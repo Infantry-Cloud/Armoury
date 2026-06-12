@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Armoury — Fleet Posture (hybrid v2, Forge)</title>
+<style>
+/* ============================================================
+   ARMOURY — Fleet Posture · hybrid v2 · ROUND 2
+   Base: calm analytics canvas. Merged in from operator console:
+   (1) slim left icon rail, (2) dense findings table.
+   Core fix this round: a crafted, opinionated type system —
+   no template rhythm, no four-identical-KPI-cards.
+
+   FORGE PALETTE (locked)
+   background      #121010
+   surface         #1C1917
+   border          #322C27
+   text-primary    #EDE7E0
+   text-muted      #9A9087
+   accent (ember)  #D9A05B   — restrained, never decorative floods
+   sev critical    #D27D6E   } fills at 0.6–0.85 opacity,
+   sev high        #D2986B   } soft rounded, no neon
+   sev medium      #C9B07E   }
+   sev low         #968D82   }
+   success         #9DBA8C
+   warning         #D9B36B
+   data-quality    #8FAFAF   — cool slate-teal, NEVER for severity
+
+   TYPE SYSTEM (the round-2 fix)
+   Intended production fonts:
+     Display / numerals : "Inter Display" (weights 200/500),
+                          tight tracking on large sizes
+     UI text            : "Inter"
+     Technical mono     : "IBM Plex Mono" — every identifier:
+                          CVE IDs, package@version, digests,
+                          cluster/namespace paths, feed versions
+   Rendered here with system stacks.
+   Scale is deliberately asymmetric, not a modular ramp:
+     hero numeral 76px / weight 200 / tracking -0.035em / tabular
+     co-stats     34px / weight 200
+     page title   23px / weight 500 / tracking -0.02em
+     body         14px
+     dense data   11.5px mono, 12px UI
+     micro labels 10px / uppercase / tracking +0.14em / muted
+   Rhythm: generous space BETWEEN zones (48–56px), dense WITHIN
+   data zones (30px table rows). Headings are strong left-aligned
+   blocks with a hairline underline — never centered cards.
+   ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#121010; --surface:#1C1917; --border:#322C27;
+  --text:#EDE7E0; --muted:#9A9087; --accent:#D9A05B;
+  --crit:#D27D6E; --high:#D2986B; --med:#C9B07E; --low:#968D82;
+  --ok:#9DBA8C; --warn:#D9B36B; --dq:#8FAFAF;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* Inter / Inter Display in prod */
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;               /* IBM Plex Mono in prod */
+}
+
+body{
+  background:#0B0A09; /* desktop behind browser frame */
+  font-family:var(--sans); color:var(--text);
+  padding:34px 28px; -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- browser frame mockup ---------- */
+.browser{
+  max-width:1380px; margin:0 auto; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.chrome{
+  display:flex; align-items:center; gap:14px;
+  background:#161312; border-bottom:1px solid var(--border);
+  padding:10px 16px;
+}
+.dots{ display:flex; gap:7px; }
+.dots i{ width:11px; height:11px; border-radius:50%; background:#3A332D; display:block; }
+.urlbar{
+  flex:1; max-width:520px; background:#121010; border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; font-family:var(--mono);
+  font-size:11.5px; color:var(--muted); letter-spacing:.01em;
+}
+.urlbar b{ color:var(--text); font-weight:500; }
+
+/* ---------- app shell: icon rail + main ---------- */
+.shell{ display:flex; min-height:880px; }
+
+/* slim left icon rail — merged from operator console */
+.rail{
+  width:58px; flex-shrink:0; background:#151211;
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; align-items:center;
+  padding:18px 0 16px;
+}
+.rail .mark{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(150deg,#D9A05B 0%,#8a6334 100%);
+  display:flex; align-items:center; justify-content:center;
+  color:#121010; font-weight:700; font-size:15px; margin-bottom:30px;
+  font-family:var(--sans);
+}
+.rail nav{ display:flex; flex-direction:column; gap:6px; width:100%; align-items:center; }
+.ritem{
+  position:relative; width:40px; height:40px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); cursor:default;
+}
+.ritem svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.ritem.active{ color:var(--text); background:#221E1A; }
+.ritem.active::before{
+  content:""; position:absolute; left:-9px; top:9px; bottom:9px;
+  width:2px; border-radius:2px; background:var(--accent);
+}
+.ritem .tip{
+  position:absolute; left:50px; top:50%; transform:translateY(-50%);
+  background:#26211D; border:1px solid var(--border); border-radius:6px;
+  padding:5px 10px; font-size:11px; color:var(--text); white-space:nowrap;
+  pointer-events:none;
+}
+.ritem .tip small{ display:block; color:var(--muted); font-size:10px; margin-top:2px; }
+.rail .spacer{ flex:1; }
+
+/* ---------- main column ---------- */
+.main{ flex:1; min-width:0; padding:0 52px 56px; }
+
+/* header — quiet, search present but not dominating */
+.hdr{
+  display:flex; align-items:center; gap:18px;
+  padding:16px 0 15px; border-bottom:1px solid var(--border);
+  margin-bottom:48px;
+}
+.crumb{ font-size:12px; color:var(--muted); letter-spacing:.02em; }
+.crumb b{ color:var(--text); font-weight:500; }
+.hdr .grow{ flex:1; }
+.blast-search{
+  display:flex; align-items:center; gap:9px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; min-width:330px;
+  color:var(--muted); font-size:12.5px;
+}
+.blast-search svg{ width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.blast-search .kbd{
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:#121010; border:1px solid var(--border); border-radius:4px;
+  padding:2px 6px; color:var(--muted);
+}
+.theme-aff{
+  display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted);
+  border:1px solid var(--border); border-radius:8px; padding:7px 11px; background:var(--surface);
+}
+.theme-aff .sw{ width:9px; height:9px; border-radius:3px; background:var(--accent); }
+.theme-aff b{ color:var(--text); font-weight:500; }
+.theme-aff span.caret{ font-size:9px; }
+.theme-aff .hint{
+  font-size:10px; color:var(--muted); border-left:1px solid var(--border);
+  padding-left:8px; margin-left:2px; letter-spacing:.03em;
+}
+
+/* ---------- heading block: strong, left-aligned, asymmetric ---------- */
+.headblock{ margin-bottom:14px; }
+.headblock .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:10px;
+}
+.headblock h1{
+  font-size:23px; font-weight:500; letter-spacing:-.02em; color:var(--text);
+}
+.headblock .sub{
+  margin-top:7px; font-size:13px; color:var(--muted); max-width:620px; line-height:1.55;
+}
+.headblock .sub code{ font-family:var(--mono); font-size:12px; color:var(--text); }
+.headrule{ width:46px; height:2px; background:var(--accent); margin:18px 0 0; border-radius:2px; }
+
+/* honest-state banner */
+.populating{
+  display:flex; align-items:baseline; gap:12px;
+  background:rgba(217,179,107,.07); border:1px solid rgba(217,179,107,.28);
+  border-radius:9px; padding:11px 16px; margin:30px 0 0;
+  font-size:12.5px; color:var(--text);
+}
+.populating .pip{ width:7px; height:7px; border-radius:50%; background:var(--warn); align-self:center; flex-shrink:0; }
+.populating b{ font-weight:600; color:var(--warn); }
+.populating span{ color:var(--muted); }
+
+/* ---------- stat zone: one dominant numeral + supporting band ---------- */
+.statzone{
+  display:flex; align-items:flex-end; gap:0;
+  margin:50px 0 0; padding:0;
+}
+.stat-hero{ padding-right:56px; border-right:1px solid var(--border); }
+.stat-hero .num{
+  font-size:76px; font-weight:200; letter-spacing:-.035em; line-height:.95;
+  color:var(--text); font-variant-numeric:tabular-nums;
+}
+.stat-hero .lbl{
+  margin-top:12px; font-size:10px; text-transform:uppercase;
+  letter-spacing:.14em; color:var(--muted);
+}
+.stat-hero .lbl b{ color:var(--text); font-weight:600; letter-spacing:.14em; }
+.co-stats{ display:flex; align-items:flex-end; }
+.co{ padding:0 44px; border-right:1px solid var(--border); }
+.co:last-child{ border-right:none; }
+.co .num{
+  font-size:34px; font-weight:200; letter-spacing:-.025em; line-height:1;
+  color:var(--text); font-variant-numeric:tabular-nums;
+}
+.co .num .unit{ font-size:17px; color:var(--muted); font-weight:300; letter-spacing:0; }
+.co .num.crit{ color:var(--crit); }
+.co .num .grade{ font-size:17px; color:var(--dq); font-weight:400; margin-left:4px; }
+.co .lbl{
+  margin-top:10px; font-size:10px; text-transform:uppercase;
+  letter-spacing:.14em; color:var(--muted);
+}
+.co .note{ margin-top:5px; font-size:11px; color:var(--muted); letter-spacing:.01em; }
+.co .note .kev{
+  font-family:var(--mono); font-size:9.5px; color:var(--crit);
+  border:1px solid rgba(210,125,110,.45); border-radius:4px; padding:1px 5px; margin-right:5px;
+}
+.co .note .pop{ color:var(--warn); }
+.co .note .dqc{ color:var(--dq); }
+
+/* ---------- severity distribution: soft stacked band ---------- */
+.zone{ margin-top:56px; }
+.zone-h{
+  display:flex; align-items:baseline; gap:14px;
+  border-bottom:1px solid var(--border); padding-bottom:11px; margin-bottom:18px;
+}
+.zone-h h2{ font-size:13px; font-weight:600; letter-spacing:.01em; color:var(--text); }
+.zone-h .meta{ font-size:11px; color:var(--muted); }
+.zone-h .grow{ flex:1; }
+.zone-h .right{ font-size:11px; color:var(--muted); font-family:var(--mono); }
+
+.sevband{ display:flex; height:30px; border-radius:8px; overflow:hidden; gap:3px; }
+.sevband i{ display:block; border-radius:4px; }
+.sevband .c{ background:rgba(210,125,110,.80); width:2.1%; min-width:14px; }
+.sevband .h{ background:rgba(210,152,107,.72); width:11%; }
+.sevband .m{ background:rgba(201,176,126,.62); width:33%; }
+.sevband .l{ background:rgba(150,141,130,.55); width:53.9%; }
+.sevlegend{ display:flex; gap:30px; margin-top:13px; }
+.sevlegend .li{ display:flex; align-items:baseline; gap:8px; }
+.sevlegend .dot{ width:8px; height:8px; border-radius:3px; align-self:center; }
+.sevlegend .n{ font-size:15px; font-weight:300; font-variant-numeric:tabular-nums; color:var(--text); }
+.sevlegend .t{ font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); }
+
+/* ---------- dense findings table — merged from operator console ---------- */
+.findings{ margin-top:56px; }
+table{ width:100%; border-collapse:collapse; }
+thead th{
+  text-align:left; font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding:0 10px 8px;
+  border-bottom:1px solid var(--border); white-space:nowrap;
+}
+tbody td{
+  padding:7px 10px; font-size:12px; border-bottom:1px solid #221E1A;
+  white-space:nowrap; vertical-align:middle; height:30px;
+}
+tbody tr:hover{ background:#181513; }
+td.mono, .mono{ font-family:var(--mono); font-size:11.5px; letter-spacing:0; }
+td .cve{ color:var(--text); font-weight:500; }
+td .pkg{ color:var(--muted); }
+td .pkg b{ color:var(--text); font-weight:500; }
+
+.sevchip{
+  display:inline-block; font-size:10px; font-weight:600; letter-spacing:.05em;
+  border-radius:5px; padding:2px 8px; text-transform:uppercase;
+}
+.sevchip.c{ background:rgba(210,125,110,.16); color:var(--crit); }
+.sevchip.h{ background:rgba(210,152,107,.14); color:var(--high); }
+.sevchip.m{ background:rgba(201,176,126,.13); color:var(--med); }
+.kevtag{
+  display:inline-block; font-family:var(--mono); font-size:9px; font-weight:600;
+  color:#121010; background:rgba(210,125,110,.85); border-radius:4px;
+  padding:1.5px 5px; margin-left:6px; vertical-align:1px; letter-spacing:.04em;
+}
+td .epss{ font-family:var(--mono); font-size:11px; color:var(--text); }
+td .epss small{ color:var(--muted); font-size:10px; }
+
+.triage{
+  display:inline-block; font-size:10.5px; border-radius:5px; padding:2px 8px;
+  border:1px solid var(--border); color:var(--muted); background:#181513;
+}
+.triage.fix{ color:var(--accent); border-color:rgba(217,160,91,.4); }
+.triage.mit{ color:var(--ok); border-color:rgba(157,186,140,.35); }
+.triage.na{ color:var(--muted); }
+.triage.acc{ color:var(--med); border-color:rgba(201,176,126,.3); }
+.triage.untriaged{ color:var(--warn); border-color:rgba(217,179,107,.35); }
+
+.dqbadge{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:10px; color:var(--dq);
+}
+.dqbadge i{ width:6px; height:6px; border-radius:50%; background:var(--dq); opacity:.8; }
+.dqbadge.dim{ opacity:.65; }
+td .src{ font-size:10.5px; color:var(--muted); }
+td .src b{ color:var(--text); font-weight:500; font-size:10.5px; }
+td.n{ text-align:right; font-variant-numeric:tabular-nums; }
+
+/* inline coverage-gap row — gaps are first-class */
+tr.gap td{
+  background:rgba(217,179,107,.05); color:var(--muted); font-size:11.5px;
+  border-top:1px dashed rgba(217,179,107,.3); border-bottom:1px dashed rgba(217,179,107,.3);
+  padding:8px 10px;
+}
+tr.gap .pip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--warn); margin-right:9px; vertical-align:1px; }
+tr.gap b{ color:var(--warn); font-weight:600; }
+
+.tbl-foot{
+  display:flex; align-items:center; gap:14px; margin-top:14px;
+  font-size:11.5px; color:var(--muted);
+}
+.tbl-foot .grow{ flex:1; }
+.tbl-foot a{ color:var(--accent); text-decoration:none; font-weight:500; }
+
+/* ---------- feed freshness strip ---------- */
+.freshness{
+  margin-top:52px; border-top:1px solid var(--border);
+  padding-top:16px; display:flex; gap:34px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.freshness .f b{ color:var(--text); font-weight:500; }
+.freshness .ok{ color:var(--ok); }
+.freshness .warn{ color:var(--warn); }
+</style>
+</head>
+<body>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/posture</div>
+  </div>
+
+  <div class="shell">
+
+    <!-- ===== slim left icon rail ===== -->
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem active" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+        <!-- theme tooltip pinned open in mockup -->
+        <div class="tip">Theme: <b style="color:#D9A05B">Forge</b><small>also: High Signal · Gunmetal</small></div>
+      </div>
+    </aside>
+
+    <!-- ===== main ===== -->
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Posture</div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff">
+          <span class="sw"></span> <b>Forge</b> <span class="caret">▾</span>
+        </div>
+      </header>
+
+      <!-- strong left-aligned heading block, asymmetric -->
+      <div class="headblock">
+        <div class="eyebrow">Fleet posture</div>
+        <h1>Production fleet — what we know, and what we don't yet</h1>
+        <div class="sub">Posture is computed only from scanned artifacts. Coverage is at <code>82%</code> and climbing; numbers below will shift as the remaining artifacts are indexed.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <div class="populating">
+        <span class="pip"></span>
+        <div><b>Populating —</b> <span>671 artifacts queued for first scan. Estimated complete in ~2 h. Coverage gaps are listed, not hidden.</span></div>
+      </div>
+
+      <!-- stat zone: one dominant numeral + supporting band -->
+      <section class="statzone">
+        <div class="stat-hero">
+          <div class="num">3,847</div>
+          <div class="lbl"><b>Artifacts</b> · indexed across fleet</div>
+        </div>
+        <div class="co-stats">
+          <div class="co">
+            <div class="num crit">23</div>
+            <div class="lbl">Critical findings</div>
+            <div class="note"><span class="kev">KEV ×4</span>known-exploited</div>
+          </div>
+          <div class="co">
+            <div class="num">82<span class="unit">%</span></div>
+            <div class="lbl">Coverage</div>
+            <div class="note"><span class="pop">populating</span> — 671 queued</div>
+          </div>
+          <div class="co">
+            <div class="num">84<span class="grade">B+</span></div>
+            <div class="lbl">Data quality</div>
+            <div class="note"><span class="dqc">evidence completeness, fleet-wide</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- severity distribution -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Severity distribution</h2>
+          <span class="meta">1,094 open findings · scanned artifacts only</span>
+          <div class="grow"></div>
+          <span class="right">Grype DB synced 41 min ago</span>
+        </div>
+        <div class="sevband">
+          <i class="c" title="critical 23"></i><i class="h" title="high 121"></i><i class="m" title="medium 361"></i><i class="l" title="low 589"></i>
+        </div>
+        <div class="sevlegend">
+          <div class="li"><span class="dot" style="background:rgba(210,125,110,.8)"></span><span class="n">23</span><span class="t">Critical</span></div>
+          <div class="li"><span class="dot" style="background:rgba(210,152,107,.72)"></span><span class="n">121</span><span class="t">High</span></div>
+          <div class="li"><span class="dot" style="background:rgba(201,176,126,.62)"></span><span class="n">361</span><span class="t">Medium</span></div>
+          <div class="li"><span class="dot" style="background:rgba(150,141,130,.55)"></span><span class="n">589</span><span class="t">Low</span></div>
+        </div>
+      </section>
+
+      <!-- dense findings table -->
+      <section class="findings">
+        <div class="zone-h">
+          <h2>Findings — triage order</h2>
+          <span class="meta">KEV first, then EPSS-weighted. Severity alone does not rank.</span>
+          <div class="grow"></div>
+          <span class="right">sorted: kev → epss desc</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Finding</th><th>Package</th><th>Severity</th><th>EPSS</th>
+              <th style="text-align:right">Artifacts</th><th>Triage</th><th>DQ</th><th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-23012</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>log4j-core</b>@2.17.0</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.94 <small>p99</small></span></td>
+              <td class="n">14</td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td><span class="dqbadge"><i></i>A</span></td>
+              <td><span class="src"><b>Grype</b> · NVD + KEV</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-21987</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>openssl</b>@3.2.1-r4</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.89 <small>p98</small></span></td>
+              <td class="n">31</td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td><span class="dqbadge"><i></i>A</span></td>
+              <td><span class="src"><b>Grype</b> · NVD + KEV</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-20455</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>busybox</b>@1.36.1</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.71 <small>p96</small></span></td>
+              <td class="n">112</td>
+              <td><span class="triage mit">mitigated</span></td>
+              <td><span class="dqbadge"><i></i>A−</span></td>
+              <td><span class="src"><b>Grype</b> · NVD + KEV</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-19834</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>curl</b>@8.5.0-r2</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.66 <small>p95</small></span></td>
+              <td class="n">87</td>
+              <td><span class="triage na">not affected</span></td>
+              <td><span class="dqbadge"><i></i>B+</span></td>
+              <td><span class="src"><b>Grype</b> · NVD + KEV</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-22790</span></td>
+              <td class="mono"><span class="pkg"><b>jackson-databind</b>@2.16.1</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.43 <small>p91</small></span></td>
+              <td class="n">9</td>
+              <td><span class="triage untriaged">untriaged</span></td>
+              <td><span class="dqbadge"><i></i>A</span></td>
+              <td><span class="src"><b>Grype</b> · NVD</span></td>
+            </tr>
+            <tr class="gap">
+              <td colspan="8"><span class="pip"></span><b>Coverage gap —</b> 671 artifacts not yet scanned, including 212 in <span class="mono">prod-eu-west</span>. Findings in this range are unknown, not absent.</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-18112</span></td>
+              <td class="mono"><span class="pkg"><b>golang.org/x/net</b>@0.19.0</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.31 <small>p88</small></span></td>
+              <td class="n">54</td>
+              <td><span class="triage acc">accepted</span></td>
+              <td><span class="dqbadge"><i></i>B+</span></td>
+              <td><span class="src"><b>Grype</b> · NVD</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-17609</span></td>
+              <td class="mono"><span class="pkg"><b>libxml2</b>@2.12.4-r1</span></td>
+              <td><span class="sevchip m">Medium</span></td>
+              <td><span class="epss">0.18 <small>p82</small></span></td>
+              <td class="n">203</td>
+              <td><span class="triage na">not affected</span></td>
+              <td><span class="dqbadge dim"><i></i>B</span></td>
+              <td><span class="src"><b>Grype</b> · NVD</span></td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-16441</span></td>
+              <td class="mono"><span class="pkg"><b>spring-web</b>@6.1.3</span></td>
+              <td><span class="sevchip m">Medium</span></td>
+              <td><span class="epss">0.12 <small>p77</small></span></td>
+              <td class="n">6</td>
+              <td><span class="triage mit">mitigated</span></td>
+              <td><span class="dqbadge"><i></i>A−</span></td>
+              <td><span class="src"><b>Grype</b> · GHSA</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tbl-foot">
+          <span>Showing 8 of 1,094 open findings · each row carries its evidence pack</span>
+          <div class="grow"></div>
+          <a href="#">All findings →</a>
+        </div>
+      </section>
+
+      <!-- feed freshness strip -->
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · <span class="warn">82% coverage, populating</span></span>
+        <span class="f"><b>Runtime obs</b> — 2 clusters reporting, last heartbeat 3 min ago</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>
