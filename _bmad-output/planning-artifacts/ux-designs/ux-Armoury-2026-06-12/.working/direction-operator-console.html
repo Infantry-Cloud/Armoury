@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armoury — Direction 1: Dense Operator Console</title>
+<style>
+/* ============================================================
+   DIRECTION 1 — DENSE OPERATOR CONSOLE
+   Forge palette (LOCKED):
+   #121010  background
+   #1C1917  surface
+   #322C27  border
+   #EDE7E0  text-primary
+   #9A9087  text-muted
+   #D9A05B  accent (ember amber, restrained)
+   #D27D6E  severity: critical  (bars at 0.6–0.85 opacity)
+   #D2986B  severity: high
+   #C9B07E  severity: medium
+   #968D82  severity: low
+   #9DBA8C  success
+   #D9B36B  warning
+   #8FAFAF  data-quality (cool slate-teal, distinct from heat)
+   ============================================================ */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0b0a09; color:#EDE7E0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding:28px; -webkit-font-smoothing:antialiased;
+}
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+.rationale {
+  max-width:980px; margin:0 auto 22px; padding:14px 18px;
+  background:#1C1917; border:1px solid #322C27; border-radius:10px;
+  color:#9A9087; font-size:13px; line-height:1.55;
+}
+.rationale strong { color:#EDE7E0; }
+.rationale em { color:#D9A05B; font-style:normal; }
+
+/* ---- Browser frame ---- */
+.frame {
+  max-width:1380px; margin:0 auto; border:1px solid #322C27; border-radius:12px;
+  overflow:hidden; background:#121010; box-shadow:0 14px 40px rgba(0,0,0,.45);
+}
+.chrome {
+  display:flex; align-items:center; gap:10px; padding:9px 14px;
+  background:#1C1917; border-bottom:1px solid #322C27;
+}
+.dot { width:10px; height:10px; border-radius:50%; background:#322C27; }
+.urlbar {
+  flex:1; max-width:460px; margin:0 auto; background:#121010; border:1px solid #322C27;
+  border-radius:6px; padding:4px 12px; font-size:11px; color:#9A9087; text-align:center;
+}
+
+/* ---- App shell: icon rail + main ---- */
+.app { display:flex; min-height:780px; }
+.rail {
+  width:52px; background:#1C1917; border-right:1px solid #322C27;
+  display:flex; flex-direction:column; align-items:center; padding:10px 0; gap:4px;
+}
+.rail .logo {
+  width:30px; height:30px; border-radius:7px; background:rgba(217,160,91,.14);
+  border:1px solid rgba(217,160,91,.4); color:#D9A05B; font-weight:700; font-size:14px;
+  display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+}
+.rail a {
+  width:36px; height:34px; border-radius:7px; display:flex; align-items:center; justify-content:center;
+  color:#9A9087; font-size:15px; text-decoration:none;
+}
+.rail a.active { background:rgba(217,160,91,.10); color:#D9A05B; box-shadow:inset 2px 0 0 #D9A05B; }
+.rail .spacer { flex:1; }
+.main { flex:1; min-width:0; display:flex; flex-direction:column; }
+
+/* ---- Header w/ persistent blast-radius search ---- */
+.hdr {
+  display:flex; align-items:center; gap:14px; padding:8px 16px;
+  border-bottom:1px solid #322C27; background:#161311;
+}
+.hdr h1 { font-size:13px; font-weight:600; letter-spacing:.02em; }
+.hdr h1 span { color:#9A9087; font-weight:400; }
+.search {
+  flex:1; max-width:560px; display:flex; align-items:center; gap:8px;
+  background:#121010; border:1px solid #322C27; border-radius:7px; padding:6px 10px;
+  font-size:12px; color:#9A9087;
+}
+.search .kbd {
+  margin-left:auto; border:1px solid #322C27; border-radius:4px; padding:1px 5px;
+  font-size:10px; color:#9A9087;
+}
+.hdr .meta { margin-left:auto; font-size:11px; color:#9A9087; display:flex; gap:14px; white-space:nowrap; }
+.hdr .meta b { color:#EDE7E0; font-weight:600; }
+
+/* ---- Stat strip ---- */
+.stats {
+  display:grid; grid-template-columns:repeat(6,1fr); gap:1px; background:#322C27;
+  border-bottom:1px solid #322C27;
+}
+.stat { background:#1C1917; padding:10px 14px; }
+.stat .lbl { font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:#9A9087; margin-bottom:4px; }
+.stat .val { font-size:21px; font-weight:650; line-height:1.1; letter-spacing:-.01em; }
+.stat .sub { font-size:10.5px; color:#9A9087; margin-top:3px; }
+.stat .sub b { font-weight:600; }
+.kev-b { color:#D27D6E; }
+.amber { color:#D9A05B; }
+.teal { color:#8FAFAF; }
+.green { color:#9DBA8C; }
+.warn-c { color:#D9B36B; }
+.pill {
+  display:inline-block; font-size:9.5px; padding:1px 7px; border-radius:99px;
+  border:1px solid #322C27; color:#9A9087; vertical-align:2px;
+}
+.pill.populating { border-color:rgba(217,179,107,.5); color:#D9B36B; }
+.pill.kevpill { border-color:rgba(210,125,110,.55); color:#D27D6E; background:rgba(210,125,110,.10); }
+
+/* coverage micro-bar */
+.microbar { height:4px; border-radius:99px; background:#322C27; margin-top:6px; overflow:hidden; }
+.microbar i { display:block; height:100%; border-radius:99px; background:#8FAFAF; opacity:.8; }
+
+/* ---- Body grid ---- */
+.grid { display:grid; grid-template-columns:1fr 332px; gap:0; flex:1; }
+.col-l { border-right:1px solid #322C27; min-width:0; }
+.panel { border-bottom:1px solid #322C27; }
+.panel-h {
+  display:flex; align-items:center; gap:8px; padding:8px 14px;
+  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#9A9087;
+}
+.panel-h .right { margin-left:auto; font-weight:400; text-transform:none; letter-spacing:0; font-size:11px; }
+
+/* ---- Findings table (tight) ---- */
+table { width:100%; border-collapse:collapse; font-size:12px; }
+th {
+  text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.08em;
+  color:#9A9087; font-weight:600; padding:5px 10px; border-top:1px solid #322C27;
+  border-bottom:1px solid #322C27; background:#161311; white-space:nowrap;
+}
+td { padding:5px 10px; border-bottom:1px solid #221e1a; vertical-align:middle; white-space:nowrap; }
+tr:hover td { background:#181512; }
+td.num { text-align:right; }
+.sev {
+  display:inline-block; width:7px; height:7px; border-radius:2px; margin-right:6px; vertical-align:0;
+}
+.sev.c { background:rgba(210,125,110,.8); }   /* #D27D6E @ .8 */
+.sev.h { background:rgba(210,152,107,.8); }   /* #D2986B @ .8 */
+.sev.m { background:rgba(201,176,126,.75); }  /* #C9B07E @ .75 */
+.sev.l { background:rgba(150,141,130,.7); }   /* #968D82 @ .7 */
+.cve { color:#EDE7E0; font-weight:600; }
+.dim { color:#9A9087; }
+.status { font-size:10.5px; border:1px solid #322C27; border-radius:5px; padding:1px 6px; color:#9A9087; }
+.status.fix { border-color:rgba(217,160,91,.45); color:#D9A05B; }
+.status.mit { border-color:rgba(157,186,140,.45); color:#9DBA8C; }
+.status.na  { border-color:rgba(143,175,175,.45); color:#8FAFAF; }
+.epssbar { display:inline-block; width:46px; height:4px; border-radius:99px; background:#322C27; margin-left:7px; vertical-align:2px; overflow:hidden; }
+.epssbar i { display:block; height:100%; background:#D9A05B; opacity:.7; border-radius:99px; }
+tr.gap-row td {
+  background:rgba(217,179,107,.05); color:#D9B36B; font-size:11px; border-bottom:1px solid #322C27;
+  white-space:normal;
+}
+
+/* ---- Right column panels ---- */
+.col-r .panel { padding-bottom:10px; }
+.chart { padding:4px 14px 8px; }
+.crow { display:flex; align-items:center; gap:8px; margin:7px 0; font-size:11px; }
+.crow .clabel { width:54px; color:#9A9087; }
+.crow .ctrack { flex:1; height:12px; background:#181512; border-radius:5px; overflow:hidden; }
+.crow .cbar { height:100%; border-radius:5px; }
+.cbar.c { background:#D27D6E; opacity:.75; }
+.cbar.h { background:#D2986B; opacity:.72; }
+.cbar.m { background:#C9B07E; opacity:.68; }
+.cbar.l { background:#968D82; opacity:.62; }
+.crow .cval { width:42px; text-align:right; color:#EDE7E0; }
+.list { padding:0 14px; font-size:11.5px; }
+.list .row { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid #221e1a; }
+.list .row:last-child { border-bottom:0; }
+.list .row .r { margin-left:auto; color:#9A9087; text-align:right; }
+.okdot { width:6px; height:6px; border-radius:50%; background:#9DBA8C; flex:none; }
+.warndot { width:6px; height:6px; border-radius:50%; background:#D9B36B; flex:none; }
+.feed-warn {
+  margin:8px 14px 0; padding:7px 10px; border:1px solid rgba(217,179,107,.45);
+  background:rgba(217,179,107,.07); border-radius:7px; font-size:11px; color:#D9B36B; line-height:1.45;
+}
+.feed-warn b { color:#EDE7E0; font-weight:600; }
+.dq { padding:2px 14px 0; }
+.dq-top { display:flex; align-items:baseline; gap:8px; }
+.dq-top .score { font-size:26px; font-weight:650; color:#8FAFAF; }
+.dq-top .of { font-size:11px; color:#9A9087; }
+.dqbar { height:5px; border-radius:99px; background:#322C27; margin:7px 0 8px; overflow:hidden; }
+.dqbar i { display:block; height:100%; width:84%; background:#8FAFAF; opacity:.8; border-radius:99px; }
+.dqrow { display:flex; justify-content:space-between; font-size:11px; color:#9A9087; padding:2px 0; }
+.dqrow b { color:#EDE7E0; font-weight:500; }
+
+/* ---- Blast radius result (secondary panel, docked) ---- */
+.blast {
+  margin:10px 14px 14px; border:1px solid rgba(217,160,91,.35); border-radius:9px;
+  background:#181512; overflow:hidden;
+}
+.blast-h {
+  display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(217,160,91,.08);
+  border-bottom:1px solid #322C27; font-size:11.5px;
+}
+.blast-h .q { color:#D9A05B; font-weight:600; }
+.blast-body { padding:10px 12px; font-size:11.5px; line-height:1.5; }
+.blast-kpis { display:flex; gap:14px; margin-bottom:8px; }
+.blast-kpis div b { display:block; font-size:18px; font-weight:650; }
+.blast-kpis div span { font-size:10px; color:#9A9087; text-transform:uppercase; letter-spacing:.07em; }
+.ns { display:inline-block; border:1px solid #322C27; border-radius:5px; padding:1px 7px; font-size:10.5px; color:#EDE7E0; margin-right:5px; background:#1C1917; }
+.blast-foot { padding:7px 12px; border-top:1px solid #322C27; font-size:10.5px; color:#9A9087; display:flex; gap:10px; }
+.blast-foot a { color:#D9A05B; text-decoration:none; }
+.statusbar {
+  display:flex; gap:18px; padding:6px 16px; border-top:1px solid #322C27; background:#161311;
+  font-size:10.5px; color:#9A9087;
+}
+.statusbar b { color:#EDE7E0; font-weight:500; }
+</style>
+</head>
+<body>
+
+<div class="rationale">
+  <strong>Direction 1 — Dense operator console.</strong> Grafana-register density for an engineer who lives in the tool: icon rail, tight rows, small type, and a persistent blast-radius search that is always one keystroke away. Everything Priya checks each morning — KEV-first queue, feed freshness, coverage gaps — fits in one viewport with zero scrolling, and the <em>stale EPSS feed warning</em> and <em>populating coverage</em> states sit inline with the data they qualify rather than in a separate alert layer.
+</div>
+
+<div class="frame">
+  <div class="chrome">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="urlbar mono">armoury.internal/fleet</div>
+  </div>
+  <div class="app">
+
+    <nav class="rail">
+      <div class="logo">A</div>
+      <a class="active" title="Fleet posture">◧</a>
+      <a title="Artifacts">▤</a>
+      <a title="Findings">◬</a>
+      <a title="Evidence packs">✦</a>
+      <a title="Feeds">↻</a>
+      <div class="spacer"></div>
+      <a title="Settings">⚙</a>
+    </nav>
+
+    <div class="main">
+      <header class="hdr">
+        <h1>Fleet posture <span>· 8 clusters · prod, staging, edge</span></h1>
+        <div class="search">
+          <span>⌕</span>
+          <span>Blast radius — paste a CVE, package, or image digest…</span>
+          <span class="kbd mono">⌘K</span>
+        </div>
+        <div class="meta">
+          <span>Grype DB synced <b>41 min ago</b></span>
+          <span>KEV catalog <b>3 h ago</b></span>
+        </div>
+      </header>
+
+      <section class="stats">
+        <div class="stat">
+          <div class="lbl">Artifacts inventoried</div>
+          <div class="val">3,847</div>
+          <div class="sub">2,914 images · 689 repos · 244 charts</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Critical findings</div>
+          <div class="val kev-b">23 <span class="pill kevpill">4 KEV</span></div>
+          <div class="sub">across 61 artifacts</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">High</div>
+          <div class="val" style="color:#D2986B;">161</div>
+          <div class="sub">12 with EPSS &gt; 0.5</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Medium / Low</div>
+          <div class="val dim">482 <span class="dim" style="font-size:13px;">/ 1,204</span></div>
+          <div class="sub">auto-deprioritised by EPSS</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Coverage</div>
+          <div class="val teal">82% <span class="pill populating">populating</span></div>
+          <div class="microbar"><i style="width:82%;"></i></div>
+          <div class="sub">212 artifacts awaiting SBOM</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Data quality · fleet</div>
+          <div class="val teal">B+ <span class="dim" style="font-size:13px;">84/100</span></div>
+          <div class="sub">SBOM depth limits 9% of results</div>
+        </div>
+      </section>
+
+      <div class="grid">
+        <!-- LEFT: ranked findings -->
+        <div class="col-l">
+          <div class="panel" style="border-bottom:0;">
+            <div class="panel-h">
+              Ranked findings — KEV first, then EPSS-weighted
+              <span class="right dim">1,870 open · showing top 10 · evidence attached to every row</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sev</th><th>Finding</th><th>Package</th><th>KEV</th>
+                  <th>EPSS</th><th class="num">Artifacts</th><th class="num">Running</th>
+                  <th>Where it bites</th><th>Triage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="sev c"></span>Crit</td>
+                  <td class="mono cve">CVE-2026-23012</td>
+                  <td class="dim">openssl 3.2.1</td>
+                  <td><span class="pill kevpill">KEV</span></td>
+                  <td>0.89<span class="epssbar"><i style="width:89%;"></i></span></td>
+                  <td class="num">14</td><td class="num">9</td>
+                  <td class="dim">prod/payments, prod/checkout</td>
+                  <td><span class="status fix">fix planned</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev c"></span>Crit</td>
+                  <td class="mono cve">CVE-2026-21118</td>
+                  <td class="dim">glibc 2.39</td>
+                  <td><span class="pill kevpill">KEV</span></td>
+                  <td>0.74<span class="epssbar"><i style="width:74%;"></i></span></td>
+                  <td class="num">31</td><td class="num">22</td>
+                  <td class="dim">fleet-wide base image</td>
+                  <td><span class="status">untriaged</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev h"></span>High</td>
+                  <td class="mono cve">CVE-2025-48104</td>
+                  <td class="dim">curl 8.6.0</td>
+                  <td><span class="pill kevpill">KEV</span></td>
+                  <td>0.61<span class="epssbar"><i style="width:61%;"></i></span></td>
+                  <td class="num">26</td><td class="num">11</td>
+                  <td class="dim">staging/*, prod/ingest</td>
+                  <td><span class="status mit">mitigated</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev h"></span>High</td>
+                  <td class="mono cve">CVE-2026-20457</td>
+                  <td class="dim">busybox 1.36.1</td>
+                  <td><span class="pill kevpill">KEV</span></td>
+                  <td>0.42<span class="epssbar"><i style="width:42%;"></i></span></td>
+                  <td class="num">8</td><td class="num">3</td>
+                  <td class="dim">edge/sensor-gw</td>
+                  <td><span class="status na">not affected</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev c"></span>Crit</td>
+                  <td class="mono cve">CVE-2026-22871</td>
+                  <td class="dim">golang.org/x/net 0.22</td>
+                  <td class="dim">—</td>
+                  <td>0.88<span class="epssbar"><i style="width:88%;"></i></span></td>
+                  <td class="num">19</td><td class="num">14</td>
+                  <td class="dim">prod/api-gateway</td>
+                  <td><span class="status fix">fix planned</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev c"></span>Crit</td>
+                  <td class="mono cve">CVE-2026-24416</td>
+                  <td class="dim">libpq 16.2</td>
+                  <td class="dim">—</td>
+                  <td>0.55<span class="epssbar"><i style="width:55%;"></i></span></td>
+                  <td class="num">12</td><td class="num">12</td>
+                  <td class="dim">prod/billing-db sidecars</td>
+                  <td><span class="status">untriaged</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev h"></span>High</td>
+                  <td class="mono cve">CVE-2025-50231</td>
+                  <td class="dim">jackson-databind 2.16</td>
+                  <td class="dim">—</td>
+                  <td>0.37<span class="epssbar"><i style="width:37%;"></i></span></td>
+                  <td class="num">44</td><td class="num">28</td>
+                  <td class="dim">jvm services, fleet-wide</td>
+                  <td><span class="status na">not affected</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev h"></span>High</td>
+                  <td class="mono cve">CVE-2026-19877</td>
+                  <td class="dim">undici 6.6.2</td>
+                  <td class="dim">—</td>
+                  <td>0.29<span class="epssbar"><i style="width:29%;"></i></span></td>
+                  <td class="num">17</td><td class="num">6</td>
+                  <td class="dim">staging/web-frontend</td>
+                  <td><span class="status">accepted</span></td>
+                </tr>
+                <tr class="gap-row">
+                  <td colspan="9">⚠ Coverage gap — edge-cluster-03 is 41% scanned and populating. Rankings above may rise as 212 remaining artifacts report SBOMs. A quiet dashboard is not the same as a safe fleet.</td>
+                </tr>
+                <tr>
+                  <td><span class="sev m"></span>Med</td>
+                  <td class="mono cve">CVE-2026-18550</td>
+                  <td class="dim">zlib 1.3.1</td>
+                  <td class="dim">—</td>
+                  <td>0.11<span class="epssbar"><i style="width:11%;"></i></span></td>
+                  <td class="num">203</td><td class="num">96</td>
+                  <td class="dim">base layers, fleet-wide</td>
+                  <td><span class="status">accepted</span></td>
+                </tr>
+                <tr>
+                  <td><span class="sev l"></span>Low</td>
+                  <td class="mono cve">CVE-2025-44102</td>
+                  <td class="dim">pcre2 10.43</td>
+                  <td class="dim">—</td>
+                  <td>0.04<span class="epssbar"><i style="width:4%;"></i></span></td>
+                  <td class="num">311</td><td class="num">140</td>
+                  <td class="dim">base layers, fleet-wide</td>
+                  <td><span class="status na">not affected</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT: charts, coverage, feeds, DQ, blast radius -->
+        <div class="col-r">
+          <div class="panel">
+            <div class="panel-h">Open findings by severity</div>
+            <div class="chart">
+              <div class="crow"><span class="clabel">Critical</span><span class="ctrack"><span class="cbar c" style="width:8%;"></span></span><span class="cval">23</span></div>
+              <div class="crow"><span class="clabel">High</span><span class="ctrack"><span class="cbar h" style="width:22%;"></span></span><span class="cval">161</span></div>
+              <div class="crow"><span class="clabel">Medium</span><span class="ctrack"><span class="cbar m" style="width:52%;"></span></span><span class="cval">482</span></div>
+              <div class="crow"><span class="clabel">Low</span><span class="ctrack"><span class="cbar l" style="width:100%;"></span></span><span class="cval">1,204</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h">Coverage by cluster <span class="right warn-c">3 populating</span></div>
+            <div class="list">
+              <div class="row"><span class="okdot"></span>prod-east <span class="r">100% · 1,212 artifacts</span></div>
+              <div class="row"><span class="okdot"></span>prod-west <span class="r">100% · 1,148 artifacts</span></div>
+              <div class="row"><span class="okdot"></span>staging <span class="r">97% · 804 artifacts</span></div>
+              <div class="row"><span class="warndot"></span>edge-cluster-03 <span class="r" style="color:#D9B36B;">41% · populating</span></div>
+              <div class="row"><span class="warndot"></span>edge-cluster-04 <span class="r" style="color:#D9B36B;">58% · populating</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h">Feeds &amp; provenance</div>
+            <div class="list">
+              <div class="row"><span class="okdot"></span>Grype DB <span class="r">synced 41 min ago</span></div>
+              <div class="row"><span class="okdot"></span>CISA KEV catalog <span class="r">synced 3 h ago</span></div>
+              <div class="row"><span class="warndot"></span>EPSS scores <span class="r" style="color:#D9B36B;">stale — 26 h ago</span></div>
+            </div>
+            <!-- STATE VARIANT: stale-feed warning -->
+            <div class="feed-warn">
+              <b>EPSS feed is stale.</b> Probability ranking below KEV uses scores from 2026-06-11. KEV ordering is unaffected. Retry sync, or import an offline bundle.
+            </div>
+          </div>
+
+          <div class="panel" style="border-bottom:0;">
+            <div class="panel-h">Fleet data quality <span class="right teal">B+</span></div>
+            <div class="dq">
+              <div class="dq-top"><span class="score">84</span><span class="of">/ 100 · evidence-weighted</span></div>
+              <div class="dqbar"><i></i></div>
+              <div class="dqrow"><span>SBOM depth (transitive deps)</span><b>78</b></div>
+              <div class="dqrow"><span>Signature &amp; attestation coverage</span><b>91</b></div>
+              <div class="dqrow"><span>Runtime correlation</span><b>83</b></div>
+            </div>
+
+            <!-- SECONDARY PANEL: blast radius result -->
+            <div class="blast">
+              <div class="blast-h"><span>⌕</span><span class="q mono">CVE-2026-23012</span><span class="dim">blast radius · 0.4 s</span></div>
+              <div class="blast-body">
+                <div class="blast-kpis">
+                  <div><b>14</b><span>affected images</span></div>
+                  <div><b style="color:#D9A05B;">9</b><span>running now</span></div>
+                  <div><b>2</b><span>namespaces</span></div>
+                </div>
+                <div><span class="ns">prod/payments</span><span class="ns">prod/checkout</span></div>
+                <div class="dim" style="margin-top:7px;">Resolved against runtime state observed 6 min ago. 5 affected images are built but not deployed.</div>
+              </div>
+              <div class="blast-foot">
+                <a href="#">Open all 14 artifacts →</a>
+                <a href="#">Generate evidence pack</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="statusbar">
+        <span>Armoury <b>self-hosted</b> · single binary</span>
+        <span>Inventory walk completed <b>14:02 UTC</b></span>
+        <span>Coverage <b>82% and populating</b></span>
+        <span style="margin-left:auto;">Every number on this screen links to its evidence.</span>
+      </footer>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armoury — Direction 4: Query-First Command Surface</title>
+<style>
+/* ============================================================
+   DIRECTION 4 — QUERY-FIRST COMMAND SURFACE
+   Forge palette (LOCKED):
+   #121010  background
+   #1C1917  surface
+   #322C27  border
+   #EDE7E0  text-primary
+   #9A9087  text-muted
+   #D9A05B  accent (ember amber — command bar focus, primary action)
+   #D27D6E  severity: critical  (chips/bars at 0.6–0.85 opacity)
+   #D2986B  severity: high
+   #C9B07E  severity: medium
+   #968D82  severity: low
+   #9DBA8C  success
+   #D9B36B  warning (air-gapped notice)
+   #8FAFAF  data-quality (cool slate-teal)
+   ============================================================ */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0b0a09; color:#EDE7E0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding:28px; -webkit-font-smoothing:antialiased;
+}
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+.rationale {
+  max-width:980px; margin:0 auto 22px; padding:14px 18px;
+  background:#1C1917; border:1px solid #322C27; border-radius:10px;
+  color:#9A9087; font-size:13px; line-height:1.55;
+}
+.rationale strong { color:#EDE7E0; }
+.rationale em { color:#D9A05B; font-style:normal; }
+
+/* ---- Browser frame ---- */
+.frame {
+  max-width:1240px; margin:0 auto; border:1px solid #322C27; border-radius:13px;
+  overflow:hidden; background:#121010; box-shadow:0 14px 40px rgba(0,0,0,.45);
+}
+.chrome { display:flex; align-items:center; gap:10px; padding:10px 16px; background:#1C1917; border-bottom:1px solid #322C27; }
+.dot { width:10px; height:10px; border-radius:50%; background:#322C27; }
+.urlbar { flex:1; max-width:440px; margin:0 auto; background:#121010; border:1px solid #322C27; border-radius:7px; padding:5px 12px; font-size:11px; color:#9A9087; text-align:center; }
+
+/* ---- Slim top bar ---- */
+.topbar { display:flex; align-items:center; gap:18px; padding:12px 28px; border-bottom:1px solid #322C27; font-size:12.5px; }
+.brand { display:flex; align-items:center; gap:9px; font-weight:650; font-size:13.5px; }
+.brand .mark {
+  width:22px; height:22px; border-radius:6px; background:rgba(217,160,91,.14);
+  border:1px solid rgba(217,160,91,.4); color:#D9A05B; font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.topbar .crumb { color:#9A9087; }
+.topbar .crumb b { color:#EDE7E0; font-weight:500; }
+.topbar .right { margin-left:auto; display:flex; gap:14px; align-items:center; color:#9A9087; font-size:11.5px; }
+.kbd {
+  border:1px solid #322C27; border-radius:4px; padding:1px 6px; font-size:10.5px; color:#9A9087;
+  background:#1C1917; font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+/* ---- STATE VARIANT: air-gapped notice ---- */
+.airgap {
+  display:flex; align-items:center; gap:10px; margin:20px 28px 0; padding:10px 16px;
+  border:1px solid rgba(217,179,107,.4); background:rgba(217,179,107,.06); border-radius:10px;
+  font-size:12.5px;
+}
+.airgap .ic { color:#D9B36B; }
+.airgap b { font-weight:600; }
+.airgap .muted { color:#9A9087; }
+.airgap .act { margin-left:auto; color:#D9A05B; text-decoration:none; font-weight:500; white-space:nowrap; }
+
+/* ---- THE COMMAND BAR (centerpiece) ---- */
+.cmdwrap { padding:26px 28px 8px; max-width:880px; margin:0 auto; width:100%; }
+.cmd {
+  display:flex; align-items:center; gap:12px; background:#1C1917;
+  border:1px solid rgba(217,160,91,.45); border-radius:13px; padding:15px 18px;
+  box-shadow:0 0 0 3px rgba(217,160,91,.07), 0 8px 28px rgba(0,0,0,.35);
+  font-size:15px;
+}
+.cmd .prompt { color:#D9A05B; font-weight:600; }
+.cmd .typed { color:#EDE7E0; }
+.cmd .caret { display:inline-block; width:8px; height:18px; background:#D9A05B; opacity:.8; vertical-align:-3px; border-radius:1px; }
+.cmd .hint { margin-left:auto; display:flex; gap:8px; align-items:center; color:#9A9087; font-size:11px; }
+.cmd-sub { display:flex; gap:16px; padding:10px 6px 0; font-size:11.5px; color:#9A9087; }
+.cmd-sub .ex { color:#9A9087; }
+.cmd-sub .ex b { color:#EDE7E0; font-weight:500; }
+
+/* ---- Query result (secondary panel, primary position) ---- */
+.result {
+  max-width:880px; margin:14px auto 0; background:#1C1917; border:1px solid #322C27;
+  border-radius:13px; overflow:hidden;
+}
+.result .rhead {
+  display:flex; align-items:center; gap:10px; padding:11px 18px; border-bottom:1px solid #322C27;
+  font-size:12px; color:#9A9087; background:#181512;
+}
+.result .rhead .q { color:#EDE7E0; font-weight:600; }
+.result .rhead .kev {
+  font-size:10px; font-weight:700; color:#D27D6E; border:1px solid rgba(210,125,110,.5);
+  background:rgba(210,125,110,.1); border-radius:99px; padding:1px 8px; letter-spacing:.06em;
+}
+.result .rbody { display:grid; grid-template-columns:repeat(3,1fr) 1.4fr; gap:0; }
+.result .cell { padding:16px 18px; border-right:1px solid #221e1a; }
+.result .cell:last-child { border-right:0; }
+.result .cell b { display:block; font-size:27px; font-weight:650; letter-spacing:-.01em; line-height:1.1; }
+.result .cell span { font-size:11px; color:#9A9087; }
+.result .cell .amber { color:#D9A05B; }
+.nschip { display:inline-block; border:1px solid #322C27; background:#121010; border-radius:6px; padding:2px 9px; font-size:11.5px; margin:2px 4px 2px 0; }
+.result .rfoot {
+  display:flex; gap:14px; align-items:center; padding:10px 18px; border-top:1px solid #322C27;
+  font-size:11.5px; color:#9A9087;
+}
+.result .rfoot a { color:#D9A05B; text-decoration:none; font-weight:500; }
+.result .rfoot .keys { margin-left:auto; display:flex; gap:10px; align-items:center; }
+
+/* ---- Posture below: supporting context ---- */
+.posture { padding:30px 28px 8px; }
+.posture .phead { display:flex; align-items:baseline; gap:12px; margin-bottom:14px; }
+.posture .phead h2 { font-size:14px; font-weight:600; }
+.posture .phead span { font-size:11.5px; color:#9A9087; }
+.statrow { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+.scard { background:#1C1917; border:1px solid #322C27; border-radius:11px; padding:13px 16px; }
+.scard .lbl { font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:#9A9087; margin-bottom:6px; }
+.scard .val { font-size:21px; font-weight:650; letter-spacing:-.01em; }
+.scard .sub { font-size:11px; color:#9A9087; margin-top:4px; }
+.teal { color:#8FAFAF; }
+.critink { color:#D27D6E; }
+.kevpill {
+  font-size:10px; font-weight:600; color:#D27D6E; border:1px solid rgba(210,125,110,.5);
+  border-radius:99px; padding:1px 7px; vertical-align:3px; margin-left:6px;
+}
+.poppill { font-size:10px; color:#D9B36B; border:1px solid rgba(217,179,107,.45); border-radius:99px; padding:1px 7px; vertical-align:3px; margin-left:6px; }
+/* inline severity spark in stat card */
+.spark { display:flex; gap:3px; align-items:flex-end; height:26px; margin-top:8px; }
+.spark i { flex:1; border-radius:3px 3px 1px 1px; }
+.spark .c { background:#D27D6E; opacity:.75; height:18%; }
+.spark .h { background:#D2986B; opacity:.72; height:32%; }
+.spark .m { background:#C9B07E; opacity:.66; height:60%; }
+.spark .l { background:#968D82; opacity:.6; height:100%; }
+
+/* findings list — Linear-style rows */
+.flist { margin-top:14px; background:#1C1917; border:1px solid #322C27; border-radius:11px; overflow:hidden; }
+.flist .fh {
+  display:flex; gap:10px; align-items:center; padding:9px 16px; border-bottom:1px solid #322C27;
+  font-size:11px; color:#9A9087; text-transform:uppercase; letter-spacing:.07em; background:#181512;
+}
+.frow {
+  display:grid; grid-template-columns:14px 150px 1fr 64px 90px 110px 110px; gap:12px; align-items:center;
+  padding:9px 16px; border-bottom:1px solid #221e1a; font-size:12.5px;
+}
+.frow:last-child { border-bottom:0; }
+.frow:hover { background:#181512; }
+.sevdot { width:8px; height:8px; border-radius:3px; }
+.sevdot.c { background:rgba(210,125,110,.8); }
+.sevdot.h { background:rgba(210,152,107,.8); }
+.sevdot.m { background:rgba(201,176,126,.75); }
+.frow .id { font-weight:600; }
+.frow .pkg { color:#9A9087; }
+.frow .meta { color:#9A9087; font-size:11.5px; text-align:right; }
+.tri { font-size:11px; border:1px solid #322C27; border-radius:6px; padding:2px 8px; color:#9A9087; text-align:center; }
+.tri.fix { border-color:rgba(217,160,91,.45); color:#D9A05B; }
+.tri.mit { border-color:rgba(157,186,140,.45); color:#9DBA8C; }
+.tri.na { border-color:rgba(143,175,175,.45); color:#8FAFAF; }
+.gaprow {
+  display:flex; gap:8px; align-items:center; padding:8px 16px; font-size:11.5px; color:#D9B36B;
+  background:rgba(217,179,107,.05); border-bottom:1px solid #221e1a;
+}
+
+/* footer status line */
+.statusline {
+  display:flex; gap:20px; padding:11px 28px 22px; font-size:11px; color:#9A9087; align-items:center;
+}
+.statusline b { color:#EDE7E0; font-weight:500; }
+.okdot { width:7px; height:7px; border-radius:50%; background:#9DBA8C; display:inline-block; margin-right:5px; vertical-align:0; }
+.warndotsm { width:7px; height:7px; border-radius:50%; background:#D9B36B; display:inline-block; margin-right:5px; vertical-align:0; }
+.dqinline { color:#8FAFAF; }
+</style>
+</head>
+<body>
+
+<div class="rationale">
+  <strong>Direction 4 — Query-first command surface.</strong> The blast-radius question is the product's sharpest moment, so the command bar owns the top of the screen and the answered query sits directly beneath it, Linear/Raycast-style — keyboard hints throughout, posture demoted to compact supporting context below. The <em>air-gapped state</em> is the visible variant: feeds arrive as imported bundles and the surface says so plainly, because provenance and freshness are part of every answer Armoury gives.
+</div>
+
+<div class="frame">
+  <div class="chrome">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="urlbar mono">armoury.internal/query</div>
+  </div>
+
+  <div class="topbar">
+    <div class="brand"><span class="mark">A</span> Armoury</div>
+    <span class="crumb">Fleet posture · <b>8 clusters</b> · 3,847 artifacts</span>
+    <div class="right">
+      <span><span class="kbd">G</span> then <span class="kbd">F</span> findings</span>
+      <span><span class="kbd">G</span> then <span class="kbd">A</span> artifacts</span>
+      <span><span class="kbd">E</span> evidence pack</span>
+    </div>
+  </div>
+
+  <!-- STATE VARIANT: air-gapped mode -->
+  <div class="airgap">
+    <span class="ic">⬡</span>
+    <span><b>Air-gapped mode.</b> <span class="muted">Feeds are imported manually — current bundle 2026-06-10 (Grype DB, KEV, EPSS). Scores are 2 days old; rankings remain reproducible against the recorded bundle.</span></span>
+    <a class="act" href="#">Import newer bundle →</a>
+  </div>
+
+  <!-- COMMAND BAR -->
+  <div class="cmdwrap">
+    <div class="cmd">
+      <span class="prompt">⌕</span>
+      <span class="typed mono">CVE-2026-23012</span><span class="caret"></span>
+      <span class="hint">
+        <span>blast radius</span><span class="kbd">↵</span>
+        <span style="margin-left:6px;">commands</span><span class="kbd">⌘K</span>
+      </span>
+    </div>
+    <div class="cmd-sub">
+      <span class="ex">Try: <b>sha256:4ac8…</b> which workloads run this image</span>
+      <span class="ex"><b>pkg:openssl</b> every artifact carrying a package</span>
+      <span class="ex"><b>ns:prod/payments</b> posture of one namespace</span>
+    </div>
+  </div>
+
+  <!-- QUERY RESULT (secondary panel in primary position) -->
+  <div class="result">
+    <div class="rhead">
+      <span class="q mono">CVE-2026-23012</span>
+      <span class="kev">KEV</span>
+      <span>openssl 3.2.1 · critical · EPSS 0.89</span>
+      <span style="margin-left:auto;">answered in 0.4 s · runtime state observed 6 min ago</span>
+    </div>
+    <div class="rbody">
+      <div class="cell"><b>14</b><span>affected images</span></div>
+      <div class="cell"><b class="amber">9</b><span>running now</span></div>
+      <div class="cell"><b>5</b><span>built, not deployed</span></div>
+      <div class="cell">
+        <span style="display:block; margin-bottom:6px;">namespaces</span>
+        <span class="nschip">prod/payments</span>
+        <span class="nschip">prod/checkout</span>
+      </div>
+    </div>
+    <div class="rfoot">
+      <a href="#">Open 14 artifacts</a>
+      <a href="#">Generate evidence pack</a>
+      <span>answer derived from SBOM evidence on file — nothing was rescanned</span>
+      <span class="keys"><span class="kbd">↵</span> open <span class="kbd">E</span> evidence <span class="kbd">esc</span> clear</span>
+    </div>
+  </div>
+
+  <!-- POSTURE AS SUPPORTING CONTEXT -->
+  <section class="posture">
+    <div class="phead">
+      <h2>Fleet posture</h2>
+      <span>coverage 82% and populating · bundle feeds imported 2026-06-10 · a quiet dashboard is not the same as a safe fleet</span>
+    </div>
+
+    <div class="statrow">
+      <div class="scard">
+        <div class="lbl">Artifacts inventoried</div>
+        <div class="val">3,847</div>
+        <div class="sub">2,914 images · 689 repos · 244 charts</div>
+      </div>
+      <div class="scard">
+        <div class="lbl">Critical findings</div>
+        <div class="val critink">23<span class="kevpill">4 KEV</span></div>
+        <div class="sub">161 high behind them, EPSS-ranked</div>
+      </div>
+      <div class="scard">
+        <div class="lbl">Findings by severity</div>
+        <div class="spark"><i class="c"></i><i class="h"></i><i class="m"></i><i class="l"></i></div>
+        <div class="sub">23 / 161 / 482 / 1,204</div>
+      </div>
+      <div class="scard">
+        <div class="lbl">Coverage</div>
+        <div class="val teal">82%<span class="poppill">populating</span></div>
+        <div class="sub">212 artifacts awaiting SBOM — unknown, not safe</div>
+      </div>
+      <div class="scard">
+        <div class="lbl">Data quality</div>
+        <div class="val teal">B+ · 84</div>
+        <div class="sub">SBOM depth limits 9% of results</div>
+      </div>
+    </div>
+
+    <div class="flist">
+      <div class="fh">
+        <span>Ranked findings — KEV first, then EPSS</span>
+        <span style="margin-left:auto; text-transform:none; letter-spacing:0;">↑↓ to move · ↵ to open · T to triage</span>
+      </div>
+      <div class="frow">
+        <span class="sevdot c"></span>
+        <span class="id mono">CVE-2026-23012</span>
+        <span class="pkg">openssl 3.2.1 · KEV · prod/payments, prod/checkout</span>
+        <span class="meta">0.89</span>
+        <span class="meta">14 artifacts</span>
+        <span class="meta">9 running</span>
+        <span class="tri fix">fix planned</span>
+      </div>
+      <div class="frow">
+        <span class="sevdot c"></span>
+        <span class="id mono">CVE-2026-21118</span>
+        <span class="pkg">glibc 2.39 · KEV · fleet-wide base image</span>
+        <span class="meta">0.74</span>
+        <span class="meta">31 artifacts</span>
+        <span class="meta">22 running</span>
+        <span class="tri">untriaged</span>
+      </div>
+      <div class="frow">
+        <span class="sevdot h"></span>
+        <span class="id mono">CVE-2025-48104</span>
+        <span class="pkg">curl 8.6.0 · KEV · staging, prod/ingest</span>
+        <span class="meta">0.61</span>
+        <span class="meta">26 artifacts</span>
+        <span class="meta">11 running</span>
+        <span class="tri mit">mitigated</span>
+      </div>
+      <div class="gaprow">
+        ◔ &nbsp;Coverage gap — edge-cluster-03 at 41%, edge-cluster-04 at 58%, both populating. 212 artifacts not yet ranked.
+      </div>
+      <div class="frow">
+        <span class="sevdot c"></span>
+        <span class="id mono">CVE-2026-22871</span>
+        <span class="pkg">golang.org/x/net 0.22 · prod/api-gateway</span>
+        <span class="meta">0.88</span>
+        <span class="meta">19 artifacts</span>
+        <span class="meta">14 running</span>
+        <span class="tri fix">fix planned</span>
+      </div>
+      <div class="frow">
+        <span class="sevdot c"></span>
+        <span class="id mono">CVE-2026-24416</span>
+        <span class="pkg">libpq 16.2 · prod/billing-db sidecars</span>
+        <span class="meta">0.55</span>
+        <span class="meta">12 artifacts</span>
+        <span class="meta">12 running</span>
+        <span class="tri">untriaged</span>
+      </div>
+      <div class="frow">
+        <span class="sevdot h"></span>
+        <span class="id mono">CVE-2025-50231</span>
+        <span class="pkg">jackson-databind 2.16 · jvm services, fleet-wide</span>
+        <span class="meta">0.37</span>
+        <span class="meta">44 artifacts</span>
+        <span class="meta">28 running</span>
+        <span class="tri na">not affected</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="statusline">
+    <span><span class="warndotsm"></span>Feeds: offline bundle <b>2026-06-10</b> (Grype DB · KEV · EPSS)</span>
+    <span><span class="okdot"></span>Inventory walk <b>14:02 UTC</b></span>
+    <span class="dqinline">Data quality B+ (84/100)</span>
+    <span style="margin-left:auto;">Every answer records the feed versions it used.</span>
+  </div>
+</div>
+
+</body>
+</html>

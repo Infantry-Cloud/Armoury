@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armoury — Direction 3: Evidence Ledger</title>
+<style>
+/* ============================================================
+   DIRECTION 3 — EVIDENCE LEDGER
+   Forge palette (LOCKED):
+   #121010  background
+   #1C1917  surface
+   #322C27  border (hairline rules throughout)
+   #EDE7E0  text-primary
+   #9A9087  text-muted
+   #D9A05B  accent (ember amber — used only for seals/links)
+   #D27D6E  severity: critical  (typographic bars at 0.6–0.85 opacity)
+   #D2986B  severity: high
+   #C9B07E  severity: medium
+   #968D82  severity: low
+   #9DBA8C  success
+   #D9B36B  warning (stale-feed dagger note)
+   #8FAFAF  data-quality (cool slate-teal)
+   ============================================================ */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0b0a09; color:#EDE7E0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  padding:28px; -webkit-font-smoothing:antialiased;
+}
+.serif { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+.rationale {
+  max-width:980px; margin:0 auto 22px; padding:14px 18px;
+  background:#1C1917; border:1px solid #322C27; border-radius:10px;
+  color:#9A9087; font-size:13px; line-height:1.55;
+}
+.rationale strong { color:#EDE7E0; }
+.rationale em { color:#D9A05B; font-style:normal; }
+
+/* ---- Browser frame ---- */
+.frame {
+  max-width:1180px; margin:0 auto; border:1px solid #322C27; border-radius:12px;
+  overflow:hidden; background:#121010; box-shadow:0 14px 40px rgba(0,0,0,.45);
+}
+.chrome { display:flex; align-items:center; gap:10px; padding:10px 16px; background:#1C1917; border-bottom:1px solid #322C27; }
+.dot { width:10px; height:10px; border-radius:50%; background:#322C27; }
+.urlbar { flex:1; max-width:440px; margin:0 auto; background:#121010; border:1px solid #322C27; border-radius:6px; padding:5px 12px; font-size:11px; color:#9A9087; text-align:center; }
+
+/* ---- Document body ---- */
+.doc { max-width:920px; margin:0 auto; padding:44px 48px 56px; }
+
+/* Masthead */
+.masthead { display:flex; align-items:baseline; gap:16px; border-bottom:2px solid #322C27; padding-bottom:16px; }
+.masthead h1 { font-size:30px; font-weight:550; letter-spacing:.005em; }
+.masthead .reg { color:#9A9087; font-size:12.5px; }
+.masthead .right { margin-left:auto; text-align:right; font-size:11.5px; color:#9A9087; line-height:1.6; }
+.masthead .right .seal { color:#D9A05B; }
+.subhead {
+  display:flex; gap:26px; padding:12px 0; border-bottom:1px solid #322C27;
+  font-size:12px; color:#9A9087;
+}
+.subhead b { color:#EDE7E0; font-weight:600; }
+.subhead .fnref { color:#D9A05B; }
+
+/* Section headings */
+h2.sec { font-size:13px; font-weight:550; letter-spacing:.14em; text-transform:uppercase; color:#9A9087; margin:34px 0 12px; }
+h2.sec span { color:#EDE7E0; }
+h2.sec::after { content:""; display:block; height:1px; background:#322C27; margin-top:8px; }
+
+/* Summary as a tabular register */
+.register { width:100%; border-collapse:collapse; }
+.register td { padding:9px 4px; border-bottom:1px solid #221e1a; font-size:13.5px; vertical-align:baseline; }
+.register td.k { color:#9A9087; width:280px; }
+.register td.v { color:#EDE7E0; }
+.register .figure { font-size:19px; font-weight:550; letter-spacing:-.01em; }
+.kev-ink { color:#D27D6E; }
+.teal { color:#8FAFAF; }
+.warn-ink { color:#D9B36B; }
+.ok-ink { color:#9DBA8C; }
+.fn { color:#D9A05B; font-size:11px; vertical-align:super; text-decoration:none; margin-left:2px; }
+
+/* Typographic severity tally (the "chart") */
+.tally { margin:6px 0 0; }
+.tally .trow { display:flex; align-items:baseline; gap:14px; padding:7px 0; border-bottom:1px solid #221e1a; font-size:13px; }
+.tally .tname { width:84px; color:#9A9087; }
+.tally .tcount { width:64px; text-align:right; font-weight:600; font-size:15px; }
+.tally .tbar { flex:1; height:9px; border-radius:4px; background:#181512; overflow:hidden; }
+.tally .tbar i { display:block; height:100%; border-radius:4px; }
+.tb-c { background:#D27D6E; opacity:.75; }
+.tb-h { background:#D2986B; opacity:.72; }
+.tb-m { background:#C9B07E; opacity:.66; }
+.tb-l { background:#968D82; opacity:.6; }
+.tally .tshare { width:56px; text-align:right; color:#9A9087; font-size:11.5px; }
+
+/* Findings ledger table */
+table.ledger { width:100%; border-collapse:collapse; font-size:13px; }
+.ledger th {
+  text-align:left; font-weight:500; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:#9A9087; padding:8px 6px; border-bottom:1.5px solid #322C27;
+}
+.ledger td { padding:10px 6px; border-bottom:1px solid #221e1a; vertical-align:baseline; }
+.ledger .entryno { color:#9A9087; font-size:11.5px; width:34px; }
+.ledger .cveid { font-weight:600; font-size:13px; letter-spacing:.01em; }
+.ledger .pkg { color:#9A9087; }
+.ledger .num { text-align:right; }
+.sevword { font-size:12px; font-weight:600; letter-spacing:.04em; }
+.sevword.c { color:rgba(210,125,110,.92); }
+.sevword.h { color:rgba(210,152,107,.92); }
+.sevword.m { color:rgba(201,176,126,.9); }
+.sevword.l { color:rgba(150,141,130,.95); }
+.kevmark {
+  font-size:10px; font-weight:700; letter-spacing:.1em; color:#D27D6E;
+  border:1px solid rgba(210,125,110,.5); padding:1px 6px; border-radius:3px; margin-left:7px;
+}
+.triage { font-style:italic; color:#9A9087; font-size:12.5px; }
+.triage.fix { color:#D9A05B; }
+.triage.mit { color:#9DBA8C; }
+.triage.na { color:#8FAFAF; }
+tr.gapline td {
+  background:rgba(217,179,107,.05); color:#D9B36B; font-size:12px; font-style:italic;
+  border-bottom:1px solid #322C27; padding:9px 6px;
+}
+
+/* Appended blast-radius entry (secondary panel) */
+.entry {
+  margin-top:14px; border:1px solid #322C27; border-left:3px solid #D9A05B; border-radius:6px;
+  background:#1C1917; padding:18px 22px;
+}
+.entry .ehead { display:flex; align-items:baseline; gap:12px; font-size:12px; color:#9A9087; }
+.entry .ehead .eid { color:#D9A05B; }
+.entry h3 { font-size:17px; font-weight:550; margin:8px 0 10px; }
+.entry p { font-size:13.5px; line-height:1.65; color:#EDE7E0; }
+.entry p .muted { color:#9A9087; }
+.entry .digest {
+  margin-top:12px; padding-top:10px; border-top:1px dashed #322C27; font-size:11px; color:#9A9087;
+  display:flex; gap:18px; flex-wrap:wrap;
+}
+.entry .digest b { color:#8FAFAF; font-weight:500; }
+
+/* Data quality attestation */
+.attest { display:flex; gap:30px; align-items:flex-start; }
+.attest .grade {
+  border:1px solid #322C27; border-radius:8px; padding:16px 22px; text-align:center; background:#1C1917;
+  min-width:130px;
+}
+.attest .grade .g { font-size:34px; font-weight:550; color:#8FAFAF; }
+.attest .grade .gs { font-size:11px; color:#9A9087; margin-top:4px; }
+.attest dl { flex:1; font-size:13px; }
+.attest dl .pair { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #221e1a; }
+.attest dt { color:#9A9087; }
+.attest dd { color:#EDE7E0; }
+
+/* Footnotes — provenance everywhere */
+.footnotes { margin-top:40px; border-top:2px solid #322C27; padding-top:14px; font-size:11.5px; color:#9A9087; line-height:1.8; }
+.footnotes .fnum { color:#D9A05B; }
+.footnotes .stale { color:#D9B36B; }   /* STATE VARIANT: stale-feed footnote + flagged row */
+.colophon {
+  margin-top:22px; padding-top:12px; border-top:1px solid #322C27; display:flex; gap:18px;
+  font-size:11px; color:#9A9087; align-items:baseline;
+}
+.colophon .seal { color:#D9A05B; }
+</style>
+</head>
+<body>
+
+<div class="rationale">
+  <strong>Direction 3 — Evidence ledger.</strong> The posture screen is rendered as a signed, append-only record rather than a dashboard: serif masthead, numbered entries, monospace digests, and provenance footnotes carried by every figure. Charts are reduced to typographic tallies so the table — the evidence — does the work; the <em>stale EPSS feed</em> is flagged the way a ledger flags a qualification: a dagger footnote, visible and permanent, never a dismissible toast.
+</div>
+
+<div class="frame">
+  <div class="chrome">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="urlbar mono">armoury.internal/fleet/record/4182</div>
+  </div>
+
+  <div class="doc">
+    <header class="masthead serif">
+      <h1>Armoury — Fleet Posture Record</h1>
+      <span class="reg">Entry № 4,182</span>
+      <div class="right" style="font-family:ui-sans-serif,system-ui,sans-serif;">
+        Compiled 2026-06-12, 14:07 UTC<br>
+        <span class="mono">sha256:9f3c…b2e1</span> <span class="seal">✦ signed</span>
+      </div>
+    </header>
+    <div class="subhead">
+      <span>Fleet: <b>8 clusters</b> · prod, staging, edge</span>
+      <span>Operator: <b>priya@infantry.cloud</b></span>
+      <span>Sources: Grype DB <b>41 min</b> <a class="fn" href="#fn1">1</a> · KEV <b>3 h</b> <a class="fn" href="#fn2">2</a> · EPSS <b class="warn-ink">26 h †</b> <a class="fn" href="#fn3">3</a></span>
+    </div>
+
+    <h2 class="sec"><span>I.</span> Summary of holdings &amp; exposure</h2>
+    <table class="register">
+      <tr>
+        <td class="k">Artifacts inventoried</td>
+        <td class="v"><span class="figure">3,847</span> &nbsp;<span style="color:#9A9087; font-size:12px;">2,914 images · 689 repos · 244 charts</span><a class="fn" href="#fn4">4</a></td>
+      </tr>
+      <tr>
+        <td class="k">Findings open, by priority</td>
+        <td class="v"><span class="figure kev-ink">23 critical</span> <span class="kevmark">4 KEV</span> &nbsp;·&nbsp; <span class="figure" style="color:rgba(210,152,107,.92);">161 high</span> &nbsp;·&nbsp; <span style="color:#9A9087;">482 medium, 1,204 low</span></td>
+      </tr>
+      <tr>
+        <td class="k">Coverage of fleet</td>
+        <td class="v"><span class="figure teal">82%</span> &nbsp;<span class="warn-ink" style="font-size:12.5px;">and populating — 212 artifacts awaiting SBOM</span><a class="fn" href="#fn5">5</a></td>
+      </tr>
+      <tr>
+        <td class="k">Fleet data-quality score</td>
+        <td class="v"><span class="figure teal">84 / 100</span> &nbsp;<span style="color:#9A9087; font-size:12px;">grade B+ · evidence-weighted</span><a class="fn" href="#fn6">6</a></td>
+      </tr>
+      <tr>
+        <td class="k">Feed freshness at compilation</td>
+        <td class="v" style="font-size:12.5px;"><span class="ok-ink">●</span> Grype DB synced 41 min ago &nbsp; <span class="ok-ink">●</span> KEV catalog 3 h ago &nbsp; <span class="warn-ink">● EPSS stale, 26 h ago †</span></td>
+      </tr>
+    </table>
+
+    <h2 class="sec"><span>II.</span> Tally of open findings by severity</h2>
+    <div class="tally">
+      <div class="trow"><span class="tname">Critical</span><span class="tcount kev-ink">23</span><span class="tbar"><i class="tb-c" style="width:8%;"></i></span><span class="tshare">1.2%</span></div>
+      <div class="trow"><span class="tname">High</span><span class="tcount" style="color:rgba(210,152,107,.92);">161</span><span class="tbar"><i class="tb-h" style="width:22%;"></i></span><span class="tshare">8.6%</span></div>
+      <div class="trow"><span class="tname">Medium</span><span class="tcount" style="color:rgba(201,176,126,.9);">482</span><span class="tbar"><i class="tb-m" style="width:52%;"></i></span><span class="tshare">25.8%</span></div>
+      <div class="trow"><span class="tname">Low</span><span class="tcount" style="color:#968D82;">1,204</span><span class="tbar"><i class="tb-l" style="width:100%;"></i></span><span class="tshare">64.4%</span></div>
+    </div>
+
+    <h2 class="sec"><span>III.</span> Ranked findings — KEV first, thereafter by EPSS</h2>
+    <table class="ledger">
+      <thead>
+        <tr>
+          <th>№</th><th>Finding</th><th>Package</th><th>Severity</th><th>EPSS</th>
+          <th class="num">Artifacts</th><th class="num">Running</th><th>Triage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="entryno">01</td>
+          <td><span class="mono cveid">CVE-2026-23012</span><span class="kevmark">KEV</span></td>
+          <td class="pkg mono">openssl 3.2.1</td>
+          <td><span class="sevword c">CRITICAL</span></td>
+          <td class="mono">0.89</td>
+          <td class="num">14</td><td class="num">9</td>
+          <td><span class="triage fix">fix planned</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">02</td>
+          <td><span class="mono cveid">CVE-2026-21118</span><span class="kevmark">KEV</span></td>
+          <td class="pkg mono">glibc 2.39</td>
+          <td><span class="sevword c">CRITICAL</span></td>
+          <td class="mono">0.74 †</td>
+          <td class="num">31</td><td class="num">22</td>
+          <td><span class="triage">untriaged</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">03</td>
+          <td><span class="mono cveid">CVE-2025-48104</span><span class="kevmark">KEV</span></td>
+          <td class="pkg mono">curl 8.6.0</td>
+          <td><span class="sevword h">HIGH</span></td>
+          <td class="mono">0.61 †</td>
+          <td class="num">26</td><td class="num">11</td>
+          <td><span class="triage mit">mitigated</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">04</td>
+          <td><span class="mono cveid">CVE-2026-20457</span><span class="kevmark">KEV</span></td>
+          <td class="pkg mono">busybox 1.36.1</td>
+          <td><span class="sevword h">HIGH</span></td>
+          <td class="mono">0.42 †</td>
+          <td class="num">8</td><td class="num">3</td>
+          <td><span class="triage na">not affected</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">05</td>
+          <td><span class="mono cveid">CVE-2026-22871</span></td>
+          <td class="pkg mono">golang.org/x/net 0.22</td>
+          <td><span class="sevword c">CRITICAL</span></td>
+          <td class="mono">0.88 †</td>
+          <td class="num">19</td><td class="num">14</td>
+          <td><span class="triage fix">fix planned</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">06</td>
+          <td><span class="mono cveid">CVE-2026-24416</span></td>
+          <td class="pkg mono">libpq 16.2</td>
+          <td><span class="sevword c">CRITICAL</span></td>
+          <td class="mono">0.55 †</td>
+          <td class="num">12</td><td class="num">12</td>
+          <td><span class="triage">untriaged</span></td>
+        </tr>
+        <tr class="gapline">
+          <td colspan="8">Qualification — this register excludes 212 artifacts still populating on edge-cluster-03 (41%) and edge-cluster-04 (58%). Entries may be appended as SBOMs arrive. A quiet record is not the same as a safe fleet.</td>
+        </tr>
+        <tr>
+          <td class="entryno">07</td>
+          <td><span class="mono cveid">CVE-2025-50231</span></td>
+          <td class="pkg mono">jackson-databind 2.16</td>
+          <td><span class="sevword h">HIGH</span></td>
+          <td class="mono">0.37 †</td>
+          <td class="num">44</td><td class="num">28</td>
+          <td><span class="triage na">not affected</span></td>
+        </tr>
+        <tr>
+          <td class="entryno">08</td>
+          <td><span class="mono cveid">CVE-2026-18550</span></td>
+          <td class="pkg mono">zlib 1.3.1</td>
+          <td><span class="sevword m">MEDIUM</span></td>
+          <td class="mono">0.11 †</td>
+          <td class="num">203</td><td class="num">96</td>
+          <td><span class="triage">accepted</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec"><span>IV.</span> Appended entry — blast-radius determination</h2>
+    <!-- SECONDARY PANEL: blast radius as an appended ledger entry -->
+    <div class="entry">
+      <div class="ehead">
+        <span class="eid mono">Entry № 4,182-A</span>
+        <span>Query executed 14:11 UTC · resolved against runtime state observed 6 min prior</span>
+      </div>
+      <h3 class="serif">Blast radius of CVE-2026-23012 (openssl 3.2.1, KEV-listed)</h3>
+      <p>
+        <b>14 affected images</b>, of which <b>9 are running</b>, confined to namespaces
+        <span class="mono">prod/payments</span> and <span class="mono">prod/checkout</span>.
+        <span class="muted">The remaining 5 images are built but not deployed. Determination drawn from SBOM evidence on file; no artifact was rescanned to answer this query.</span>
+      </p>
+      <div class="digest">
+        <span>Evidence pack: <b class="mono">EP-2026-0612-031</b></span>
+        <span>Inputs digest: <b class="mono">sha256:4ac8…77fd</b></span>
+        <span>Reproducible: <b>yes — query + feed versions recorded</b></span>
+      </div>
+    </div>
+
+    <h2 class="sec"><span>V.</span> Data-quality attestation</h2>
+    <div class="attest">
+      <div class="grade">
+        <div class="g serif">B+</div>
+        <div class="gs">84 / 100 · fleet-wide</div>
+      </div>
+      <dl>
+        <div class="pair"><dt>SBOM depth — transitive dependencies resolved</dt><dd>78 / 100</dd></div>
+        <div class="pair"><dt>Signature &amp; attestation coverage</dt><dd>91 / 100</dd></div>
+        <div class="pair"><dt>Runtime correlation — images matched to workloads</dt><dd>83 / 100</dd></div>
+        <div class="pair"><dt>Qualification</dt><dd style="color:#9A9087;">shallow SBOMs limit confidence on 9% of findings</dd></div>
+      </dl>
+    </div>
+
+    <div class="footnotes">
+      <div><span class="fnum" id="fn1">1.</span> Grype vulnerability DB v5, build 2026-06-12T13:26Z, synced 41 minutes before compilation.</div>
+      <div><span class="fnum" id="fn2">2.</span> CISA Known Exploited Vulnerabilities catalog, retrieved 2026-06-12T11:04Z.</div>
+      <div class="stale"><span class="fnum" id="fn3">3.</span> † EPSS scores are stale — last synced 26 hours ago (2026-06-11T12:09Z). All EPSS figures above carry this qualification. KEV ordering is unaffected. Re-sync or import an offline bundle to clear.</div>
+      <div><span class="fnum" id="fn4">4.</span> Inventory walk completed 14:02 UTC across 8 clusters; every artifact retains its SBOM, digest, and source registry as evidence.</div>
+      <div><span class="fnum" id="fn5">5.</span> Coverage counts unknown artifacts as unknown, not safe. 212 artifacts are queued for SBOM generation on edge clusters.</div>
+      <div><span class="fnum" id="fn6">6.</span> Data-quality score is evidence-weighted: SBOM depth, signature coverage, and runtime correlation. Method published at /docs/data-quality.</div>
+    </div>
+
+    <div class="colophon">
+      <span class="seal">✦</span>
+      <span>This record is append-only. Compiled by Armoury (self-hosted) · record digest <span class="mono">sha256:9f3c…b2e1</span> · prior entry № 4,181, 2026-06-12 08:07 UTC.</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

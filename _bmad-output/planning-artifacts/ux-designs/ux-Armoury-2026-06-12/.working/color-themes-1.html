@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armoury — Dark Theme Explorations (5 variations)</title>
+<style>
+/* ============================================================
+   Armoury — dark theme explorations. All values documented per
+   variation below so they can be lifted into Tailwind tokens.
+   System font stack, no JS, no external assets.
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+body { background: #08090b; color: #d6d9de; }
+
+.page-head {
+  padding: 40px 48px 28px;
+  border-bottom: 1px solid #1c1f25;
+}
+.page-head h1 { font-size: 22px; font-weight: 650; letter-spacing: -0.01em; color: #e8eaee; }
+.page-head p { margin-top: 8px; font-size: 14px; color: #8a8f99; max-width: 760px; line-height: 1.55; }
+
+/* ---------- shared band layout ---------- */
+.band { padding: 36px 48px 44px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.band-head { margin-bottom: 20px; }
+.band-head .vname { font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
+.band-head .vreg { font-size: 13.5px; margin-top: 4px; opacity: 0.75; }
+.band-head .vnum { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; margin-bottom: 6px; }
+
+/* token chips */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px 6px 7px; border-radius: 8px;
+  font-size: 11.5px; line-height: 1;
+  border: 1px solid;
+}
+.chip .sw { width: 16px; height: 16px; border-radius: 5px; flex: none; border: 1px solid rgba(255,255,255,0.12); }
+.chip .role { font-weight: 600; }
+.chip .hex { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10.5px; opacity: 0.65; }
+
+/* snippet card */
+.snippet { border-radius: 14px; border: 1px solid; padding: 22px 24px 20px; max-width: 980px; }
+.snip-title { font-size: 13px; font-weight: 650; letter-spacing: 0.01em; margin-bottom: 2px; }
+.snip-sub { font-size: 11.5px; margin-bottom: 16px; }
+
+.statrow { display: flex; gap: 36px; flex-wrap: wrap; padding: 14px 0 18px; border-bottom: 1px solid; margin-bottom: 18px; }
+.stat .num { font-size: 21px; font-weight: 650; letter-spacing: -0.02em; }
+.stat .lbl { font-size: 11px; margin-top: 3px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* soft horizontal bars */
+.barchart { margin-bottom: 20px; }
+.barchart .bc-title { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
+.barrow { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 11.5px; }
+.barrow .blbl { width: 64px; flex: none; text-align: right; }
+.barrow .btrack { flex: 1; height: 14px; border-radius: 7px; overflow: hidden; }
+.barrow .bfill { height: 100%; border-radius: 7px; }
+.barrow .bval { width: 34px; flex: none; font-variant-numeric: tabular-nums; }
+
+/* findings table */
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th { text-align: left; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0 10px 8px; }
+td { padding: 10px 10px; border-top: 1px solid; vertical-align: middle; }
+td.mono, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; }
+.pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 600; line-height: 1.3; border: 1px solid transparent; }
+.dq { display: inline-block; padding: 2px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 650; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; border: 1px solid; }
+
+/* ============================================================
+   VARIATION 1 — "Gunmetal"  (near-black neutral, one restrained accent)
+   background    #0B0C0E
+   surface/card  #15171B
+   border        #262A31
+   text-primary  #E7E9ED
+   text-muted    #878E9A
+   accent        #9DB2D9   (desaturated steel blue — single accent)
+   critical      #C97A7A   high #C99A6B   medium #C9BC85   low #7E8A9C
+   success       #8FBF9F   warning #C9A86B
+   data-quality  #A493C9   (muted violet — distinct from severity)
+   ============================================================ */
+.v1 { background: #0B0C0E; color: #E7E9ED; }
+.v1 .vreg { color: #878E9A; }
+.v1 .chip { background: #15171B; border-color: #262A31; color: #E7E9ED; }
+.v1 .chip .hex { color: #878E9A; }
+.v1 .snippet { background: #15171B; border-color: #262A31; }
+.v1 .snip-title { color: #E7E9ED; }
+.v1 .snip-sub { color: #878E9A; }
+.v1 .statrow { border-color: #262A31; }
+.v1 .stat .num { color: #E7E9ED; }
+.v1 .stat .num em { color: #9DB2D9; font-style: normal; }
+.v1 .stat .lbl { color: #878E9A; }
+.v1 .bc-title { color: #878E9A; }
+.v1 .blbl, .v1 .bval { color: #878E9A; }
+.v1 .btrack { background: #1D2025; }
+.v1 .b-crit { background: #C97A7A; opacity: 0.85; }
+.v1 .b-high { background: #C99A6B; opacity: 0.8; }
+.v1 .b-med  { background: #C9BC85; opacity: 0.7; }
+.v1 .b-low  { background: #7E8A9C; opacity: 0.6; }
+.v1 th { color: #878E9A; }
+.v1 td { border-color: #22262C; color: #C8CCD3; }
+.v1 .sev-crit { color: #D89090; background: rgba(201,122,122,0.12); border-color: rgba(201,122,122,0.3); }
+.v1 .kev { color: #C97A7A; font-weight: 650; font-size: 10.5px; letter-spacing: 0.05em; }
+.v1 .st-plan { color: #9DB2D9; background: rgba(157,178,217,0.12); border-color: rgba(157,178,217,0.3); }
+.v1 .st-inv  { color: #C9A86B; background: rgba(201,168,107,0.12); border-color: rgba(201,168,107,0.3); }
+.v1 .st-acc  { color: #878E9A; background: rgba(135,142,154,0.12); border-color: rgba(135,142,154,0.3); }
+.v1 .dq { color: #A493C9; border-color: rgba(164,147,201,0.35); background: rgba(164,147,201,0.08); }
+
+/* ============================================================
+   VARIATION 2 — "Slate Observatory"  (deep blue-slate analytics)
+   background    #0C1220
+   surface/card  #141C2E
+   border        #25304A
+   text-primary  #E4E9F4
+   text-muted    #8794AD
+   accent        #7FA3E8   (soft cornflower — analytics blue)
+   critical      #E08A93   high #E0A878   medium #D9C98A   low #8BA3C7
+   success       #84C5A5   warning #DBB36E
+   data-quality  #6FC7C7   (soft teal — distinct from severity & accent)
+   ============================================================ */
+.v2 { background: #0C1220; color: #E4E9F4; }
+.v2 .vreg { color: #8794AD; }
+.v2 .chip { background: #141C2E; border-color: #25304A; color: #E4E9F4; }
+.v2 .chip .hex { color: #8794AD; }
+.v2 .snippet { background: #141C2E; border-color: #25304A; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset; }
+.v2 .snip-title { color: #E4E9F4; }
+.v2 .snip-sub { color: #8794AD; }
+.v2 .statrow { border-color: #25304A; }
+.v2 .stat .num { color: #E4E9F4; }
+.v2 .stat .num em { color: #7FA3E8; font-style: normal; }
+.v2 .stat .lbl { color: #8794AD; }
+.v2 .bc-title { color: #8794AD; }
+.v2 .blbl, .v2 .bval { color: #8794AD; }
+.v2 .btrack { background: #1B2438; }
+.v2 .b-crit { background: linear-gradient(90deg, #E08A93, #C77781); }
+.v2 .b-high { background: linear-gradient(90deg, #E0A878, #C79268); }
+.v2 .b-med  { background: linear-gradient(90deg, #D9C98A, #BFB079); }
+.v2 .b-low  { background: linear-gradient(90deg, #8BA3C7, #7890B3); }
+.v2 th { color: #8794AD; }
+.v2 td { border-color: #212C44; color: #C5CEE0; }
+.v2 .sev-crit { color: #E08A93; background: rgba(224,138,147,0.12); border-color: rgba(224,138,147,0.3); }
+.v2 .kev { color: #E08A93; font-weight: 650; font-size: 10.5px; letter-spacing: 0.05em; }
+.v2 .st-plan { color: #7FA3E8; background: rgba(127,163,232,0.12); border-color: rgba(127,163,232,0.3); }
+.v2 .st-inv  { color: #DBB36E; background: rgba(219,179,110,0.12); border-color: rgba(219,179,110,0.3); }
+.v2 .st-acc  { color: #8794AD; background: rgba(135,148,173,0.12); border-color: rgba(135,148,173,0.3); }
+.v2 .dq { color: #6FC7C7; border-color: rgba(111,199,199,0.35); background: rgba(111,199,199,0.08); }
+
+/* ============================================================
+   VARIATION 3 — "Forge"  (warm graphite + ember amber — the Armoury workshop)
+   background    #121010
+   surface/card  #1C1917
+   border        #322C27
+   text-primary  #EDE7E0
+   text-muted    #9A9087
+   accent        #D9A05B   (ember amber — restrained, not orange-alarm)
+   critical      #D27D6E   high #D2986B   medium #C9B07E   low #968D82
+   success       #9DBA8C   warning #D9B36B
+   data-quality  #8FAFAF   (cool slate-teal — reads "instrument", not heat)
+   ============================================================ */
+.v3 { background: #121010; color: #EDE7E0; }
+.v3 .vreg { color: #9A9087; }
+.v3 .chip { background: #1C1917; border-color: #322C27; color: #EDE7E0; }
+.v3 .chip .hex { color: #9A9087; }
+.v3 .snippet { background: #1C1917; border-color: #322C27; }
+.v3 .snip-title { color: #EDE7E0; }
+.v3 .snip-sub { color: #9A9087; }
+.v3 .statrow { border-color: #322C27; }
+.v3 .stat .num { color: #EDE7E0; }
+.v3 .stat .num em { color: #D9A05B; font-style: normal; }
+.v3 .stat .lbl { color: #9A9087; }
+.v3 .bc-title { color: #9A9087; }
+.v3 .blbl, .v3 .bval { color: #9A9087; }
+.v3 .btrack { background: #262120; }
+.v3 .b-crit { background: #D27D6E; opacity: 0.85; }
+.v3 .b-high { background: #D2986B; opacity: 0.8; }
+.v3 .b-med  { background: #C9B07E; opacity: 0.7; }
+.v3 .b-low  { background: #968D82; opacity: 0.6; }
+.v3 th { color: #9A9087; }
+.v3 td { border-color: #2B2622; color: #D4CCC2; }
+.v3 .sev-crit { color: #D98E80; background: rgba(210,125,110,0.12); border-color: rgba(210,125,110,0.3); }
+.v3 .kev { color: #D27D6E; font-weight: 650; font-size: 10.5px; letter-spacing: 0.05em; }
+.v3 .st-plan { color: #D9A05B; background: rgba(217,160,91,0.12); border-color: rgba(217,160,91,0.3); }
+.v3 .st-inv  { color: #C9B07E; background: rgba(201,176,126,0.12); border-color: rgba(201,176,126,0.3); }
+.v3 .st-acc  { color: #9A9087; background: rgba(154,144,135,0.12); border-color: rgba(154,144,135,0.3); }
+.v3 .dq { color: #8FAFAF; border-color: rgba(143,175,175,0.35); background: rgba(143,175,175,0.08); }
+
+/* ============================================================
+   VARIATION 4 — "Quiet Ops"  (muted teal/cyan, control-room calm)
+   background    #0A1314
+   surface/card  #121E20
+   border        #223437
+   text-primary  #E2EBEB
+   text-muted    #84989A
+   accent        #6FBFB4   (muted sea-teal — ops, not neon cyan)
+   critical      #CF8189   high #CC9C72   medium #C2BA84   low #7C98A0
+   success       #82BF9C   warning #C7AC72
+   data-quality  #9C9CD4   (soft periwinkle — distinct from teal & severity)
+   ============================================================ */
+.v4 { background: #0A1314; color: #E2EBEB; }
+.v4 .vreg { color: #84989A; }
+.v4 .chip { background: #121E20; border-color: #223437; color: #E2EBEB; }
+.v4 .chip .hex { color: #84989A; }
+.v4 .snippet { background: #121E20; border-color: #223437; }
+.v4 .snip-title { color: #E2EBEB; }
+.v4 .snip-sub { color: #84989A; }
+.v4 .statrow { border-color: #223437; }
+.v4 .stat .num { color: #E2EBEB; }
+.v4 .stat .num em { color: #6FBFB4; font-style: normal; }
+.v4 .stat .lbl { color: #84989A; }
+.v4 .bc-title { color: #84989A; }
+.v4 .blbl, .v4 .bval { color: #84989A; }
+.v4 .btrack { background: #19282B; }
+.v4 .b-crit { background: #CF8189; opacity: 0.85; }
+.v4 .b-high { background: #CC9C72; opacity: 0.8; }
+.v4 .b-med  { background: #C2BA84; opacity: 0.7; }
+.v4 .b-low  { background: #7C98A0; opacity: 0.6; }
+.v4 th { color: #84989A; }
+.v4 td { border-color: #1E3033; color: #C3D1D2; }
+.v4 .sev-crit { color: #CF8189; background: rgba(207,129,137,0.12); border-color: rgba(207,129,137,0.3); }
+.v4 .kev { color: #CF8189; font-weight: 650; font-size: 10.5px; letter-spacing: 0.05em; }
+.v4 .st-plan { color: #6FBFB4; background: rgba(111,191,180,0.12); border-color: rgba(111,191,180,0.3); }
+.v4 .st-inv  { color: #C7AC72; background: rgba(199,172,114,0.12); border-color: rgba(199,172,114,0.3); }
+.v4 .st-acc  { color: #84989A; background: rgba(132,152,154,0.12); border-color: rgba(132,152,154,0.3); }
+.v4 .dq { color: #9C9CD4; border-color: rgba(156,156,212,0.35); background: rgba(156,156,212,0.08); }
+
+/* ============================================================
+   VARIATION 5 — "High Signal"  (high-contrast, accessibility-leaning;
+   AAA-targeting text contrast, still soft fills — no neon)
+   background    #060708
+   surface/card  #131517
+   border        #34383E
+   text-primary  #F4F6F8   (≈17:1 on surface)
+   text-muted    #A6ADB8   (≈7.5:1 on surface)
+   accent        #93C5FD   (soft sky — ≈9:1 on surface)
+   critical      #F2A0A0   high #EFB98A   medium #E3D391   low #A9B6C7
+   success       #A3D9B1   warning #EFC98A
+   data-quality  #C7AEF0   (soft lavender)
+   ============================================================ */
+.v5 { background: #060708; color: #F4F6F8; }
+.v5 .vreg { color: #A6ADB8; }
+.v5 .chip { background: #131517; border-color: #34383E; color: #F4F6F8; }
+.v5 .chip .hex { color: #A6ADB8; }
+.v5 .snippet { background: #131517; border-color: #34383E; }
+.v5 .snip-title { color: #F4F6F8; }
+.v5 .snip-sub { color: #A6ADB8; }
+.v5 .statrow { border-color: #34383E; }
+.v5 .stat .num { color: #F4F6F8; }
+.v5 .stat .num em { color: #93C5FD; font-style: normal; }
+.v5 .stat .lbl { color: #A6ADB8; }
+.v5 .bc-title { color: #A6ADB8; }
+.v5 .blbl, .v5 .bval { color: #A6ADB8; }
+.v5 .btrack { background: #1E2125; }
+.v5 .b-crit { background: #F2A0A0; }
+.v5 .b-high { background: #EFB98A; }
+.v5 .b-med  { background: #E3D391; }
+.v5 .b-low  { background: #A9B6C7; }
+.v5 th { color: #A6ADB8; }
+.v5 td { border-color: #2A2E33; color: #DDE1E6; }
+.v5 .sev-crit { color: #F2A0A0; background: rgba(242,160,160,0.14); border-color: rgba(242,160,160,0.4); }
+.v5 .kev { color: #F2A0A0; font-weight: 650; font-size: 10.5px; letter-spacing: 0.05em; }
+.v5 .st-plan { color: #93C5FD; background: rgba(147,197,253,0.14); border-color: rgba(147,197,253,0.4); }
+.v5 .st-inv  { color: #EFC98A; background: rgba(239,201,138,0.14); border-color: rgba(239,201,138,0.4); }
+.v5 .st-acc  { color: #A6ADB8; background: rgba(166,173,184,0.14); border-color: rgba(166,173,184,0.4); }
+.v5 .dq { color: #C7AEF0; border-color: rgba(199,174,240,0.4); background: rgba(199,174,240,0.1); }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Armoury — dark theme explorations</h1>
+  <p>Five dark-only variations, each a different emotional register, all keeping data viz soft (rounded muted bars, quiet chips — no neon, no glow). Same Fleet Posture content in every band so the palettes compare fairly. Hex values are documented in the stylesheet comments for lifting into tokens.</p>
+</div>
+
+<!-- ================= VARIATION 1 ================= -->
+<section class="band v1">
+  <div class="band-head">
+    <div class="vnum">Variation 1</div>
+    <div class="vname">Gunmetal</div>
+    <div class="vreg">Near-black neutral with one restrained steel-blue accent — the quietest room in the building; the data is the only color that matters.</div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:#0B0C0E"></span><span class="role">background</span><span class="hex">#0B0C0E</span></span>
+    <span class="chip"><span class="sw" style="background:#15171B"></span><span class="role">surface</span><span class="hex">#15171B</span></span>
+    <span class="chip"><span class="sw" style="background:#262A31"></span><span class="role">border</span><span class="hex">#262A31</span></span>
+    <span class="chip"><span class="sw" style="background:#E7E9ED"></span><span class="role">text-primary</span><span class="hex">#E7E9ED</span></span>
+    <span class="chip"><span class="sw" style="background:#878E9A"></span><span class="role">text-muted</span><span class="hex">#878E9A</span></span>
+    <span class="chip"><span class="sw" style="background:#9DB2D9"></span><span class="role">accent</span><span class="hex">#9DB2D9</span></span>
+    <span class="chip"><span class="sw" style="background:#C97A7A"></span><span class="role">critical</span><span class="hex">#C97A7A</span></span>
+    <span class="chip"><span class="sw" style="background:#C99A6B"></span><span class="role">high</span><span class="hex">#C99A6B</span></span>
+    <span class="chip"><span class="sw" style="background:#C9BC85"></span><span class="role">medium</span><span class="hex">#C9BC85</span></span>
+    <span class="chip"><span class="sw" style="background:#7E8A9C"></span><span class="role">low</span><span class="hex">#7E8A9C</span></span>
+    <span class="chip"><span class="sw" style="background:#8FBF9F"></span><span class="role">success</span><span class="hex">#8FBF9F</span></span>
+    <span class="chip"><span class="sw" style="background:#C9A86B"></span><span class="role">warning</span><span class="hex">#C9A86B</span></span>
+    <span class="chip"><span class="sw" style="background:#A493C9"></span><span class="role">data-quality</span><span class="hex">#A493C9</span></span>
+  </div>
+  <div class="snippet">
+    <div class="snip-title">Fleet Posture</div>
+    <div class="snip-sub">Evidence layer · last ingest 4 min ago</div>
+    <div class="statrow">
+      <div class="stat"><div class="num">1,204</div><div class="lbl">Artifacts</div></div>
+      <div class="stat"><div class="num"><em>37</em></div><div class="lbl">KEV findings</div></div>
+      <div class="stat"><div class="num">82%</div><div class="lbl">Coverage · populating</div></div>
+    </div>
+    <div class="barchart">
+      <div class="bc-title">Findings by severity</div>
+      <div class="barrow"><span class="blbl">Critical</span><span class="btrack"><span class="bfill b-crit" style="width:8%"></span></span><span class="bval">37</span></div>
+      <div class="barrow"><span class="blbl">High</span><span class="btrack"><span class="bfill b-high" style="width:28%"></span></span><span class="bval">142</span></div>
+      <div class="barrow"><span class="blbl">Medium</span><span class="btrack"><span class="bfill b-med" style="width:62%"></span></span><span class="bval">318</span></div>
+      <div class="barrow"><span class="blbl">Low</span><span class="btrack"><span class="bfill b-low" style="width:100%"></span></span><span class="bval">507</span></div>
+    </div>
+    <table>
+      <tr><th>Finding</th><th>Component</th><th>Flags</th><th>Where it runs</th><th>Status</th><th>DQ</th></tr>
+      <tr>
+        <td class="mono">CVE-2026-23012</td><td class="mono">log4j-core 2.17.0</td>
+        <td><span class="kev">KEV</span></td><td>prod / payments</td>
+        <td><span class="pill st-plan">Fix planned</span></td><td><span class="dq">DQ 86</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2026-11873</td><td class="mono">openssl 3.1.4</td>
+        <td><span class="pill sev-crit">Critical</span></td><td>prod / edge-gateway</td>
+        <td><span class="pill st-inv">Investigating</span></td><td><span class="dq">DQ 92</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2025-48190</td><td class="mono">requests 2.31.0</td>
+        <td></td><td>staging / billing-api</td>
+        <td><span class="pill st-acc">Accepted risk</span></td><td><span class="dq">DQ 71</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= VARIATION 2 ================= -->
+<section class="band v2">
+  <div class="band-head">
+    <div class="vnum">Variation 2</div>
+    <div class="vname">Slate Observatory</div>
+    <div class="vreg">Deep blue-slate analytics — the Weblytics register: a calm reporting surface where charts feel like weather, not alarms.</div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:#0C1220"></span><span class="role">background</span><span class="hex">#0C1220</span></span>
+    <span class="chip"><span class="sw" style="background:#141C2E"></span><span class="role">surface</span><span class="hex">#141C2E</span></span>
+    <span class="chip"><span class="sw" style="background:#25304A"></span><span class="role">border</span><span class="hex">#25304A</span></span>
+    <span class="chip"><span class="sw" style="background:#E4E9F4"></span><span class="role">text-primary</span><span class="hex">#E4E9F4</span></span>
+    <span class="chip"><span class="sw" style="background:#8794AD"></span><span class="role">text-muted</span><span class="hex">#8794AD</span></span>
+    <span class="chip"><span class="sw" style="background:#7FA3E8"></span><span class="role">accent</span><span class="hex">#7FA3E8</span></span>
+    <span class="chip"><span class="sw" style="background:#E08A93"></span><span class="role">critical</span><span class="hex">#E08A93</span></span>
+    <span class="chip"><span class="sw" style="background:#E0A878"></span><span class="role">high</span><span class="hex">#E0A878</span></span>
+    <span class="chip"><span class="sw" style="background:#D9C98A"></span><span class="role">medium</span><span class="hex">#D9C98A</span></span>
+    <span class="chip"><span class="sw" style="background:#8BA3C7"></span><span class="role">low</span><span class="hex">#8BA3C7</span></span>
+    <span class="chip"><span class="sw" style="background:#84C5A5"></span><span class="role">success</span><span class="hex">#84C5A5</span></span>
+    <span class="chip"><span class="sw" style="background:#DBB36E"></span><span class="role">warning</span><span class="hex">#DBB36E</span></span>
+    <span class="chip"><span class="sw" style="background:#6FC7C7"></span><span class="role">data-quality</span><span class="hex">#6FC7C7</span></span>
+  </div>
+  <div class="snippet">
+    <div class="snip-title">Fleet Posture</div>
+    <div class="snip-sub">Evidence layer · last ingest 4 min ago</div>
+    <div class="statrow">
+      <div class="stat"><div class="num">1,204</div><div class="lbl">Artifacts</div></div>
+      <div class="stat"><div class="num"><em>37</em></div><div class="lbl">KEV findings</div></div>
+      <div class="stat"><div class="num">82%</div><div class="lbl">Coverage · populating</div></div>
+    </div>
+    <div class="barchart">
+      <div class="bc-title">Findings by severity</div>
+      <div class="barrow"><span class="blbl">Critical</span><span class="btrack"><span class="bfill b-crit" style="width:8%"></span></span><span class="bval">37</span></div>
+      <div class="barrow"><span class="blbl">High</span><span class="btrack"><span class="bfill b-high" style="width:28%"></span></span><span class="bval">142</span></div>
+      <div class="barrow"><span class="blbl">Medium</span><span class="btrack"><span class="bfill b-med" style="width:62%"></span></span><span class="bval">318</span></div>
+      <div class="barrow"><span class="blbl">Low</span><span class="btrack"><span class="bfill b-low" style="width:100%"></span></span><span class="bval">507</span></div>
+    </div>
+    <table>
+      <tr><th>Finding</th><th>Component</th><th>Flags</th><th>Where it runs</th><th>Status</th><th>DQ</th></tr>
+      <tr>
+        <td class="mono">CVE-2026-23012</td><td class="mono">log4j-core 2.17.0</td>
+        <td><span class="kev">KEV</span></td><td>prod / payments</td>
+        <td><span class="pill st-plan">Fix planned</span></td><td><span class="dq">DQ 86</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2026-11873</td><td class="mono">openssl 3.1.4</td>
+        <td><span class="pill sev-crit">Critical</span></td><td>prod / edge-gateway</td>
+        <td><span class="pill st-inv">Investigating</span></td><td><span class="dq">DQ 92</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2025-48190</td><td class="mono">requests 2.31.0</td>
+        <td></td><td>staging / billing-api</td>
+        <td><span class="pill st-acc">Accepted risk</span></td><td><span class="dq">DQ 71</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= VARIATION 3 ================= -->
+<section class="band v3">
+  <div class="band-head">
+    <div class="vnum">Variation 3</div>
+    <div class="vname">Forge</div>
+    <div class="vreg">Warm graphite with ember amber — the Armoury workshop: tools on the bench, steel and warm light, craft over alarm.</div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:#121010"></span><span class="role">background</span><span class="hex">#121010</span></span>
+    <span class="chip"><span class="sw" style="background:#1C1917"></span><span class="role">surface</span><span class="hex">#1C1917</span></span>
+    <span class="chip"><span class="sw" style="background:#322C27"></span><span class="role">border</span><span class="hex">#322C27</span></span>
+    <span class="chip"><span class="sw" style="background:#EDE7E0"></span><span class="role">text-primary</span><span class="hex">#EDE7E0</span></span>
+    <span class="chip"><span class="sw" style="background:#9A9087"></span><span class="role">text-muted</span><span class="hex">#9A9087</span></span>
+    <span class="chip"><span class="sw" style="background:#D9A05B"></span><span class="role">accent</span><span class="hex">#D9A05B</span></span>
+    <span class="chip"><span class="sw" style="background:#D27D6E"></span><span class="role">critical</span><span class="hex">#D27D6E</span></span>
+    <span class="chip"><span class="sw" style="background:#D2986B"></span><span class="role">high</span><span class="hex">#D2986B</span></span>
+    <span class="chip"><span class="sw" style="background:#C9B07E"></span><span class="role">medium</span><span class="hex">#C9B07E</span></span>
+    <span class="chip"><span class="sw" style="background:#968D82"></span><span class="role">low</span><span class="hex">#968D82</span></span>
+    <span class="chip"><span class="sw" style="background:#9DBA8C"></span><span class="role">success</span><span class="hex">#9DBA8C</span></span>
+    <span class="chip"><span class="sw" style="background:#D9B36B"></span><span class="role">warning</span><span class="hex">#D9B36B</span></span>
+    <span class="chip"><span class="sw" style="background:#8FAFAF"></span><span class="role">data-quality</span><span class="hex">#8FAFAF</span></span>
+  </div>
+  <div class="snippet">
+    <div class="snip-title">Fleet Posture</div>
+    <div class="snip-sub">Evidence layer · last ingest 4 min ago</div>
+    <div class="statrow">
+      <div class="stat"><div class="num">1,204</div><div class="lbl">Artifacts</div></div>
+      <div class="stat"><div class="num"><em>37</em></div><div class="lbl">KEV findings</div></div>
+      <div class="stat"><div class="num">82%</div><div class="lbl">Coverage · populating</div></div>
+    </div>
+    <div class="barchart">
+      <div class="bc-title">Findings by severity</div>
+      <div class="barrow"><span class="blbl">Critical</span><span class="btrack"><span class="bfill b-crit" style="width:8%"></span></span><span class="bval">37</span></div>
+      <div class="barrow"><span class="blbl">High</span><span class="btrack"><span class="bfill b-high" style="width:28%"></span></span><span class="bval">142</span></div>
+      <div class="barrow"><span class="blbl">Medium</span><span class="btrack"><span class="bfill b-med" style="width:62%"></span></span><span class="bval">318</span></div>
+      <div class="barrow"><span class="blbl">Low</span><span class="btrack"><span class="bfill b-low" style="width:100%"></span></span><span class="bval">507</span></div>
+    </div>
+    <table>
+      <tr><th>Finding</th><th>Component</th><th>Flags</th><th>Where it runs</th><th>Status</th><th>DQ</th></tr>
+      <tr>
+        <td class="mono">CVE-2026-23012</td><td class="mono">log4j-core 2.17.0</td>
+        <td><span class="kev">KEV</span></td><td>prod / payments</td>
+        <td><span class="pill st-plan">Fix planned</span></td><td><span class="dq">DQ 86</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2026-11873</td><td class="mono">openssl 3.1.4</td>
+        <td><span class="pill sev-crit">Critical</span></td><td>prod / edge-gateway</td>
+        <td><span class="pill st-inv">Investigating</span></td><td><span class="dq">DQ 92</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2025-48190</td><td class="mono">requests 2.31.0</td>
+        <td></td><td>staging / billing-api</td>
+        <td><span class="pill st-acc">Accepted risk</span></td><td><span class="dq">DQ 71</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= VARIATION 4 ================= -->
+<section class="band v4">
+  <div class="band-head">
+    <div class="vnum">Variation 4</div>
+    <div class="vname">Quiet Ops</div>
+    <div class="vreg">Muted teal control-room — steady night-shift ops: everything monitored, nothing shouting; teal as "system healthy" ambience.</div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:#0A1314"></span><span class="role">background</span><span class="hex">#0A1314</span></span>
+    <span class="chip"><span class="sw" style="background:#121E20"></span><span class="role">surface</span><span class="hex">#121E20</span></span>
+    <span class="chip"><span class="sw" style="background:#223437"></span><span class="role">border</span><span class="hex">#223437</span></span>
+    <span class="chip"><span class="sw" style="background:#E2EBEB"></span><span class="role">text-primary</span><span class="hex">#E2EBEB</span></span>
+    <span class="chip"><span class="sw" style="background:#84989A"></span><span class="role">text-muted</span><span class="hex">#84989A</span></span>
+    <span class="chip"><span class="sw" style="background:#6FBFB4"></span><span class="role">accent</span><span class="hex">#6FBFB4</span></span>
+    <span class="chip"><span class="sw" style="background:#CF8189"></span><span class="role">critical</span><span class="hex">#CF8189</span></span>
+    <span class="chip"><span class="sw" style="background:#CC9C72"></span><span class="role">high</span><span class="hex">#CC9C72</span></span>
+    <span class="chip"><span class="sw" style="background:#C2BA84"></span><span class="role">medium</span><span class="hex">#C2BA84</span></span>
+    <span class="chip"><span class="sw" style="background:#7C98A0"></span><span class="role">low</span><span class="hex">#7C98A0</span></span>
+    <span class="chip"><span class="sw" style="background:#82BF9C"></span><span class="role">success</span><span class="hex">#82BF9C</span></span>
+    <span class="chip"><span class="sw" style="background:#C7AC72"></span><span class="role">warning</span><span class="hex">#C7AC72</span></span>
+    <span class="chip"><span class="sw" style="background:#9C9CD4"></span><span class="role">data-quality</span><span class="hex">#9C9CD4</span></span>
+  </div>
+  <div class="snippet">
+    <div class="snip-title">Fleet Posture</div>
+    <div class="snip-sub">Evidence layer · last ingest 4 min ago</div>
+    <div class="statrow">
+      <div class="stat"><div class="num">1,204</div><div class="lbl">Artifacts</div></div>
+      <div class="stat"><div class="num"><em>37</em></div><div class="lbl">KEV findings</div></div>
+      <div class="stat"><div class="num">82%</div><div class="lbl">Coverage · populating</div></div>
+    </div>
+    <div class="barchart">
+      <div class="bc-title">Findings by severity</div>
+      <div class="barrow"><span class="blbl">Critical</span><span class="btrack"><span class="bfill b-crit" style="width:8%"></span></span><span class="bval">37</span></div>
+      <div class="barrow"><span class="blbl">High</span><span class="btrack"><span class="bfill b-high" style="width:28%"></span></span><span class="bval">142</span></div>
+      <div class="barrow"><span class="blbl">Medium</span><span class="btrack"><span class="bfill b-med" style="width:62%"></span></span><span class="bval">318</span></div>
+      <div class="barrow"><span class="blbl">Low</span><span class="btrack"><span class="bfill b-low" style="width:100%"></span></span><span class="bval">507</span></div>
+    </div>
+    <table>
+      <tr><th>Finding</th><th>Component</th><th>Flags</th><th>Where it runs</th><th>Status</th><th>DQ</th></tr>
+      <tr>
+        <td class="mono">CVE-2026-23012</td><td class="mono">log4j-core 2.17.0</td>
+        <td><span class="kev">KEV</span></td><td>prod / payments</td>
+        <td><span class="pill st-plan">Fix planned</span></td><td><span class="dq">DQ 86</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2026-11873</td><td class="mono">openssl 3.1.4</td>
+        <td><span class="pill sev-crit">Critical</span></td><td>prod / edge-gateway</td>
+        <td><span class="pill st-inv">Investigating</span></td><td><span class="dq">DQ 92</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2025-48190</td><td class="mono">requests 2.31.0</td>
+        <td></td><td>staging / billing-api</td>
+        <td><span class="pill st-acc">Accepted risk</span></td><td><span class="dq">DQ 71</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= VARIATION 5 ================= -->
+<section class="band v5">
+  <div class="band-head">
+    <div class="vnum">Variation 5</div>
+    <div class="vname">High Signal</div>
+    <div class="vreg">High-contrast, accessibility-leaning — maximum legibility for long triage sessions; AAA-targeting text, fills kept pastel-soft so contrast never turns shrill.</div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="sw" style="background:#060708"></span><span class="role">background</span><span class="hex">#060708</span></span>
+    <span class="chip"><span class="sw" style="background:#131517"></span><span class="role">surface</span><span class="hex">#131517</span></span>
+    <span class="chip"><span class="sw" style="background:#34383E"></span><span class="role">border</span><span class="hex">#34383E</span></span>
+    <span class="chip"><span class="sw" style="background:#F4F6F8"></span><span class="role">text-primary</span><span class="hex">#F4F6F8</span></span>
+    <span class="chip"><span class="sw" style="background:#A6ADB8"></span><span class="role">text-muted</span><span class="hex">#A6ADB8</span></span>
+    <span class="chip"><span class="sw" style="background:#93C5FD"></span><span class="role">accent</span><span class="hex">#93C5FD</span></span>
+    <span class="chip"><span class="sw" style="background:#F2A0A0"></span><span class="role">critical</span><span class="hex">#F2A0A0</span></span>
+    <span class="chip"><span class="sw" style="background:#EFB98A"></span><span class="role">high</span><span class="hex">#EFB98A</span></span>
+    <span class="chip"><span class="sw" style="background:#E3D391"></span><span class="role">medium</span><span class="hex">#E3D391</span></span>
+    <span class="chip"><span class="sw" style="background:#A9B6C7"></span><span class="role">low</span><span class="hex">#A9B6C7</span></span>
+    <span class="chip"><span class="sw" style="background:#A3D9B1"></span><span class="role">success</span><span class="hex">#A3D9B1</span></span>
+    <span class="chip"><span class="sw" style="background:#EFC98A"></span><span class="role">warning</span><span class="hex">#EFC98A</span></span>
+    <span class="chip"><span class="sw" style="background:#C7AEF0"></span><span class="role">data-quality</span><span class="hex">#C7AEF0</span></span>
+  </div>
+  <div class="snippet">
+    <div class="snip-title">Fleet Posture</div>
+    <div class="snip-sub">Evidence layer · last ingest 4 min ago</div>
+    <div class="statrow">
+      <div class="stat"><div class="num">1,204</div><div class="lbl">Artifacts</div></div>
+      <div class="stat"><div class="num"><em>37</em></div><div class="lbl">KEV findings</div></div>
+      <div class="stat"><div class="num">82%</div><div class="lbl">Coverage · populating</div></div>
+    </div>
+    <div class="barchart">
+      <div class="bc-title">Findings by severity</div>
+      <div class="barrow"><span class="blbl">Critical</span><span class="btrack"><span class="bfill b-crit" style="width:8%"></span></span><span class="bval">37</span></div>
+      <div class="barrow"><span class="blbl">High</span><span class="btrack"><span class="bfill b-high" style="width:28%"></span></span><span class="bval">142</span></div>
+      <div class="barrow"><span class="blbl">Medium</span><span class="btrack"><span class="bfill b-med" style="width:62%"></span></span><span class="bval">318</span></div>
+      <div class="barrow"><span class="blbl">Low</span><span class="btrack"><span class="bfill b-low" style="width:100%"></span></span><span class="bval">507</span></div>
+    </div>
+    <table>
+      <tr><th>Finding</th><th>Component</th><th>Flags</th><th>Where it runs</th><th>Status</th><th>DQ</th></tr>
+      <tr>
+        <td class="mono">CVE-2026-23012</td><td class="mono">log4j-core 2.17.0</td>
+        <td><span class="kev">KEV</span></td><td>prod / payments</td>
+        <td><span class="pill st-plan">Fix planned</span></td><td><span class="dq">DQ 86</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2026-11873</td><td class="mono">openssl 3.1.4</td>
+        <td><span class="pill sev-crit">Critical</span></td><td>prod / edge-gateway</td>
+        <td><span class="pill st-inv">Investigating</span></td><td><span class="dq">DQ 92</span></td>
+      </tr>
+      <tr>
+        <td class="mono">CVE-2025-48190</td><td class="mono">requests 2.31.0</td>
+        <td></td><td>staging / billing-api</td>
+        <td><span class="pill st-acc">Accepted risk</span></td><td><span class="dq">DQ 71</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>
