@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Armoury — Evidence · trail + packs (key screen, Forge)</title>
+<style>
+/* ============================================================
+   ARMOURY — Evidence surface · key screen
+   Two states in this file:
+     1. Canonical — append-only evidence trail (timestamped,
+        mono), one-click "Generate CRA pack" with smart-default
+        scope, generated pack cards with signature status
+        (Sigstore / operator-key), pack cover summary carrying
+        the pack's OWN coverage + DQ statement (FR24).
+     2. Alternate — pack generating: async, per-section progress
+        [EXPERIENCE.md ASSUMPTION: progress shown as pack
+        sections complete]; fails closed, never partial.
+
+   GOVERNING SPINE SECTIONS
+   DESIGN.md      — Colors (dq hue = instrument, success =
+                    verified signatures), Typography (mono for
+                    timestamps, digests, feed versions),
+                    Components: heading-block, button-primary
+                    (at most one per surface — "Generate CRA
+                    pack"), dq-badge, freshness-strip; Elevation
+                    (tonal cards, no shadows on canvas).
+   EXPERIENCE.md  — IA (Evidence surface), Component Patterns:
+                    Evidence pack generator (one click, smart
+                    defaults, config after the click, async,
+                    signed); State Patterns: Append-only evidence
+                    (NFR11 — no edit/delete; corrections
+                    supersede), Error (pack generation fails
+                    closed); Honest Provenance (packs state their
+                    own coverage and DQ on the cover); Voice and
+                    Tone; Flow 3 (UJ-3 audit day).
+
+   FORGE PALETTE (locked) — see DESIGN.md frontmatter.
+   TYPE — intended: "Inter Display" titles/numerals, "Inter" UI,
+   "IBM Plex Mono" all identifiers. System stacks used here.
+   ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#121010; --surface:#1C1917; --border:#322C27; --hair:#221E1A;
+  --text:#EDE7E0; --data:#D4CCC2; --muted:#9A9087; --accent:#D9A05B;
+  --crit:#D27D6E; --med:#C9B07E;
+  --ok:#9DBA8C; --warn:#D9B36B; --dq:#8FAFAF;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* Inter / Inter Display in prod */
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;               /* IBM Plex Mono in prod */
+}
+
+body{
+  background:#0B0A09; font-family:var(--sans); color:var(--text);
+  padding:34px 28px; -webkit-font-smoothing:antialiased;
+}
+
+.state-label{
+  max-width:1380px; margin:0 auto 14px; font-family:var(--mono);
+  font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+}
+.state-label b{ color:var(--accent); font-weight:600; }
+.state-gap{ height:56px; }
+
+.browser{
+  max-width:1380px; margin:0 auto; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.chrome{
+  display:flex; align-items:center; gap:14px;
+  background:#161312; border-bottom:1px solid var(--border); padding:10px 16px;
+}
+.dots{ display:flex; gap:7px; }
+.dots i{ width:11px; height:11px; border-radius:50%; background:#3A332D; display:block; }
+.urlbar{
+  flex:1; max-width:560px; background:#121010; border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; font-family:var(--mono);
+  font-size:11.5px; color:var(--muted);
+}
+.urlbar b{ color:var(--text); font-weight:500; }
+
+.shell{ display:flex; min-height:840px; }
+
+.rail{
+  width:58px; flex-shrink:0; background:#151211; border-right:1px solid var(--border);
+  display:flex; flex-direction:column; align-items:center; padding:18px 0 16px;
+}
+.rail .mark{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(150deg,#D9A05B,#8a6334);
+  display:flex; align-items:center; justify-content:center;
+  color:#121010; font-weight:700; font-size:15px; margin-bottom:30px;
+}
+.rail nav{ display:flex; flex-direction:column; gap:6px; width:100%; align-items:center; }
+.ritem{
+  position:relative; width:40px; height:40px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center; color:var(--muted);
+}
+.ritem svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.ritem.active{ color:var(--text); background:#221E1A; }
+.ritem.active::before{
+  content:""; position:absolute; left:-9px; top:9px; bottom:9px;
+  width:2px; border-radius:2px; background:var(--accent);
+}
+.rail .spacer{ flex:1; }
+
+.main{ flex:1; min-width:0; padding:0 52px 56px; }
+
+.hdr{
+  display:flex; align-items:center; gap:18px;
+  padding:16px 0 15px; border-bottom:1px solid var(--border); margin-bottom:44px;
+}
+.crumb{ font-size:12px; color:var(--muted); }
+.crumb b{ color:var(--text); font-weight:500; }
+.hdr .grow{ flex:1; }
+.blast-search{
+  display:flex; align-items:center; gap:9px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; min-width:330px;
+  color:var(--muted); font-size:12.5px;
+}
+.blast-search svg{ width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.blast-search .kbd{
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:#121010; border:1px solid var(--border); border-radius:4px;
+  padding:2px 6px; color:var(--muted);
+}
+.theme-aff{
+  display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted);
+  border:1px solid var(--border); border-radius:8px; padding:7px 11px; background:var(--surface);
+}
+.theme-aff .sw{ width:9px; height:9px; border-radius:3px; background:var(--accent); }
+.theme-aff b{ color:var(--text); font-weight:500; }
+
+.headblock{ margin-bottom:0; }
+.headblock .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:10px;
+}
+.headblock h1{ font-size:23px; font-weight:500; letter-spacing:-.02em; color:var(--text); }
+.headblock .sub{ margin-top:7px; font-size:13px; color:var(--muted); max-width:620px; line-height:1.55; }
+.headrule{ width:46px; height:2px; background:var(--accent); margin:18px 0 0; border-radius:2px; }
+
+/* ---------- generate band: one primary action, smart defaults stated ---------- */
+.genband{
+  display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  margin-top:32px; padding:18px 22px;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+}
+.btn-primary{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:600; color:#121010;
+  background:var(--accent); border-radius:8px; padding:9px 18px; flex-shrink:0;
+}
+.btn-primary svg{ width:13px; height:13px; stroke:#121010; fill:none; stroke-width:2; }
+.gendesc{ font-size:12px; color:var(--muted); line-height:1.5; }
+.gendesc b{ color:var(--data); font-weight:500; }
+.gendesc .scope{ font-family:var(--mono); font-size:11px; color:var(--data); }
+.genband .grow{ flex:1; }
+.genband .after{ font-size:10.5px; color:var(--muted); max-width:240px; line-height:1.45; }
+
+/* ---------- zones ---------- */
+.zone{ margin-top:56px; }
+.zone-h{
+  display:flex; align-items:baseline; gap:14px;
+  border-bottom:1px solid var(--border); padding-bottom:11px; margin-bottom:18px;
+}
+.zone-h h2{ font-size:13px; font-weight:600; color:var(--text); }
+.zone-h .meta{ font-size:11px; color:var(--muted); }
+.zone-h .grow{ flex:1; }
+.zone-h .right{ font-size:11px; color:var(--muted); font-family:var(--mono); }
+
+/* ---------- pack cards: tonal, bordered, never floating ---------- */
+.packs{ display:flex; flex-direction:column; gap:14px; }
+.pack{
+  display:flex; gap:0; background:var(--surface);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+}
+.pack .left{ flex:1; padding:18px 22px 16px; min-width:0; }
+.pack .titlerow{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.pack .name{ font-size:14px; font-weight:600; color:var(--text); }
+.pack .fw{ font-family:var(--mono); font-size:9.5px; color:var(--muted); border:1px solid var(--border); border-radius:4px; padding:1.5px 6px; letter-spacing:.05em; }
+.pack .scope{ margin-top:6px; font-family:var(--mono); font-size:10.5px; color:var(--muted); }
+.pack .scope b{ color:var(--data); font-weight:500; }
+/* the pack's own coverage / DQ statement — FR24, quoted from the cover */
+.cover{
+  margin-top:13px; border-left:2px solid var(--dq); padding:2px 0 2px 12px;
+  font-size:11.5px; color:var(--data); line-height:1.55; max-width:680px;
+}
+.cover .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:.13em; color:var(--dq); font-weight:600; display:block; margin-bottom:4px; }
+.cover b{ color:var(--text); font-weight:600; }
+.cover .dqv{ color:var(--dq); }
+.pack .files{ margin-top:12px; display:flex; gap:18px; flex-wrap:wrap; font-family:var(--mono); font-size:10px; color:var(--muted); }
+.pack .files b{ color:var(--data); font-weight:500; }
+
+.pack .right{
+  width:250px; flex-shrink:0; border-left:1px solid var(--border);
+  padding:18px 20px 16px; display:flex; flex-direction:column; gap:9px;
+}
+.sig{ display:flex; align-items:flex-start; gap:8px; font-size:11px; color:var(--data); line-height:1.45; }
+.sig .pip{ width:7px; height:7px; border-radius:50%; margin-top:3px; flex-shrink:0; }
+.sig.verified .pip{ background:var(--ok); }
+.sig.verified b{ color:var(--ok); font-weight:600; }
+.sig .m{ font-family:var(--mono); font-size:9.5px; color:var(--muted); display:block; margin-top:2px; }
+.pack .right .spacer{ flex:1; }
+.pack .dl{ font-size:11.5px; color:var(--accent); font-weight:500; }
+.pack .vfy{ font-size:10.5px; color:var(--muted); }
+
+/* ---------- append-only evidence trail ---------- */
+.trail{ border-left:2px solid var(--hair); margin-left:4px; }
+.tev{
+  display:flex; gap:16px; align-items:baseline;
+  padding:8px 0 8px 18px; position:relative;
+}
+.tev::before{
+  content:""; position:absolute; left:-5px; top:14px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--bg); border:1.5px solid var(--muted);
+}
+.tev.decision::before{ border-color:var(--accent); }
+.tev.pack::before{ border-color:var(--dq); }
+.tev.scan::before{ border-color:var(--ok); }
+.tev .when{ font-family:var(--mono); font-size:10px; color:var(--muted); width:148px; flex-shrink:0; }
+.tev .kind{
+  font-size:9px; text-transform:uppercase; letter-spacing:.12em; font-weight:600;
+  color:var(--muted); width:84px; flex-shrink:0;
+}
+.tev.decision .kind{ color:var(--accent); }
+.tev.pack .kind{ color:var(--dq); }
+.tev.scan .kind{ color:var(--ok); }
+.tev .what{ font-size:12px; color:var(--data); line-height:1.5; }
+.tev .what b{ color:var(--text); font-weight:600; }
+.tev .what .m{ font-family:var(--mono); font-size:11px; }
+.tev .what .who{ color:var(--muted); }
+.tev .sup{
+  font-family:var(--mono); font-size:9px; color:var(--muted);
+  border:1px solid var(--border); border-radius:4px; padding:1px 5px; margin-left:7px;
+}
+.tev.superseded .what{ color:var(--muted); }
+.trail-note{ margin-top:14px; padding-left:18px; font-size:11px; color:var(--muted); }
+
+.tbl-foot{
+  display:flex; align-items:center; gap:14px; margin-top:14px;
+  font-size:11.5px; color:var(--muted);
+}
+.tbl-foot .grow{ flex:1; }
+.tbl-foot a{ color:var(--accent); text-decoration:none; font-weight:500; }
+
+.freshness{
+  margin-top:52px; border-top:1px solid var(--border);
+  padding-top:16px; display:flex; gap:34px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.freshness .f b{ color:var(--text); font-weight:500; }
+.freshness .ok{ color:var(--ok); }
+.freshness .warn{ color:var(--warn); }
+
+/* ---------- generating state (alternate) ---------- */
+.genprog{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:18px 22px;
+}
+.genprog .toprow{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.genprog .name{ font-size:14px; font-weight:600; color:var(--text); }
+.genprog .scope{ font-family:var(--mono); font-size:10.5px; color:var(--muted); }
+.genprog .state{
+  margin-left:auto; font-size:10px; text-transform:uppercase; letter-spacing:.12em;
+  color:var(--warn); font-weight:600;
+}
+.seclist{ margin-top:16px; }
+.secrow{
+  display:flex; align-items:center; gap:14px; height:30px;
+  border-bottom:1px solid var(--hair); font-size:12px; color:var(--data);
+}
+.secrow:last-child{ border-bottom:none; }
+.secrow .st{ width:16px; text-align:center; flex-shrink:0; font-family:var(--mono); font-size:11px; }
+.secrow.done .st{ color:var(--ok); }
+.secrow.now .st{ color:var(--accent); }
+.secrow.queued .st{ color:var(--muted); }
+.secrow.queued{ color:var(--muted); }
+.secrow .nm{ width:240px; flex-shrink:0; }
+.secrow .bar{ flex:1; height:4px; border-radius:2px; background:#181513; overflow:hidden; }
+.secrow .bar i{ display:block; height:100%; border-radius:2px; }
+.secrow.done .bar i{ width:100%; background:rgba(157,186,140,.55); }
+.secrow.now .bar i{ width:62%; background:rgba(217,160,91,.6); }
+.secrow.queued .bar i{ width:0; }
+.secrow .meta{ width:210px; text-align:right; font-family:var(--mono); font-size:9.5px; color:var(--muted); flex-shrink:0; }
+.gen-note{ margin-top:14px; font-size:11px; color:var(--muted); line-height:1.5; max-width:680px; }
+.gen-note b{ color:var(--data); font-weight:500; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- STATE 1 — CANONICAL: trail + generate + signed pack cards     -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 1 · canonical</b> — evidence trail (append-only) · one-click CRA pack · signed pack cards with their own coverage statements</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/evidence</div>
+  </div>
+
+  <div class="shell">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem active" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Evidence</div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <div class="headblock">
+        <div class="eyebrow">Evidence</div>
+        <h1>Recorded as it happened</h1>
+        <div class="sub">Every scan, decision, and pack generation, timestamped and attributed. Entries are never edited or removed — corrections are new entries that supersede the old, with both visible.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <!-- one-click generation, smart defaults stated up front -->
+      <div class="genband">
+        <span class="btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7"/></svg>
+          Generate CRA pack
+        </span>
+        <div class="gendesc">
+          One click. Default scope: <span class="scope">Last 12 months · production fleet</span><br>
+          <b>The pack states its own coverage and data quality on its cover</b> — exactly what this UI shows now.
+        </div>
+        <div class="grow"></div>
+        <div class="after">Window, scope, and framework are adjustable after generation starts. Other frameworks can be added in Settings.</div>
+      </div>
+
+      <!-- ===== generated packs ===== -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Evidence packs</h2>
+          <span class="meta">Signed and tamper-verifiable · PDF + machine-readable companions</span>
+          <div class="grow"></div>
+          <span class="right">3 packs generated</span>
+        </div>
+
+        <div class="packs">
+
+          <div class="pack">
+            <div class="left">
+              <div class="titlerow">
+                <span class="name">CRA evidence pack — production fleet</span>
+                <span class="fw">CRA</span>
+              </div>
+              <div class="scope">window <b>2025-06-12 → 2026-06-12</b> · scope <b>production fleet</b> · generated 2026-06-12 08:14 UTC by m.kovacs</div>
+              <div class="cover">
+                <span class="lbl">Cover statement — the pack's own scope claim</span>
+                Covers <b>3,176 of 3,847 artifacts</b> (82% of fleet at generation time). 671 artifacts were not yet scanned and are listed as gaps, not omitted. Data quality at generation: <b class="dqv">84 B+</b>.
+              </div>
+              <div class="files"><b>pack.pdf</b> 4.2 MB · <b>sboms.tar.gz</b> 312 files · <b>vex.json</b> 41 statements · <b>decisions.ndjson</b> 188 entries</div>
+            </div>
+            <div class="right">
+              <div class="sig verified">
+                <span class="pip"></span>
+                <span><b>Signature verified</b> — Sigstore<span class="m">rekor entry 84217745 · 2026-06-12 08:31 UTC</span></span>
+              </div>
+              <div class="spacer"></div>
+              <span class="dl">Download pack →</span>
+              <span class="vfy">Verify signature · view cover sheet</span>
+            </div>
+          </div>
+
+          <div class="pack">
+            <div class="left">
+              <div class="titlerow">
+                <span class="name">CVE-day export — CVE-2026-23012 blast radius</span>
+                <span class="fw">AD-HOC</span>
+              </div>
+              <div class="scope">scope <b>14 affected artifacts · 2 clusters</b> · generated 2026-06-11 09:52 UTC by p.sharma</div>
+              <div class="cover">
+                <span class="lbl">Cover statement — the pack's own scope claim</span>
+                Definitive for the <b>14 scanned artifacts</b> only. 2 artifacts in scope had no SBOM at generation and are named as unrepresented. Data quality at generation: <b class="dqv">91 A−</b>.
+              </div>
+              <div class="files"><b>pack.pdf</b> 1.1 MB · <b>sboms.tar.gz</b> 14 files · <b>vex.json</b> 1 statement</div>
+            </div>
+            <div class="right">
+              <div class="sig verified">
+                <span class="pip"></span>
+                <span><b>Signature verified</b> — Sigstore<span class="m">rekor entry 84019312 · 2026-06-11 09:53 UTC</span></span>
+              </div>
+              <div class="spacer"></div>
+              <span class="dl">Download pack →</span>
+              <span class="vfy">Verify signature · view cover sheet</span>
+            </div>
+          </div>
+
+          <div class="pack">
+            <div class="left">
+              <div class="titlerow">
+                <span class="name">CRA evidence pack — air-gapped site B</span>
+                <span class="fw">CRA</span>
+              </div>
+              <div class="scope">window <b>2025-04-01 → 2026-04-01</b> · scope <b>site-b fleet</b> · generated 2026-04-02 11:08 UTC by m.kovacs</div>
+              <div class="cover">
+                <span class="lbl">Cover statement — the pack's own scope claim</span>
+                Covers <b>412 of 415 artifacts</b> (99% of site-b fleet). Feed bundle was 6 days old at generation — disclosed on the cover. Data quality at generation: <b class="dqv">79 B</b>.
+              </div>
+              <div class="files"><b>pack.pdf</b> 2.8 MB · <b>sboms.tar.gz</b> 412 files · <b>vex.json</b> 17 statements</div>
+            </div>
+            <div class="right">
+              <div class="sig verified">
+                <span class="pip"></span>
+                <span><b>Signature verified</b> — operator key<span class="m">key id 7C4F…E2A1 · air-gapped signing</span></span>
+              </div>
+              <div class="spacer"></div>
+              <span class="dl">Download pack →</span>
+              <span class="vfy">Verify signature · view cover sheet</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== append-only trail ===== -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Evidence trail</h2>
+          <span class="meta">Append-only. Corrections supersede; nothing is rewritten.</span>
+          <div class="grow"></div>
+          <span class="right">14,209 entries</span>
+        </div>
+
+        <div class="trail">
+          <div class="tev pack">
+            <span class="when">2026-06-12 08:31 UTC</span>
+            <span class="kind">Pack</span>
+            <span class="what"><b>CRA evidence pack generated</b> — production fleet, 12-month window. Signed via Sigstore. <span class="who">· m.kovacs</span></span>
+          </div>
+          <div class="tev decision">
+            <span class="when">2026-06-12 07:45 UTC</span>
+            <span class="kind">Decision</span>
+            <span class="what"><span class="m">CVE-2026-23012</span> · <span class="m">log4j-core@2.17.0</span> — accepted → <b>fix planned</b>: "Vendor VEX confirms affected. Upgrade to 2.17.1 scheduled, CHG-4821." <span class="who">· p.sharma</span></span>
+          </div>
+          <div class="tev scan">
+            <span class="when">2026-06-12 03:12 UTC</span>
+            <span class="kind">Scan</span>
+            <span class="what"><b>312 artifacts re-evaluated</b> against Grype DB <span class="m">v5.12</span> — 3 new findings, 1 resolved. <span class="who">· system</span></span>
+          </div>
+          <div class="tev decision superseded">
+            <span class="when">2026-06-11 18:02 UTC</span>
+            <span class="kind">Decision</span>
+            <span class="what"><span class="m">CVE-2026-23012</span> · <span class="m">log4j-core@2.17.0</span> — untriaged → accepted: "Awaiting vendor confirmation before committing to upgrade window." <span class="who">· p.sharma</span><span class="sup">superseded 2026-06-12</span></span>
+          </div>
+          <div class="tev pack">
+            <span class="when">2026-06-11 09:53 UTC</span>
+            <span class="kind">Pack</span>
+            <span class="what"><b>Blast-radius export generated</b> — <span class="m">CVE-2026-23012</span>, 14 artifacts. Carries the on-screen caveat verbatim. <span class="who">· p.sharma</span></span>
+          </div>
+          <div class="tev scan">
+            <span class="when">2026-06-11 04:00 UTC</span>
+            <span class="kind">Feed</span>
+            <span class="what"><b>KEV catalog updated</b> to 2026-06-11 — 1 fleet-relevant addition: <span class="m">CVE-2026-23012</span>. <span class="who">· system</span></span>
+          </div>
+        </div>
+        <div class="trail-note">No entry on this trail can be edited or deleted — by anyone, including admins. This is what makes the packs above worth signing.</div>
+        <div class="tbl-foot">
+          <span>Showing 6 of 14,209 entries</span>
+          <div class="grow"></div>
+          <a href="#">Full trail →</a>
+        </div>
+      </section>
+
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · <span class="warn">82% coverage, populating</span></span>
+        <span class="f"><b>Signing</b> — Sigstore reachable · last entry 08:31 UTC</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<div class="state-gap"></div>
+
+<!-- ============================================================ -->
+<!-- STATE 2 — ALTERNATE: pack generating, per-section progress    -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 2 · alternate</b> — pack generating: async, progress per pack section, fails closed</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/evidence</div>
+  </div>
+
+  <div class="shell" style="min-height:560px;">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem active" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Evidence</div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <div class="headblock">
+        <div class="eyebrow">Evidence</div>
+        <h1>Recorded as it happened</h1>
+        <div class="sub">A pack is generating. You can keep working — generation is recorded on the trail when it completes or fails. No partial pack is ever delivered.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Generating — CRA evidence pack</h2>
+          <span class="meta">Sections complete independently; the pack is assembled and signed only when all sections succeed</span>
+          <div class="grow"></div>
+          <span class="right">started 09:02 UTC · ~4 min remaining</span>
+        </div>
+
+        <div class="genprog">
+          <div class="toprow">
+            <span class="name">CRA evidence pack — production fleet</span>
+            <span class="scope">window 2025-06-12 → 2026-06-12 · scope production fleet · requested by m.kovacs</span>
+            <span class="state">Generating</span>
+          </div>
+          <div class="seclist">
+            <div class="secrow done">
+              <span class="st">✓</span><span class="nm">Cover — scope, coverage &amp; data quality</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">82% coverage · DQ 84 B+ · stated on cover</span>
+            </div>
+            <div class="secrow done">
+              <span class="st">✓</span><span class="nm">Artifact inventory</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">3,176 artifacts enumerated</span>
+            </div>
+            <div class="secrow done">
+              <span class="st">✓</span><span class="nm">SBOM appendix</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">3,176 SBOMs · sboms.tar.gz</span>
+            </div>
+            <div class="secrow now">
+              <span class="st">▸</span><span class="nm">Findings &amp; triage decisions</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">688 of 1,094 findings written</span>
+            </div>
+            <div class="secrow queued">
+              <span class="st">·</span><span class="nm">VEX statements</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">queued</span>
+            </div>
+            <div class="secrow queued">
+              <span class="st">·</span><span class="nm">Coverage-gap disclosure</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">queued · 671 unscanned artifacts to disclose</span>
+            </div>
+            <div class="secrow queued">
+              <span class="st">·</span><span class="nm">Assemble &amp; sign (Sigstore)</span>
+              <span class="bar"><i></i></span>
+              <span class="meta">runs last, only on full success</span>
+            </div>
+          </div>
+          <div class="gen-note">If a section fails, generation stops and names the failing section — <b>retry re-runs failed sections only</b>. The trail records the attempt either way.</div>
+        </div>
+      </section>
+
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · <span class="warn">82% coverage, populating</span></span>
+        <span class="f"><b>Signing</b> — Sigstore reachable</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

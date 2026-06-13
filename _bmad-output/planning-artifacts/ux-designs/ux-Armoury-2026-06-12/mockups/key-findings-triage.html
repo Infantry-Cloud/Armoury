@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Armoury — Findings · triage drawer (key screen, Forge)</title>
+<style>
+/* ============================================================
+   ARMOURY — Findings workbench + triage drawer · key screen
+   Two states in this file:
+     1. Canonical — slide-over triage drawer OPEN over the dense
+        KEV-first table: ranking explanation (FR13), vendor VEX
+        attribution (FR15), source provenance (FR8/FR12),
+        decision form, append-only decision history (NFR11 —
+        no edit/delete affordances anywhere).
+     2. Alternate — drawer closed: full workbench with the
+        coverage-gap row inline as a first-class row.
+
+   GOVERNING SPINE SECTIONS
+   DESIGN.md      — Colors, Typography, Components: findings-table,
+                    severity-chip, kev-tag, triage-pill, dq-badge,
+                    coverage-gap-row, button-primary, freshness-strip.
+                    Elevation & Depth (drawer = true overlay, soft
+                    low-alpha shadow — the only thing that floats).
+   EXPERIENCE.md  — Component Patterns: Findings table (sort logic
+                    stated in words), Triage drawer (ranking
+                    explanation, VEX, provenance, decision form,
+                    stay-in-list, ⌘Enter advance), Coverage-gap row;
+                    Voice and Tone; Honest Provenance; State
+                    Patterns: Append-only evidence (NFR11).
+
+   FORGE PALETTE (locked) — see DESIGN.md frontmatter.
+   TYPE — intended: "Inter Display" titles, "Inter" UI,
+   "IBM Plex Mono" all identifiers. System stacks used here.
+   ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#121010; --surface:#1C1917; --border:#322C27; --hair:#221E1A;
+  --text:#EDE7E0; --data:#D4CCC2; --muted:#9A9087; --accent:#D9A05B;
+  --crit:#D27D6E; --high:#D2986B; --med:#C9B07E; --low:#968D82;
+  --ok:#9DBA8C; --warn:#D9B36B; --dq:#8FAFAF;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* Inter / Inter Display in prod */
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;               /* IBM Plex Mono in prod */
+}
+
+body{
+  background:#0B0A09; font-family:var(--sans); color:var(--text);
+  padding:34px 28px; -webkit-font-smoothing:antialiased;
+}
+
+.state-label{
+  max-width:1420px; margin:0 auto 14px; font-family:var(--mono);
+  font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+}
+.state-label b{ color:var(--accent); font-weight:600; }
+.state-gap{ height:56px; }
+
+.browser{
+  max-width:1420px; margin:0 auto; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.chrome{
+  display:flex; align-items:center; gap:14px;
+  background:#161312; border-bottom:1px solid var(--border); padding:10px 16px;
+}
+.dots{ display:flex; gap:7px; }
+.dots i{ width:11px; height:11px; border-radius:50%; background:#3A332D; display:block; }
+.urlbar{
+  flex:1; max-width:560px; background:#121010; border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; font-family:var(--mono);
+  font-size:11.5px; color:var(--muted);
+}
+.urlbar b{ color:var(--text); font-weight:500; }
+
+.shell{ display:flex; min-height:880px; position:relative; overflow:hidden; }
+
+.rail{
+  width:58px; flex-shrink:0; background:#151211; border-right:1px solid var(--border);
+  display:flex; flex-direction:column; align-items:center; padding:18px 0 16px;
+}
+.rail .mark{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(150deg,#D9A05B,#8a6334);
+  display:flex; align-items:center; justify-content:center;
+  color:#121010; font-weight:700; font-size:15px; margin-bottom:30px;
+}
+.rail nav{ display:flex; flex-direction:column; gap:6px; width:100%; align-items:center; }
+.ritem{
+  position:relative; width:40px; height:40px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center; color:var(--muted);
+}
+.ritem svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.ritem.active{ color:var(--text); background:#221E1A; }
+.ritem.active::before{
+  content:""; position:absolute; left:-9px; top:9px; bottom:9px;
+  width:2px; border-radius:2px; background:var(--accent);
+}
+.rail .spacer{ flex:1; }
+
+.main{ flex:1; min-width:0; padding:0 52px 56px; }
+
+.hdr{
+  display:flex; align-items:center; gap:18px;
+  padding:16px 0 15px; border-bottom:1px solid var(--border); margin-bottom:44px;
+}
+.crumb{ font-size:12px; color:var(--muted); }
+.crumb b{ color:var(--text); font-weight:500; }
+.hdr .grow{ flex:1; }
+.blast-search{
+  display:flex; align-items:center; gap:9px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; min-width:330px;
+  color:var(--muted); font-size:12.5px;
+}
+.blast-search svg{ width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.blast-search .kbd{
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:#121010; border:1px solid var(--border); border-radius:4px;
+  padding:2px 6px; color:var(--muted);
+}
+.theme-aff{
+  display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted);
+  border:1px solid var(--border); border-radius:8px; padding:7px 11px; background:var(--surface);
+}
+.theme-aff .sw{ width:9px; height:9px; border-radius:3px; background:var(--accent); }
+.theme-aff b{ color:var(--text); font-weight:500; }
+
+.headblock{ margin-bottom:0; }
+.headblock .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:10px;
+}
+.headblock h1{ font-size:23px; font-weight:500; letter-spacing:-.02em; color:var(--text); }
+.headblock .sub{ margin-top:7px; font-size:13px; color:var(--muted); max-width:620px; line-height:1.55; }
+.headrule{ width:46px; height:2px; background:var(--accent); margin:18px 0 0; border-radius:2px; }
+
+/* ---------- findings table ---------- */
+.findings{ margin-top:48px; }
+.zone-h{
+  display:flex; align-items:baseline; gap:14px;
+  border-bottom:1px solid var(--border); padding-bottom:11px; margin-bottom:18px;
+}
+.zone-h h2{ font-size:13px; font-weight:600; color:var(--text); }
+.zone-h .meta{ font-size:11px; color:var(--muted); }
+.zone-h .grow{ flex:1; }
+.zone-h .right{ font-size:11px; color:var(--muted); font-family:var(--mono); }
+
+table{ width:100%; border-collapse:collapse; }
+thead th{
+  text-align:left; font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding:0 10px 8px;
+  border-bottom:1px solid var(--border); white-space:nowrap;
+}
+tbody td{
+  padding:7px 10px; font-size:12px; border-bottom:1px solid var(--hair);
+  white-space:nowrap; vertical-align:middle; height:30px; color:var(--data);
+}
+tbody tr:hover{ background:#181513; }
+tr.selected td{ background:#221E1A; }
+tr.selected td:first-child{ box-shadow:inset 2px 0 0 var(--accent); }
+td.mono, .mono{ font-family:var(--mono); font-size:11.5px; letter-spacing:0; }
+td .cve{ color:var(--text); font-weight:500; }
+td .pkg{ color:var(--muted); }
+td .pkg b{ color:var(--text); font-weight:500; }
+td.n{ text-align:right; font-variant-numeric:tabular-nums; }
+
+.sevchip{
+  display:inline-block; font-size:10px; font-weight:600; letter-spacing:.05em;
+  border-radius:5px; padding:2px 8px; text-transform:uppercase;
+}
+.sevchip.c{ background:rgba(210,125,110,.16); color:var(--crit); }
+.sevchip.h{ background:rgba(210,152,107,.14); color:var(--high); }
+.sevchip.m{ background:rgba(201,176,126,.13); color:var(--med); }
+.kevtag{
+  display:inline-block; font-family:var(--mono); font-size:9px; font-weight:600;
+  color:#121010; background:rgba(210,125,110,.85); border-radius:4px;
+  padding:1.5px 5px; margin-left:6px; vertical-align:1px; letter-spacing:.04em;
+}
+td .epss{ font-family:var(--mono); font-size:11px; color:var(--data); }
+td .epss small{ color:var(--muted); font-size:10px; }
+
+.triage{
+  display:inline-block; font-size:10.5px; border-radius:5px; padding:2px 8px;
+  border:1px solid var(--border); color:var(--muted); background:#181513;
+}
+.triage.fix{ color:var(--accent); border-color:rgba(217,160,91,.4); }
+.triage.mit{ color:var(--ok); border-color:rgba(157,186,140,.35); }
+.triage.na{ color:var(--muted); }
+.triage.acc{ color:var(--med); border-color:rgba(201,176,126,.3); }
+.triage.untriaged{ color:var(--warn); border-color:rgba(217,179,107,.35); }
+
+tr.gap td{
+  background:rgba(217,179,107,.05); color:var(--muted); font-size:11.5px;
+  border-top:1px dashed rgba(217,179,107,.3); border-bottom:1px dashed rgba(217,179,107,.3);
+  padding:8px 10px; white-space:normal;
+}
+tr.gap .pip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--warn); margin-right:9px; vertical-align:1px; }
+tr.gap b{ color:var(--warn); font-weight:600; }
+
+.tbl-foot{
+  display:flex; align-items:center; gap:14px; margin-top:14px;
+  font-size:11.5px; color:var(--muted);
+}
+.tbl-foot .grow{ flex:1; }
+.tbl-foot a{ color:var(--accent); text-decoration:none; font-weight:500; }
+.tbl-foot .kbdhint{ font-family:var(--mono); font-size:10px; }
+.tbl-foot .kbdhint i{
+  font-style:normal; background:#181513; border:1px solid var(--border);
+  border-radius:4px; padding:1px 5px; margin:0 2px;
+}
+
+.freshness{
+  margin-top:52px; border-top:1px solid var(--border);
+  padding-top:16px; display:flex; gap:34px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.freshness .f b{ color:var(--text); font-weight:500; }
+.freshness .ok{ color:var(--ok); }
+.freshness .warn{ color:var(--warn); }
+
+/* ============================================================
+   SLIDE-OVER TRIAGE DRAWER — the one true overlay on this surface.
+   Soft large-radius low-alpha black shadow (never colored glow);
+   scrim dims the table behind. shadcn Sheet in production.
+   ============================================================ */
+.scrim{
+  position:absolute; inset:0; background:rgba(8,6,5,.45); z-index:5;
+}
+.drawer{
+  position:absolute; top:0; right:0; bottom:0; width:460px; z-index:6;
+  background:var(--surface); border-left:1px solid var(--border);
+  box-shadow:-28px 0 60px rgba(0,0,0,.5);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.dwr-head{
+  padding:20px 24px 16px; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.dwr-head .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:9px;
+}
+.dwr-head .idrow{ display:flex; align-items:center; gap:8px; }
+.dwr-head .id{ font-family:var(--mono); font-size:16px; font-weight:600; color:var(--text); }
+.dwr-head .pkg{ margin-top:6px; font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+.dwr-head .pkg b{ color:var(--data); font-weight:500; }
+.dwr-head .chips{ display:flex; gap:8px; margin-top:11px; align-items:center; }
+.dwr-head .esc{
+  position:absolute; top:18px; right:20px; font-family:var(--mono); font-size:10px;
+  color:var(--muted); border:1px solid var(--border); border-radius:4px; padding:2px 6px;
+}
+.dwr-body{ flex:1; overflow:auto; padding:0 24px 20px; }
+
+.dsec{ padding-top:22px; }
+.dsec .dh{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding-bottom:8px;
+  border-bottom:1px solid var(--hair); margin-bottom:12px;
+  display:flex; align-items:baseline; gap:10px;
+}
+.dsec .dh .src{ margin-left:auto; font-family:var(--mono); font-size:9.5px; text-transform:none; letter-spacing:0; font-weight:400; }
+.dsec p{ font-size:12px; color:var(--data); line-height:1.55; }
+.dsec p b{ color:var(--text); font-weight:600; }
+.dsec p .m{ font-family:var(--mono); font-size:11px; }
+
+/* ranking explanation rows */
+.rank-row{
+  display:flex; align-items:baseline; gap:10px; padding:6px 0;
+  border-bottom:1px solid var(--hair); font-size:12px; color:var(--data);
+}
+.rank-row:last-child{ border-bottom:none; }
+.rank-row .k{ font-family:var(--mono); font-size:10.5px; color:var(--muted); width:88px; flex-shrink:0; }
+.rank-row .v{ flex:1; }
+.rank-row .v b{ color:var(--text); font-weight:600; }
+.rank-row .v .crit{ color:var(--crit); }
+
+/* VEX attribution card */
+.vex{
+  border:1px solid var(--border); border-radius:9px; padding:13px 15px;
+  background:#181513;
+}
+.vex .who{ display:flex; align-items:baseline; gap:9px; }
+.vex .who b{ font-size:12px; color:var(--text); font-weight:600; }
+.vex .who .st{ font-family:var(--mono); font-size:10px; color:var(--med); }
+.vex .stmt{ margin-top:8px; font-size:12px; color:var(--data); line-height:1.5; }
+.vex .src{ margin-top:9px; font-family:var(--mono); font-size:9.5px; color:var(--muted); }
+
+/* provenance list */
+.prov li{
+  list-style:none; display:flex; gap:10px; padding:5px 0;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.prov li b{ color:var(--data); font-weight:500; min-width:118px; }
+.prov li .ok{ color:var(--ok); }
+
+/* decision form */
+.statgrid{ display:flex; flex-wrap:wrap; gap:8px; }
+.statopt{
+  font-size:11px; border-radius:5px; padding:5px 12px;
+  border:1px solid var(--border); color:var(--muted); background:#181513;
+}
+.statopt.sel{ color:var(--muted); border-color:rgba(154,144,135,.55); background:#221E1A; box-shadow:inset 0 0 0 1px rgba(154,144,135,.25); }
+.fieldlbl{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; margin:16px 0 8px;
+}
+.fieldlbl small{ text-transform:none; letter-spacing:0; font-weight:400; }
+.justify{
+  border:1px solid var(--border); border-radius:8px; background:#141110;
+  padding:10px 12px; font-size:12px; color:var(--data); line-height:1.5; min-height:64px;
+}
+.dwr-actions{ display:flex; align-items:center; gap:12px; margin-top:16px; }
+.btn-primary{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:600; color:#121010;
+  background:var(--accent); border-radius:8px; padding:8px 16px;
+}
+.btn-primary .kbd{ font-family:var(--mono); font-size:9.5px; opacity:.75; }
+.dwr-actions .hint{ font-size:10.5px; color:var(--muted); }
+
+/* append-only decision history — no edit/delete affordances exist */
+.hist{ border-left:2px solid var(--hair); margin-left:3px; padding-left:16px; }
+.hev{ padding:9px 0; }
+.hev .top{ display:flex; gap:9px; align-items:baseline; }
+.hev .top .when{ font-family:var(--mono); font-size:9.5px; color:var(--muted); }
+.hev .top .who{ font-size:11px; color:var(--data); font-weight:500; }
+.hev .what{ margin-top:4px; font-size:11.5px; color:var(--data); line-height:1.5; }
+.hev .what .m{ font-family:var(--mono); font-size:10.5px; }
+.hev.superseded .what, .hev.superseded .top .who{ color:var(--muted); }
+.hev .sup{ font-family:var(--mono); font-size:9px; color:var(--muted); border:1px solid var(--border); border-radius:4px; padding:1px 5px; margin-left:6px; }
+.hist-note{ margin-top:10px; font-size:10.5px; color:var(--muted); font-style:normal; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- STATE 1 — CANONICAL: triage drawer OPEN over the workbench    -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 1 · canonical</b> — triage drawer open: ranking explanation · VEX · provenance · decision · append-only history</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/findings?focus=CVE-2026-23012</div>
+  </div>
+
+  <div class="shell">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem active" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Findings</div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <div class="headblock">
+        <div class="eyebrow">Findings</div>
+        <h1>Triage workbench</h1>
+        <div class="sub">1,094 open findings across scanned artifacts. Recording a decision requires a justification; every decision lands in the evidence trail as written.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <section class="findings">
+        <div class="zone-h">
+          <h2>Findings — triage order</h2>
+          <span class="meta">KEV first, then EPSS-weighted. Severity alone does not rank.</span>
+          <div class="grow"></div>
+          <span class="right">sorted: kev → epss desc</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Finding</th><th>Package</th><th>Severity</th><th>EPSS</th>
+              <th style="text-align:right">Artifacts</th><th>Triage</th><th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="selected">
+              <td class="mono"><span class="cve">CVE-2026-23012</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>log4j-core</b>@2.17.0</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.94 <small>p99</small></span></td>
+              <td class="n">14</td>
+              <td><span class="triage untriaged">untriaged</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-21987</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>openssl</b>@3.2.1-r4</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.89 <small>p98</small></span></td>
+              <td class="n">31</td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-20455</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>busybox</b>@1.36.1</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.71 <small>p96</small></span></td>
+              <td class="n">112</td>
+              <td><span class="triage mit">mitigated</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-19834</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>curl</b>@8.5.0-r2</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.66 <small>p95</small></span></td>
+              <td class="n">87</td>
+              <td><span class="triage na">not affected</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-22790</span></td>
+              <td class="mono"><span class="pkg"><b>jackson-databind</b>@2.16.1</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.43 <small>p91</small></span></td>
+              <td class="n">9</td>
+              <td><span class="triage untriaged">untriaged</span></td>
+              <td class="mono">Grype · NVD</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-18112</span></td>
+              <td class="mono"><span class="pkg"><b>golang.org/x/net</b>@0.19.0</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.31 <small>p88</small></span></td>
+              <td class="n">54</td>
+              <td><span class="triage acc">accepted</span></td>
+              <td class="mono">Grype · NVD</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-17609</span></td>
+              <td class="mono"><span class="pkg"><b>libxml2</b>@2.12.4-r1</span></td>
+              <td><span class="sevchip m">Medium</span></td>
+              <td><span class="epss">0.18 <small>p82</small></span></td>
+              <td class="n">203</td>
+              <td><span class="triage na">not affected</span></td>
+              <td class="mono">Grype · NVD</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tbl-foot">
+          <span>Showing 7 of 1,094 open findings · page 1 of 157</span>
+          <div class="grow"></div>
+          <span class="kbdhint"><i>t</i> triage · <i>e</i> explore in graph · <i>⌘Enter</i> record &amp; advance</span>
+        </div>
+      </section>
+
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · <span class="warn">82% coverage, populating</span></span>
+      </footer>
+
+    </main>
+
+    <!-- scrim + slide-over triage drawer -->
+    <div class="scrim"></div>
+    <aside class="drawer">
+      <div class="dwr-head" style="position:relative;">
+        <div class="eyebrow">Triage</div>
+        <div class="idrow">
+          <span class="id">CVE-2026-23012</span>
+          <span class="kevtag">KEV</span>
+          <span class="sevchip c">Critical</span>
+        </div>
+        <div class="pkg"><b>log4j-core</b>@2.17.0 · 14 affected artifacts · 9 running</div>
+        <div class="esc">esc</div>
+      </div>
+
+      <div class="dwr-body">
+
+        <!-- ranking explanation — FR13 -->
+        <div class="dsec">
+          <div class="dh">Why this ranks first <span class="src">rank 1 of 1,094</span></div>
+          <div class="rank-row"><span class="k">KEV</span><span class="v"><b class="crit">Listed</b> — CISA Known Exploited Vulnerabilities, added 2026-06-11. KEV findings always rank above non-KEV.</span></div>
+          <div class="rank-row"><span class="k">EPSS</span><span class="v"><b>0.94</b> (p99) — highest exploit-prediction score among open KEV findings.</span></div>
+          <div class="rank-row"><span class="k">Severity</span><span class="v">Critical (CVSS 9.8) — used for display, not for rank order.</span></div>
+          <div class="rank-row"><span class="k">Exposure</span><span class="v"><b>9 of 14</b> affected artifacts are running now, in 2 clusters.</span></div>
+        </div>
+
+        <!-- VEX with vendor attribution — FR15 -->
+        <div class="dsec">
+          <div class="dh">Vendor VEX statements <span class="src">1 of 1</span></div>
+          <div class="vex">
+            <div class="who"><b>Apache Software Foundation</b><span class="st">status: affected</span></div>
+            <div class="stmt">Versions 2.0-beta9 through 2.17.0 are affected when message lookup substitution is enabled. Fixed in 2.17.1.</div>
+            <div class="src">openvex · issued 2026-06-11 · retrieved 2026-06-12 04:10 UTC · applies to log4j-core@2.17.0</div>
+          </div>
+        </div>
+
+        <!-- source provenance — FR8 / FR12 -->
+        <div class="dsec">
+          <div class="dh">Provenance</div>
+          <ul class="prov">
+            <li><b>Match</b> Grype DB v5.12 · evaluated <span class="ok">38 min ago</span></li>
+            <li><b>Advisory</b> NVD · retrieved 2026-06-12 04:00 UTC</li>
+            <li><b>KEV</b> catalog 2026-06-11 · retrieved 04:00 UTC</li>
+            <li><b>EPSS</b> scored 2026-06-12 04:00 UTC</li>
+            <li><b>SBOM evidence</b> Syft v1.18 · per affected artifact</li>
+          </ul>
+        </div>
+
+        <!-- decision form — locked status set, justification required -->
+        <div class="dsec">
+          <div class="dh">Record a decision</div>
+          <div class="statgrid">
+            <span class="statopt">not affected</span>
+            <span class="statopt">mitigated</span>
+            <span class="statopt">accepted</span>
+            <span class="statopt sel">fix planned</span>
+          </div>
+          <div class="fieldlbl">Justification <small>· required — recorded verbatim in the evidence trail</small></div>
+          <div class="justify">Upgrading log4j-core to 2.17.1 across the 14 affected artifacts. Rollout starts with the 9 running workloads; tracked in CHG-4821.</div>
+          <div class="dwr-actions">
+            <span class="btn-primary">Record decision <span class="kbd">⌘↵ advances</span></span>
+            <span class="hint">Recorded as p.sharma · applies to this finding across all 14 artifacts</span>
+          </div>
+        </div>
+
+        <!-- append-only decision history — NFR11: no edit, no delete -->
+        <div class="dsec">
+          <div class="dh">Decision history <span class="src">append-only</span></div>
+          <div class="hist">
+            <div class="hev superseded">
+              <div class="top"><span class="when">2026-06-11 18:02 UTC</span><span class="who">p.sharma</span><span class="sup">superseded</span></div>
+              <div class="what">untriaged → <span class="m">accepted</span> — "Awaiting vendor confirmation before committing to upgrade window."</div>
+            </div>
+            <div class="hev">
+              <div class="top"><span class="when">2026-06-12 07:45 UTC</span><span class="who">p.sharma</span></div>
+              <div class="what"><span class="m">accepted</span> → <span class="m">fix planned</span> — "Vendor VEX confirms affected. Upgrade to 2.17.1 scheduled, CHG-4821."</div>
+            </div>
+          </div>
+          <div class="hist-note">Entries are never edited or removed. A correction is a new entry that supersedes the old one — both stay visible.</div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<div class="state-gap"></div>
+
+<!-- ============================================================ -->
+<!-- STATE 2 — ALTERNATE: drawer closed, coverage-gap row inline   -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 2 · alternate</b> — drawer closed: full workbench with the coverage gap as a first-class row</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/findings</div>
+  </div>
+
+  <div class="shell" style="min-height:760px;">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem active" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Findings</div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <div class="headblock">
+        <div class="eyebrow">Findings</div>
+        <h1>Triage workbench</h1>
+        <div class="sub">1,094 open findings across the 82% of the fleet that is scanned. The unscanned remainder is listed below where its findings would appear.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <section class="findings">
+        <div class="zone-h">
+          <h2>Findings — triage order</h2>
+          <span class="meta">KEV first, then EPSS-weighted. Severity alone does not rank.</span>
+          <div class="grow"></div>
+          <span class="right">sorted: kev → epss desc</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Finding</th><th>Package</th><th>Severity</th><th>EPSS</th>
+              <th style="text-align:right">Artifacts</th><th>Triage</th><th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-23012</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>log4j-core</b>@2.17.0</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.94 <small>p99</small></span></td>
+              <td class="n">14</td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-21987</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>openssl</b>@3.2.1-r4</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.89 <small>p98</small></span></td>
+              <td class="n">31</td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-20455</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>busybox</b>@1.36.1</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.71 <small>p96</small></span></td>
+              <td class="n">112</td>
+              <td><span class="triage mit">mitigated</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr class="gap">
+              <td colspan="7"><span class="pip"></span><b>Coverage gap —</b> 671 artifacts not yet scanned, including 212 in <span class="mono">prod-eu-west</span>. Findings in this range are unknown, not absent. Cause: first-scan backlog, ~2 h remaining.</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-19834</span><span class="kevtag">KEV</span></td>
+              <td class="mono"><span class="pkg"><b>curl</b>@8.5.0-r2</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.66 <small>p95</small></span></td>
+              <td class="n">87</td>
+              <td><span class="triage na">not affected</span></td>
+              <td class="mono">Grype · NVD + KEV</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-22790</span></td>
+              <td class="mono"><span class="pkg"><b>jackson-databind</b>@2.16.1</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.43 <small>p91</small></span></td>
+              <td class="n">9</td>
+              <td><span class="triage untriaged">untriaged</span></td>
+              <td class="mono">Grype · NVD</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-18112</span></td>
+              <td class="mono"><span class="pkg"><b>golang.org/x/net</b>@0.19.0</span></td>
+              <td><span class="sevchip h">High</span></td>
+              <td><span class="epss">0.31 <small>p88</small></span></td>
+              <td class="n">54</td>
+              <td><span class="triage acc">accepted</span></td>
+              <td class="mono">Grype · NVD</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tbl-foot">
+          <span>Showing 6 of 1,094 open findings · page 1 of 157</span>
+          <div class="grow"></div>
+          <span class="kbdhint"><i>t</i> triage · <i>e</i> explore in graph</span>
+        </div>
+      </section>
+
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · <span class="warn">82% coverage, populating</span></span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

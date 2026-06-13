@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>UX Design Validation: Armoury</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .title .fixpass-note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+  .dim-judgment ul { margin: 0 0 10px; padding-left: 20px; }
+  .dim-judgment li { margin-bottom: 4px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="report-header">
+      <div class="title">
+        <h1>Armoury — UX Design Validation Report</h1>
+        <div class="subtitle">_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/DESIGN.md · EXPERIENCE.md</div>
+        <div class="fixpass-note">Note: a fix pass is being applied in this same finalize run — findings B1–B2 and S1–S10 are scheduled for resolution.</div>
+      </div>
+    </header>
+
+    <div class="synthesis">
+      <p>A strong, unusually disciplined spine pair: every decision-log lock is honored in spirit, all <code>{path.to.token}</code> references resolve, three-theme semantic parity holds, the DQ hue is severity-distinct in all three themes, and the flows hit protagonist/steps/climax/failure cleanly. Two blockers stand between this and a clean finalize: untokenized Forge-only hexes that contradict the locked theme-switchability decision, and a UI-relevant FR (license policy authoring) with no home in the IA. The should-fix list is mostly the known reconcile-prd partials that finalize should now resolve rather than re-record.</p>
+      <p>The reconciliation lens corroborates this picture: of 44 PRD items (30 FR, 11 NFR, 3 UJ), 37 are covered, 6 are partial, 1 (NFR7, non-UI by nature) is intentionally excluded, and 0 are dropped. The 6 partials align one-to-one with the rubric walker's should-fixes (FR6 uniformity claim, FR11 feed enumeration, FR20 endpoint discoverability, FR23 retention setting, FR27 policy authoring — escalated to blocker B2 — and NFR9 agent trust copy). The inspiration audit confirms both Dribbble references landed (Weblytics strongly, AmazingUI amplified into two graph surfaces), with one cosmetic gap: the AmazingUI shot is uncited in either spine.</p>
+    </div>
+
+    <div class="dimension-summary">
+      <div class="dim-card">
+        <div class="dim-name">Flow coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Token completeness</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Component coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">State coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Visual reference coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Bloat &amp; overspecification</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Inheritance discipline</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Shape fit</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+    </div>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Flow coverage</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>UJ-1/2/3 each carry a named protagonist, numbered steps, a climax beat, and a failure path. Two narrow gaps in flow-level copy and affordances remain.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S7 — NFR9 agent trust copy missing from install flow</h3>
+              <span class="finding-location">EXPERIENCE.md — Flow 1 step 5 / Settings agent install</span>
+            </header>
+            <div class="finding-note">"Watch/list only, never cluster-admin" reassurance — a trust nuance the PRD leans on — never appears.</div>
+            <div class="finding-fix"><strong>Fix:</strong> One sentence of install-affordance copy.</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">High</span>
+              <h3 class="finding-title">S9 — Pack signature verification affordance unspecified (UJ-3/FR25)</h3>
+              <span class="finding-location">EXPERIENCE.md — Flow 3 / Evidence pack generator row</span>
+            </header>
+            <div class="finding-note">Packs are "tamper-verifiable" but how Marta or the auditor verifies is never specified — a story-dev consumer has no mechanism to build.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Name the mechanism (e.g. verify command / fingerprint printed on the cover sheet).</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Token completeness</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>All token references resolve by exact name and three-theme parity holds for all 15 semantic color roles — but hard-coded Forge-only tint hexes break the locked theme-switchability decision, and one token contradicts the decision log.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-critical">Critical</span>
+              <h3 class="finding-title">B1 — Theme-switchability broken by hard-coded Forge hexes</h3>
+              <span class="finding-location">DESIGN.md — components.icon-rail.background; Elevation &amp; Depth; Components table</span>
+            </header>
+            <div class="finding-note">The decision log locks "Token system must be theme-switchable (shadcn CSS variables)" and the spine's own Do's and Don'ts bans "Components referencing theme-specific hexes" — yet the rail background (#151211) and the two raised-tint values (#181513 row hover, #221E1A active rail item) are raw Forge hexes with no semantic token and no High Signal / Gunmetal equivalents. A downstream implementer cannot render the rail, row hover, or active-item state in two of the three day-1 themes.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add semantic roles (e.g. <code>surface-sunken</code>, <code>surface-raised</code>, <code>surface-active</code>) to all three theme maps in <code>colors</code>; reference them from <code>components.icon-rail</code> and the Elevation/Components prose. (#221E1A already equals Forge <code>hairline</code> — decide whether that aliasing is intentional or coincidental.)</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">High</span>
+              <h3 class="finding-title">S1 — Severity-band opacity contradicts the log and the spine's own prose</h3>
+              <span class="finding-location">DESIGN.md — components.severity-band.fill-opacity</span>
+            </header>
+            <div class="finding-note">Frontmatter token says '0.55–0.80' vs Brand &amp; Style / Colors prose and .decision-log.md ("severity fills at 0.6–0.85 opacity") — an implementer gets conflicting values for the soft-chart signature.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Align the token to 0.6–0.85 (or state why the band specifically runs lower).</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 2 — spacing.zone-gap-sm defined but never referenced</h3>
+              <span class="finding-location">DESIGN.md — frontmatter</span>
+            </header>
+            <div class="finding-note"><code>spacing.zone-gap-sm</code> (48px) is defined but never referenced; prose says "{spacing.zone-gap} (48–56px)".</div>
+            <div class="finding-fix"><strong>Fix:</strong> Reference it or drop it.</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 3 — Findings table values drift from tokens</h3>
+              <span class="finding-location">DESIGN.md — Components</span>
+            </header>
+            <div class="finding-note">Table headers "9.5–10px" vs the 10px <code>micro-label</code> token; KEV tag "at 0.85" alpha appears in the table but not the frontmatter token.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Align table to tokens.</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 4 — tabular-nums lives only in prose</h3>
+              <span class="finding-location">DESIGN.md — frontmatter/prose</span>
+            </header>
+            <div class="finding-note"><code>tabular-nums</code> for numerals lives only in prose; fine per spec, but token consumers may miss it.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a comment beside <code>hero-numeral</code>.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Component coverage</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Component inventory is complete and extraction-ready, with one frontmatter orphan.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 1 — heading-block missing from Components table</h3>
+              <span class="finding-location">DESIGN.md — frontmatter + Layout</span>
+            </header>
+            <div class="finding-note"><code>heading-block</code> has frontmatter tokens and Layout prose but no row in the Components table; extraction-by-table misses it.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a row or fold its tokens into Layout.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>State coverage</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Core honest-degradation states are excellent; a few surface-level gaps remain.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S10 — No long-running-query state for blast radius (NFR2 worst case)</h3>
+              <span class="finding-location">EXPERIENCE.md — State Patterns</span>
+            </header>
+            <div class="finding-note">NFR2 allows "under a minute worst case"; no state describes what the surface shows between Enter and answer (skeleton? progressive tiers?).</div>
+            <div class="finding-fix"><strong>Fix:</strong> One State Patterns row (progressive render or honest "evaluating N artifacts…" state).</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 7 — Two derivable-but-unnamed states</h3>
+              <span class="finding-location">EXPERIENCE.md — State Patterns</span>
+            </header>
+            <div class="finding-note">Empty Evidence trail (pre-first-decision) and artifact-detail-without-SBOM states unspecified; both are derivable from existing patterns but cheap to name.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Name both states.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Visual reference coverage</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>All 8 <code>.working/</code> renders are cited and spines-win-on-conflict is stated in both spines; one cited import is an empty file and one inspiration source is uncredited.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S3 — imports/weblytics.html is a 0-byte file cited as a lifted reference</h3>
+              <span class="finding-location">EXPERIENCE.md — Inspiration &amp; Anti-patterns, first bullet</span>
+            </header>
+            <div class="finding-note">The file is empty (Dribbble blocked the import); the inline link implies viewable content.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Delete the empty file and cite the Dribbble URL only (as the spine header already does), or note "(URL-only; import blocked)".</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 5 — AmazingUI Dribbble shot uncited</h3>
+              <span class="finding-location">EXPERIENCE.md — Inspiration &amp; Anti-patterns</span>
+            </header>
+            <div class="finding-note">The shot that seeded the graph requirement is uncited (lineage only in .decision-log.md; see reconcile-dribbble-inspiration.md).</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add the URL-only citation.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Bloat &amp; overspecification</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Tight throughout; minor editorial voice leakage in EXPERIENCE.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">Low</span>
+              <h3 class="finding-title">Nit 6 — Editorial voice leaks into EXPERIENCE</h3>
+              <span class="finding-location">EXPERIENCE.md — prose voice</span>
+            </header>
+            <div class="finding-note">Flourishes ("no illustration theatre", "honest, partial, alive") leak DESIGN-style voice into EXPERIENCE; harmless but the spec assigns editorial voice to DESIGN only.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Neutralize or relocate the flourishes.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Inheritance discipline</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Sources resolve, UJ names are verbatim, and the locked Forge hexes match the decision log exactly — but one UI-relevant FR has no home in the IA, several PRD promises never surface as copy or settings, and the locked glossary is a subset of the source glossary.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-critical">Critical</span>
+              <h3 class="finding-title">B2 — FR27 license policy authoring has no surface</h3>
+              <span class="finding-location">EXPERIENCE.md — Information Architecture / Settings row; Component Patterns</span>
+            </header>
+            <div class="finding-note">FR27 (fleet-wide license allow/deny policy) is a UI-relevant FR: violations-as-findings are covered, but the admin surface where the policy is <em>authored</em> exists nowhere in the 7-surface IA. Already recorded in reconcile-prd.md (gap #3) — at finalize, recording is not resolving. A story-dev consumer has no home to build this into.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add license policy (allow/deny list management, admin role) to the Settings IA row and a behavioral note (who edits, how violations re-evaluate on policy change).</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">High</span>
+              <h3 class="finding-title">S4 — FR6 uniformity is never a user-facing claim</h3>
+              <span class="finding-location">EXPERIENCE.md — Posture / Settings / Flow 1</span>
+            </header>
+            <div class="finding-note">The PRD's chassis promise ("every image SBOM'd and scanned the same way") appears in no copy, stat, or surface (reconcile-prd gap #1) — the product's core promise is invisible.</div>
+            <div class="finding-fix"><strong>Fix:</strong> One line of posture or freshness-strip copy (e.g. "All N artifacts scanned with the same Syft/Grype config, vX") claims it.</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">High</span>
+              <h3 class="finding-title">S5 — FR23 evidence retention setting absent</h3>
+              <span class="finding-location">EXPERIENCE.md — IA, Settings row</span>
+            </header>
+            <div class="finding-note">Configurable retention with the 24-month compliance floor has no home.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add to Settings IA purpose list.</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S6 — FR20 Prometheus endpoint discoverability unspecified</h3>
+              <span class="finding-location">EXPERIENCE.md — IA / Settings</span>
+            </header>
+            <div class="finding-note">The pull-only stance is honored but where an operator finds the endpoint URL/scrape config is unstated.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add to Settings (read-only, copyable endpoint + sample scrape config).</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S8 — FR11 feed enumeration omits CNA records and OSV</h3>
+              <span class="finding-location">EXPERIENCE.md — Honest Provenance, freshness-strip bullet</span>
+            </header>
+            <div class="finding-note">The strip enumerates "Grype DB, KEV catalog, EPSS, SBOM index, runtime observation"; CNA records and OSV are absent from any named UI list.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Extend the enumerated list or mark it non-exhaustive ("every connected feed").</div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">Medium</span>
+              <h3 class="finding-title">S2 — Locked glossary omits Control plane / Cluster agent</h3>
+              <span class="finding-location">EXPERIENCE.md — Voice and Tone, locked glossary</span>
+            </header>
+            <div class="finding-note">Source glossary (digest §D) includes both; the spine's "identical across product, packs, and docs" list drops them while Foundation uses the terms freely.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add both terms to the locked set.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>Shape fit</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>DESIGN body sections are in exact canonical spec order; EXPERIENCE carries all eight required defaults plus defensible, load-bearing invented sections. No findings.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details>
+        <summary>
+          <h2>PRD reconciliation</h2>
+          <span class="reviewer-source">reconcile-prd.md</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Audit of prd.md + addendum.md (prd-Armoury-2026-06-11) against both spines. <strong>Counts (44 PRD items: 30 FR + 11 NFR + 3 UJ): Covered 37 · Partial 6 · Excluded 1 (NFR7, non-UI by nature) · Dropped 0.</strong></p>
+            <p>The six partials: FR6 (uniformity never a user-facing claim), FR11 (CNA/OSV absent from named feed lists), FR20 (metrics endpoint doorway unspecified), FR23 (retention configuration absent from Settings), FR27 (license policy authoring has no home — escalated to blocker B2), NFR9 (read-only agent reassurance missing from install copy). Each maps to a rubric-walker should-fix above.</p>
+            <p>Qualitative at-risk items beyond the FR table: the "no rescans, no rebuilds" quiet-magic moment of UJ-2 isn't narrated in Flow 2 (only FR8 provenance carries it indirectly); the auditor verification affordance (S9) and glossary completeness (S2) round out the list.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details>
+        <summary>
+          <h2>Inspiration reconciliation</h2>
+          <span class="reviewer-source">reconcile-dribbble-inspiration.md</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p><strong>Weblytics Dark Dashboard — landed strongly.</strong> The "soft data" reaction became DESIGN's hard posture #2 (rounded, muted, 0.6–0.85 opacity fills, no neon); the dark-theme reaction exceeded into three dark themes. The soft-tables reaction became a deliberate fusion with the dense operator-console direction — softness survives in the table chrome, not the rows.</p>
+            <p><strong>AmazingUI SaaS Cyber Phishing Platform — landed, amplified.</strong> The single graph reaction matured into two surfaces (blast-radius 4-tier graph and the Graph explorer) plus the full graph token set. Not reflected: the shot is never credited in either spine — lineage exists only in .decision-log.md (carried as nit 5 above). Nothing else was promised, nothing else is owed.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <div class="mechanical">
+      <h3>Mechanical notes</h3>
+      <ul>
+        <li>All <code>{path.to.token}</code> references in both spines resolve to frontmatter tokens by exact name (including <code>{components.dq-badge}</code>, <code>{components.graph-node}</code>, <code>{components.graph-edge-affected}</code>, <code>{components.button-primary}</code>).</li>
+        <li>Three-theme parity: all 15 semantic color roles present in Forge, High Signal, and Gunmetal maps. (Parity is broken only by the untokenized tints in B1.)</li>
+        <li>No severity hue reused for data-quality in any theme (#8FAFAF / #C7AEF0 / #A493C9 are hue-distinct from all three severity ramps).</li>
+        <li>Locked Forge hexes match .decision-log.md values exactly, including <code>text-data</code> #D4CCC2.</li>
+        <li><code>sources</code> frontmatter: all four paths resolve on disk.</li>
+        <li>UJ names, personas, roles, triage status set, and IA's 7 surfaces match the decision log and digest verbatim.</li>
+        <li>DESIGN body sections in canonical spec order; EXPERIENCE carries all eight required defaults plus defensible invented sections.</li>
+        <li>Spines-win-on-conflict stated once in each spine. No Mermaid present.</li>
+      </ul>
+    </div>
+
+    <footer class="report-footer">
+      <div class="meta">
+        <span>Rubric: review-rubric-walker.md</span>
+        <span>Reconciliation: reconcile-prd.md · reconcile-dribbble-inspiration.md</span>
+        <span>Generated: 2026-06-12</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Armoury — Graph explorer (key screen, Forge)</title>
+<style>
+/* ============================================================
+   ARMOURY — Graph explorer · key screen
+   Open-ended traversal of the relational model — distinct from
+   the Blast-radius surface (which renders a single answer).
+   Two states in this file:
+     1. Canonical — explored neighborhood: artifact at center →
+        packages, deployments, signature attestation; traversal
+        breadcrumb; node inspector side panel (pinned selection).
+     2. Alternate — empty start state, search-first:
+        "Start from a CVE, package, or artifact."
+
+   GOVERNING SPINE SECTIONS
+   DESIGN.md      — Components: graph-node, graph-node-running
+                    (ember ring + pip, never glow),
+                    graph-node-inactive (dashed, muted),
+                    graph-edge-affected (severity hue ONLY on the
+                    CVE → affected path, soft beziers); Colors
+                    (accent = running-now emphasis; success =
+                    verified signatures); Shapes (bezier edges,
+                    rounded nodes); Typography (every node labeled
+                    with its real identifier in mono).
+   EXPERIENCE.md  — IA (Graph explorer surface, dual graph entry),
+                    Graph Views (open-ended traversal, node click
+                    → detail, context action → evidence, selection
+                    pins, search-first empty state), Accessibility
+                    Floor (nodes focusable, non-graph equivalents),
+                    Voice and Tone, State Patterns (empty states
+                    left-aligned, never centered).
+
+   NOTE — the node inspector panel is rendered as the pinned-
+   selection reading of EXPERIENCE.md Graph Views ("selection pins
+   it"; every node resolves to detail + evidence). It is not a
+   named Component Pattern; flagged in the run notes.
+
+   FORGE PALETTE (locked) — see DESIGN.md frontmatter.
+   TYPE — intended: "Inter Display" titles, "Inter" UI,
+   "IBM Plex Mono" all identifiers. System stacks used here.
+   No text baked into reusable SVG assets — all SVG text here is
+   live data labels (identifiers), externalizable as strings.
+   ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#121010; --surface:#1C1917; --border:#322C27; --hair:#221E1A;
+  --text:#EDE7E0; --data:#D4CCC2; --muted:#9A9087; --accent:#D9A05B;
+  --crit:#D27D6E; --ok:#9DBA8C; --warn:#D9B36B; --dq:#8FAFAF;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* Inter / Inter Display in prod */
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;               /* IBM Plex Mono in prod */
+}
+
+body{
+  background:#0B0A09; font-family:var(--sans); color:var(--text);
+  padding:34px 28px; -webkit-font-smoothing:antialiased;
+}
+
+.state-label{
+  max-width:1420px; margin:0 auto 14px; font-family:var(--mono);
+  font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+}
+.state-label b{ color:var(--accent); font-weight:600; }
+.state-gap{ height:56px; }
+
+.browser{
+  max-width:1420px; margin:0 auto; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.chrome{
+  display:flex; align-items:center; gap:14px;
+  background:#161312; border-bottom:1px solid var(--border); padding:10px 16px;
+}
+.dots{ display:flex; gap:7px; }
+.dots i{ width:11px; height:11px; border-radius:50%; background:#3A332D; display:block; }
+.urlbar{
+  flex:1; max-width:560px; background:#121010; border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; font-family:var(--mono);
+  font-size:11.5px; color:var(--muted);
+}
+.urlbar b{ color:var(--text); font-weight:500; }
+
+.shell{ display:flex; min-height:840px; }
+
+.rail{
+  width:58px; flex-shrink:0; background:#151211; border-right:1px solid var(--border);
+  display:flex; flex-direction:column; align-items:center; padding:18px 0 16px;
+}
+.rail .mark{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(150deg,#D9A05B,#8a6334);
+  display:flex; align-items:center; justify-content:center;
+  color:#121010; font-weight:700; font-size:15px; margin-bottom:30px;
+}
+.rail nav{ display:flex; flex-direction:column; gap:6px; width:100%; align-items:center; }
+.ritem{
+  position:relative; width:40px; height:40px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center; color:var(--muted);
+}
+.ritem svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.ritem.active{ color:var(--text); background:#221E1A; }
+.ritem.active::before{
+  content:""; position:absolute; left:-9px; top:9px; bottom:9px;
+  width:2px; border-radius:2px; background:var(--accent);
+}
+.rail .spacer{ flex:1; }
+
+.main{ flex:1; min-width:0; padding:0 48px 48px; }
+
+/* ---------- explorer header ---------- */
+.xhdr{ padding:34px 0 0; }
+.xhdr .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:12px;
+}
+.qbar{
+  display:flex; align-items:center; gap:12px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:11px 16px; max-width:640px;
+}
+.qbar svg{ width:14px; height:14px; stroke:var(--muted); fill:none; stroke-width:1.6; flex-shrink:0; }
+.qbar .q{ font-family:var(--mono); font-size:14px; color:var(--text); font-weight:500; }
+.qbar .ph{ font-size:12.5px; color:var(--muted); }
+.qbar .kbd{
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:#121010; border:1px solid var(--border); border-radius:4px;
+  padding:2px 6px; color:var(--muted);
+}
+
+/* traversal breadcrumb — every hop is a real identifier in mono */
+.trav{
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+  margin:20px 0 0; font-family:var(--mono); font-size:11px; color:var(--muted);
+}
+.trav .lbl{
+  font-family:var(--sans); font-size:9.5px; text-transform:uppercase;
+  letter-spacing:.13em; font-weight:600; margin-right:4px;
+}
+.trav .hop{
+  border:1px solid var(--border); border-radius:5px; padding:3px 9px;
+  background:var(--surface); color:var(--data);
+}
+.trav .hop.here{ color:var(--text); border-color:rgba(217,160,91,.4); }
+.trav .arr{ color:var(--muted); }
+
+/* ---------- canvas + inspector ---------- */
+.xbody{ display:flex; gap:18px; margin-top:22px; align-items:stretch; }
+.canvas{
+  flex:1; min-width:0; background:var(--bg); border:1px solid var(--hair);
+  border-radius:12px; padding:6px 4px 0; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+svg.graph{ display:block; width:100%; height:auto; }
+svg.graph text{ font-family:var(--mono); }
+svg.graph .lbl-sans{ font-family:var(--sans); }
+
+.legend{
+  display:flex; gap:28px; align-items:center; padding:14px 18px 16px;
+  font-size:10.5px; color:var(--muted); border-top:1px dashed var(--hair); margin-top:auto;
+  flex-wrap:wrap;
+}
+.legend .li{ display:flex; align-items:center; gap:8px; }
+.legend .ring{ width:11px; height:11px; border-radius:4px; border:1.5px solid var(--accent); }
+.legend .mutebox{ width:11px; height:11px; border-radius:4px; border:1px dashed #4A423A; }
+.legend .sevline{ width:18px; height:2px; border-radius:2px; background:rgba(210,125,110,.6); }
+.legend .pin{ width:11px; height:11px; border-radius:4px; border:1.5px solid rgba(217,160,91,.7); background:#221E1A; }
+
+/* ---------- node inspector — pinned selection ---------- */
+.inspector{
+  width:300px; flex-shrink:0; background:var(--surface);
+  border:1px solid var(--border); border-radius:12px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.ins-h{ padding:16px 18px 13px; border-bottom:1px solid var(--border); }
+.ins-h .eyebrow{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.14em;
+  color:var(--muted); font-weight:600; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px;
+}
+.ins-h .eyebrow .pin{ font-family:var(--mono); font-size:9px; color:var(--accent); border:1px solid rgba(217,160,91,.4); border-radius:4px; padding:1px 5px; letter-spacing:0; text-transform:none; }
+.ins-h .id{ font-family:var(--mono); font-size:13.5px; font-weight:600; color:var(--text); word-break:break-all; }
+.ins-h .kind{ margin-top:5px; font-size:11px; color:var(--muted); }
+.ins-body{ padding:4px 18px 16px; flex:1; overflow:auto; }
+.ins-sec{ padding-top:14px; }
+.ins-sec .sh{
+  font-size:9px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding-bottom:7px;
+  border-bottom:1px solid var(--hair); margin-bottom:9px;
+}
+.kv{ display:flex; gap:10px; padding:4px 0; font-size:11px; }
+.kv .k{ color:var(--muted); width:86px; flex-shrink:0; }
+.kv .v{ color:var(--data); font-family:var(--mono); font-size:10.5px; word-break:break-all; }
+.kv .v.sans{ font-family:var(--sans); font-size:11px; }
+.kv .v .okc{ color:var(--ok); }
+.kv .v .dqc{ color:var(--dq); }
+.kv .v .pipdot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent); margin-right:6px; vertical-align:1px; }
+.ins-acts{ padding:12px 18px 16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+.ins-act{
+  display:flex; align-items:center; gap:9px; font-size:11.5px; font-weight:500;
+  color:var(--accent); border:1px solid rgba(217,160,91,.35); border-radius:8px;
+  padding:7px 12px;
+}
+.ins-act.quiet{ color:var(--muted); border-color:var(--border); }
+.ins-act svg{ width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.ins-act .kbd{ margin-left:auto; font-family:var(--mono); font-size:9px; color:var(--muted); border:1px solid var(--border); border-radius:3px; padding:1px 4px; }
+
+/* ---------- provenance footer ---------- */
+.provenance{ margin-top:30px; border-top:1px solid var(--border); padding-top:16px; }
+.provenance .row{
+  display:flex; gap:32px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.provenance .row b{ color:var(--text); font-weight:500; }
+.provenance .row .ok{ color:var(--ok); }
+.provenance .honest{ margin-top:12px; font-size:11.5px; color:var(--muted); }
+.provenance .honest b{ color:var(--warn); font-weight:600; }
+
+/* ---------- empty / start state (alternate) — left-aligned, never centered ---------- */
+.headblock{ margin-top:44px; }
+.headblock .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:10px;
+}
+.headblock h1{ font-size:23px; font-weight:500; letter-spacing:-.02em; color:var(--text); }
+.headblock .sub{ margin-top:7px; font-size:13px; color:var(--muted); max-width:620px; line-height:1.55; }
+.headrule{ width:46px; height:2px; background:var(--accent); margin:18px 0 0; border-radius:2px; }
+
+.starters{ margin-top:34px; max-width:640px; }
+.starters .sh{
+  font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding-bottom:9px;
+  border-bottom:1px solid var(--border); margin-bottom:6px;
+}
+.startrow{
+  display:flex; align-items:center; gap:14px; height:34px;
+  border-bottom:1px solid var(--hair); font-size:12px; color:var(--data);
+}
+.startrow .m{ font-family:var(--mono); font-size:11.5px; color:var(--text); }
+.startrow .why{ color:var(--muted); font-size:11px; }
+.startrow .grow{ flex:1; }
+.startrow .go{ color:var(--accent); font-size:11px; font-weight:500; }
+.start-note{ margin-top:16px; font-size:11px; color:var(--muted); max-width:620px; line-height:1.5; }
+.start-note .m{ font-family:var(--mono); font-size:10.5px; color:var(--data); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- STATE 1 — CANONICAL: explored neighborhood + node inspector   -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 1 · canonical</b> — explored neighborhood: artifact center → packages, deployments, signature · inspector pinned · traversal breadcrumb</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/graph?focus=acme/payments-api:3.4.1</div>
+  </div>
+
+  <div class="shell">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem active" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="xhdr">
+        <div class="eyebrow">Graph explorer</div>
+        <div class="qbar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          <span class="q">acme/payments-api:3.4.1</span>
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="trav">
+          <span class="lbl">Traversal</span>
+          <span class="hop">CVE-2026-23012</span>
+          <span class="arr">→</span>
+          <span class="hop">log4j-core@2.17.0</span>
+          <span class="arr">→</span>
+          <span class="hop here">acme/payments-api:3.4.1</span>
+        </div>
+      </header>
+
+      <div class="xbody">
+
+        <div class="canvas">
+          <!-- =============== explored neighborhood, static SVG ===============
+               Artifact pinned at center. Left: contained packages (one carries
+               the open CVE — severity hue ONLY on that path). Right: runtime
+               deployments (ember ring = running now) and the build signature.
+               Soft beziers throughout; node tokens from DESIGN.md. -->
+          <svg class="graph" viewBox="0 0 1060 560" role="img"
+               aria-label="Graph neighborhood centered on artifact acme/payments-api:3.4.1 — packages left, deployments and signature right">
+
+            <!-- neighborhood labels -->
+            <text x="40" y="40" font-size="9.5" letter-spacing="2.2" fill="#9A9087" class="lbl-sans">CONTAINS — PACKAGES</text>
+            <text x="430" y="40" font-size="9.5" letter-spacing="2.2" fill="#9A9087" class="lbl-sans">ARTIFACT</text>
+            <text x="770" y="40" font-size="9.5" letter-spacing="2.2" fill="#9A9087" class="lbl-sans">RUNS &amp; ATTESTS</text>
+
+            <!-- ============ edges (under nodes) ============ -->
+            <!-- CVE → log4j-core : the only severity-hued path on this canvas -->
+            <path d="M196 118 C 196 152, 130 160, 130 192" stroke="#D27D6E" stroke-opacity="0.5" stroke-width="1.8" fill="none"/>
+            <!-- packages → artifact : neutral containment edges -->
+            <path d="M250 222 C 330 222, 350 262, 424 268" stroke="#4A423A" stroke-opacity="0.7" stroke-width="1.3" fill="none"/>
+            <path d="M250 312 C 330 312, 350 290, 424 284" stroke="#4A423A" stroke-opacity="0.7" stroke-width="1.3" fill="none"/>
+            <path d="M250 402 C 330 402, 350 312, 424 298" stroke="#4A423A" stroke-opacity="0.7" stroke-width="1.3" fill="none"/>
+            <!-- artifact → deployments : ember when running, dashed when not -->
+            <path d="M652 262 C 716 262, 716 158, 766 152" stroke="#D9A05B" stroke-opacity="0.45" stroke-width="1.6" fill="none"/>
+            <path d="M652 280 C 716 280, 716 268, 766 268" stroke="#D9A05B" stroke-opacity="0.45" stroke-width="1.6" fill="none"/>
+            <path d="M652 298 C 716 298, 716 384, 766 388" stroke="#968D82" stroke-opacity="0.35" stroke-width="1.2" stroke-dasharray="3 4" fill="none"/>
+            <!-- artifact → signature attestation -->
+            <path d="M538 330 C 538 396, 660 470, 766 478" stroke="#4A423A" stroke-opacity="0.7" stroke-width="1.3" fill="none"/>
+
+            <!-- ============ packages (left) ============ -->
+            <!-- the CVE node — only place severity hue appears -->
+            <g>
+              <rect x="120" y="66" width="190" height="52" rx="11"
+                    fill="#D27D6E" fill-opacity="0.13" stroke="#D27D6E" stroke-opacity="0.6" stroke-width="1.3"/>
+              <text x="136" y="88" font-size="11.5" font-weight="600" fill="#EDE7E0">CVE-2026-23012</text>
+              <text x="136" y="105" font-size="9" fill="#D27D6E">critical · KEV · 1 finding here</text>
+            </g>
+            <g>
+              <rect x="48" y="192" width="202" height="56" rx="11"
+                    fill="#1C1917" stroke="#D27D6E" stroke-opacity="0.4" stroke-width="1.2"/>
+              <text x="64" y="215" font-size="11" fill="#EDE7E0">log4j-core@2.17.0</text>
+              <text x="64" y="232" font-size="9" fill="#9A9087" class="lbl-sans">direct dependency · 1 open finding</text>
+            </g>
+            <g>
+              <rect x="48" y="284" width="202" height="56" rx="11"
+                    fill="#1C1917" stroke="#322C27" stroke-width="1.2"/>
+              <text x="64" y="307" font-size="11" fill="#D4CCC2">jackson-databind@2.16.1</text>
+              <text x="64" y="324" font-size="9" fill="#9A9087" class="lbl-sans">direct dependency · 1 open finding</text>
+            </g>
+            <g>
+              <rect x="48" y="374" width="202" height="56" rx="11"
+                    fill="#1C1917" stroke="#322C27" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <text x="64" y="397" font-size="11" fill="#D4CCC2">+ 211 more packages</text>
+              <text x="64" y="414" font-size="9" fill="#9A9087" class="lbl-sans">expand to enumerate · 0 open findings</text>
+            </g>
+
+            <!-- ============ artifact (center, pinned selection) ============ -->
+            <g>
+              <!-- pinned: ember selection ring, 4px offset — ring, never glow -->
+              <rect x="420" y="236" width="236" height="98" rx="14" fill="none"
+                    stroke="#D9A05B" stroke-opacity="0.55" stroke-width="1.4"/>
+              <rect x="424" y="240" width="228" height="90" rx="11"
+                    fill="#221E1A" stroke="#322C27" stroke-width="1"/>
+              <circle cx="444" cy="263" r="3" fill="#D9A05B"/>
+              <text x="456" y="267" font-size="11.5" font-weight="600" fill="#EDE7E0">acme/payments-api:3.4.1</text>
+              <text x="440" y="288" font-size="9" fill="#9A9087">sha256:9f2c41…ab</text>
+              <text x="440" y="306" font-size="9" fill="#9A9087" class="lbl-sans">214 packages · 2 findings · running in 2 namespaces</text>
+              <text x="440" y="322" font-size="9" fill="#8FAFAF">DQ 91 A−</text>
+            </g>
+
+            <!-- ============ runtime + attestation (right) ============ -->
+            <g>
+              <rect x="762" y="118" width="252" height="64" rx="13" fill="none"
+                    stroke="#D9A05B" stroke-opacity="0.55" stroke-width="1.4"/>
+              <rect x="766" y="122" width="244" height="56" rx="10" fill="#1C1917" stroke="#322C27" stroke-width="1"/>
+              <circle cx="784" cy="143" r="3" fill="#D9A05B"/>
+              <text x="796" y="147" font-size="10.5" fill="#EDE7E0">prod-eu-west/payments</text>
+              <text x="782" y="166" font-size="9" fill="#9A9087">deploy/payments-api · 4 pods running</text>
+            </g>
+            <g>
+              <rect x="762" y="234" width="252" height="64" rx="13" fill="none"
+                    stroke="#D9A05B" stroke-opacity="0.55" stroke-width="1.4"/>
+              <rect x="766" y="238" width="244" height="56" rx="10" fill="#1C1917" stroke="#322C27" stroke-width="1"/>
+              <circle cx="784" cy="259" r="3" fill="#D9A05B"/>
+              <text x="796" y="263" font-size="10.5" fill="#EDE7E0">prod-eu-west/payments-canary</text>
+              <text x="782" y="282" font-size="9" fill="#9A9087">deploy/payments-api · 1 pod running</text>
+            </g>
+            <!-- shipped, not running -->
+            <g opacity="0.5">
+              <rect x="766" y="358" width="244" height="56" rx="10" fill="#1C1917"
+                    stroke="#322C27" stroke-width="1" stroke-dasharray="4 4"/>
+              <text x="782" y="381" font-size="10.5" fill="#9A9087">staging-eu/payments</text>
+              <text x="782" y="399" font-size="9" fill="#9A9087" class="lbl-sans">shipped, not running · last ran 12 d ago</text>
+            </g>
+            <!-- signature attestation node — success = verified, instrument not heat -->
+            <g>
+              <rect x="766" y="450" width="244" height="56" rx="10" fill="#1C1917"
+                    stroke="#322C27" stroke-width="1"/>
+              <circle cx="784" cy="471" r="3" fill="#9DBA8C"/>
+              <text x="796" y="475" font-size="10.5" fill="#D4CCC2">signature · cosign</text>
+              <text x="782" y="493" font-size="9" fill="#9DBA8C">verified · rekor 83904112 · build 2026-05-30</text>
+            </g>
+
+          </svg>
+
+          <div class="legend">
+            <span class="li"><span class="pin"></span>pinned selection — inspector at right</span>
+            <span class="li"><span class="ring"></span>ember ring = running now</span>
+            <span class="li"><span class="mutebox"></span>dashed / muted = shipped, not running</span>
+            <span class="li"><span class="sevline"></span>severity hue = CVE → affected path only</span>
+            <span class="li">arrows / Tab traverse · Enter opens detail · + / − zoom</span>
+          </div>
+        </div>
+
+        <!-- node inspector: the pinned node, resolved -->
+        <aside class="inspector">
+          <div class="ins-h">
+            <div class="eyebrow">Node <span class="pin">pinned</span></div>
+            <div class="id">acme/payments-api:3.4.1</div>
+            <div class="kind">Artifact · container image</div>
+          </div>
+          <div class="ins-body">
+            <div class="ins-sec">
+              <div class="sh">Identity</div>
+              <div class="kv"><span class="k">Digest</span><span class="v">sha256:9f2c41d8…a31acab</span></div>
+              <div class="kv"><span class="k">Registry</span><span class="v">registry.acme.dev/acme</span></div>
+              <div class="kv"><span class="k">Signature</span><span class="v"><span class="okc">verified</span> · cosign · rekor 83904112</span></div>
+            </div>
+            <div class="ins-sec">
+              <div class="sh">What this node knows</div>
+              <div class="kv"><span class="k">Packages</span><span class="v sans">214 — SBOM Syft v1.18</span></div>
+              <div class="kv"><span class="k">Findings</span><span class="v sans">2 open · 1 KEV · ranked #1 fleet-wide</span></div>
+              <div class="kv"><span class="k">Running</span><span class="v sans"><span class="pipdot"></span>2 namespaces · 5 pods · prod-eu-west</span></div>
+              <div class="kv"><span class="k">Data quality</span><span class="v"><span class="dqc">91 A−</span> <span class="sans">· expandable</span></span></div>
+            </div>
+            <div class="ins-sec">
+              <div class="sh">Provenance</div>
+              <div class="kv"><span class="k">SBOM</span><span class="v">indexed 2026-06-12 03:12 UTC</span></div>
+              <div class="kv"><span class="k">Evaluated</span><span class="v">38 min ago · Grype v5.12</span></div>
+              <div class="kv"><span class="k">Runtime</span><span class="v">heartbeat <span class="okc">2 min ago</span></span></div>
+            </div>
+          </div>
+          <div class="ins-acts">
+            <span class="ins-act">
+              <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+              Open artifact detail <span class="kbd">↵</span>
+            </span>
+            <span class="ins-act quiet">
+              <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+              View evidence
+            </span>
+            <span class="ins-act quiet">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+              Blast radius from here
+            </span>
+          </div>
+        </aside>
+
+      </div>
+
+      <footer class="provenance">
+        <div class="row">
+          <span><b>SBOMs</b> — Syft v1.18, indexed per artifact</span>
+          <span><b>Matching</b> — Grype DB v5.12, synced <span class="ok">41 min ago</span></span>
+          <span><b>Runtime</b> — 2 clusters, heartbeat 2 min ago</span>
+          <span><b>Signatures</b> — cosign / rekor, checked at index time</span>
+        </div>
+        <div class="honest"><b>Scope:</b> this neighborhood shows what is indexed. Unscanned artifacts do not appear as nodes — they are counted on Posture as coverage gaps.</div>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<div class="state-gap"></div>
+
+<!-- ============================================================ -->
+<!-- STATE 2 — ALTERNATE: empty start state, search-first          -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 2 · alternate</b> — start state: search-first, left-aligned, recent starting points</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/graph</div>
+  </div>
+
+  <div class="shell" style="min-height:600px;">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem active" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <div class="headblock">
+        <div class="eyebrow">Graph explorer</div>
+        <h1>Start from a CVE, package, or artifact</h1>
+        <div class="sub">The fleet is a graph: CVE → package → artifact → cluster and workload. Pick any node and walk its relationships. Every artifact, finding, and CVE in the product also carries an "Explore in graph" action that lands here.</div>
+        <div class="headrule"></div>
+      </div>
+
+      <div class="qbar" style="margin-top:34px;">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        <span class="ph">CVE ID, package@version, artifact name, or digest</span>
+        <span class="kbd">⌘K</span>
+      </div>
+
+      <div class="starters">
+        <div class="sh">Recent starting points</div>
+        <div class="startrow">
+          <span class="m">CVE-2026-23012</span>
+          <span class="why">explored 2 h ago · 14 affected artifacts</span>
+          <div class="grow"></div><span class="go">Resume →</span>
+        </div>
+        <div class="startrow">
+          <span class="m">log4j-core@2.17.0</span>
+          <span class="why">explored yesterday · in 12 artifacts</span>
+          <div class="grow"></div><span class="go">Resume →</span>
+        </div>
+        <div class="startrow">
+          <span class="m">acme/payments-api:3.4.1</span>
+          <span class="why">explored yesterday · running in 2 namespaces</span>
+          <div class="grow"></div><span class="go">Resume →</span>
+        </div>
+      </div>
+
+      <div class="start-note">Only indexed artifacts appear as nodes — 82% of the fleet is scanned, populating. Unscanned artifacts are counted as coverage gaps on Posture, not drawn here.</div>
+
+      <footer class="provenance" style="margin-top:56px;">
+        <div class="row">
+          <span><b>Graph index</b> — 3,176 artifacts · 48,112 package edges · 2 clusters</span>
+          <span><b>SBOMs</b> — Syft v1.18</span>
+          <span><b>Runtime</b> — heartbeat <span class="ok">2 min ago</span></span>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

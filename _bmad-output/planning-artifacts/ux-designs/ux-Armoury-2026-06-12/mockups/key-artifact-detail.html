@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Armoury — Artifact detail · key screen (Forge)</title>
+<style>
+/* ============================================================
+   ARMOURY — Artifact detail (FR18) · key screen
+   Two states in this file:
+     1. Canonical — fully scanned artifact: SBOM contents,
+        vulnerability + license findings in one view (KEV-first),
+        triage pills, evaluation provenance, freshness strip.
+     2. Alternate — artifact with NO SBOM yet: "unknown, not
+        absent" honesty state.
+
+   GOVERNING SPINE SECTIONS
+   DESIGN.md      — Brand & Style (calm canvas, asymmetric
+                    composition), Colors, Typography (mono for
+                    every identifier), Layout & Spacing (zone
+                    rhythm), Components: icon-rail, heading-block,
+                    findings-table, severity-chip, kev-tag,
+                    triage-pill, dq-badge, coverage-gap-row,
+                    populating-banner, freshness-strip.
+   EXPERIENCE.md  — IA (Artifacts surface), Voice and Tone,
+                    Honest Provenance (per-artifact freshness +
+                    evaluation provenance), Component Patterns
+                    (findings table, KEV tag, triage pill, DQ
+                    badge, coverage-gap row), Data-Quality Score,
+                    State Patterns (the no-SBOM state follows the
+                    "unknown, not absent" coverage-gap voice).
+
+   FORGE PALETTE (locked) — see DESIGN.md frontmatter.
+   background #121010 · surface #1C1917 · border #322C27
+   hairline #221E1A · text #EDE7E0 · data #D4CCC2 · muted #9A9087
+   accent #D9A05B · crit #D27D6E · high #D2986B · med #C9B07E
+   low #968D82 · ok #9DBA8C · warn #D9B36B · dq #8FAFAF
+
+   TYPE — intended production fonts (system stacks used here):
+   "Inter Display" titles/numerals (200/500), "Inter" UI text,
+   "IBM Plex Mono" for EVERY identifier: digests, package@version,
+   cluster/namespace paths, feed versions, license SPDX IDs.
+   ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#121010; --surface:#1C1917; --border:#322C27; --hair:#221E1A;
+  --text:#EDE7E0; --data:#D4CCC2; --muted:#9A9087; --accent:#D9A05B;
+  --crit:#D27D6E; --high:#D2986B; --med:#C9B07E; --low:#968D82;
+  --ok:#9DBA8C; --warn:#D9B36B; --dq:#8FAFAF;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* Inter / Inter Display in prod */
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;               /* IBM Plex Mono in prod */
+}
+
+body{
+  background:#0B0A09; font-family:var(--sans); color:var(--text);
+  padding:34px 28px; -webkit-font-smoothing:antialiased;
+}
+
+.state-label{
+  max-width:1380px; margin:0 auto 14px; font-family:var(--mono);
+  font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+}
+.state-label b{ color:var(--accent); font-weight:600; }
+.state-gap{ height:56px; }
+
+/* ---------- browser frame ---------- */
+.browser{
+  max-width:1380px; margin:0 auto; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.chrome{
+  display:flex; align-items:center; gap:14px;
+  background:#161312; border-bottom:1px solid var(--border); padding:10px 16px;
+}
+.dots{ display:flex; gap:7px; }
+.dots i{ width:11px; height:11px; border-radius:50%; background:#3A332D; display:block; }
+.urlbar{
+  flex:1; max-width:560px; background:#121010; border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; font-family:var(--mono);
+  font-size:11.5px; color:var(--muted);
+}
+.urlbar b{ color:var(--text); font-weight:500; }
+
+/* ---------- shell: icon rail + main ---------- */
+.shell{ display:flex; min-height:820px; }
+.rail{
+  width:58px; flex-shrink:0; background:#151211; border-right:1px solid var(--border);
+  display:flex; flex-direction:column; align-items:center; padding:18px 0 16px;
+}
+.rail .mark{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(150deg,#D9A05B,#8a6334);
+  display:flex; align-items:center; justify-content:center;
+  color:#121010; font-weight:700; font-size:15px; margin-bottom:30px;
+}
+.rail nav{ display:flex; flex-direction:column; gap:6px; width:100%; align-items:center; }
+.ritem{
+  position:relative; width:40px; height:40px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center; color:var(--muted);
+}
+.ritem svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.ritem.active{ color:var(--text); background:#221E1A; }
+.ritem.active::before{
+  content:""; position:absolute; left:-9px; top:9px; bottom:9px;
+  width:2px; border-radius:2px; background:var(--accent);
+}
+.rail .spacer{ flex:1; }
+
+.main{ flex:1; min-width:0; padding:0 52px 56px; }
+
+/* ---------- header ---------- */
+.hdr{
+  display:flex; align-items:center; gap:18px;
+  padding:16px 0 15px; border-bottom:1px solid var(--border); margin-bottom:44px;
+}
+.crumb{ font-size:12px; color:var(--muted); letter-spacing:.02em; }
+.crumb b{ color:var(--text); font-weight:500; }
+.crumb .m{ font-family:var(--mono); font-size:11.5px; }
+.hdr .grow{ flex:1; }
+.blast-search{
+  display:flex; align-items:center; gap:9px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; min-width:330px;
+  color:var(--muted); font-size:12.5px;
+}
+.blast-search svg{ width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.blast-search .kbd{
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:#121010; border:1px solid var(--border); border-radius:4px;
+  padding:2px 6px; color:var(--muted);
+}
+.theme-aff{
+  display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted);
+  border:1px solid var(--border); border-radius:8px; padding:7px 11px; background:var(--surface);
+}
+.theme-aff .sw{ width:9px; height:9px; border-radius:3px; background:var(--accent); }
+.theme-aff b{ color:var(--text); font-weight:500; }
+
+/* ---------- artifact heading block ---------- */
+.headblock{ margin-bottom:0; }
+.headblock .eyebrow{
+  font-size:10px; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--accent); font-weight:600; margin-bottom:10px;
+}
+.artname-row{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+/* artifact name is a technical identifier → mono, at page-title size */
+.artname{ font-family:var(--mono); font-size:23px; font-weight:500; letter-spacing:-.01em; color:var(--text); }
+.dqbadge{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:10px; color:var(--dq);
+}
+.dqbadge i{ width:6px; height:6px; border-radius:50%; background:var(--dq); opacity:.8; }
+.dqbadge.lg{ font-size:11.5px; border:1px solid rgba(143,175,175,.3); border-radius:5px; padding:3px 9px; }
+.dqbadge.dim{ opacity:.65; }
+.digest{ margin-top:9px; font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+.digest b{ color:var(--data); font-weight:500; }
+.headrule{ width:46px; height:2px; background:var(--accent); margin:18px 0 0; border-radius:2px; }
+
+/* meta band under heading: running locations + actions */
+.metaband{
+  display:flex; align-items:center; gap:26px; flex-wrap:wrap;
+  margin-top:24px;
+}
+.runloc{ display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11.5px; color:var(--data); }
+.runloc .pip{ width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+.runloc small{ color:var(--muted); font-size:10.5px; }
+.runloc.idle .pip{ background:transparent; border:1px dashed var(--low); }
+.runloc.idle{ color:var(--muted); }
+.metaband .grow{ flex:1; }
+.act{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:500; color:var(--accent);
+  border:1px solid rgba(217,160,91,.4); border-radius:8px;
+  padding:7px 14px; background:transparent;
+}
+.act svg{ width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.6; }
+.act.quiet{ color:var(--muted); border-color:var(--border); }
+
+/* honesty banner (no-SBOM state) */
+.populating{
+  display:flex; align-items:baseline; gap:12px;
+  background:rgba(217,179,107,.07); border:1px solid rgba(217,179,107,.28);
+  border-radius:9px; padding:11px 16px; margin:30px 0 0;
+  font-size:12.5px; color:var(--text);
+}
+.populating .pip{ width:7px; height:7px; border-radius:50%; background:var(--warn); align-self:center; flex-shrink:0; }
+.populating b{ font-weight:600; color:var(--warn); }
+.populating span{ color:var(--muted); }
+
+/* ---------- zones ---------- */
+.zone{ margin-top:56px; }
+.zone-h{
+  display:flex; align-items:baseline; gap:14px;
+  border-bottom:1px solid var(--border); padding-bottom:11px; margin-bottom:18px;
+}
+.zone-h h2{ font-size:13px; font-weight:600; letter-spacing:.01em; color:var(--text); }
+.zone-h .meta{ font-size:11px; color:var(--muted); }
+.zone-h .grow{ flex:1; }
+.zone-h .right{ font-size:11px; color:var(--muted); font-family:var(--mono); }
+
+/* ---------- dense tables ---------- */
+table{ width:100%; border-collapse:collapse; }
+thead th{
+  text-align:left; font-size:9.5px; text-transform:uppercase; letter-spacing:.13em;
+  color:var(--muted); font-weight:600; padding:0 10px 8px;
+  border-bottom:1px solid var(--border); white-space:nowrap;
+}
+tbody td{
+  padding:7px 10px; font-size:12px; border-bottom:1px solid var(--hair);
+  white-space:nowrap; vertical-align:middle; height:30px; color:var(--data);
+}
+tbody tr:hover{ background:#181513; }
+td.mono, .mono{ font-family:var(--mono); font-size:11.5px; letter-spacing:0; }
+td .cve{ color:var(--text); font-weight:500; }
+td .pkg{ color:var(--muted); }
+td .pkg b{ color:var(--text); font-weight:500; }
+td.n{ text-align:right; font-variant-numeric:tabular-nums; }
+
+.sevchip{
+  display:inline-block; font-size:10px; font-weight:600; letter-spacing:.05em;
+  border-radius:5px; padding:2px 8px; text-transform:uppercase;
+}
+.sevchip.c{ background:rgba(210,125,110,.16); color:var(--crit); }
+.sevchip.h{ background:rgba(210,152,107,.14); color:var(--high); }
+.sevchip.m{ background:rgba(201,176,126,.13); color:var(--med); }
+.sevchip.l{ background:rgba(150,141,130,.13); color:var(--low); }
+/* license findings carry a type chip, never a severity hue of their own */
+.typechip{
+  display:inline-block; font-size:10px; font-weight:600; letter-spacing:.05em;
+  border-radius:5px; padding:2px 8px; text-transform:uppercase;
+  border:1px solid var(--border); color:var(--muted); background:#181513;
+}
+.kevtag{
+  display:inline-block; font-family:var(--mono); font-size:9px; font-weight:600;
+  color:#121010; background:rgba(210,125,110,.85); border-radius:4px;
+  padding:1.5px 5px; margin-left:6px; vertical-align:1px; letter-spacing:.04em;
+}
+td .epss{ font-family:var(--mono); font-size:11px; color:var(--data); }
+td .epss small{ color:var(--muted); font-size:10px; }
+
+.triage{
+  display:inline-block; font-size:10.5px; border-radius:5px; padding:2px 8px;
+  border:1px solid var(--border); color:var(--muted); background:#181513;
+}
+.triage.fix{ color:var(--accent); border-color:rgba(217,160,91,.4); }
+.triage.mit{ color:var(--ok); border-color:rgba(157,186,140,.35); }
+.triage.na{ color:var(--muted); }
+.triage.acc{ color:var(--med); border-color:rgba(201,176,126,.3); }
+.triage.untriaged{ color:var(--warn); border-color:rgba(217,179,107,.35); }
+
+tr.gap td{
+  background:rgba(217,179,107,.05); color:var(--muted); font-size:11.5px;
+  border-top:1px dashed rgba(217,179,107,.3); border-bottom:1px dashed rgba(217,179,107,.3);
+  padding:8px 10px; white-space:normal;
+}
+tr.gap .pip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--warn); margin-right:9px; vertical-align:1px; }
+tr.gap b{ color:var(--warn); font-weight:600; }
+
+.tbl-foot{
+  display:flex; align-items:center; gap:14px; margin-top:14px;
+  font-size:11.5px; color:var(--muted);
+}
+.tbl-foot .grow{ flex:1; }
+.tbl-foot a{ color:var(--accent); text-decoration:none; font-weight:500; }
+
+/* SBOM summary band — hairline-divided, not a card grid */
+.sbomband{ display:flex; align-items:flex-end; margin-bottom:22px; }
+.sb{ padding:0 36px; border-right:1px solid var(--border); }
+.sb:first-child{ padding-left:0; }
+.sb:last-child{ border-right:none; }
+.sb .num{ font-size:34px; font-weight:200; letter-spacing:-.025em; line-height:1; color:var(--text); font-variant-numeric:tabular-nums; }
+.sb .lbl{ margin-top:10px; font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); }
+.sb .note{ margin-top:5px; font-size:11px; color:var(--muted); }
+.sb .note .m{ font-family:var(--mono); font-size:10.5px; color:var(--data); }
+
+/* ---------- evaluation provenance + freshness ---------- */
+.provrow{
+  display:flex; gap:32px; flex-wrap:wrap; margin-top:18px;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.provrow b{ color:var(--data); font-weight:500; }
+.provrow .ok{ color:var(--ok); }
+.provrow .warn{ color:var(--warn); }
+.freshness{
+  margin-top:52px; border-top:1px solid var(--border);
+  padding-top:16px; display:flex; gap:34px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; color:var(--muted);
+}
+.freshness .f b{ color:var(--text); font-weight:500; }
+.freshness .ok{ color:var(--ok); }
+.freshness .warn{ color:var(--warn); }
+
+/* no-SBOM unknown block */
+.unknown-block{
+  margin-top:18px; border:1px dashed rgba(217,179,107,.3);
+  background:rgba(217,179,107,.05); border-radius:9px; padding:22px 24px;
+}
+.unknown-block h3{ font-size:13px; font-weight:600; color:var(--warn); margin-bottom:8px; }
+.unknown-block p{ font-size:12.5px; color:var(--muted); line-height:1.55; max-width:620px; }
+.unknown-block p b{ color:var(--data); font-weight:500; }
+.unknown-block .m{ font-family:var(--mono); font-size:11.5px; color:var(--data); }
+.unknown-block .actions{ display:flex; gap:12px; margin-top:16px; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- STATE 1 — CANONICAL: scanned artifact, full detail            -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 1 · canonical</b> — scanned artifact: SBOM, findings (vulnerability + license, KEV-first), provenance</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/artifacts/acme/payments-api:3.4.1</div>
+  </div>
+
+  <div class="shell">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem active" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Artifacts / <span class="m">payments-api</span></div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <!-- artifact heading block -->
+      <div class="headblock">
+        <div class="eyebrow">Artifact</div>
+        <div class="artname-row">
+          <span class="artname">acme/payments-api:3.4.1</span>
+          <span class="dqbadge lg"><i></i>91 A− · data quality</span>
+        </div>
+        <div class="digest">sha256:<b>9f2c41d8a02e77b3f1c6905e2c4ab8d1f30a7e6c52b9d4188e02c6f47a31acab</b></div>
+        <div class="headrule"></div>
+      </div>
+
+      <!-- running locations + contextual actions -->
+      <div class="metaband">
+        <span class="runloc"><span class="pip"></span>prod-eu-west/payments · deploy/payments-api <small>4 pods running</small></span>
+        <span class="runloc"><span class="pip"></span>prod-eu-west/payments-canary · deploy/payments-api <small>1 pod running</small></span>
+        <span class="runloc idle"><span class="pip"></span>staging-eu/payments <small>shipped, not running — last ran 12 d ago</small></span>
+        <div class="grow"></div>
+        <span class="act">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+          Explore in graph
+        </span>
+      </div>
+
+      <!-- ===== SBOM contents ===== -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>SBOM contents</h2>
+          <span class="meta">Generated at build · attested</span>
+          <div class="grow"></div>
+          <span class="right">Syft v1.18 · indexed 2026-06-12 03:12 UTC</span>
+        </div>
+
+        <div class="sbomband">
+          <div class="sb">
+            <div class="num">214</div>
+            <div class="lbl">Packages</div>
+            <div class="note">across <span class="m">jvm · apk · binary</span></div>
+          </div>
+          <div class="sb">
+            <div class="num">37</div>
+            <div class="lbl">Direct dependencies</div>
+            <div class="note">177 transitive</div>
+          </div>
+          <div class="sb">
+            <div class="num">11</div>
+            <div class="lbl">Licenses observed</div>
+            <div class="note">1 license finding — listed below</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>Package</th><th>Type</th><th>License</th><th>Relationship</th><th style="text-align:right">Findings</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono"><span class="pkg"><b>log4j-core</b>@2.17.0</span></td>
+              <td>java-archive</td>
+              <td class="mono">Apache-2.0</td>
+              <td>direct</td>
+              <td class="n">1</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="pkg"><b>jackson-databind</b>@2.16.1</span></td>
+              <td>java-archive</td>
+              <td class="mono">Apache-2.0</td>
+              <td>direct</td>
+              <td class="n">1</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="pkg"><b>report-render</b>@0.9.4</span></td>
+              <td>java-archive</td>
+              <td class="mono">AGPL-3.0-only</td>
+              <td>transitive · via <span class="mono">pdf-kit@2.1.0</span></td>
+              <td class="n">1</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="pkg"><b>openssl</b>@3.2.1-r4</span></td>
+              <td>apk</td>
+              <td class="mono">Apache-2.0</td>
+              <td>base image</td>
+              <td class="n">0</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="pkg"><b>busybox</b>@1.36.1</span></td>
+              <td>apk</td>
+              <td class="mono">GPL-2.0-only</td>
+              <td>base image</td>
+              <td class="n">0</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tbl-foot">
+          <span>Showing 5 of 214 packages</span>
+          <div class="grow"></div>
+          <a href="#">All packages →</a>
+        </div>
+      </section>
+
+      <!-- ===== findings: vulnerability + license, one view ===== -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Findings — this artifact</h2>
+          <span class="meta">Vulnerability and license findings together. KEV first, then EPSS-weighted. Severity alone does not rank.</span>
+          <div class="grow"></div>
+          <span class="right">3 open · sorted: kev → epss desc</span>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Finding</th><th>Type</th><th>Package</th><th>Severity</th><th>EPSS</th><th>Triage</th><th>Last evaluated</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-23012</span><span class="kevtag">KEV</span></td>
+              <td><span class="typechip">Vulnerability</span></td>
+              <td class="mono"><span class="pkg"><b>log4j-core</b>@2.17.0</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.94 <small>p99</small></span></td>
+              <td><span class="triage fix">fix planned</span></td>
+              <td class="mono">38 min ago · Grype v5.12</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">CVE-2026-22790</span></td>
+              <td><span class="typechip">Vulnerability</span></td>
+              <td class="mono"><span class="pkg"><b>jackson-databind</b>@2.16.1</span></td>
+              <td><span class="sevchip c">Critical</span></td>
+              <td><span class="epss">0.43 <small>p91</small></span></td>
+              <td><span class="triage untriaged">untriaged</span></td>
+              <td class="mono">38 min ago · Grype v5.12</td>
+            </tr>
+            <tr>
+              <td class="mono"><span class="cve">LIC-AGPL-3.0</span></td>
+              <td><span class="typechip">License</span></td>
+              <td class="mono"><span class="pkg"><b>report-render</b>@0.9.4</span></td>
+              <td><span class="sevchip m">Policy</span></td>
+              <td><span class="epss">— <small>n/a</small></span></td>
+              <td><span class="triage acc">accepted</span></td>
+              <td class="mono">38 min ago · policy v3</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tbl-foot">
+          <span>3 open findings · 2 resolved in earlier evaluations — full history in Evidence</span>
+          <div class="grow"></div>
+          <a href="#">Open in Findings →</a>
+        </div>
+      </section>
+
+      <!-- ===== evaluation provenance ===== -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Evaluation provenance</h2>
+          <span class="meta">What this page knows, and where each datum came from</span>
+        </div>
+        <div class="provrow">
+          <span><b>SBOM</b> — Syft v1.18 · generated 2026-06-12 03:12 UTC</span>
+          <span><b>Vulnerability match</b> — Grype DB v5.12 · evaluated <span class="ok">38 min ago</span></span>
+          <span><b>KEV</b> — catalog 2026-06-11 · retrieved 2026-06-12 04:00 UTC</span>
+          <span><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+          <span><b>License policy</b> — policy v3 · evaluated 38 min ago</span>
+          <span><b>Runtime</b> — agent prod-eu-west · heartbeat <span class="ok">2 min ago</span></span>
+        </div>
+      </section>
+
+      <!-- freshness strip -->
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>EPSS</b> — scored 2026-06-12 04:00 UTC</span>
+        <span class="f"><b>SBOM index</b> — Syft v1.18 · this artifact indexed 03:12 UTC</span>
+        <span class="f"><b>Runtime obs</b> — 2 clusters reporting, last heartbeat 2 min ago</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<div class="state-gap"></div>
+
+<!-- ============================================================ -->
+<!-- STATE 2 — ALTERNATE: artifact with no SBOM yet                -->
+<!-- "unknown, not absent" voice                                   -->
+<!-- ============================================================ -->
+<div class="state-label"><b>State 2 · alternate</b> — artifact with no SBOM yet: findings are unknown, not absent</div>
+
+<div class="browser">
+  <div class="chrome">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="urlbar"><b>armoury</b>.internal.acme.dev/artifacts/acme/legacy-billing:1.2.8</div>
+  </div>
+
+  <div class="shell" style="min-height:640px;">
+
+    <aside class="rail">
+      <div class="mark">A</div>
+      <nav>
+        <div class="ritem" title="Posture">
+          <svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+        </div>
+        <div class="ritem active" title="Artifacts">
+          <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </div>
+        <div class="ritem" title="Findings">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+        </div>
+        <div class="ritem" title="Blast radius">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7.3l3.6 3.2M17.3 7.3l-3.6 3.2M6.7 16.7l3.6-3.2M17.3 16.7l-3.6-3.2"/></svg>
+        </div>
+        <div class="ritem" title="Graph explorer">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+        </div>
+        <div class="ritem" title="Evidence">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6V2z"/><path d="M9 12h7M9 16h7M9 8h4"/></svg>
+        </div>
+      </nav>
+      <div class="spacer"></div>
+      <div class="ritem" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="hdr">
+        <div class="crumb"><b>Fleet</b> / Artifacts / <span class="m">legacy-billing</span></div>
+        <div class="grow"></div>
+        <div class="blast-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-5-5"/></svg>
+          Blast radius — CVE, package, or digest
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="theme-aff"><span class="sw"></span> <b>Forge</b></div>
+      </header>
+
+      <div class="headblock">
+        <div class="eyebrow">Artifact</div>
+        <div class="artname-row">
+          <span class="artname">acme/legacy-billing:1.2.8</span>
+          <span class="dqbadge lg dim"><i></i>22 D · data quality — no SBOM</span>
+        </div>
+        <div class="digest">sha256:<b>e30a9c12f4b87d05c6e1a93f02d748b1ce5f60a8d217e94b30c5d1f8a96bdad4</b></div>
+        <div class="headrule"></div>
+      </div>
+
+      <div class="metaband">
+        <span class="runloc"><span class="pip"></span>prod-us-east/billing · deploy/legacy-billing <small>2 pods running</small></span>
+        <div class="grow"></div>
+        <span class="act quiet">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="19" cy="14" r="2.5"/><path d="M7.5 16l3-6.5M13.8 8.6l3.7 3.7"/></svg>
+          Explore in graph
+        </span>
+      </div>
+
+      <div class="populating">
+        <span class="pip"></span>
+        <div><b>No SBOM yet —</b> <span>queued for first scan, position 214 of 671. Estimated within ~2 h.</span></div>
+      </div>
+
+      <!-- the unknown is stated, never hidden -->
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Findings — this artifact</h2>
+          <span class="meta">Nothing has been evaluated yet</span>
+        </div>
+        <div class="unknown-block">
+          <h3>Findings here are unknown, not absent.</h3>
+          <p>This artifact has no SBOM, so no vulnerability or license evaluation has run.
+             It <b>is running now</b> in <span class="m">prod-us-east/billing</span> — runtime presence is observed independently of scanning.
+             Until the first scan completes, this artifact is counted as a coverage gap on Posture, not as clean.</p>
+          <div class="actions">
+            <span class="act">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+              Scan next
+            </span>
+            <span class="act quiet">View queue in Settings</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="zone">
+        <div class="zone-h">
+          <h2>Evaluation provenance</h2>
+          <span class="meta">What is known so far</span>
+        </div>
+        <div class="provrow">
+          <span><b>SBOM</b> — <span class="warn">none yet · queued 2026-06-12 09:41 UTC</span></span>
+          <span><b>Vulnerability match</b> — <span class="warn">not evaluated</span></span>
+          <span><b>License policy</b> — <span class="warn">not evaluated</span></span>
+          <span><b>Registry</b> — manifest indexed 2026-06-12 09:41 UTC</span>
+          <span><b>Runtime</b> — agent prod-us-east · heartbeat <span class="ok">1 min ago</span></span>
+        </div>
+      </section>
+
+      <footer class="freshness">
+        <span class="f"><b>Grype DB</b> v5.12 — synced <span class="ok">41 min ago</span></span>
+        <span class="f"><b>KEV catalog</b> — 2026-06-11 <span class="ok">(current)</span></span>
+        <span class="f"><b>SBOM index</b> — <span class="warn">this artifact not yet indexed</span></span>
+        <span class="f"><b>Runtime obs</b> — 2 clusters reporting, last heartbeat 1 min ago</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>
