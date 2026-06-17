@@ -1,8 +1,8 @@
 ---
 name: Armoury
 description: Self-hosted software supply-chain evidence layer for SME security teams. shadcn/ui on React + Tailwind; dark-only, three user-selectable themes; this DESIGN.md specifies the full brand layer over shadcn defaults.
-status: draft
-updated: 2026-06-12
+status: final
+updated: 2026-06-13
 colors:
   # Semantic token layer mapped onto shadcn CSS variables. THREE dark themes
   # ship day 1, user-selectable: Forge (default, unsuffixed), High Signal
@@ -235,7 +235,7 @@ Two hard postures define the character:
 1. **Asymmetric composition.** No uniform KPI-card grids, no centered cards, no template rhythm. One dominant hero numeral with co-stats in a hairline-divided band; strong left-aligned heading blocks with a short ember rule. The generic dashboard look is an explicit reject.
 2. **Soft data.** Charts, bands, and graph edges are rounded and muted — severity fills at 0.6–0.85 opacity, no neon, no glow. Severity is heat, but the room stays cool.
 
-shadcn/ui + Tailwind is the UI system. These tokens extend shadcn defaults via its CSS-variable layer; unlisted shadcn tokens inherit, restated only when a theme remaps them.
+shadcn/ui + Tailwind is the UI system. These tokens extend shadcn defaults via its CSS-variable layer; unlisted shadcn tokens are inherited and restated only when a theme remaps them.
 
 ## Colors
 
@@ -288,7 +288,7 @@ shadcn components inherited as-is unless listed: `Dialog`, `Sheet`, `Popover`, `
 | Hero stat | {typography.hero-numeral} + {typography.micro-label} label; co-stats in hairline band. Critical count may take {colors.severity-critical}; DQ grade takes {colors.data-quality}. |
 | Severity chip | Uppercase micro label on 0.13–0.16-alpha severity tint, {rounded.sm}. |
 | KEV tag | Mono, dark text on {colors.severity-critical} at 0.85 — the single highest-urgency mark in the system; nothing outranks it visually. |
-| License chip | Neutral policy/license-type chip for license findings: {typography.mono-meta} text in {colors.text-muted}, 1px {colors.border}, {rounded.sm}. Never a severity hue — the severity ramp is CVE-only. |
+| License chip | Neutral policy/license-type chip for license findings (token spec in frontmatter). Never a severity hue — the severity ramp is CVE-only. |
 | Triage pill | Outlined, status-hued text: fix planned = {colors.accent}, mitigated = {colors.success}, accepted = {colors.severity-medium}, not affected = {colors.text-muted}, untriaged = {colors.warning}. |
 | DQ badge | Mono grade + 6px pip, always {colors.data-quality}. Dims (0.65 opacity) for lower grades — never turns red. |
 | Findings table | 30px rows, 9.5–10px uppercase headers, identifiers in mono, hover = {colors.rail-hover}. Coverage-gap rows sit inline (see below). |
@@ -299,7 +299,7 @@ shadcn components inherited as-is unless listed: `Dialog`, `Sheet`, `Popover`, `
 | Graph node — running | Outer {colors.accent} ring (1.4px, 0.55 alpha, 4px offset) + ember pip. Ring, never glow. |
 | Graph node — not running | 0.5 opacity, dashed border, muted text ("shipped, not running"). |
 | Graph edges | Soft beziers; severity hue at 0.3–0.55 alpha only on the affected path; artifact→workload edges in {colors.accent} (running) or dashed muted (not). |
-| Node inspector | Side panel anchored right within Graph explorer: {colors.surface} background, 1px {colors.border} left rule, identifiers in {typography.mono-identifier}. |
+| Node inspector | Side panel anchored right within Graph explorer (token spec in frontmatter); selection pins the node. |
 | Primary button | {colors.accent} fill, {colors.background} text — at most one per surface (e.g. "Export evidence pack"). |
 | Freshness strip | Mono micro-text row at page end: feed name bold, age in {colors.success}/{colors.warning}. |
 | Theme switcher | Compact affordance: 9px swatch + theme name; full picker lives in Settings and command palette. |

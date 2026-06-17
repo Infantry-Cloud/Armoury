@@ -10,4 +10,9 @@ principles = [
   "Before writing code, climb the ladder — need it at all? stdlib? native feature? installed dep? one line? — stop at the first rung that holds.",
   "Question complex requests: do you actually need X, or does Y cover it?",
   "Locality of Behaviour — what changes together lives together; keep related code, config, and tests side by side over splitting by technical layer.",
+  "Shallow Abstraction — adding a 4th layer? Stop.",
+  "Explicit over Implicit — no magic, no globals, no tribal knowledge.",
+  "Composition over Inheritance — register, don't extend.",
+  "Tests as Guardrails — co-located, run often, never deleted to pass.",
+  "Fail fast — validate at the boundary, raise at the source, never swallow an error to keep going.",
 ]

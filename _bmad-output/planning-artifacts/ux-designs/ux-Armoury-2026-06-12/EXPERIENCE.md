@@ -1,7 +1,7 @@
 ---
 name: Armoury
-status: draft
-updated: 2026-06-12
+status: final
+updated: 2026-06-13
 sources:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/addendum.md
@@ -11,7 +11,9 @@ sources:
 
 # Armoury — Experience Spine
 
-> Paired with `DESIGN.md` (visual identity reference — both spines inherit it). Visual references: [mockups/hybrid-posture-v2.html](mockups/hybrid-posture-v2.html) (Posture), [mockups/blast-radius-graph-v1.html](mockups/blast-radius-graph-v1.html) (Blast radius graph), [mockups/key-artifact-detail.html](mockups/key-artifact-detail.html) (Artifact detail), [mockups/key-findings-triage.html](mockups/key-findings-triage.html) (Findings + triage drawer), [mockups/key-evidence-packs.html](mockups/key-evidence-packs.html) (Evidence + packs), [mockups/key-graph-explorer.html](mockups/key-graph-explorer.html) (Graph explorer); Settings is spine-only by decision. Soft-chart inspiration: [Weblytics Dark Dashboard](https://dribbble.com/shots/15754500-Weblytics-Dark-Dashboard) (reference URL — Dribbble not importable). Spines win on conflict with renders. Render lag: hybrid-posture-v2.html predates the Graph explorer's 7th rail item (mock shows 6) — spines win.
+> Paired with `DESIGN.md` (visual identity reference — both spines inherit it). **Spines win on conflict with any render.**
+>
+> Visual references in [mockups/](mockups/): `hybrid-posture-v2.html` (Posture), `blast-radius-graph-v1.html` (Blast radius graph), `key-artifact-detail.html` (Artifact detail), `key-findings-triage.html` (Findings + triage drawer), `key-evidence-packs.html` (Evidence + packs), `key-graph-explorer.html` (Graph explorer). Settings is spine-only by decision. Soft-chart inspiration: [Weblytics Dark Dashboard](https://dribbble.com/shots/15754500-Weblytics-Dark-Dashboard) (reference URL — Dribbble not importable). Render lag: `hybrid-posture-v2.html` predates the Graph explorer's 7th rail item (mock shows 6).
 
 ## Foundation
 
@@ -29,7 +31,9 @@ Slim left icon rail, 7 surfaces. No top nav.
 | Artifacts | Rail / `g a` | List → detail: SBOM contents, findings (vulnerability and license) with triage status, evaluation provenance, running locations (FR18). |
 | Findings | Rail / `g f` | Triage workbench — KEV-first, EPSS-weighted ranked list (FR13); triage drawer launches from any row. |
 | Evidence | Rail / `g e` | Append-only evidence trail + evidence packs; "Generate CRA pack" lives here (FR21–25). |
-| Settings | Rail (pinned bottom) | Registry connections (FR1), package feeds (FR29), agent install, feed-bundle import (FR10), license policy authoring (fleet-wide allow/deny lists, FR27), evidence retention (configurable; UI never permits below the 24-month compliance floor, FR23), Prometheus endpoint panel (read-only: endpoint URL + exported metric list with copy action — how an operator wires Grafana, FR20), theme, users/roles. |
+| Settings | Rail (pinned bottom) | Connections, policy, retention, metrics, theme, users/roles — see below. |
+
+**Settings panels:** registry connections (FR1) · package feeds (FR29) · agent install · feed-bundle import (FR10) · license policy authoring (fleet-wide allow/deny lists, FR27) · evidence retention (configurable; UI never permits below the 24-month compliance floor, FR23) · Prometheus endpoint panel (read-only: endpoint URL + exported metric list with copy action — how an operator wires Grafana, FR20) · theme · users/roles.
 
 - **Graph entry is dual:** Graph explorer has its own rail item, *and* every artifact, finding, and CVE carries a contextual "Explore in graph" action.
 - **OIDC is declarative** — env vars / Helm values / config file, never a UI wizard (NFR6). Settings *displays* the resolved auth configuration read-only; first sign-in uses the bootstrap admin.
@@ -55,7 +59,7 @@ Microcopy. Calm, honest, evidence-led. Counts and verbs, no exclamation, no fear
 
 The signature pattern. **The posture must never need a caveat the UI doesn't already show.** Every answer-bearing surface carries its own sources, coverage, and freshness — inline, not in a help page:
 
-- **Freshness strip** on Posture, Blast radius, and Artifact detail: each feed (Grype DB, KEV catalog, EPSS, CNA records, OSV, SBOM index, runtime observation) with version and age, in {typography.mono-meta}; ages colored {colors.success} (fresh) / {colors.warning} (stale).
+- **Freshness strip** on Posture, Blast radius, and Artifact detail: each feed (Grype DB, KEV catalog, EPSS, CNA records, OSV, SBOM index, runtime observation) shown with version and age, in {typography.mono-meta}; ages colored {colors.success} (fresh) / {colors.warning} (stale).
 - **Coverage gaps are first-class rows** — rendered inline in findings tables and lists as coverage-gap rows, positioned where the missing data would be, naming counts and locations ("671 artifacts not yet scanned, including 212 in `prod-eu-west`").
 - **Every blast-radius answer ends with a provenance footer** and, when applicable, an explicit caveat line scoping the answer ("2 artifacts in scope have no SBOM yet and are not represented").
 - **Every enrichment datum is source-attributed** (FR12) — source name + retrieval time on hover/expansion; every finding shows when it was last evaluated and against which feed versions (FR8). Feed updates re-evaluate stored SBOMs — answers are already current with no rescan, no rebuild (NFR5), and the provenance footer says so.
@@ -106,7 +110,7 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | Icon rail | Global | One item per IA surface; active state mirrors route. Tooltips on hover/focus. Settings pinned bottom. Never collapses further — 58px is the floor. |
 | Command palette | Global (`⌘K`) | See Command Palette section. One palette, context-pre-scoped where launched from search affordances. |
 | Findings table | Findings, Posture, Artifact detail | KEV-first then EPSS-weighted order by default (FR13); header states the sort logic in words ("KEV first, then EPSS-weighted. Severity alone does not rank."). Row click or `t` opens the triage drawer; row hover reveals "Explore in graph". Pagination, not infinite scroll, at NFR3 scale. |
-| Triage drawer | Slide-over right drawer (shadcn `Sheet`) from any findings list | Contains: ranking explanation (FR13 — why this finding ranks here), VEX context with vendor attribution (FR15), full provenance (FR8/FR12), and the decision form (status + justification). Submitting records author + timestamp (FR14), updates the row in place, and keeps the user in the list — drawer advances to next finding on `⌘Enter`, closes on `Esc`. Decisions propagate to posture views and evidence packs. |
+| Triage drawer | Slide-over right drawer (shadcn `Sheet`) from any findings list | Contains: ranking explanation (FR13 — why this finding ranks here), VEX context with vendor attribution (FR15), full provenance (FR8/FR12), and the decision form (status + justification). Submitting the form records author and timestamp (FR14), updates the row in place, and keeps the user in the list — drawer advances to next finding on `⌘Enter`, closes on `Esc`. Decisions propagate to posture views and evidence packs. |
 | Coverage-gap row | Any findings/artifacts list | Inline at the position the missing data would occupy. Not dismissible, not collapsible — it disappears only when the gap closes. Click-through to the gap's cause (unscanned artifacts, unreachable registry, disconnected agent). |
 | Populating banner | Posture, Artifacts | Appears whenever first-scan or re-evaluation backlog exists; states queue count and estimate; progress is live (see State Patterns). Never modal, never blocking. |
 | Hero stat | Posture, Blast radius answers | One per surface. Numerals animate count-up on populate (suppressed under reduced motion). |
@@ -117,7 +121,7 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | Node inspector | Graph explorer | Side panel ({components.node-inspector}); selection pins the node and shows identity, knowledge, and provenance, plus actions: open detail, view evidence, blast radius from here. `Esc` unpins. |
 | License chip | Posture, Findings, Artifact detail | License findings render the neutral {components.license-chip} — never severity-hued; the severity ramp is CVE-only. Same triage drawer flow as vulnerability findings. |
 | Evidence pack card | Evidence surface | Every pack card carries "Verify signature" — in-UI check showing result + signer identity — plus a copyable offline verification command (cosign; operator-key equivalent on air-gapped installs) so an external auditor can verify independently (FR25). |
-| Evidence pack generator | Evidence surface, `⌘K` | Visuals inherit shadcn `Dialog` + {components.button-primary}. One-click "Generate CRA pack" with smart defaults (last audit window, whole fleet); configuration is available *after* the click (window, scope, framework — FR22 extensible), not a wizard before it. Generation is async with a progress state [ASSUMPTION: minutes-scale, progress shown as pack sections complete]; result is signed (Sigstore, or operator keys when air-gapped) with PDF + machine-readable companions (SBOMs, VEX). |
+| Evidence pack generator | Evidence surface, `⌘K` | Visuals inherit shadcn `Dialog` + {components.button-primary}. One-click "Generate CRA pack" with smart defaults (last audit window, whole fleet); configuration is available *after* the click (window, scope, framework — FR22 extensible), not a wizard before it. Generation is asynchronous with a progress state [ASSUMPTION: minutes-scale; progress shown as pack sections complete]; result is signed (Sigstore, or operator keys when air-gapped) with PDF + machine-readable companions (SBOMs, VEX). |
 | Export | Blast radius, Posture | "Export evidence pack" / report / CSV (FR19). Export carries the same provenance footer and caveats as the on-screen answer — always. |
 | Freshness strip | Posture, Blast radius, Artifact detail | Read-only; each entry click-through to the feed's Settings page. |
 | Theme switcher | Header, Settings, `⌘K` | See Theme System. |
@@ -132,7 +136,7 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | Disconnected agent | Posture, Settings | Runtime entries in the freshness strip show last heartbeat; affected clusters' runtime data is marked stale-as-of, not removed — "last seen" honesty over silent decay. [ASSUMPTION] Heartbeat staleness threshold (warn at minutes, disconnect at an hour) pending architecture's agent-buffering design. |
 | Air-gapped mode | Global | [ASSUMPTION] Instance-level flag from deployment config; UI substitutes Sigstore copy with operator-key signing copy and shows bundle-import affordances. No phone-home affordances exist anywhere (NFR4). |
 | Empty (pre-setup) | Posture | First-run: heading block + the two setup actions that matter (connect registry, install agent) with copy-paste one-liners in mono. No illustration theatre. |
-| Empty (no results) | Blast radius, Graph explorer | "No artifacts affected — across the N% of the fleet that is scanned." The zero is always coverage-scoped. |
+| Empty (no results) | Blast radius, Graph explorer | "No artifacts affected — across the N% of the fleet that is scanned" — the coverage-scoped zero (see Honest Provenance). |
 | Long-running query | Blast radius | Answers stream progressively (NFR2); if not complete within seconds, partial results render with an explicit scope line ("searching — 1,204 of 3,000 artifact set evaluated"); worst case under a minute. Never an unexplained spinner. |
 | Cold load | All surfaces | shadcn `Skeleton` mirroring the real layout (hero numeral block, table rows). |
 | Read-only auditor | Global | Triage forms, pack-config edits, and Settings mutations are absent (not disabled-and-teasing); generation/viewing of packs and all read surfaces fully available. |
@@ -212,7 +216,7 @@ Failure: registry unreachable → connection error surfaces in Settings *and* as
 6. She works the affected list: `t` opens the triage drawer on each finding — ranking explanation, VEX context, provenance — records "fix planned" / "not affected" with justifications, `⌘Enter` advancing through the list without leaving it.
 7. Every decision is already in the append-only evidence trail with author and timestamp. Nothing to write up later.
 
-Failure: query matches nothing → "No artifacts affected — across the 82% of the fleet that is scanned"; the zero is coverage-scoped, and the unscanned remainder is one click away.
+Failure: query matches nothing → the coverage-scoped zero ("No artifacts affected — across the 82% of the fleet that is scanned"), with the unscanned remainder one click away.
 
 ### Flow 3 — UJ-3: Audit day (Marta, compliance lead, read-only auditor)
 
