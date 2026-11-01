@@ -1,0 +1,15 @@
+# Team override for bmad-spec.
+# BMad 6.12 ships persistent_facts empty, so re-add the shared project rules this workflow used to auto-load.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation from linear-workflow.md once the spec intent and target are known; preserve distinct stable IDs for multiple agreed specs.",
+]
+
+on_complete = "Follow Linear Planning completion for bmad-spec and this target SPEC: unresolved gaps or unaccepted output do not close its planning issue. Link the accepted artifact without treating it as a substitute for a Build Acceptance Contract."

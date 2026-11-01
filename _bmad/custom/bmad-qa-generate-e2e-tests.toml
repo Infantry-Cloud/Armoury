@@ -1,0 +1,22 @@
+# Team override for the built-in QA test generator.
+# TEA (bmad-testarch-automate/atdd) is the primary test generator; this stays contract-traceable when used.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_prepend = [
+  "Register this standing requirement; activation runs before the stock workflow identifies the feature, so do not demand a path prematurely. In the main flow, require the tracked story's Build spec path (`{implementation_artifacts}/spec-<story_key>.md` or its spec-folder story file) before generation, load its complete contract, and run approved-phase validation. Halt generation on failure. If the main flow confirms genuinely untracked work, require a proportional micro-contract through bmad-build's dispatch route, with AC/VAL traceability, rather than an unstructured description.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the actual generation target is known; update only approved testing obligations, not speculative coverage tasks.",
+  "Generate only the mechanical obligations assigned by the approved Validation Design, at the cheapest trustworthy levels. Name or annotate each generated acceptance-level test with its VAL-* and covered AC-* IDs. Do not create broad E2E tests when unit, component, API, boundary-contract, integration, analysis, or inspection evidence is sufficient.",
+  "Do not modify normative Acceptance Contract content. Report uncovered criteria, infeasible oracles, testability gaps, and required manual assurance as blocking findings that return through contract change control. Return generated test paths and commands as evidence candidates for Delivery Evidence, but do not self-approve them.",
+]
+
+on_complete = "Emit a contract trace summary containing contract revision/digest, each AC-* and VAL-*, generated test path or manual obligation, test level, command, current result, uncovered items, and remaining evidence. Do not call coverage complete while any required VAL is unmapped or failing. Follow Linear Planning completion for a matching agreed QA-generation obligation using its real result, and reconcile approved execution tasks without claiming independent delivery."

@@ -1,0 +1,6 @@
+# Team override for bmad-walkthrough: inspect changes with jj, never git.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+]

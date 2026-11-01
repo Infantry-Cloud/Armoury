@@ -1,0 +1,17 @@
+# Team / enterprise overrides for _bmad/config.toml.
+# Committed to the repo — applies to every developer on the project.
+# Tables deep-merge over base config; keyed entries merge by key.
+# Example: override an agent descriptor, or add a new agent.
+#
+# [agents.bmad-agent-pm]
+# description = "Prefers short, bulleted PRDs over narrative drafts."
+
+# Custom agent shipped by bmad-customisations (skill: .agents/skills/bmad-agent-steward).
+# Listed here so party mode and the agent roster include it.
+[agents.bmad-agent-steward]
+module = "custom"
+team = "software-development"
+name = "Vera"
+title = "Guardrail Steward"
+icon = "⚖️"
+description = "Keeps readiness loops, story contracts, locked tests and CI serving their purpose. Diagnoses guardrail blockers with the user, routes them to the right owner, and adjusts a mechanism only on the user's explicit, recorded decision."

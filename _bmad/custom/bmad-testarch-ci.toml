@@ -1,0 +1,18 @@
+# Team override for TEA CI.
+# The CI provider is the project's choice (Dagger, GitHub Actions, GitLab CI...); the pipeline ends in one contract step.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the CI scope and target are known; a generated pipeline is not proof it gates anything.",
+  "CONTRACT CI STEP (team policy; story-contract.md 'CI results'). Use the Contract CI Wiring recorded in docs/agent-readiness.md; if it is missing, design it with the user first (suite, command, JUnit reporter, report path outside the workspace, VAL ID convention, testcase contract property and full test identity export). Generate the pipeline for the CI provider AR chose (Dagger, GitHub Actions, GitLab CI or other); never impose a provider. For every test suite in the pipeline, write a JUnit XML report outside the workspace (for example $RUNNER_TEMP). After the tests, in the same job and even when tests fail, run `uv run _bmad/custom/scripts/validate_story_contract.py ci --require-jj --junit <report> [--junit <report>...]` (drop `--require-jj` only for a project that has explicitly not adopted jj) and make it part of the pipeline's result. Upload the reports as artifacts and record the CI run identity. Never let the pipeline delete, skip or rewrite locked tests, and never write the reports inside the project tree.",
+  "PROVE IT (team policy). Before calling the pipeline done, show in a real or local run that a failing VAL-tagged test fails the contract step naming the VAL ID, and that removing the test from the run fails with 'CI did not run it'. Revert the probe afterwards and record the evidence in docs/agent-readiness.md.",
+]
+
+on_complete = "Report the generated pipeline files, each suite's JUnit report path and VAL ID convention, the contract step command, the probe evidence, and anything not yet enforced. Follow Linear Planning completion only for a matching agreed CI obligation whose probe evidence passed."

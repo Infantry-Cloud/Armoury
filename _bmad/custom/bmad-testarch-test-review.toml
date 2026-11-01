@@ -1,0 +1,24 @@
+# Team override for TEA Test Review.
+# Test quality is judged against the approved story contract and its risk.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_prepend = [
+  "Register this standing requirement without attempting target-dependent work during activation. In the main Create flow, after the workflow identifies a tracked story, load its Build spec (`{implementation_artifacts}/spec-<story_key>.md` or its spec-folder story file), name the report with that story key, require its approved revision, run approved-phase validation, and load validation/test-design artifacts, diff, tests, raw local results, and CI evidence. For standalone, Resume, Validate, or Edit modes, apply contract checks only when a story is actually in scope; do not block legitimate report operations that have no story target.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the actual review target is known; review state on the board does not prove approved revision or delivery.",
+  "Independently verify that every acceptance-level test maps bidirectionally to AC/VAL/risk, uses the cheapest trustworthy level, asserts observable contract behavior rather than implementation logic, is deterministic and maintainable, and produces the promised evidence. Treat skipped required tests, false-positive assertions, stale fixtures, flaky outcomes, and broad E2E duplication as evidence failures according to risk.",
+  "Execute QA-owned manual VAL-* procedures and rerun mechanical obligations where feasible. Return independent result/evidence/build candidates in the Test Review report; do not edit the story's normative contract or Delivery Evidence. Code Review is the sole story evidence writer and must independently verify these candidates. A proposed waiver requires authority, reason, owner, impact, mitigation, and expiry; Test Review cannot silently waive product intent.",
+  "Assess whether the evidence candidates would satisfy delivered-phase validation and report every missing/failing item. Do not claim the story's delivered validator passed until Code Review has written final evidence and run it against the story.",
+  "LOCKED TESTS AND EVIDENCE (team policy; story-contract.md). Run approved-phase validation to confirm locked ATDD tests are unchanged apart from removed skip markers, report planned tests that are missing or still skipped, and return evidence candidates as existing project files (output, logs, observation records), never as unsaved claims.",
+]
+
+on_complete = "Emit a Test Contract Review with quality score, approved revision/digest, AC/VAL/test/evidence candidates, commands/raw results, manual observations, skipped/flaky/weak tests, uncovered or out-of-contract behavior, proposed waivers, predicted delivered-validation gaps, and required Code Review actions. Green automation alone is not approval. Follow Linear Planning completion for the matching agreed bmad-testarch-test-review obligation using its actual verdict/evidence; keep the parent story In Review until Code Review accepts delivery."

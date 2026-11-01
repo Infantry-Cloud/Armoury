@@ -1,0 +1,14 @@
+# Optional native publishing on upstream main (not shipped in BMAD v6.12.2).
+# Publication support only: existing v6 contract overrides need explicit migration
+# before Build/Code Review can be used with the newer plan/ticket-tree lifecycle.
+[workflow]
+publication = "at_inception"
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+activation_steps_append = [
+  "Register Linear Activation once the native ticket operation and target are known. Reuse the bound Project and native tracker_id/remote identities; all standalone tickets also belong to that Project. Never let a native close or tracker status bypass the local approved/delivered contract gates.",
+]
+on_complete = "Follow Linear Reconcile after the requested native ticket operation, sharing confirmed identities rather than creating duplicates. Only close a planning/epic obligation when its own acceptance and closure criteria pass; this callback does not mean the initiative is finished."

@@ -1,0 +1,15 @@
+# Team override for bmad-architecture.
+# BMad 6.12 ships persistent_facts empty, so re-add the shared project rules this workflow used to auto-load.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation from linear-workflow.md once this architecture run's intent and target are known; multiple architecture obligations must not share an ambiguous ticket.",
+]
+
+on_complete = "Follow Linear Planning completion for bmad-architecture and the final architecture spine: close only the matching agreed obligation whose Done when and acceptance are satisfied, with artifact and validation evidence."

@@ -1,0 +1,2150 @@
+{
+  "schema_version": 1,
+  "binding_id": "6c72558f-a015-481f-9427-04b4a978be1e",
+  "name": "Armoury",
+  "team_id": "2c31596e-9e0d-4b36-8d6b-5ce20f3d8eda",
+  "team_key": "INF",
+  "project": {
+    "id": "fa5b5868-9358-4726-9b7a-88238fb147b3",
+    "identifier": "P-INF-2",
+    "url": "https://linear.app/infantry-cloud/project/armoury-2aabd2d09169"
+  },
+  "statuses": {
+    "backlog": "8f102a64-1491-4c27-a765-be7dc0961ee1",
+    "todo": "fbb66bb3-edca-4864-b516-854613ae5b95",
+    "in_progress": "4facf087-fe6e-4486-9fc9-6c17c04da81e",
+    "in_review": "4755a7d6-3376-4924-8839-940df8c5c5d6",
+    "done": "d890e95c-0c11-48a1-988b-551c8f2a7539",
+    "canceled": "e4a02954-b23b-4ec3-bcd9-a986758cb7ef"
+  },
+  "publication_approved": true,
+  "publication_note": "Approved 2026-11-01 at Kickoff; team INF confirmed by user 2026-11-01.",
+  "items": [
+    {
+      "key": "planning:brief",
+      "kind": "planning",
+      "title": "Product brief",
+      "skill": "bmad-product-brief",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/briefs/brief-Armoury-2026-06-11/brief.md",
+        "id": "brief"
+      },
+      "parent_key": null,
+      "after": [],
+      "done_when": "Brief accepted (status: final)",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "0c80dd35-e6c4-4d66-afd2-44316ea1c3a7",
+        "identifier": "INF-5",
+        "url": "https://linear.app/infantry-cloud/issue/INF-5/product-brief"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/briefs/brief-Armoury-2026-06-11/brief.md",
+        "status": "final",
+        "date": "2026-06-11"
+      }
+    },
+    {
+      "key": "planning:research",
+      "kind": "planning",
+      "title": "Market research",
+      "skill": "bmad-deep-recon",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/research/market-software-supply-chain-security-research-2026-06-11.md",
+        "id": "market-research"
+      },
+      "parent_key": null,
+      "after": [],
+      "done_when": "Research report accepted",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "2efcd5e6-a904-40bb-bcf8-5b23f8415274",
+        "identifier": "INF-6",
+        "url": "https://linear.app/infantry-cloud/issue/INF-6/market-research"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/research/market-software-supply-chain-security-research-2026-06-11.md",
+        "date": "2026-06-11"
+      }
+    },
+    {
+      "key": "planning:prd",
+      "kind": "planning",
+      "title": "PRD",
+      "skill": "bmad-prd",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md",
+        "id": "prd"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:brief",
+        "planning:research"
+      ],
+      "done_when": "PRD finalized after reviewer gate",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "5269c4c3-f58e-488f-823c-e4b516cf2146",
+        "identifier": "INF-7",
+        "url": "https://linear.app/infantry-cloud/issue/INF-7/prd"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md",
+        "status": "final",
+        "reviews": [
+          "review-rubric.md",
+          "review-adversarial-general.md"
+        ],
+        "amended": "2026-11-01 no-deadlines (user-directed)"
+      }
+    },
+    {
+      "key": "planning:ux",
+      "kind": "planning",
+      "title": "UX design (DESIGN.md + EXPERIENCE.md)",
+      "skill": "bmad-ux",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/",
+        "id": "ux"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:prd"
+      ],
+      "done_when": "Both spines final and validated",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "f99a6c08-6882-4744-8295-62a713a67856",
+        "identifier": "INF-8",
+        "url": "https://linear.app/infantry-cloud/issue/INF-8/ux-design-designmd-experiencemd"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/",
+        "status": "final",
+        "validation": "validation-report.md",
+        "amended": "2026-11-01 Svelte framework reference"
+      }
+    },
+    {
+      "key": "planning:architecture",
+      "kind": "planning",
+      "title": "Architecture",
+      "skill": "bmad-architecture",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/architecture.md",
+        "id": "architecture"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:prd",
+        "planning:ux"
+      ],
+      "done_when": "Architecture complete and validated",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "b93c6d32-a40c-4a00-a6d9-2853c8bb36da",
+        "identifier": "INF-9",
+        "url": "https://linear.app/infantry-cloud/issue/INF-9/architecture"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/architecture.md",
+        "status": "complete",
+        "date": "2026-06-14",
+        "revised": "2026-11-01 backend Go->Rust, River via riverqueue (user-directed)"
+      }
+    },
+    {
+      "key": "planning:epics",
+      "kind": "planning",
+      "title": "Epics and stories",
+      "skill": "bmad-create-epics-and-stories",
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epics"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:architecture"
+      ],
+      "done_when": "epics.md saved and accepted by the user, every FR/NFR traced; all approved epics and stories published to this Project",
+      "local_status": "done",
+      "publication": "published",
+      "remote": {
+        "id": "2f7f458c-7f73-4f7b-89bc-df4440e8670a",
+        "identifier": "INF-10",
+        "url": "https://linear.app/infantry-cloud/issue/INF-10/epics-and-stories"
+      },
+      "evidence": {
+        "artifact": "_bmad-output/planning-artifacts/epics.md",
+        "status": "final",
+        "date": "2026-11-05",
+        "validation": "step-4 passed: FR 30/30, NFR 11/11, UX-DR 36/36, ARCH 30/30; no forward story dependencies",
+        "published": "10 epics INF-13..INF-22, 68 stories INF-23..INF-90, 73 blocked-by links; markers verified",
+        "revision": "uncommitted in jj change vxztzqsp (undescribed, mixed with earlier work)"
+      }
+    },
+    {
+      "key": "planning:sprint",
+      "kind": "planning",
+      "title": "Implementation readiness + sprint planning",
+      "skill": "bmad-sprint-planning",
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "id": "sprint-status"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:epics"
+      ],
+      "done_when": "Readiness PASS (or CONCERNS explicitly accepted) and sprint-status.yaml generated",
+      "local_status": "todo",
+      "publication": "published",
+      "remote": {
+        "id": "771c0dc6-24ed-4465-9ebe-3004ad7c2979",
+        "identifier": "INF-11",
+        "url": "https://linear.app/infantry-cloud/issue/INF-11/implementation-readiness-sprint-planning"
+      },
+      "evidence": null
+    },
+    {
+      "key": "planning:ar",
+      "kind": "planning",
+      "title": "Agent readiness (AR)",
+      "skill": "AR (architect/dev menu)",
+      "source": {
+        "path": "docs/agent-readiness.md",
+        "id": "agent-readiness"
+      },
+      "parent_key": null,
+      "after": [
+        "planning:sprint",
+        "story:1:1.1"
+      ],
+      "done_when": "docs/agent-readiness.md ready at agreed score with proven correction loops; contract validator wired into CI and shown to block invalid contracts. Runs after the scaffold story exists.",
+      "local_status": "todo",
+      "publication": "published",
+      "remote": {
+        "id": "26bcccc9-ba66-44e4-8fdf-537e1afbbb62",
+        "identifier": "INF-12",
+        "url": "https://linear.app/infantry-cloud/issue/INF-12/agent-readiness-ar"
+      },
+      "evidence": null
+    },
+    {
+      "key": "epic:1",
+      "kind": "epic",
+      "title": "Epic 1: Install, sign in, and the Armoury shell",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-1"
+      },
+      "parent_key": null,
+      "after": [],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "identifier": "INF-13",
+        "url": "https://linear.app/infantry-cloud/issue/INF-13/epic-1-install-sign-in-and-the-armoury-shell"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "epic:2",
+      "kind": "epic",
+      "title": "Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-2"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:1"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "identifier": "INF-14",
+        "url": "https://linear.app/infantry-cloud/issue/INF-14/epic-2-fleet-inventory-and-uniform-scanning-shown-as-a-populating"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "epic:3",
+      "kind": "epic",
+      "title": "Epic 3: Running inventory from read-only cluster agents",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-3"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:2"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "identifier": "INF-15",
+        "url": "https://linear.app/infantry-cloud/issue/INF-15/epic-3-running-inventory-from-read-only-cluster-agents"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "epic:4",
+      "kind": "epic",
+      "title": "Epic 4: Fresh, enriched findings, connected or air-gapped",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-4"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:2"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "identifier": "INF-16",
+        "url": "https://linear.app/infantry-cloud/issue/INF-16/epic-4-fresh-enriched-findings-connected-or-air-gapped"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "epic:5",
+      "kind": "epic",
+      "title": "Epic 5: Prioritise and triage findings",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-5"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:3",
+        "epic:4"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "identifier": "INF-17",
+        "url": "https://linear.app/infantry-cloud/issue/INF-17/epic-5-prioritise-and-triage-findings"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "epic:6",
+      "kind": "epic",
+      "title": "Epic 6: Blast radius and graph exploration",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-6"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:5"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "704be205-3102-4924-aa72-25383a2f3275",
+        "identifier": "INF-18",
+        "url": "https://linear.app/infantry-cloud/issue/INF-18/epic-6-blast-radius-and-graph-exploration"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "epic:7",
+      "kind": "epic",
+      "title": "Epic 7: License compliance",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-7"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:5"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
+        "identifier": "INF-19",
+        "url": "https://linear.app/infantry-cloud/issue/INF-19/epic-7-license-compliance"
+      },
+      "evidence": null,
+      "milestone_key": "epic:7"
+    },
+    {
+      "key": "epic:8",
+      "kind": "epic",
+      "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-8"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:5"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e8963591-f35e-48d1-b196-2942e19a77ff",
+        "identifier": "INF-20",
+        "url": "https://linear.app/infantry-cloud/issue/INF-20/epic-8-fleet-signals-prometheus-metrics-and-data-quality"
+      },
+      "evidence": null,
+      "milestone_key": "epic:8"
+    },
+    {
+      "key": "epic:9",
+      "kind": "epic",
+      "title": "Epic 9: Signed CRA evidence packs",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-9"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:5",
+        "epic:7",
+        "epic:8"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "identifier": "INF-21",
+        "url": "https://linear.app/infantry-cloud/issue/INF-21/epic-9-signed-cra-evidence-packs"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "epic:10",
+      "kind": "epic",
+      "title": "Epic 10: Verifiable, air-gapped delivery of Armoury itself",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-10"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:4"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
+        "identifier": "INF-22",
+        "url": "https://linear.app/infantry-cloud/issue/INF-22/epic-10-verifiable-air-gapped-delivery-of-armoury-itself"
+      },
+      "evidence": null,
+      "milestone_key": "epic:10"
+    },
+    {
+      "key": "story:1:1.1",
+      "kind": "story",
+      "title": "Story 1.1: Monorepo scaffold with an aggregate local gate and CI",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.1"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "planning:sprint"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "identifier": "INF-23",
+        "url": "https://linear.app/infantry-cloud/issue/INF-23"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.2",
+      "kind": "story",
+      "title": "Story 1.2: Install the control plane with one Helm command, durable storage included",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.2"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.1",
+        "planning:ar"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "4ac4e335-0c9a-4149-bdc1-89c931d22306",
+        "identifier": "INF-24",
+        "url": "https://linear.app/infantry-cloud/issue/INF-24"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.3",
+      "kind": "story",
+      "title": "Story 1.3: Sign in with the bootstrap admin",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.3"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "b215c36a-113a-48f4-b388-42c060a51b0a",
+        "identifier": "INF-25",
+        "url": "https://linear.app/infantry-cloud/issue/INF-25"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.4",
+      "kind": "story",
+      "title": "Story 1.4: Declarative OIDC sign-in and role-based access",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.4"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ad74d467-d4a2-4f35-b12f-11a1d7463bf4",
+        "identifier": "INF-26",
+        "url": "https://linear.app/infantry-cloud/issue/INF-26"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.5",
+      "kind": "story",
+      "title": "Story 1.5: Design tokens and the three themes",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.5"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "9c160e7f-5b0e-4397-a810-6fd896c57244",
+        "identifier": "INF-27",
+        "url": "https://linear.app/infantry-cloud/issue/INF-27"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.6",
+      "kind": "story",
+      "title": "Story 1.6: App shell, navigation and the empty Posture page",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.6"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e5c9683d-0ae3-47c3-aef0-8616c4fc8765",
+        "identifier": "INF-28",
+        "url": "https://linear.app/infantry-cloud/issue/INF-28"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.7",
+      "kind": "story",
+      "title": "Story 1.7: Accessibility, message catalogue and responsive baseline",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.7"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "42d5e0d5-6327-4d7e-ad9d-d585735c2453",
+        "identifier": "INF-29",
+        "url": "https://linear.app/infantry-cloud/issue/INF-29"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:1:1.8",
+      "kind": "story",
+      "title": "Story 1.8: Command palette and keyboard map",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.8"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.7"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "eb3e678e-566c-4819-a79f-3aa110b93733",
+        "identifier": "INF-30",
+        "url": "https://linear.app/infantry-cloud/issue/INF-30"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1"
+    },
+    {
+      "key": "story:2:2.1",
+      "kind": "story",
+      "title": "Story 2.1: Tamper-evident evidence ledger",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.1"
+      },
+      "parent_key": "epic:2",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "74590331-d17e-4690-bdf7-ec9f35ac2363",
+        "identifier": "INF-31",
+        "url": "https://linear.app/infantry-cloud/issue/INF-31"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.2",
+      "kind": "story",
+      "title": "Story 2.2: Connect a container registry and enumerate its images",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.2"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d0c07103-f680-4e52-9fdd-241a8fe27e8b",
+        "identifier": "INF-32",
+        "url": "https://linear.app/infantry-cloud/issue/INF-32"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.3",
+      "kind": "story",
+      "title": "Story 2.3: Central SBOM generation with Syft",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.3"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "f8cd83cc-eedf-4f93-a5fd-09aa9a5b9c5f",
+        "identifier": "INF-33",
+        "url": "https://linear.app/infantry-cloud/issue/INF-33"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.4",
+      "kind": "story",
+      "title": "Story 2.4: Uniform vulnerability scanning of stored SBOMs",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.4"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d0af2731-7706-46d6-87a1-e05aa78487a3",
+        "identifier": "INF-34",
+        "url": "https://linear.app/infantry-cloud/issue/INF-34"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.5",
+      "kind": "story",
+      "title": "Story 2.5: Continuous onboarding within one hour",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.5"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "c4cc0eed-e2a6-4c92-8762-7582e6fee0a4",
+        "identifier": "INF-35",
+        "url": "https://linear.app/infantry-cloud/issue/INF-35"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.6",
+      "kind": "story",
+      "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.6"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "151a6f40-9344-439e-af1e-04113f7965b7",
+        "identifier": "INF-36",
+        "url": "https://linear.app/infantry-cloud/issue/INF-36"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.7",
+      "kind": "story",
+      "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.7"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e046e29b-36b5-4b55-922f-8e1d490960c3",
+        "identifier": "INF-37",
+        "url": "https://linear.app/infantry-cloud/issue/INF-37"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.8",
+      "kind": "story",
+      "title": "Story 2.8: OCI artifacts beyond container images",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.8"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.7"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "f2b3033b-d1f8-4d6d-a63a-1ed58c490e0e",
+        "identifier": "INF-38",
+        "url": "https://linear.app/infantry-cloud/issue/INF-38"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.9",
+      "kind": "story",
+      "title": "Story 2.9: Posture summary \u2014 populating, coverage and freshness",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.9"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.8"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "49a0b504-599d-4794-8b82-1b36b26cf57c",
+        "identifier": "INF-39",
+        "url": "https://linear.app/infantry-cloud/issue/INF-39"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.10",
+      "kind": "story",
+      "title": "Story 2.10: Posture findings \u2014 severity band and findings table",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.10"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.9"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "152cd59b-73e7-4745-addd-f3e1ff34c2ca",
+        "identifier": "INF-40",
+        "url": "https://linear.app/infantry-cloud/issue/INF-40"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.11",
+      "kind": "story",
+      "title": "Story 2.11: Artifacts list and artifact detail",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.11"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.10"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5141059b-68b1-4fae-8a4c-902eaf0c8fb6",
+        "identifier": "INF-41",
+        "url": "https://linear.app/infantry-cloud/issue/INF-41"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.12",
+      "kind": "story",
+      "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.12"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.11"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "79dd592f-2407-44f6-82a5-5e3f230d5db3",
+        "identifier": "INF-42",
+        "url": "https://linear.app/infantry-cloud/issue/INF-42"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:2:2.13",
+      "kind": "story",
+      "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-2.13"
+      },
+      "parent_key": "epic:2",
+      "after": [
+        "story:2:2.12"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "986ef1ab-6743-487b-9eef-bf22373f56d9",
+        "identifier": "INF-43",
+        "url": "https://linear.app/infantry-cloud/issue/INF-43"
+      },
+      "evidence": null,
+      "milestone_key": "epic:2"
+    },
+    {
+      "key": "story:3:3.1",
+      "kind": "story",
+      "title": "Story 3.1: Agent enrollment and mTLS identity",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.1"
+      },
+      "parent_key": "epic:3",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "547bee9d-a1be-4876-9b42-9ee75e775d9c",
+        "identifier": "INF-44",
+        "url": "https://linear.app/infantry-cloud/issue/INF-44"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:3:3.2",
+      "kind": "story",
+      "title": "Story 3.2: Read-only agent reports running workloads",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.2"
+      },
+      "parent_key": "epic:3",
+      "after": [
+        "story:3:3.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "93f7aeab-a18e-4507-aa78-e1ab8f2bcbff",
+        "identifier": "INF-45",
+        "url": "https://linear.app/infantry-cloud/issue/INF-45"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:3:3.3",
+      "kind": "story",
+      "title": "Story 3.3: Reconnect by stateless re-derive, without storms",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.3"
+      },
+      "parent_key": "epic:3",
+      "after": [
+        "story:3:3.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ceb2b8bb-a3b5-4983-8557-c138e70f1795",
+        "identifier": "INF-46",
+        "url": "https://linear.app/infantry-cloud/issue/INF-46"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:3:3.4",
+      "kind": "story",
+      "title": "Story 3.4: HTTPS long-poll fallback for locked-down networks",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.4"
+      },
+      "parent_key": "epic:3",
+      "after": [
+        "story:3:3.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "dbbd8db4-e9bb-4ad9-80a4-cc01f400bacf",
+        "identifier": "INF-47",
+        "url": "https://linear.app/infantry-cloud/issue/INF-47"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:3:3.5",
+      "kind": "story",
+      "title": "Story 3.5: Shipped-vs-running reconciliation",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.5"
+      },
+      "parent_key": "epic:3",
+      "after": [
+        "story:3:3.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ab3ce230-d365-4b21-8f86-3ae9a1d86379",
+        "identifier": "INF-48",
+        "url": "https://linear.app/infantry-cloud/issue/INF-48"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:3:3.6",
+      "kind": "story",
+      "title": "Story 3.6: Runtime coverage on Posture, and minute 29 with the agent",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-3.6"
+      },
+      "parent_key": "epic:3",
+      "after": [
+        "story:3:3.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "2c651d27-0c76-4322-8e6a-623bb71e5425",
+        "identifier": "INF-49",
+        "url": "https://linear.app/infantry-cloud/issue/INF-49"
+      },
+      "evidence": null,
+      "milestone_key": "epic:3"
+    },
+    {
+      "key": "story:4:4.1",
+      "kind": "story",
+      "title": "Story 4.1: Scheduled vulnerability database updates with versioned history",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.1"
+      },
+      "parent_key": "epic:4",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5abe0970-92dc-4460-86e7-9e182d1d2026",
+        "identifier": "INF-50",
+        "url": "https://linear.app/infantry-cloud/issue/INF-50"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.2",
+      "kind": "story",
+      "title": "Story 4.2: Feed-delta re-evaluation of stored SBOMs",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.2"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "06d7b961-194b-418a-83d4-90427c574b8d",
+        "identifier": "INF-51",
+        "url": "https://linear.app/infantry-cloud/issue/INF-51"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.3",
+      "kind": "story",
+      "title": "Story 4.3: KEV and EPSS enrichment with source attribution",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.3"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "4c495197-f7da-4309-a994-04e549bb8d1b",
+        "identifier": "INF-52",
+        "url": "https://linear.app/infantry-cloud/issue/INF-52"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.4",
+      "kind": "story",
+      "title": "Story 4.4: OSV and CNA record enrichment",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.4"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5b33fc40-f9f0-45e4-b141-c024cfde6b0f",
+        "identifier": "INF-53",
+        "url": "https://linear.app/infantry-cloud/issue/INF-53"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.5",
+      "kind": "story",
+      "title": "Story 4.5: Offline feed bundle format and creation",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.5"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e31c6820-bb74-443c-8ac6-57b29b149be7",
+        "identifier": "INF-54",
+        "url": "https://linear.app/infantry-cloud/issue/INF-54"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.6",
+      "kind": "story",
+      "title": "Story 4.6: Import an offline bundle into an air-gapped instance",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.6"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "2d0ed6c1-7e63-4acb-a340-7e6d031cfdb9",
+        "identifier": "INF-55",
+        "url": "https://linear.app/infantry-cloud/issue/INF-55"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.7",
+      "kind": "story",
+      "title": "Story 4.7: Honest feed staleness across Posture and findings",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.7"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "29d3ddce-1403-49bc-b1ad-7736dfe370a9",
+        "identifier": "INF-56",
+        "url": "https://linear.app/infantry-cloud/issue/INF-56"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:4:4.8",
+      "kind": "story",
+      "title": "Story 4.8: Prove one-hour re-evaluation at the scale anchor",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-4.8"
+      },
+      "parent_key": "epic:4",
+      "after": [
+        "story:4:4.7"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "cde11a10-f4b5-43f1-b2b9-81713e8acb62",
+        "identifier": "INF-57",
+        "url": "https://linear.app/infantry-cloud/issue/INF-57"
+      },
+      "evidence": null,
+      "milestone_key": "epic:4"
+    },
+    {
+      "key": "story:5:5.1",
+      "kind": "story",
+      "title": "Story 5.1: Deterministic, explainable ranking",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.1"
+      },
+      "parent_key": "epic:5",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "dc5c4c6d-0d7e-4115-b4aa-d3ea8071e3d9",
+        "identifier": "INF-58",
+        "url": "https://linear.app/infantry-cloud/issue/INF-58"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.2",
+      "kind": "story",
+      "title": "Story 5.2: Findings workbench and ranked Posture table",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.2"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "c2c46458-dfde-4f00-9d42-f318bb45c824",
+        "identifier": "INF-59",
+        "url": "https://linear.app/infantry-cloud/issue/INF-59"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.3",
+      "kind": "story",
+      "title": "Story 5.3: Record triage decisions as evidence",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.3"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "658eb270-6e72-4c19-8df9-0e356890888d",
+        "identifier": "INF-60",
+        "url": "https://linear.app/infantry-cloud/issue/INF-60"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.4",
+      "kind": "story",
+      "title": "Story 5.4: Triage drawer",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.4"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e847ce0a-22ee-4188-9f32-c814befb5189",
+        "identifier": "INF-61",
+        "url": "https://linear.app/infantry-cloud/issue/INF-61"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.5",
+      "kind": "story",
+      "title": "Story 5.5: Evidence trail surface",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.5"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "eaa65e5b-2eb4-4763-ad3f-6b7a1316d6aa",
+        "identifier": "INF-62",
+        "url": "https://linear.app/infantry-cloud/issue/INF-62"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.6",
+      "kind": "story",
+      "title": "Story 5.6: Emit VEX from triage decisions",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.6"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "fe69e7d6-bcb2-4854-8f65-fe051d959e01",
+        "identifier": "INF-63",
+        "url": "https://linear.app/infantry-cloud/issue/INF-63"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:5:5.7",
+      "kind": "story",
+      "title": "Story 5.7: Ingest vendor VEX",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.7"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "2e0032f8-1491-4bbf-9694-d2c2f1059405",
+        "identifier": "INF-64",
+        "url": "https://linear.app/infantry-cloud/issue/INF-64"
+      },
+      "evidence": null,
+      "milestone_key": "epic:5"
+    },
+    {
+      "key": "story:6:6.1",
+      "kind": "story",
+      "title": "Story 6.1: Graph projection of inventory and findings",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.1"
+      },
+      "parent_key": "epic:6",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "22fb228d-5c31-4a50-890b-9e68d9f8bba1",
+        "identifier": "INF-65",
+        "url": "https://linear.app/infantry-cloud/issue/INF-65"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.2",
+      "kind": "story",
+      "title": "Story 6.2: Blast-radius query API",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.2"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "182c4477-388f-417a-a238-fe7c24038469",
+        "identifier": "INF-66",
+        "url": "https://linear.app/infantry-cloud/issue/INF-66"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.3",
+      "kind": "story",
+      "title": "Story 6.3: Blast-radius surface \u2014 answer and table, from \u2318K",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.3"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "90d2e798-82f8-48ea-a820-284bf97ea079",
+        "identifier": "INF-67",
+        "url": "https://linear.app/infantry-cloud/issue/INF-67"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.4",
+      "kind": "story",
+      "title": "Story 6.4: Blast-radius graph reading",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.4"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "49fbda6b-4518-4196-bc14-6071d77fe56b",
+        "identifier": "INF-68",
+        "url": "https://linear.app/infantry-cloud/issue/INF-68"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.5",
+      "kind": "story",
+      "title": "Story 6.5: Export blast-radius and posture answers",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.5"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "f8566208-4e68-4469-9b22-96d465e12acb",
+        "identifier": "INF-69",
+        "url": "https://linear.app/infantry-cloud/issue/INF-69"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.6",
+      "kind": "story",
+      "title": "Story 6.6: Graph explorer and node inspector",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.6"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "341e82f9-f95b-439c-808f-2bb59051da1f",
+        "identifier": "INF-70",
+        "url": "https://linear.app/infantry-cloud/issue/INF-70"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:6:6.7",
+      "kind": "story",
+      "title": "Story 6.7: Prove sub-minute blast radius at the scale anchor",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-6.7"
+      },
+      "parent_key": "epic:6",
+      "after": [
+        "story:6:6.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "3e38df05-d7e0-4961-b692-f65cff39a89e",
+        "identifier": "INF-71",
+        "url": "https://linear.app/infantry-cloud/issue/INF-71"
+      },
+      "evidence": null,
+      "milestone_key": "epic:6"
+    },
+    {
+      "key": "story:7:7.1",
+      "kind": "story",
+      "title": "Story 7.1: License evaluation of stored SBOMs with Grant",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-7.1"
+      },
+      "parent_key": "epic:7",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "f2311a44-6234-487f-91dc-613735cf8226",
+        "identifier": "INF-72",
+        "url": "https://linear.app/infantry-cloud/issue/INF-72"
+      },
+      "evidence": null,
+      "milestone_key": "epic:7"
+    },
+    {
+      "key": "story:7:7.2",
+      "kind": "story",
+      "title": "Story 7.2: License evaluation of images and filesystems directly",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-7.2"
+      },
+      "parent_key": "epic:7",
+      "after": [
+        "story:7:7.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "bd6bbbea-be36-4519-9bb9-dd5ebcada10a",
+        "identifier": "INF-73",
+        "url": "https://linear.app/infantry-cloud/issue/INF-73"
+      },
+      "evidence": null,
+      "milestone_key": "epic:7"
+    },
+    {
+      "key": "story:7:7.3",
+      "kind": "story",
+      "title": "Story 7.3: Fleet license policy",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-7.3"
+      },
+      "parent_key": "epic:7",
+      "after": [
+        "story:7:7.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "89a3f160-541e-42f4-83da-72b824cc056c",
+        "identifier": "INF-74",
+        "url": "https://linear.app/infantry-cloud/issue/INF-74"
+      },
+      "evidence": null,
+      "milestone_key": "epic:7"
+    },
+    {
+      "key": "story:7:7.4",
+      "kind": "story",
+      "title": "Story 7.4: License findings in Posture, Findings and triage",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-7.4"
+      },
+      "parent_key": "epic:7",
+      "after": [
+        "story:7:7.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e084506e-6dce-452b-b308-aad657b91f80",
+        "identifier": "INF-75",
+        "url": "https://linear.app/infantry-cloud/issue/INF-75"
+      },
+      "evidence": null,
+      "milestone_key": "epic:7"
+    },
+    {
+      "key": "story:8:8.1",
+      "kind": "story",
+      "title": "Story 8.1: Data-quality scoring model and artifact score",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-8.1"
+      },
+      "parent_key": "epic:8",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "fd18e070-3882-41dd-a08e-59185e08c743",
+        "identifier": "INF-76",
+        "url": "https://linear.app/infantry-cloud/issue/INF-76"
+      },
+      "evidence": null,
+      "milestone_key": "epic:8"
+    },
+    {
+      "key": "story:8:8.2",
+      "kind": "story",
+      "title": "Story 8.2: Fleet data quality on Posture and Artifacts",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-8.2"
+      },
+      "parent_key": "epic:8",
+      "after": [
+        "story:8:8.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "5913dd95-391d-42da-9f66-3a4a608b03f9",
+        "identifier": "INF-77",
+        "url": "https://linear.app/infantry-cloud/issue/INF-77"
+      },
+      "evidence": null,
+      "milestone_key": "epic:8"
+    },
+    {
+      "key": "story:8:8.3",
+      "kind": "story",
+      "title": "Story 8.3: Prometheus metrics endpoint",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-8.3"
+      },
+      "parent_key": "epic:8",
+      "after": [
+        "story:8:8.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "6ac80d2f-4b1b-47bf-bc7d-6edd1a54538e",
+        "identifier": "INF-78",
+        "url": "https://linear.app/infantry-cloud/issue/INF-78"
+      },
+      "evidence": null,
+      "milestone_key": "epic:8"
+    },
+    {
+      "key": "story:8:8.4",
+      "kind": "story",
+      "title": "Story 8.4: Prometheus panel in Settings",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-8.4"
+      },
+      "parent_key": "epic:8",
+      "after": [
+        "story:8:8.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "721c9efa-1202-4766-bd70-9e4722d86bc1",
+        "identifier": "INF-79",
+        "url": "https://linear.app/infantry-cloud/issue/INF-79"
+      },
+      "evidence": null,
+      "milestone_key": "epic:8"
+    },
+    {
+      "key": "story:9:9.1",
+      "kind": "story",
+      "title": "Story 9.1: Point-in-time evidence queries for any window",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.1"
+      },
+      "parent_key": "epic:9",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "56912870-2909-4845-bfbb-d299334f7825",
+        "identifier": "INF-80",
+        "url": "https://linear.app/infantry-cloud/issue/INF-80"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.2",
+      "kind": "story",
+      "title": "Story 9.2: Pack architecture and the CRA pack definition",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.2"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "e75f8631-9e21-4695-8ae5-d6055e27b44c",
+        "identifier": "INF-81",
+        "url": "https://linear.app/infantry-cloud/issue/INF-81"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.3",
+      "kind": "story",
+      "title": "Story 9.3: PDF report and machine-readable companions",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.3"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "2f068ab5-7c57-4c34-a837-1fc7b0d88ae9",
+        "identifier": "INF-82",
+        "url": "https://linear.app/infantry-cloud/issue/INF-82"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.4",
+      "kind": "story",
+      "title": "Story 9.4: Sign evidence packs",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.4"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "33db88aa-c781-43fd-b629-9c066be92771",
+        "identifier": "INF-83",
+        "url": "https://linear.app/infantry-cloud/issue/INF-83"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.5",
+      "kind": "story",
+      "title": "Story 9.5: Generate packs and verify signatures in the UI",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.5"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "78bc9f56-84ab-4c2f-a1e8-cc5983a403df",
+        "identifier": "INF-84",
+        "url": "https://linear.app/infantry-cloud/issue/INF-84"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.6",
+      "kind": "story",
+      "title": "Story 9.6: Signed ledger checkpoints",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.6"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.5"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "b5f4290e-53ab-4680-aa42-ad752b8cd47f",
+        "identifier": "INF-85",
+        "url": "https://linear.app/infantry-cloud/issue/INF-85"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.7",
+      "kind": "story",
+      "title": "Story 9.7: Retention with archiving to the object store",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.7"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d9758600-6832-47cc-b02b-685685043284",
+        "identifier": "INF-86",
+        "url": "https://linear.app/infantry-cloud/issue/INF-86"
+      },
+      "evidence": null,
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:10:10.1",
+      "kind": "story",
+      "title": "Story 10.1: Signed, provenance-attested releases",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-10.1"
+      },
+      "parent_key": "epic:10",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ef707aae-7d44-4ffe-91ef-c69a0dbe6d12",
+        "identifier": "INF-87",
+        "url": "https://linear.app/infantry-cloud/issue/INF-87"
+      },
+      "evidence": null,
+      "milestone_key": "epic:10"
+    },
+    {
+      "key": "story:10:10.2",
+      "kind": "story",
+      "title": "Story 10.2: Armoury-published signed feed bundles",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-10.2"
+      },
+      "parent_key": "epic:10",
+      "after": [
+        "story:10:10.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "9b4b5de6-038c-46f6-82a7-9a063f39b200",
+        "identifier": "INF-88",
+        "url": "https://linear.app/infantry-cloud/issue/INF-88"
+      },
+      "evidence": null,
+      "milestone_key": "epic:10"
+    },
+    {
+      "key": "story:10:10.3",
+      "kind": "story",
+      "title": "Story 10.3: Air-gapped installation from an internal mirror",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-10.3"
+      },
+      "parent_key": "epic:10",
+      "after": [
+        "story:10:10.2"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "65f72822-5f9c-469f-8596-8ebfbd55081f",
+        "identifier": "INF-89",
+        "url": "https://linear.app/infantry-cloud/issue/INF-89"
+      },
+      "evidence": null,
+      "milestone_key": "epic:10"
+    },
+    {
+      "key": "story:10:10.4",
+      "kind": "story",
+      "title": "Story 10.4: Prove the full air-gapped journey end to end",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-10.4"
+      },
+      "parent_key": "epic:10",
+      "after": [
+        "story:10:10.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "0c4c9279-ce11-4727-8721-d67700b1169d",
+        "identifier": "INF-90",
+        "url": "https://linear.app/infantry-cloud/issue/INF-90"
+      },
+      "evidence": null,
+      "milestone_key": "epic:10"
+    }
+  ],
+  "workspace": {
+    "id": "63d7e2a7-6be7-4acf-bdca-6be9f452cdfb",
+    "name": "Infantry Cloud"
+  },
+  "labels": {
+    "bmad:planning": "d18581c8-1cf8-49fd-8e70-443e419fc09b",
+    "bmad:epic": "62bfda4f-8379-480d-be47-8ad0235cd2c5",
+    "bmad:story": "d806f83f-e71f-44bf-9180-cdfffed74f0c",
+    "bmad:task": "2561b6d2-f928-4221-b89f-f53d8e7c85fd",
+    "bmad:bug": "e8c24bd5-9c7c-46c0-9f8d-8ddc02ed523f",
+    "bmad:spike": "e2f9e673-e1b0-4698-b286-2eeb48a3869c"
+  },
+  "milestones": {
+    "epic:1": {
+      "id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:1"
+    },
+    "epic:2": {
+      "id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:2"
+    },
+    "epic:3": {
+      "id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:3"
+    },
+    "epic:4": {
+      "id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:4"
+    },
+    "epic:5": {
+      "id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:5"
+    },
+    "epic:6": {
+      "id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:6"
+    },
+    "epic:7": {
+      "id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:7"
+    },
+    "epic:8": {
+      "id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:8"
+    },
+    "epic:9": {
+      "id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:9"
+    },
+    "epic:10": {
+      "id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:10"
+    }
+  },
+  "milestones_note": "One project milestone per epic (user request 2026-11-05), for ordering and progress only; no target dates. Each epic issue and its stories are assigned to it. Milestone progress is not delivery evidence."
+}

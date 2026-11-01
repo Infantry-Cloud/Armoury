@@ -1,0 +1,22 @@
+# Team override for TEA Automate.
+# Post-implementation expansion remains contract-traceable and risk-based.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_prepend = [
+  "Register this standing rule without attempting target work during activation. In the main Create flow, once context establishes tracked story work, load the approved contract from its Build spec and validate its digest before expanding tests; use AC/VAL as the oracle and return invalid/drifted contracts through Correct Course. For standalone, Resume, Validate, or Edit modes without a story target, do not invent a contract precondition.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the automation scope and target are known; no new scope or task is approved by a tracker comment alone.",
+  "Expand only material coverage gaps justified by the contract, test design, regression risk, or a discovered blind spot. Prefer the cheapest trustworthy level and preserve existing project test conventions. Tag acceptance-level tests with VAL-* and AC-* IDs; report implementation behavior with no originating contract/risk as a scope or traceability finding.",
+  "Return executable commands, paths, results, and evidence candidates for Delivery Evidence. Do not edit normative contract content, claim product acceptance, or mark QA-owned manual obligations complete without independently executing them.",
+]
+
+on_complete = "Emit the before/after AC-to-VAL coverage map, added tests and levels, exact commands/results, remaining manual checks, uncovered contract obligations, out-of-contract behavior, and evidence paths. Follow Linear Planning completion for an explicitly agreed bmad-testarch-automate obligation and reconcile approved task evidence; test generation is not independent story delivery."

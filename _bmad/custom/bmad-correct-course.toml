@@ -1,0 +1,25 @@
+# Team override for Correct Course.
+# Semantic story changes use explicit contract revision and reapproval.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_prepend = [
+  "Register this standing rule for the main workflow; activation occurs before Correct Course gathers and analyzes the requested change. Once the affected story is identified, load its Build spec (`{implementation_artifacts}/spec-<story_key>.md` or its spec-folder story file) and validate its current approved revision before edits and classify the request as editorial-only, validation-mechanism-only, semantic contract change, or conflict with a higher-level source artifact. Do not attempt target-dependent mutation during activation.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the requested local change and target are known; tracker text/status is input to discuss, never authority to alter a contract.",
+  "Editorial-only changes must preserve behavior and the validation oracle. Validation-mechanism-only changes require Test Architect approval and rerunning affected VAL-* evidence. Any change to intent, scope, source requirement, assumption, risk, AC, oracle, required evidence, or accepted behavior is semantic: increment Revision, set Contract Approval back to draft/pending, clear the old digest, identify invalidated VAL/evidence rows, and require product plus TEA validation reapproval before bmad-build resumes implementation. Normative edits go inside the spec's frozen block (`<frozen-after-approval>` or `<intent-contract>`) only with the user's explicit authorization. For a semantic change, also set the Build spec status to `draft` so Build re-runs planning and CHECKPOINT 1, preserving Implementation Notes, Spec Change Log and Review Triage Log.",
+  "If the requested change conflicts with PRD, UX, architecture, NFR, security, or another authoritative source, route the decision to that source owner and update the source first or record the approved resolution. Never let a story silently override a higher-level artifact and never weaken the contract merely to match existing code.",
+  "JJ REVISION (team policy; follow jj-vcs.md and story-contract.md). Never run git. Any edit inside the Acceptance Contract, even editorial, changes its digest, so it needs a new Revision. Make the revision its own `docs(story-<epic>.<story>): revise acceptance contract r<N>` change. Never describe, rewrite or replace an earlier approval change; the new revision is approved only by a new sealed approval change with `Contract-Revision: <N>`, recorded after product and Test Architect reapproval.",
+  "LOCKED TESTS (team policy; story-contract.md 'Locked ATDD tests'). Changing a locked ATDD test beyond removing skip markers is a validation-mechanism change: new Revision, Test Architect reapproval (plus product reapproval when the oracle or behaviour changes), and a new approval change with tests re-locked by the validator `lock` command.",
+  "EDIT GUARD (team policy; story-contract.md 'Edit guard (Pi)'). The Pi edit guard refuses agent edits to an approved contract and its locked tests. After the revision is approved by the user, ask the user to run `/contract-unlock <spec path>` before editing, and `/contract-lock` once the new revision and its approval change are recorded. Never work around the guard through bash or another tool.",
+]
+
+on_complete = "Emit a Contract Change Record with change class, old/new revision, changed AC/VAL/source IDs, impact on implementation/tests/evidence, approvals required, evidence invalidated, and the exact validator command to rerun. Then follow Linear Correct Course/Reconcile: publish only approved scope changes against existing stable identities, reopen invalidated completion, comment on each changed or reopened issue (Activity notes), retain history, and obtain explicit cancellation approval for removed work; never delete tickets or import remote edits as local approval."

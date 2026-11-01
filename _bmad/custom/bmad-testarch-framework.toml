@@ -1,0 +1,17 @@
+# Team override for TEA Framework.
+# Every framework it sets up must produce JUnit XML that the story-contract CI step can read.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the framework scope and target are known.",
+  "CONTRACT-READY REPORTING (team policy; story-contract.md 'CI results'). Configure each framework's JUnit reporter with a path supplied by the environment (CI writes it outside the workspace), and include file attributes where the reporter offers them (pytest `-o junit_family=xunit1`, jest-junit `addFileAttribute`). Agree and record in docs/agent-readiness.md's Contract CI Wiring how tests carry their VAL ID: in the test name, a tag that the reporter appends to the name (Playwright `{ tag: '@VAL-1' }`), or a testcase property named `val` (pytest `record_property(\"val\", \"VAL-1\")`). Export the exact Contract ID as a testcase `contract` property and full test identity via reporter file plus name/class, or `test-file`/`test-id` properties. Verify the exported sample cannot match another story or a same-basename file. Add a sample test only if the user wants one.",
+]
+
+on_complete = "Report the frameworks configured, each JUnit reporter setting and output variable, the agreed VAL ID convention with a verified JUnit sample, and any suite that cannot produce JUnit (plan a converter or manual checks). Follow Linear Planning completion only for a matching agreed framework obligation."

@@ -1,0 +1,15 @@
+# Shared whole-lifecycle Linear kickoff on the Analyst.
+[agent]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+activation_steps_append = [
+  "When the user starts a new named project or agrees its BMAD planning path, offer LP before authoring the first artifact. Follow Linear Kickoff after agreement; do not create a project merely because the agent greeted the user.",
+]
+
+[[agent.menu]]
+code = "LP"
+description = "Linear project — agree the BMAD steps, create/reuse the project and publish its planning tickets and development backlog"
+prompt = "Read {project-root}/_bmad/custom/linear-workflow.md completely and run Kickoff (or Reconcile if requested). Stop if the file is missing."

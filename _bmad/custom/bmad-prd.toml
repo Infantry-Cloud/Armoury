@@ -1,0 +1,15 @@
+# Team override for bmad-prd.
+# BMad 6.12 ships persistent_facts empty, so re-add the shared project rules this workflow used to auto-load.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation from linear-workflow.md for the main flow once the PRD intent and project are known; do not start or close a ticket during greeting or validation-only work.",
+]
+
+on_complete = "Follow Linear Planning completion for bmad-prd and its actual target PRD: verify the agreed Done when and acceptance before updating the linked planning ticket, preserving pending publication on failure."

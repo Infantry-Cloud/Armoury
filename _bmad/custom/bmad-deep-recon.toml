@@ -1,0 +1,11 @@
+# Track only agreed research steps, with distinct IDs for repeated research runs.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+activation_steps_append = [
+  "Register Linear Activation once the research subject, type and project are known. Match the specific agreed research obligation; never invent extra planning tickets.",
+]
+on_complete = "Follow Linear Planning completion for bmad-deep-recon and the specific research output: distinguish completion of the agreed investigation from an unsupported claim that all research questions were resolved."

@@ -1,0 +1,15 @@
+# Team override for bmad-retrospective.
+# BMad 6.12 ships persistent_facts empty, so re-add the shared project rules this workflow used to auto-load.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once this retrospective's epic and project are known; do not close an epic simply because its retrospective was opened.",
+]
+
+on_complete = "Follow Linear Planning completion if this retrospective is an agreed obligation. Reconcile only explicitly agreed follow-up work into the same Project; recommendations are not automatically approved tasks. Then follow Linear Epic completion (Retrospective stage): after explicit acceptance of the saved retrospective and current delivery of every agreed child story, move only that epic to Done, then post its epic comment and project status update from Activity notes. Incomplete or unaccepted retrospectives leave the epic open; never close the Linear Project. Then run the project-wide guardrail health scan (`uv run {project-root}/_bmad/custom/scripts/steward_scan.py`, read-only) and add its concerns to the retrospective discussion: ask the user whether the guardrails helped or hindered this epic, and suggest the Guardrail Steward (`bmad-agent-steward`, menu FA) for any mechanism the team wants adjusted."

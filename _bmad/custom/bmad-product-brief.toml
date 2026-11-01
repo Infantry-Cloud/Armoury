@@ -1,0 +1,11 @@
+# Track an agreed product-brief step in the shared Linear Project.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+activation_steps_append = [
+  "Register Linear Activation once this brief's intent and project are known, not during greeting or a validation-only operation.",
+]
+on_complete = "Follow Linear Planning completion for bmad-product-brief, matching the actual final brief to its agreed planning issue and verifying Done when and acceptance before closing it."

@@ -1,0 +1,12 @@
+# Track a selected agent-context setup/refresh/audit obligation.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+activation_steps_append = [
+  "Register Linear Activation once the context action and project are known; an audit alone does not complete a setup obligation.",
+  "Register a main-flow completion instruction: after presenting this operation's actual final result, follow Linear Planning completion for bmad-project-context and the matching agreed action/artifacts, checking Done when and acceptance before updating its issue. Preserve the global Linear kickoff rule during refresh. BMAD v6.12.2 declares on_complete but does not execute it in this skill, so apply this standing completion instruction in the main flow instead; use the Run an agreed step wrapper if execution is uncertain.",
+]
+on_complete = "Follow Linear Planning completion for bmad-project-context and the actual action/artifacts, checking the matching agreed Done when before updating its issue. Preserve the project's existing Linear kickoff rule when refreshing global agent context."

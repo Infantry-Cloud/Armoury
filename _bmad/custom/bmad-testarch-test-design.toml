@@ -1,0 +1,22 @@
+# Team override for TEA Test Design.
+# System/epic test design informs story contracts without becoming a competing source.
+
+[workflow]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before contract planning, approval, independent test design/review or revision, read {project-root}/_bmad/custom/story-contract.md completely. For approved implementation and its checks only, read {project-root}/_bmad/custom/instructions/implementation.md first and follow its freshness check, stop conditions and full-manual fallback. Defer until a contract is in scope.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+activation_steps_prepend = [
+  "Register this source-of-truth rule for use after the main workflow discovers its scope and inputs. Story contracts are the story-level oracle when present; PRD, UX, architecture, NFR, risk, and readiness remain higher-level sources. Do not require a story during activation for system/epic or non-Create modes, and never duplicate story criteria into a competing mutable specification.",
+]
+
+activation_steps_append = [
+  "Register Linear Activation once the test-design scope and actual target are known; match the agreed system/epic/story obligation rather than all test-design tickets.",
+  "Produce risk-based system/epic validation guidance that bmad-build planning and TEA ATDD can reference: critical journeys, P0-P3 risks, trustworthy test levels, environment/data/fixture needs, NFR evidence, boundary-contract needs, residual manual assurance, and quality thresholds. Give recommendations stable IDs and source links so later AC-* and VAL-* entries can trace to them.",
+  "When run for one story, assess and improve the draft Validation Design in its Build spec while the contract remains draft, editing the frozen block only with the user's explicit approval of each change. Preserve product intent, identify uncovered positive/negative/boundary/failure cases and untestable oracles, and route semantic questions to the product/source owner instead of inventing answers.",
+]
+
+on_complete = "Emit a Contract Input Summary listing the test-design artifact path, scope, risk IDs, affected story/AC/VAL IDs, required pre-implementation ATDD work, manual residuals, and unresolved approval blockers. The test-design artifact supports but never supersedes the story contract. Follow Linear Planning completion for bmad-testarch-test-design only when the matching agreed Done when and acceptance pass."
