@@ -1,0 +1,22 @@
+# Team override for the Architect (Winston). Append-only.
+# Winston owns repo/design decisions, so the agent-readiness step lives here as a
+# planning-phase item: agree failures -> build loops -> prove repair -> assess coverage, run
+# just before implementation. Agnostic: he elicits the user's methodology + tooling
+# and enforces THOSE — imposes nothing. The shared prompt is in agent-readiness-workflow.md.
+
+[agent]
+persistent_facts = [
+  "file:{project-root}/project-context.md",
+  "Before any version-control command, stage write or closure recommendation, read {project-root}/_bmad/custom/jj-vcs.md completely; defer until work needs it.",
+  "Before Linear kickoff, activation, publication, status changes or reconciliation, read {project-root}/_bmad/custom/linear-workflow.md completely; defer until the project and target are known.",
+]
+
+[[agent.menu]]
+code = "LP"
+description = "Linear project — agree the BMAD steps, create/reuse the project and publish planning and development tickets"
+prompt = "Read {project-root}/_bmad/custom/linear-workflow.md completely and run Kickoff (or Reconcile if requested). Stop if the file is missing."
+
+[[agent.menu]]
+code = "AR"
+description = "Agent readiness — engineer and prove mechanical feedback loops for better agentic programming (before implementation)"
+prompt = "Read {project-root}/_bmad/custom/agent-readiness-workflow.md completely and follow it exactly. The goal is proven agent-visible failure/repair loops, not checklist completion or score maximisation. If the file is missing, say so and stop; do not improvise the workflow."

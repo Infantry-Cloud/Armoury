@@ -1,0 +1,7 @@
+# Team override for the deprecated dev-story workflow (BMad 6.12 still ships it).
+# It must not become a route around the story-contract lifecycle: implementation goes through bmad-build.
+
+[workflow]
+activation_steps_prepend = [
+  "This legacy implementation entry point must not bypass the story-contract lifecycle. HALT this workflow and direct the user to bmad-build with the original story/spec path; do not implement here. Follow _bmad/custom/story-contract.md.",
+]
