@@ -1,6 +1,6 @@
 ---
 name: Armoury
-description: Self-hosted software supply-chain evidence layer for SME security teams. shadcn/ui on React + Tailwind; dark-only, three user-selectable themes; this DESIGN.md specifies the full brand layer over shadcn defaults.
+description: Self-hosted software supply-chain evidence layer for SME security teams. shadcn-svelte on SvelteKit + Tailwind; dark-only, three user-selectable themes; this DESIGN.md specifies the full brand layer over shadcn defaults.
 status: final
 updated: 2026-06-13
 colors:

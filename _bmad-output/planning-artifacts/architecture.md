@@ -3,6 +3,7 @@ stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
 lastStep: 8
 status: 'complete'
 completedAt: '2026-06-14'
+revisedAt: '2026-11-01'  # backend Go → Rust (control plane + agent)
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/addendum.md
@@ -47,7 +48,7 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 
 ### Scale & Complexity
 
-- Primary domain: **self-hosted full-stack** (React/shadcn SPA + control-plane backend + per-cluster read-only K8s agents, Helm-delivered).
+- Primary domain: **self-hosted full-stack** (SvelteKit/shadcn-svelte SPA + control-plane backend + per-cluster read-only K8s agents, Helm-delivered).
 - Complexity level: **High / enterprise** — distributed, graph-backed, compliance-grade, dual-mode (connected + air-gapped).
 - Estimated major architectural components: **~10** — UI; API/query layer; graph store (GUAC); SBOM/scan orchestrator + scheduler; feed-ingestion & re-evaluation engine; enrichment aggregator; evidence store (append-only); pack generator + signer; cluster agent; metrics endpoint.
 
@@ -86,6 +87,7 @@ Non-obvious risks surfaced during context analysis, carried forward into the dec
 | R8  | Corrupt/partial feed bundle (air-gap, FR10) drives a false-green re-eval → a signed CRA pack seals the false-green       | Atomically validate + sign bundles before they can drive re-eval; partial/failed import **fails closed as stale**, never applies silently |
 | R9  | Shared storage contention: a ledger-append failure under disk pressure also freezes operational scan jobs (SPOF, distinct from R5 loss) | Separate quota/reservation for ledger vs. operational state; expose disk-headroom as a health metric (FR20/NFR8)     |
 | R10 | Evidence immutability (NFR11) + signing (FR25) **amplify** upstream data errors (enrichment drift, bad feed) into sealed, uncorrectable records | Versioned, superseding corrections; record enrichment/feed **source versions** on findings and pack covers so a later correction is explainable, not locked |
+| R11 | Rust backend runs Grype as a subprocess per SBOM (spawn + DB open each time) → re-eval throughput may miss NFR5's 1-hour bound at the scale anchor | Bounded parallel worker pool; measure per-SBOM cost in the R1/R2 load test. Fallback only if the CLI fails the bar: a long-lived Go matcher sidecar (the one Go component allowed back in) |
 
 ## Starter Template Evaluation
 
@@ -93,7 +95,7 @@ Non-obvious risks surfaced during context analysis, carried forward into the dec
 
 **Multi-component self-hosted system** — there is no single monolithic starter. Four deliverables in **one monorepo** (Daniel's call), all versioned/released together to support SLSA-attested unified releases (NFR7):
 
-1. Web SPA (Svelte) · 2. Go control plane · 3. Go cluster agent · 4. Helm chart
+1. Web SPA (Svelte) · 2. Rust control plane · 3. Rust cluster agent · 4. Helm chart
 
 Guiding principle (from project memory): **API-first** — the UI, future MCP server, and Prometheus metrics are all consumers of one API spine. The SPA is just the first client.
 
@@ -101,19 +103,19 @@ Guiding principle (from project memory): **API-first** — the UI, future MCP se
 
 - **Frontend — SvelteKit (static/SPA) vs. plain Svelte + Vite.** Chose **SvelteKit with `adapter-static` + SSR disabled**: it's shadcn-svelte's first-class path, uses Vite under the hood, and produces a pure client-rendered SPA (static assets, no Node runtime to operate self-hosted/air-gapped) while giving us file-based routing for the 7 surfaces. Plain Svelte+Vite is the fallback if we want to avoid SvelteKit entirely.
 - **Graph library — Svelte Flow (`@xyflow/svelte`, stable v1.6.0).** Stable 1.x release on the same shared core (`@xyflow/system`) as React Flow; further de-risked by the mandatory Graph/Table equivalent (accessibility requirement) so it is never a single point of failure.
-- **Backend — no framework starter.** Idiomatic Go module layout (`cmd/` + `internal/`); API-first via an OpenAPI contract with generated server stubs + typed TS client for the SPA. Rejected heavyweight web frameworks — stdlib `net/http` (Go 1.22+ routing) or a thin router is sufficient and keeps the static binary lean for air-gapped Helm delivery.
-- **Cluster agent — controller-runtime directly vs. Kubebuilder scaffold.** Leaning **controller-runtime manager + informers without CRDs**: NFR9 makes the agent a read-only watch/list reporter, not a CRD-owning operator, so Kubebuilder's full CRD scaffold is more than we need (kept as an option if we later want CRDs).
-- **Monorepo tooling — Go workspaces + a task runner.** `go.work` spanning control-plane + agent (shared modules for the agent↔CP protocol and API types), the SPA under `web/`, charts under `charts/`, driven by a `Taskfile`/`Makefile`. Rejected Nx/Turborepo — JS-centric, poor Go fit.
+- **Backend — Rust, no framework starter.** _Changed from Go on 2026-11-01 (Daniel: more confident with Rust for AI-driven development; the compiler catches more agent mistakes)._ `axum` on `tokio` — a thin router, not a heavyweight framework — producing a lean static (musl) binary for air-gapped Helm delivery. API-first via an OpenAPI contract with generated server types + typed TS client for the SPA. Consequence: the Go OSS substrate is no longer callable in-process — see **Substrate Integration**.
+- **Cluster agent — `kube-rs` (`kube` + `kube-runtime` watchers/reflectors), no CRDs.** NFR9 makes the agent a read-only watch/list reporter, not a CRD-owning operator, so no operator framework is needed.
+- **Monorepo tooling — Cargo workspace + a task runner.** Root `Cargo.toml` workspace spanning `control-plane`, `agent`, and a shared `agent-proto` crate (agent↔CP protocol types), the SPA under `web/`, charts under `charts/`, driven by a `Taskfile`. Rejected Nx/Turborepo — JS-centric, poor Rust fit.
 
 ### Selected Stack & Scaffold
 
-**Versions (current as of 2026-06 — pin at init, not hardcoded forever):** Go 1.26.x · Svelte 5 / SvelteKit 2 / Vite / Tailwind v4 · shadcn-svelte (latest, runes-native) · `@xyflow/svelte` v1.6.x · controller-runtime v0.23.x (Kubebuilder v4.9.x if used) · Helm 3.
+**Versions (current as of 2026-06 — pin at init, not hardcoded forever):** Rust stable (2024 edition) · Svelte 5 / SvelteKit 2 / Vite / Tailwind v4 · shadcn-svelte (latest, runes-native) · `@xyflow/svelte` v1.6.x · `kube-rs` · `tonic` · `sqlx` · Helm 3 · pinned Syft/Grype/Grant/cosign CLIs.
 
 **Initialization commands (these become the first implementation story):**
 
 ```bash
-# --- repo root ---
-go work init
+# --- repo root: Cargo workspace ---
+# root Cargo.toml: [workspace] members = ["control-plane", "agent", "agent-proto"], resolver = "3"
 
 # --- web SPA: SvelteKit (static SPA) + Tailwind + shadcn-svelte ---
 npx sv create web --template minimal --types ts --add tailwindcss
@@ -123,12 +125,16 @@ npm i @xyflow/svelte                    # Svelte Flow (stable) for blast-radius 
 # set adapter-static + `export const ssr = false` in the root +layout for SPA mode
 cd ..
 
-# --- Go control plane ---
-mkdir -p control-plane && cd control-plane && go mod init armoury/control-plane && cd ..
+# --- Rust control plane ---
+cargo new control-plane --bin --name armoury
+(cd control-plane && cargo add axum tokio -F tokio/full && cargo add sqlx -F postgres,runtime-tokio,tls-rustls,uuid,migrate)
 
-# --- Go cluster agent (controller-runtime, read-only watcher) ---
-mkdir -p agent && cd agent && go mod init armoury/agent
-go get sigs.k8s.io/controller-runtime@latest && cd ..
+# --- Rust cluster agent (kube-rs, read-only watcher) ---
+cargo new agent --bin --name armoury-agent
+(cd agent && cargo add kube -F runtime,rustls-tls && cargo add k8s-openapi -F latest && cargo add tokio -F full)
+
+# --- shared agent protocol (tonic/prost codegen from proto/agent/v1 in build.rs) ---
+cargo new agent-proto --lib
 
 # --- Helm chart ---
 helm create charts/armoury           # then strip to control-plane + agent subcharts
@@ -136,15 +142,15 @@ helm create charts/armoury           # then strip to control-plane + agent subch
 
 **Architectural decisions provided by this scaffold:**
 
-- **Language & Runtime:** Go 1.26.x (single static binaries, in-process orchestration of the Go OSS substrate); Svelte 5 + TypeScript SPA.
+- **Language & Runtime:** Rust stable (static binaries); Syft/Grype/Grant/cosign run as pinned CLI subprocesses shipped in the control-plane image; Svelte 5 + TypeScript SPA.
 - **Styling:** Tailwind v4 + shadcn-svelte (owned components, copied in); design tokens map straight onto the DESIGN.md theme system (Forge/High-Signal/Gunmetal).
-- **Build tooling:** Vite (via SvelteKit) for the SPA; Go toolchain for binaries; Taskfile/Make orchestrates the monorepo.
-- **Code organization:** `web/` · `control-plane/` · `agent/` · `charts/` · shared Go modules via `go.work`; OpenAPI spec as the API source of truth.
-- **Testing/Dev:** Vitest + Playwright (SPA); Go `testing` + `envtest` (agent against a fake API server); hot reload via Vite dev server proxied to the Go API.
+- **Build tooling:** Vite (via SvelteKit) for the SPA; Cargo for binaries; Taskfile/Make orchestrates the monorepo.
+- **Code organization:** `web/` · `control-plane/` · `agent/` · `charts/` · shared crates via the Cargo workspace; OpenAPI spec as the API source of truth.
+- **Testing/Dev:** Vitest + Playwright (SPA); `cargo nextest` + `#[sqlx::test]` (per-test Postgres DB) for the control plane; agent unit-tested against a mocked `kube` client and integration-tested against a kind cluster in CI; hot reload via Vite dev server proxied to the Rust API (`bacon`/`watchexec` on the Rust side).
 
 **Note:** Repo + scaffold initialization (above) should be the first implementation story.
 
-**Downstream doc fix:** DESIGN.md / EXPERIENCE.md name React as the implementation framework — update that reference to Svelte (visual identity and tokens are framework-agnostic and unaffected).
+**Downstream doc fix (done 2026-11-01):** DESIGN.md / EXPERIENCE.md now name Svelte (SvelteKit + shadcn-svelte); visual identity and tokens unaffected.
 
 ## Core Architectural Decisions
 
@@ -154,12 +160,12 @@ helm create charts/armoury           # then strip to control-plane + agent subch
 
 - **Datastore:** PostgreSQL + **Apache AGE** — relational + openCypher graph in one engine. Blast-radius (CVE→package→artifact→workload+time) runs as AGE Cypher traversals.
 - **Blob/ledger storage:** **SeaweedFS** (bundled, S3-compatible; external S3 optional) for SBOM blobs and temporal-ledger compaction.
-- **Job/queue + re-eval engine:** **River** (Postgres-backed) Go workers; re-evaluation is a **feed-delta join** (changed CVEs/ranges → affected stored packages), never a fleet rescan (NFR5).
+- **Job/queue + re-eval engine:** **River** via its Rust client **`riverqueue`** ([docs](https://riverqueue.com/docs?lang=rust); Postgres-backed, transactional enqueue — a job is inserted in the same transaction as the data it concerns; built on `sqlx` + `tokio`, matching our stack; optional self-hosted River UI). The Rust client is young (first release 2026-10, v0.4) but shares River's mature database schema and job protocol with the Go original; pin the version. Fallback if it bites: `graphile_worker`; re-evaluation is a **feed-delta join** (changed CVEs/ranges → affected stored packages), never a fleet rescan (NFR5).
 - **Evidence ledger:** append-only, **hash-chained** rows in Postgres (NFR11); SBOM snapshots compacted to SeaweedFS; corrections are superseding entries (FR14).
 - **Agent transport:** **agent-initiated outbound, HTTPS/gRPC + mTLS** (gRPC streaming, HTTPS long-poll fallback where proxies block it) — no inbound to prod clusters (R4).
 - **Agent recovery:** **stateless re-derive** — relist from K8s API on reconnect, control plane reconciles; jitter + bounded rate on reconnect (R3).
 - **Auth:** OIDC code flow + declarative config + bootstrap admin (NFR6); **httpOnly secure cookie session** for the SPA (avoids tokens-in-JS / XSS).
-- **API spine:** OpenAPI-first; **`oapi-codegen`** (Go server stubs) + **`openapi-typescript`/orval** (typed TS client).
+- **API spine:** OpenAPI-first; server types generated from `api/openapi.yaml` (`openapi-generator` `rust-axum` target) + **`openapi-typescript`/orval** (typed TS client). Fallback if the Rust generator fights us: code-first `utoipa`, with CI failing on any diff between the emitted and committed spec — the committed spec stays the contract either way.
 
 **Important (shape architecture):**
 
@@ -184,7 +190,7 @@ PostgreSQL (with AGE extension; bundle the `apache/age` Postgres image or build 
 
 ### Authentication & Security
 
-OIDC (e.g. `coreos/go-oidc`) declaratively configured; bootstrap admin for first sign-in / IdP outage. Cookie-session SPA auth. RBAC middleware for the three roles. Connection credentials encrypted at rest. All release artifacts cosign-signed and SLSA-attested.
+OIDC (`openidconnect` crate) declaratively configured; bootstrap admin for first sign-in / IdP outage. Cookie-session SPA auth. RBAC middleware for the three roles. Connection credentials encrypted at rest. All release artifacts cosign-signed and SLSA-attested.
 
 ### API & Communication Patterns
 
@@ -196,7 +202,18 @@ SvelteKit static SPA · shadcn-svelte · Tailwind v4 · Svelte Flow (graph) · T
 
 ### Infrastructure & Deployment
 
-Single Helm umbrella chart; bundled Postgres-AGE + SeaweedFS by default, external opt-in. Air-gap instance mode. SLSA-attested, cosign-signed releases. Single-instance control plane (NFR10); read-only Go agents via controller-runtime.
+Single Helm umbrella chart; bundled Postgres-AGE + SeaweedFS by default, external opt-in. Air-gap instance mode. SLSA-attested, cosign-signed releases. Single-instance control plane (NFR10); read-only Rust agents via kube-rs.
+
+### Substrate Integration (Rust ↔ Go OSS tools)
+
+Syft, Grype, Grant and cosign are Go with no Rust bindings, so the control plane runs them as **pinned CLI subprocesses** bundled in its image, through one `tools` module (timeouts, JSON decoding, stderr capture, version capture). Tool versions are recorded on every finding and evidence entry, which strengthens FR8 provenance.
+
+- **Syft:** `syft <image-ref> -o syft-json` (CycloneDX/SPDX derived for packs). Registry credentials go in via per-invocation env, never argv.
+- **Grype:** `grype sbom:<file> -o json` with `GRYPE_DB_AUTO_UPDATE=false`; `feeds` owns the DB directory, and offline bundles apply via `grype db import` (R8: validate first, fail closed).
+- **Grant:** `grant check` against stored SBOMs, JSON output; the wider Grant surface (images, filesystems) stays reachable (FR26).
+- **cosign:** `cosign sign-blob --bundle` (keyless when connected, operator key when air-gapped). Verification may use the `sigstore` crate (verification-focused, pre-1.0) or the cosign CLI.
+
+**Upside:** results are byte-for-byte what users get running the same tools themselves (the "embrace the OSS stack" position), a tool crash can't take down the control plane, and tool upgrades don't need a recompile. **Cost:** per-SBOM process spawn plus Grype DB open — see R11.
 
 ### Decision Impact Analysis
 
@@ -210,7 +227,7 @@ Single Helm umbrella chart; bundled Postgres-AGE + SeaweedFS by default, externa
 
 ### Critical Conflict Points Identified
 
-Nine areas where agents could diverge: DB naming, API naming, JSON casing, error/answer envelopes, Go layout, Svelte file naming, IDs/timestamps, the locked domain vocabulary, and honest-degradation metadata.
+Nine areas where agents could diverge: DB naming, API naming, JSON casing, error/answer envelopes, Rust layout, Svelte file naming, IDs/timestamps, the locked domain vocabulary, and honest-degradation metadata.
 
 ### Naming Patterns
 
@@ -224,7 +241,7 @@ Nine areas where agents could diverge: DB naming, API naming, JSON casing, error
 - REST, versioned: `/api/v1/<plural-noun>`; path params `{id}`; query params `snake_case`. Resource nesting max one level.
 - Headers: `X-Armoury-*` for custom.
 
-**Go code:** standard Go (`MixedCaps`, no underscores); **package-by-capability** under `internal/` — each capability folder holds its HTTP entrypoint, domain logic, storage access, and tests _together_ (LoB), never split into `models/`/`services/`/`repositories/`. **Interfaces only at the third occurrence or when a real second implementation exists** — defined at the consumer, never speculative, never single-impl. No `Manager`/`Factory`/`Provider`/`Handler`/`Adapter` layers. Errors wrapped with `%w`; sentinel `ErrX` only where matched.
+**Rust code:** standard Rust naming (`snake_case` items, `PascalCase` types); `rustfmt` + `clippy -D warnings`. **Module-by-capability** under `src/` — each capability module holds its HTTP handlers, domain logic, SQL, and tests _together_ (LoB), never split into `models/`/`services/`/`repositories/`. One crate per binary plus the shared `agent-proto`; **no crate-per-capability split**. **Traits only at the third occurrence or when a real second implementation exists** — never speculative, never single-impl, no `dyn` for a single implementor. No `Manager`/`Factory`/`Provider`/`Handler`/`Adapter` layers. Errors: one `thiserror` enum per capability, propagated with `?`; `anyhow` only in `main`. No `unwrap`/`expect` outside tests and startup wiring; no `unsafe`.
 
 **Svelte/TS:** component files `kebab-case.svelte`, components used `PascalCase`; routes lowercase (SvelteKit `+page.svelte`); stores/composables `use-x.ts` / `camelCase`; types `PascalCase` (generated client is source of truth — never hand-edit).
 
@@ -246,18 +263,18 @@ HTTP status carries semantics (400/401/403/404/409/422/500); `code` is the stabl
 
 **IDs & time:** external IDs **UUIDv7** (time-sortable — suits the append-only ledger and agent-side generation); timestamps **RFC 3339 UTC** strings, always. Durations in seconds (integer).
 
-**Domain vocabulary is locked, not free text.** The glossary (`Artifact`, `Fleet`, `Finding`, `Posture`, `Evidence`, `Evidence pack`, `Control plane`, `Cluster agent`) and the triage status set (`not_affected` / `mitigated` / `accepted` / `fix_planned`, plus derived `untriaged`) are **typed enums** in Go, the OpenAPI schema, and TS — never stringly-typed, never synonymized.
+**Domain vocabulary is locked, not free text.** The glossary (`Artifact`, `Fleet`, `Finding`, `Posture`, `Evidence`, `Evidence pack`, `Control plane`, `Cluster agent`) and the triage status set (`not_affected` / `mitigated` / `accepted` / `fix_planned`, plus derived `untriaged`) are **typed enums** in Rust (`serde` `snake_case`), the OpenAPI schema, and TS — never stringly-typed, never synonymized.
 
 ### Structure Patterns (Locality of Behaviour)
 
 **Primary rule:** everything that changes together lives together. Organize by **capability/domain, not technical layer.**
 
-**Go (control-plane & agent):**
+**Rust (control-plane & agent):**
 
 ```
 control-plane/
-  cmd/armoury/            # entrypoint (main) — wiring only
-  internal/
+  src/main.rs             # entrypoint — wiring only
+  src/
     inventory/            # registry connect, SBOM gen, reconciliation + its storage + tests
     scan/                 # grype orchestration + pipeline + tests
     reeval/               # feed-delta engine + tests
@@ -269,21 +286,21 @@ control-plane/
 ```
 
 - **Max 3 layers:** Entrypoint (HTTP handler / `cmd`) → Coordinator (capability orchestrator) → Implementation. A 4th layer is the signal to stop.
-- **Explicit dependencies** — DB handle, object-store client, config passed in via constructors; **no globals, no singletons, no magic**. `cmd/armoury` is the only place wiring happens.
+- **Explicit dependencies** — DB handle, object-store client, config passed in via constructors; **no globals, no singletons, no magic** (no `static`/`OnceLock`/`lazy_static` state). `main.rs` is the only place wiring happens.
 - **No `utils/`/`helpers/`/`common/`.** A shared thing earns a _named_ home by capability (rule of three before extraction).
 - Files **100–400 lines**, split at 500+; each file opens with a one-line docstring stating its purpose.
 
 **Svelte SPA:** locality via SvelteKit routes — surface-specific components, loaders, and stores live _with their route_ (`routes/posture/`, `routes/blast-radius/`); only genuinely shared primitives sit in `lib/components/ui` (shadcn-svelte). No global `components/` dumping ground; co-locate `*.test.ts`.
 
-**Tests:** co-located everywhere (Go `_test.go`, Svelte `*.test.ts`); Playwright e2e in `web/e2e/`. Run frequently; never deleted to pass.
+**Tests:** co-located everywhere (Rust in-file `#[cfg(test)] mod tests`, cross-module in `tests/`; Svelte `*.test.ts`); Playwright e2e in `web/e2e/`. Run frequently; never deleted to pass.
 
 ### Process Patterns
 
 - **Config:** env / Helm values only (NFR6); twelve-factor; secrets via k8s Secret refs.
 - **Composition over inheritance** — register implementations in collections (e.g. connector / pack-definition registries), don't extend base types.
 - **SPA state/errors:** TanStack Query owns server-state; skeletons mirror layout; render the typed error envelope's `message`; never a bare spinner.
-- **Logging:** structured `slog` JSON, levels `debug/info/warn/error`; never log credentials or full SBOM payloads.
-- **Migrations:** versioned forward-only SQL (`goose`/`migrate`); AGE graph schema versioned alongside.
+- **Logging:** structured `tracing` JSON (`tracing-subscriber`), levels `debug/info/warn/error`; never log credentials or full SBOM payloads.
+- **Migrations:** versioned forward-only SQL (`sqlx migrate`); AGE graph schema versioned alongside.
 
 ### Enforcement — All agents MUST
 
@@ -304,24 +321,26 @@ Wrapping every response in `{data}`; offset pagination on fleet tables; free-str
 
 ```
 armoury/
-├── go.work                       # spans control-plane, agent, shared proto module
-├── Taskfile.yaml                 # build/test/lint/run orchestration (Go + web + charts)
+├── Cargo.toml                    # workspace: control-plane, agent, agent-proto
+├── Taskfile.yaml                 # build/test/lint/run orchestration (Rust + web + charts)
 ├── CLAUDE.md                     # LoB rules (generated from Daniel's template)
 ├── README.md
 ├── .github/workflows/
-│   ├── ci.yml                    # test + lint (Go, web)
+│   ├── ci.yml                    # test + lint (Rust fmt/clippy/nextest, web)
 │   └── release.yml               # build, SLSA provenance, cosign-sign images/charts/bundles (NFR7)
 │
 ├── api/
 │   └── openapi.yaml              # THE REST contract — source of truth (UI + future MCP)
 ├── proto/
 │   └── agent/v1/agent.proto      # agent↔control-plane gRPC contract (FR3/FR4)
+├── agent-proto/                  # tonic/prost codegen from proto/ (build.rs), shared by CP + agent
 │
 ├── control-plane/
-│   ├── go.mod
-│   ├── cmd/armoury/main.go       # wiring ONLY — the one place deps are constructed
+│   ├── Cargo.toml
+│   ├── Dockerfile                # bundles pinned syft/grype/grant/cosign binaries
+│   ├── src/main.rs               # wiring ONLY — the one place deps are constructed
 │   ├── migrations/               # versioned forward-only SQL + AGE graph schema
-│   └── internal/                 # package-by-capability; each owns handler+logic+queries+tests
+│   └── src/                      # module-by-capability; each owns handler+logic+queries+tests
 │   │   ├── httpapi/              # generated server stubs + router mount (entrypoint glue only)
 │   │   ├── inventory/            # FR1–FR5, FR29  registry/feed connect, Syft SBOM, reconcile, coverage
 │   │   ├── feeds/                # FR7, FR10      feed ingestion + signed offline bundles (R8)
@@ -340,15 +359,16 @@ armoury/
 │   │   ├── metrics/              # FR20           Prometheus exposition
 │   │   ├── auth/                 # NFR6           OIDC, bootstrap admin, sessions, RBAC
 │   │   ├── agentgw/              # FR3, FR4       agent gRPC gateway (mTLS, reconcile re-derive)
-│   │   ├── postgres/             # pgx pool + migration runner + AGE bootstrap (constructed in cmd)
-│   │   └── blob/                 # SeaweedFS/S3 client (constructed in cmd)
+│   │   ├── tools/                # pinned Syft/Grype/Grant/cosign CLI runner (4 callers → earned)
+│   │   ├── postgres/             # sqlx pool + migration runner + AGE bootstrap (constructed in main)
+│   │   └── blob/                 # S3 client — SeaweedFS default, any S3 (constructed in main)
 │
 ├── agent/
-│   ├── go.mod
-│   ├── cmd/agent/main.go
-│   └── internal/
-│       ├── watch/                # FR3   controller-runtime informers (watch/list only, NFR9)
-│       └── report/               # FR4   outbound mTLS gRPC client + stateless re-derive (R3)
+│   ├── Cargo.toml
+│   ├── src/main.rs
+│   └── src/
+│       ├── watch/                # FR3   kube-runtime watchers/reflectors (watch/list only, NFR9)
+│       └── report/               # FR4   outbound mTLS tonic gRPC client + stateless re-derive (R3)
 │
 ├── web/
 │   ├── package.json
@@ -373,10 +393,10 @@ armoury/
 
 ### Architectural Boundaries
 
-- **API boundary:** `api/openapi.yaml` is the only contract between SPA/MCP and the control plane. Handlers live _in their capability package_; `internal/httpapi` holds only generated stubs + router assembly. Generated code is never hand-edited.
+- **API boundary:** `api/openapi.yaml` is the only contract between SPA/MCP and the control plane. Handlers live _in their capability module_; `httpapi` module holds only generated stubs + router assembly. Generated code is never hand-edited.
 - **Agent boundary:** `proto/agent/v1` is the only contract between agent and control plane. Agent reaches the control plane _outbound_ (mTLS); never the reverse. Agent depends on nothing in `control-plane/internal`.
-- **Capability boundary:** packages communicate through exported Go interfaces _defined at the consumer_ (rule-of-three), wired in `cmd/armoury`. No cross-capability reach into another's storage — each owns its own queries.
-- **Data boundary:** one Postgres (schemas separate inventory / evidence / graph); evidence schema is append-only at the DB layer (no UPDATE/DELETE grants on ledger tables, NFR11). SBOM blobs only via `internal/blob`.
+- **Capability boundary:** modules communicate through plain `pub` functions and types; traits only at rule-of-three; wired in `main.rs`. No cross-capability reach into another's storage — each owns its own queries.
+- **Data boundary:** one Postgres (schemas separate inventory / evidence / graph); evidence schema is append-only at the DB layer (no UPDATE/DELETE grants on ledger tables, NFR11). SBOM blobs only via the `blob` module.
 - **Air-gap boundary:** all outbound network access funnels through `feeds`, `enrichment`, and `signing` — the three packages an air-gap audit must cover; nothing else makes external calls.
 
 ### Requirements → Structure Mapping
@@ -414,7 +434,7 @@ inventory (SBOM via blob)
 
 ### Coherence Validation ✅
 
-**Decision compatibility:** Internally consistent — Go control plane orchestrating Go OSS tools (Syft/Grype/Grant/cosign) in-process; one Postgres (AGE for graph, relational for state, hash-chained ledger for evidence); SeaweedFS for blobs; River for jobs; Svelte SPA over an OpenAPI spine. No version conflicts (AGE supports PG 11–18; all else current). Single-datastore choice directly serves NFR1/NFR4.
+**Decision compatibility:** Internally consistent — Rust control plane orchestrating the Go OSS tools (Syft/Grype/Grant/cosign) as pinned CLI subprocesses; one Postgres (AGE for graph, relational for state, hash-chained ledger for evidence); SeaweedFS (default) or any S3 for blobs; River (`riverqueue`) for jobs; Svelte SPA over an OpenAPI spine. No version conflicts (AGE supports PG 11–18; all else current). Single-datastore choice directly serves NFR1/NFR4.
 
 **Pattern consistency:** LoB by-capability layout aligns with the FR-group decomposition; OpenAPI-as-contract and the provenance-metadata mandate are enforceable and consistent with NFR8. Locked enums match the UX spec's locked glossary.
 
@@ -434,7 +454,7 @@ inventory (SBOM via blob)
 
 1. **FR30 data-quality scoring model is undefined.** The PRD/UX deliberately left the scoring algorithm (SBOM depth, scan coverage, feed freshness, enrichment coverage, CVE record quality → score+grade) as an architecture/UX decision. Placed in `posture` but the inputs→score function and grade banding need definition before the posture/pack DQ surfaces.
 2. **Agent enrollment & identity bootstrap.** Transport (mTLS, outbound) is decided, but how the one-line `helm install` agent obtains its mTLS identity + control-plane address/enrollment token isn't specified — and it's on the UJ-1 30-minute critical path.
-3. **Performance validation plan** for R1/R2 (NFR2/NFR5) — an explicit load test at the scale anchor.
+3. **Performance validation plan** for R1/R2/R11 (NFR2/NFR5) — including measured per-SBOM Grype subprocess cost — an explicit load test at the scale anchor.
 
 **Minor gaps (specify during the relevant slice):**
 

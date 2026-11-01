@@ -119,7 +119,7 @@ Two data sources, both operable by SecOps alone — zero dev-team cooperation.
 
 ## Scope & Roadmap
 
-**Timing anchor:** EU CRA reporting obligations begin **2026-09-11** — regulation is the forcing function that turns "nice to have" into "need by Q3." v1 must be installable and producing evidence before that date.
+**No deadlines.** v1 ships when it meets the quality bars below. EU CRA reporting obligations (from 2026-09-11) remain market context — they explain why buyers care — not a delivery date.
 
 ### Explicitly out of scope
 

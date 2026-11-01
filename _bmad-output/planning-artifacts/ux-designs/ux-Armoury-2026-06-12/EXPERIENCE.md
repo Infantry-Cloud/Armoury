@@ -17,7 +17,7 @@ sources:
 
 ## Foundation
 
-Web product, desktop-first with tolerant degradation on tablet; no dedicated mobile layouts in v1. shadcn/ui + Tailwind (React) — both spines inherit; `DESIGN.md` is the visual identity reference and owns every token named here in `{path.to.token}` form. Self-hosted control plane (single instance, NFR10); read-only cluster agents report in; air-gapped deployments are first-class (NFR4, FR10). Roles: admin (configuration, connections), analyst (triage, pack generation), read-only auditor. Everything is operable by one SecOps engineer alone — zero dev-team cooperation is a product gate.
+Web product, desktop-first with tolerant degradation on tablet; no dedicated mobile layouts in v1. shadcn-svelte + Tailwind (SvelteKit) — both spines inherit; `DESIGN.md` is the visual identity reference and owns every token named here in `{path.to.token}` form. Self-hosted control plane (single instance, NFR10); read-only cluster agents report in; air-gapped deployments are first-class (NFR4, FR10). Roles: admin (configuration, connections), analyst (triage, pack generation), read-only auditor. Everything is operable by one SecOps engineer alone — zero dev-team cooperation is a product gate.
 
 ## Information Architecture
 
