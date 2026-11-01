@@ -1,6 +1,6 @@
 ---
 name: bmad-linear
-description: Set up a new BMAD project in Linear, agree and publish its planning steps, and reconcile its epics, stories, bugs and implementation tasks. Use when starting a named BMAD project, connecting its whole workflow to Linear, or retrying incomplete Linear publishing.
+description: Set up a new BMAD project in Linear, agree and publish its planning steps, and reconcile its epics (with milestones), stories, bugs, implementation tasks and activity notes. Use when starting a named BMAD project, connecting its whole workflow to Linear, or retrying incomplete Linear publishing.
 ---
 
 # BMAD Linear
@@ -12,7 +12,8 @@ If it is missing, stop and ask the user to sync the shared customisations.
 Choose the requested operation:
 
 - New project, project kickoff, or agreeing a delivery plan: **Kickoff**.
-- Publish existing work, backfill, reconcile, or retry: **Reconcile**.
+- Publish existing work, backfill, reconcile, or retry (including missing epic
+  milestones and pending activity notes): **Reconcile**.
 - Execute the next or a named approved planning step: **Run an agreed step**.
 - Otherwise explain the integration and offer Kickoff; do not create speculative work.
 

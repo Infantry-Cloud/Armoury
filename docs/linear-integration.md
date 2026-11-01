@@ -16,11 +16,11 @@ including the Guardrail Steward agent and the contract edit guard).
 - Dev/TEA contract guidance and the contract-validator integration instructions in AR.
 - `_bmad/custom/jj-vcs.md` and its wiring (Build, Build Auto, ATDD, Code Review, TEA/QA,
   Correct Course, Sprint Planning, Walkthrough, dev agent, project context): agents use jj,
-  never git, and may only run `jj new`/`jj describe`. Armoury is not yet a jj workspace, so
-  agents stop and ask before version-control work until you run `jj git init --colocate` yourself.
+  never git, and may only run `jj new`/`jj describe`. Armoury is a colocated jj workspace
+  (jj over a Git backend), so agents follow `jj-vcs.md` directly.
 - Contract approval as its own sealed jj change (`story-contract.md`, "Approval change (jj)"):
-  approved/delivered validation compares the contract with that recorded version. Until Armoury
-  is a jj workspace the validator falls back to the digest field; CI should pass `--require-jj`.
+  approved/delivered validation compares the contract with that recorded version, with the
+  digest field as a fallback where no jj history is available; CI should pass `--require-jj`.
 
 No installed BMAD skill bodies, personal configuration or readiness extension were
 replaced. No files were deleted, existing stories rewritten, approvals fabricated,
