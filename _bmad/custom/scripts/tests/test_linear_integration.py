@@ -408,9 +408,7 @@ class LinearIntegrationTests(unittest.TestCase):
             with self.subTest(milestone_rule=phrase):
                 self.assertIn(phrase, milestones)
         self.assertIn("`BMAD-ID: <binding_id>:<epic key>:milestone`", text)
-        notes = text.split("## Activity notes", 1)[1].split(
-            "## Epic completion", 1
-        )[0]
+        notes = text.split("## Activity notes", 1)[1].split("## Epic completion", 1)[0]
         for phrase in (
             "Comment on the epic issue, then a project status update",
             "`BMAD-NOTE: <binding_id>:<key>:<event>:<cycle>`",
@@ -426,6 +424,47 @@ class LinearIntegrationTests(unittest.TestCase):
         reconcile = text.split("## Reconcile, failures and reporting", 1)[1]
         self.assertIn("upserts missing epic milestones", reconcile)
         self.assertIn("retries `pending`/`uncertain` notes", reconcile)
+
+    def test_reconcile_realigns_refactored_breakdowns(self) -> None:
+        text = " ".join((ROOT / "_bmad/custom/linear-workflow.md").read_text().split())
+        self.assertIn("A key is opaque once assigned", text)
+        self.assertIn("BMAD-SOURCE: <project-relative path>#<source id> <digest>", text)
+        self.assertIn("run the reconcile helper's local drift gate", text)
+        reconcile = text.split("## Reconcile, failures and reporting", 1)[1]
+        for phrase in (
+            "_bmad/custom/scripts/linear_reconcile.py plan",
+            "renumbered or reordered breakdown, a story moved to another epic",
+            "It never imports Linear text/status as approved local intent",
+            "Anything left over is never guessed",
+            "`restore-*`: write the BMAD value back",
+            "`conflict-*`: ask the user",
+            "Resolve identity and conflicts with the user before any write",
+            "Removed: set `lifecycle: cancelled` only after explicit cancellation approval",
+            "Never create a duplicate to get past one",
+            "Never overwrite those fields",
+            "baseline --write",
+            "exit 0 means aligned",
+            "Plain renumbering and block refreshes are silent",
+        ):
+            with self.subTest(reconcile_rule=phrase):
+                self.assertIn(phrase, reconcile)
+        self.assertTrue((ROOT / "_bmad/custom/scripts/linear_reconcile.py").is_file())
+        for name in (
+            "bmad-create-epics-and-stories.toml",
+            "bmad-correct-course.toml",
+            "bmad-sprint-planning.toml",
+        ):
+            with self.subTest(hook=name):
+                completion = tomllib.loads((ROOT / "_bmad/custom" / name).read_text())[
+                    "workflow"
+                ]["on_complete"]
+                self.assertIn("Linear Reconcile procedure", completion)
+        self.assertIn(
+            "refactored, renumbered, moved, split, merged or removed",
+            (ROOT / ".agents/skills/bmad-linear/SKILL.md")
+            .read_text()
+            .replace("\n  ", " "),
+        )
 
     def test_completion_hooks_post_activity_notes(self) -> None:
         trees = [

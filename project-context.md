@@ -51,6 +51,7 @@ delivery from Build alone. Run the required validator phases and real tests; rep
 For a new named project, agree the plan through `bmad-linear` or LP before publishing work.
 Publishing, board status and task checkboxes never authorise scope, implementation or acceptance.
 Use stable identities; do not invent tickets or close the Linear Project automatically.
+After the breakdown changes, run Linear Reconcile so Linear follows BMAD, never the reverse.
 
 ## Version control (jj)
 

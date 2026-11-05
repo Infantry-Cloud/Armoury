@@ -45,19 +45,32 @@ contract-lifecycle compatibility.
   `name`, confirmed `team_id`/`team_key`, `project` (confirmed `id` and `url`, or
   null before creation), the actual status-ID map, `publication_approved`, and
   `items`. Each item has a stable `key`, `kind`, `title`, `skill`/action if applicable,
-  `source` (project-relative artifact path and source ID), `parent_key` or null,
-  `after` keys, agreed `done_when`, publication state (`pending`, `published`, or
-  `uncertain`), confirmed remote `id`/`identifier`/`url`, and evidence when known.
-  An epic item also has `milestone`: its publication state and confirmed `id`/`name`.
-  Any item can have `notes`: one entry per activity note, with `marker`, `kind`
-  (`comment` or `project-update`), publication state and confirmed remote `id`.
-  These fields are additive; an older manifest gets them through Reconcile.
+  `source` (current project-relative artifact `path` and source `id`), `parent_key`
+  or null, `after` keys, agreed `done_when`, publication state (`pending`,
+  `published`, or `uncertain`), confirmed remote `id`/`identifier`/`url`, and evidence
+  when known. An epic item also has `milestone`: its publication state and confirmed
+  `id`/`name`. Any item can have `notes`: one entry per activity note, with `marker`,
+  `kind` (`comment` or `project-update`), publication state and confirmed remote `id`.
+  Reconcile adds `synced` (the baseline at the last proven sync), `source_history`
+  (earlier source IDs), and `lifecycle` (`active`, or `cancelled`/`superseded` with
+  `superseded_by`, only after the user approves). Only the reconcile helper's
+  `baseline` command writes `synced`. These fields are additive; an older manifest
+  gets them through Reconcile. Existing manifests may use other shapes: `source.id`
+  as `epic-1`/`story-1.1`, titles with their `Epic 1:` prefix, remote IDs under
+  `remote`, story keys such as `story:1:1.1`, or epic milestones in a top-level
+  `milestones` map (with `milestone_key` and their own recorded marker). The helper
+  reads all of them and writes back in the shape the manifest already uses. Never
+  migrate a manifest's shape as a side effect of reconciling.
   Save atomically (temporary sibling file + replace), after each confirmed write.
 - Use keys such as `planning:prd`, `planning:architecture`, `epic:<source-id>`,
   `story:<epic-id>:<story-id>`, and `task:<story-key>:<stable-task-id>`. Multiple
   research/architecture/spec steps need distinct user-agreed IDs. Assign a task ID
   once when its approved plan first appears. Never derive identity from mutable
   titles, array positions, run dates, or absolute workstation paths; never reuse an ID.
+  A key is opaque once assigned: when an epic or story is renumbered, moved to
+  another epic, or retitled it keeps its key, and only `source` changes. For example,
+  `story:1:2` stays `story:1:2` after it becomes Story 2.4. A new key that would
+  collide gets a suffix (`story:1:2~2`). Never re-key an item to tidy its name.
 - A project description carries `BMAD-PROJECT-ID: <binding_id>`; an issue description
   carries `BMAD-ID: <binding_id>:<key>`; an epic milestone description carries
   `BMAD-ID: <binding_id>:<epic key>:milestone`. Record the same marker and IDs locally.
@@ -66,6 +79,20 @@ contract-lifecycle compatibility.
   explicitly adopted existing project, confirm its identity and add the marker.
   A title-only match, conflicting mapping, or multiple marker matches requires
   user resolution, not a new duplicate or a guessed update.
+- BMAD owns an issue's description only inside its **managed block** at the end.
+  Text above the block belongs to the team. The block is:
+
+  ```text
+  ---
+  BMAD-managed - change this in BMAD, not in Linear.
+  <publishable summary, acceptance references, source link, dependencies>
+  BMAD-SOURCE: <project-relative path>#<source id> <digest>
+  BMAD-ID: <binding_id>:<key>
+  ```
+
+  Copy the `BMAD-SOURCE` line exactly from the reconcile helper's `source_line`.
+  Planning and task issues omit that line. When you update a description, replace
+  only the block and keep the text above it.
 - Project/team and publication approval are obtained once at Kickoff. This allows
   publishing subsequently approved planning steps, stories and execution tasks
   without asking again per issue. It does not approve new scope, assign people,
@@ -121,6 +148,10 @@ are known**, not an action before that workflow has loaded its project/story.
 
 Read the active manifest (ask if absent/ambiguous). For a new project with no binding,
 offer/run Kickoff before substantial work; never silently attach it to another project.
+Before the first Linear write of a run, run the reconcile helper's local drift gate
+(`plan --check` without `--remote`; see Reconcile). Exit 3 means the breakdown
+changed since the last sync. Run Reconcile first, or at least resolve its identity
+steps, so writes never land on a stale key, parent or milestone.
 For authorised work, resolve the matching planning/story/task item and upsert missing
 approved work. Move the targeted issue to In Progress only when actual work starts.
 Help, status-only, validation-only, greeting or an unrelated project do not start work.
@@ -196,9 +227,10 @@ acceptance instead of fabricating a code-review obligation. Epic completion foll
 the two stages below; Build never closes an epic. No workflow automatically closes
 the Linear Project. Remote board edits cannot modify contracts or local Build/sprint status.
 
-Correct Course revises local intent and obtains reapproval first. Reflect approved
-changes on existing issues; reopen invalidated completion, retain old evidence/history,
-and flag removed work for explicit cancellation approval. Never delete tickets.
+Correct Course revises local intent and obtains reapproval first. Then run Reconcile:
+it carries renumbered, moved, split, merged and retitled work onto the existing
+issues. Reopen invalidated completion, retain old evidence/history, and flag removed
+work for explicit cancellation approval. Never delete tickets.
 Post a comment on each reopened or changed issue that names the change record.
 Retrospective action items become tickets only when agreed, not speculative work.
 
@@ -304,13 +336,144 @@ milestone stays as it is; Linear shows its progress from the child issues.
 
 ## Reconcile, failures and reporting
 
+Reconcile keeps Linear aligned with BMAD after anything changes: new work, a
+renumbered or reordered breakdown, a story moved to another epic, a split, merge,
+retitle or removal, and edits people make in Linear. Local artifacts are
+authoritative, so Reconcile changes Linear and the manifest's tracking fields to match
+them. It never imports Linear text/status as approved local intent.
+
+Run it after create-epics-and-stories, Correct Course, sprint planning and any hand
+edit of the breakdown. Also run it when the Activation drift gate fails, when a
+completion hook was interrupted, and when the user asks.
+
 Reconcile reads the selected manifest and authoritative local artifacts, adopts
 verified native IDs, and queries Linear before each upsert. It backfills agreed
 planning steps and ALL approved development entries/tasks, including artifacts
-created before kickoff. It never imports Linear text/status as approved local intent.
-It also upserts missing epic milestones, sets each issue's milestone, and retries
-`pending`/`uncertain` notes. It posts notes for status changes it makes itself. It
-does not write notes for past events unless the user asks for a backfill.
+created before kickoff. It also upserts missing epic milestones, sets each issue's
+milestone, and retries `pending`/`uncertain` notes. It posts notes for status changes
+it makes itself. It does not write notes for past events unless the user asks for a
+backfill.
+
+### The reconcile helper
+
+```bash
+uv run {project-root}/_bmad/custom/scripts/linear_reconcile.py plan \
+  --root {project-root} --epics <resolved epics file(s) or sharded epics dir> \
+  [--sprint-status <resolved sprint-status.yaml>] [--remote <snapshot.json>] [--check]
+```
+
+The helper is read-only. It prints a JSON plan with `steps` (`phase`, `key`,
+`action`, `needs_user`), `new` entries (proposed keys and lookalike `candidates`),
+`matched` entries (desired title and parent) and `warnings`. With `--check` it exits
+3 when anything needs reconciling. Without `--remote` it compares the breakdown with
+the manifest only, which is the cheap Activation gate. It reads the released layout
+(epics.md, sprint-status.yaml). In the ticket-tree layout native IDs are stable:
+apply the same field, block and three-way rules by hand.
+
+It matches entries to keys in this order, so identity survives refactoring:
+
+1. Same title and body, wherever the entry now lives (renumbered or moved).
+2. Same source ID, and the title, the body or a recorded user confirmation agrees.
+3. Same title only.
+4. Same body only (retitled).
+
+Anything left over is never guessed. The helper reports a lookalike as
+`confirm-identity`, and a manifest item with no local entry as `missing-locally`.
+
+### Remote snapshot
+
+Build it from MCP list/get calls before each full plan and again after applying.
+Include all pages, canceled and archived issues of the Project, and every issue found
+by a marker search. Fetch an issue when a list call truncates its description. Write
+it to a temporary file outside the repository; it may hold private text. Never commit it.
+
+```json
+{"project": {"id": "..."},
+ "issues": [{"id": "...", "identifier": "...", "url": "...", "title": "...",
+             "description": "...", "parent_id": null, "milestone_id": null,
+             "project_id": "...", "status": "backlog", "archived": false}],
+ "milestones": [{"id": "...", "name": "...", "description": "..."}]}
+```
+
+`status` is one of `backlog`, `todo`, `in-progress`, `in-review`, `done` or `canceled`,
+mapped through the manifest's status map. The configured review label counts as
+`in-review`.
+
+### What Reconcile owns
+
+Reconcile owns these managed fields: the title (`Epic N: <title>`,
+`Story N.M: <title>`, and the epic's milestone named the same), Project, parent,
+milestone, `bmad:*` labels, relations it created, the managed description block, and
+status under the evidence rules. Everything else belongs to the team. That includes
+assignee, priority, estimate, cycle, other labels, comments and description text above
+the block. Never overwrite those fields.
+
+For each managed field the helper compares three values: BMAD's desired value,
+Linear's current value, and the `synced` baseline.
+
+| Linear | BMAD | Result |
+| --- | --- | --- |
+| equals desired | any | in sync |
+| equals baseline | changed | `update-*`: write the BMAD value |
+| changed | equals baseline | `restore-*`: write the BMAD value back, then comment why |
+| changed | changed | `conflict-*`: ask the user |
+
+An item without a baseline gets `update-*` and `no-baseline`. List these items for the
+user once before the first write.
+
+### Procedure
+
+1. **Preflight.** Use one publishing session and the active manifest. Resolve paths
+   through the BMAD config, then run the local plan. A blocking warning (duplicate
+   story ID, story without an epic) stops Reconcile. Fix the breakdown through its
+   owning workflow first.
+2. **Snapshot.** Build the remote snapshot and run the full plan.
+3. **Resolve identity and conflicts with the user before any write.** Show every
+   `needs_user` step in one table, then record each decision atomically in the manifest:
+   - `confirm-identity`/`missing-locally`, renumbered or rewritten: set `source.id`
+     to the local ID and `source.confirmed: true`.
+   - Split: the user picks which part keeps the existing key; the other parts are new.
+   - Merge: the survivor keeps its key; the absorbed item gets `lifecycle: superseded`
+     and `superseded_by`.
+   - Removed: set `lifecycle: cancelled` only after explicit cancellation approval.
+   - Genuinely new: approve creation under the proposed key.
+   - `remote-missing`, `identity-conflict`, `duplicate-remote`, `remote-unknown`,
+     `duplicate-milestone`, `milestone-missing`: adopt, relink or recreate as the user
+     decides. Never create a duplicate to get past one.
+   - `conflict-*`: show both values. The user keeps BMAD's value, or changes BMAD
+     through its owning workflow (Correct Course for approved scope), then reruns.
+   - `status-ahead`, `remote-canceled`: discuss them. Correct them only with approval.
+   - `dangling-dependency`: fix `after` from the approved breakdown.
+
+   Rerun the plan until only steps the user explicitly parked still need the user.
+4. **Apply in plan phase order**: identity, milestones, epics, stories, other
+   (tasks, bugs, spikes, planning), relations, statuses, notes. Before each write,
+   fetch by saved ID and verify the marker. Persist returned IDs immediately.
+   - `adopt`/`adopt-milestone`: record the existing ID; never create.
+   - `create`/`create-milestone`: create it with its marker under the proposed key.
+   - `update-*`, `restore-*`, `retitle`, `refresh-block`, `restore-marker`,
+     `set-project`: write the desired value or block.
+   - `move`: set the new parent and the new epic milestone on the story and on every
+     task under it (the plan lists them).
+   - `update-milestone-name`: rename the same milestone for a renumbered epic. This
+     is not rename-reuse.
+   - `cancel`: set Canceled and keep the issue and its history.
+   - Relations: add missing blocked-by links. Remove only the links this workflow
+     created that the breakdown no longer has.
+   - `status-behind`: advance only through the owning workflow's evidence rules
+     (Code Review for Done, and so on), with its activity note.
+5. **Verify and baseline.** Re-snapshot and rerun the plan. Then run the same command
+   with `baseline --write`. Add `--accept <key>` only for a planning or task item whose
+   block this session has just rewritten. Baseline records `synced`, `source` and
+   `source_history` only for items the snapshot proves are in sync. Finish with
+   `plan --check`; exit 0 means aligned. Otherwise report what remains.
+
+Post a `changed` activity note when Reconcile moves an issue to another epic, cancels
+or supersedes it, restores a Linear edit, or applies a conflict decision. Name the
+reason and the change record if there is one. Plain renumbering and block refreshes
+are silent, so an inserted story does not flood the board with comments.
+
+### Failures
 
 On a timeout/ambiguous create response, mark the item `uncertain`, keep the SAME
 marker, and search/reconcile before retrying. Do not blindly retry creates. On auth,
@@ -319,7 +482,11 @@ record unsent work as pending/uncertain, report the actual failure and resume fr
 Do not claim success, drop pending items, duplicate successful writes, or roll back an
 approved local artifact because publishing failed. A local hard gate still halts as usual.
 
-Every integration action reports Project URL; created/updated/unchanged issue and
-milestone URLs; posted notes; pending/uncertain items, notes and blockers; and the
-exact next local step. If a workflow's
-completion hook did not run (halt/interruption), use Reconcile—no automatic background sync.
+### Reporting
+
+Every integration action reports the Project URL and the URLs of issues and
+milestones it created, updated, moved, restored, cancelled or left unchanged. It
+also reports posted notes, pending/uncertain items and notes, blockers, decisions the
+user parked, the final `plan --check` result, and the exact next local step. If a
+workflow's completion hook did not run (halt/interruption), use Reconcile. There is no
+automatic background sync.

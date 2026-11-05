@@ -12,8 +12,11 @@ If it is missing, stop and ask the user to sync the shared customisations.
 Choose the requested operation:
 
 - New project, project kickoff, or agreeing a delivery plan: **Kickoff**.
-- Publish existing work, backfill, reconcile, or retry (including missing epic
-  milestones and pending activity notes): **Reconcile**.
+- Publish existing work, backfill, reconcile, retry (including missing epic
+  milestones and pending activity notes), realign Linear after epics or stories were
+  refactored, renumbered, moved, split, merged or removed, or check for drift:
+  **Reconcile**. Use its reconcile helper; `plan --check` alone answers "is Linear
+  in sync?" without writing.
 - Execute the next or a named approved planning step: **Run an agreed step**.
 - Otherwise explain the integration and offer Kickoff; do not create speculative work.
 
