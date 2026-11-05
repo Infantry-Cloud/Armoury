@@ -98,8 +98,17 @@
           "review-rubric.md",
           "review-adversarial-general.md"
         ],
-        "amended": "2026-11-01 no-deadlines (user-directed)"
-      }
+        "amended": "2026-11-01 no-deadlines (user-directed)",
+        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled"
+      },
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:prd:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2d41ee6a-74d9-49f7-99d8-5d690ea266a3"
+        }
+      ]
     },
     {
       "key": "planning:ux",
@@ -126,8 +135,17 @@
         "artifact": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/",
         "status": "final",
         "validation": "validation-report.md",
-        "amended": "2026-11-01 Svelte framework reference"
-      }
+        "amended": "2026-11-01 Svelte framework reference",
+        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled"
+      },
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:ux:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "d26288cb-c431-4b94-9332-da6805fb8526"
+        }
+      ]
     },
     {
       "key": "planning:architecture",
@@ -155,8 +173,17 @@
         "artifact": "_bmad-output/planning-artifacts/architecture.md",
         "status": "complete",
         "date": "2026-06-14",
-        "revised": "2026-11-01 backend Go->Rust, River via riverqueue (user-directed)"
-      }
+        "revised": "2026-11-01 backend Go->Rust, River via riverqueue (user-directed)",
+        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled"
+      },
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:architecture:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "7d5adb26-c6b1-455b-b887-4ed80ae2ed51"
+        }
+      ]
     },
     {
       "key": "planning:epics",
@@ -185,8 +212,17 @@
         "date": "2026-11-05",
         "validation": "step-4 passed: FR 30/30, NFR 11/11, UX-DR 36/36, ARCH 30/30; no forward story dependencies",
         "published": "10 epics INF-13..INF-22, 68 stories INF-23..INF-90, 73 blocked-by links; markers verified",
-        "revision": "uncommitted in jj change vxztzqsp (undescribed, mixed with earlier work)"
-      }
+        "revision": "uncommitted in jj change vxztzqsp (undescribed, mixed with earlier work)",
+        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled"
+      },
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:epics:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "aead29c8-98a1-40aa-8f6f-9c1bccb299c1"
+        }
+      ]
     },
     {
       "key": "planning:sprint",
@@ -202,14 +238,30 @@
         "planning:epics"
       ],
       "done_when": "Readiness PASS (or CONCERNS explicitly accepted) and sprint-status.yaml generated",
-      "local_status": "todo",
+      "local_status": "done",
       "publication": "published",
       "remote": {
         "id": "771c0dc6-24ed-4465-9ebe-3004ad7c2979",
         "identifier": "INF-11",
         "url": "https://linear.app/infantry-cloud/issue/INF-11/implementation-readiness-sprint-planning"
       },
-      "evidence": null
+      "evidence": {
+        "artifact": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "gate": "PASS",
+        "gate_record": "_bmad-output/planning-artifacts/implementation-readiness.md",
+        "change_record": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
+        "validate": "sprint_plan.py validate: valid, no problems",
+        "date": "2026-11-06",
+        "counts": "11 epics, 77 stories"
+      },
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:sprint:done:gate-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "e650c513-ad14-48fd-b6c7-6e6b675459b6"
+        }
+      ]
     },
     {
       "key": "planning:ar",
@@ -255,7 +307,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-13/epic-1-install-sign-in-and-the-armoury-shell"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:epic:1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "cf24e8f1-1cda-4471-8532-0e8be1fe1dd8"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "epic:2",
@@ -279,7 +340,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-14/epic-2-fleet-inventory-and-uniform-scanning-shown-as-a-populating"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:epic:2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "77dbdc62-d836-4d36-a680-e2613d9057d3"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "epic:3",
@@ -405,7 +475,7 @@
     {
       "key": "epic:8",
       "kind": "epic",
-      "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
+      "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -474,7 +544,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-22/epic-10-verifiable-air-gapped-delivery-of-armoury-itself"
       },
       "evidence": null,
-      "milestone_key": "epic:10"
+      "milestone_key": "epic:10",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:epic:10:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b59429d5-cab6-4eed-af58-5f1f6c6fc4dc"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.1",
@@ -498,7 +577,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-23"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "23e6f6d7-e7d3-4121-a258-27340e1fe464"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.2",
@@ -523,7 +611,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-24"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "7bfdd330-d2e8-4bea-8a0d-9d96cf840fcd"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.3",
@@ -547,7 +644,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-25"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "c31c7aed-500e-4b03-8b12-dabea709871d"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.4",
@@ -571,7 +677,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-26"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b699d8c1-dc36-4e49-94b7-618d3962f3b2"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.5",
@@ -595,7 +710,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-27"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "f2d558a1-0e54-4f28-8a42-13a5acff62df"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.6",
@@ -619,7 +743,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-28"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.6:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "49bc4306-a7cd-4d85-a9a8-7b7242780faa"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.7",
@@ -643,7 +776,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-29"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "e9afc27a-2298-45bf-aca0-bfc1a1e8148f"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:1:1.8",
@@ -670,6 +812,33 @@
       "milestone_key": "epic:1"
     },
     {
+      "key": "story:1:1.9",
+      "kind": "story",
+      "title": "Story 1.9: Banned-pattern guards",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-1.9"
+      },
+      "parent_key": "epic:1",
+      "after": [
+        "story:1:1.8"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "8a40a170-25bd-4a90-aaa6-55742dc804d6",
+        "identifier": "INF-97",
+        "url": "https://linear.app/infantry-cloud/issue/INF-97/story-19-banned-pattern-guards"
+      },
+      "evidence": {
+        "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
+        "approved": "Daniel, 2026-11-05"
+      },
+      "milestone_key": "epic:1"
+    },
+    {
       "key": "story:2:2.1",
       "kind": "story",
       "title": "Story 2.1: Tamper-evident evidence ledger",
@@ -689,7 +858,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-31"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "38d7ddaa-b098-47bf-92ed-1ea57d678bcf"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.2",
@@ -713,7 +891,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-32"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "6eda4c4b-796d-4805-a8f4-1022e5eb9a06"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.3",
@@ -737,7 +924,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-33"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "d1c49575-9da0-4d96-bab5-376bbbe5248f"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.4",
@@ -761,7 +957,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-34"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "5845da86-a41c-462f-96cd-2a9222549717"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.5",
@@ -785,12 +990,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-35"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "95488935-2659-4f54-bd34-87300bbe6120"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.6",
       "kind": "story",
-      "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
+      "title": "Story 2.6: Package feed connections — npm and PyPI",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -809,12 +1023,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-36"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.6:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "aec1d72b-4908-4c7e-924a-0aae66c3a521"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.7",
       "kind": "story",
-      "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
+      "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -833,7 +1056,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-37"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "5705ec38-fec2-4eed-ba04-00f9e3cc28aa"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.8",
@@ -862,7 +1094,7 @@
     {
       "key": "story:2:2.9",
       "kind": "story",
-      "title": "Story 2.9: Posture summary \u2014 populating, coverage and freshness",
+      "title": "Story 2.9: Posture summary — populating, coverage and freshness",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -881,12 +1113,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-39"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.9:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "01aa833d-f9c9-4c06-b750-15fb7caf554d"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.10",
       "kind": "story",
-      "title": "Story 2.10: Posture findings \u2014 severity band and findings table",
+      "title": "Story 2.10: Posture findings — severity band and findings table",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -929,12 +1170,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-41"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.11:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "9acceeee-b98a-422c-a40c-6e22c1ff18ee"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.12",
       "kind": "story",
-      "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
+      "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -953,12 +1203,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-42"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.12:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "bd2b34e1-3b35-4f36-a313-be4f469a8b8a"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:2:2.13",
       "kind": "story",
-      "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
+      "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -977,7 +1236,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-43"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.13:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "5a019318-25bc-4ad3-a407-5b2160e41b6e"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:3:3.1",
@@ -999,7 +1267,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-44"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:3:3.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "364cdd46-9206-4ecf-a812-9b7dca646246"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:3:3.2",
@@ -1023,7 +1300,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-45"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:3:3.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "e7400995-b6a0-4693-92b0-1e2a061b1b11"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:3:3.3",
@@ -1047,7 +1333,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-46"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:3:3.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "c593424a-3ccc-41e4-819f-61fd453db618"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:3:3.4",
@@ -1071,7 +1366,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-47"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:3:3.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2d339074-23be-4236-8b01-a4d9cee903ee"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:3:3.5",
@@ -1141,7 +1445,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-50"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "09956a65-60eb-4c1e-a015-fe58e2433f35"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.2",
@@ -1165,7 +1478,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-51"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "4aa0d269-2c1f-4840-a90d-bd12cf1f65b2"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.3",
@@ -1189,7 +1511,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-52"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "1f2beaed-a8ab-4aa0-8d2b-b7d16acfae0b"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.4",
@@ -1213,7 +1544,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-53"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "efc63b15-a810-4129-8692-de153b66de15"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.5",
@@ -1237,7 +1577,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-54"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "81f5ef98-870c-4b5b-86fc-634866dfce9d"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.6",
@@ -1285,7 +1634,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-56"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "03a0465a-86c0-47df-aace-0603951a63cf"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:4:4.8",
@@ -1309,7 +1667,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-57"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.8:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "c5735927-861f-4443-8700-fa70f2356168"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:5:5.1",
@@ -1379,7 +1746,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-60"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "cc70a2ff-d55b-4507-ba64-e2917bd2ad56"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:5:5.4",
@@ -1451,7 +1827,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-63"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.6:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "19900330-212e-4240-9d47-65b7e99b5a7e"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:5:5.7",
@@ -1475,6 +1860,42 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-64"
       },
       "evidence": null,
+      "milestone_key": "epic:5",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "ede90712-ca62-4358-a56d-0964c485614e"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:5:5.8",
+      "kind": "story",
+      "title": "Story 5.8: Fleet-wide triage decisions",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-5.8"
+      },
+      "parent_key": "epic:5",
+      "after": [
+        "story:5:5.7"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "3eb837de-fb15-46ca-b575-53e3e2ed5d5d",
+        "identifier": "INF-98",
+        "url": "https://linear.app/infantry-cloud/issue/INF-98/story-58-fleet-wide-triage-decisions"
+      },
+      "evidence": {
+        "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
+        "approved": "Daniel, 2026-11-05"
+      },
       "milestone_key": "epic:5"
     },
     {
@@ -1497,7 +1918,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-65"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "7b027ee1-820f-4335-be86-6b319a4d1946"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:6:6.2",
@@ -1521,12 +1951,21 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-66"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "42daa9cd-038c-41d4-9ad3-3376528e553d"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:6:6.3",
       "kind": "story",
-      "title": "Story 6.3: Blast-radius surface \u2014 answer and table, from \u2318K",
+      "title": "Story 6.3: Blast-radius surface — answer and table, from ⌘K",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1545,7 +1984,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-67"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "fcc85d44-0433-409c-bf38-e706b36ffbb7"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:6:6.4",
@@ -1569,7 +2017,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-68"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "87d6ea9c-947c-4205-adba-f8ffcedc1cf9"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:6:6.5",
@@ -1593,7 +2050,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-69"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2456ba4c-db24-4bb5-89ea-9a943e0509f9"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:6:6.6",
@@ -1641,7 +2107,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-71"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "63160fda-4d33-4a8e-b27b-a02e08e7a49b"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:7:7.1",
@@ -1663,7 +2138,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-72"
       },
       "evidence": null,
-      "milestone_key": "epic:7"
+      "milestone_key": "epic:7",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:7:7.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "73f4e49e-61d5-48f7-8341-31059f9ea4d5"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:7:7.2",
@@ -1711,7 +2195,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-74"
       },
       "evidence": null,
-      "milestone_key": "epic:7"
+      "milestone_key": "epic:7",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:7:7.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "23265b55-efb6-433d-a061-6b125c9ca7da"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:7:7.4",
@@ -1805,7 +2298,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-78"
       },
       "evidence": null,
-      "milestone_key": "epic:8"
+      "milestone_key": "epic:8",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:8:8.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2cc12438-f2c2-428c-8fa5-4a870b137a31"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:8:8.4",
@@ -1851,7 +2353,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-80"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "01af08f8-9655-46e0-b12c-1587a663f1fb"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:9:9.2",
@@ -1899,7 +2410,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-82"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "06c93330-47e2-4131-aaeb-4eab508a2a9b"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:9:9.4",
@@ -1923,7 +2443,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-83"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "631a9b62-5265-4669-8f3e-731f884f7cbe"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:9:9.5",
@@ -1947,7 +2476,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-84"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "1c9fed31-0233-4808-b2da-36b3820e2575"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:9:9.6",
@@ -1971,7 +2509,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-85"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.6:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "00094d87-f585-40db-aa24-ca4aed1d388c"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:9:9.7",
@@ -1995,6 +2542,69 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-86"
       },
       "evidence": null,
+      "milestone_key": "epic:9",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:9:9.7:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "8e3f8432-920e-4c55-898d-4fdaa8dd1142"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:9:9.8",
+      "kind": "story",
+      "title": "Story 9.8: SBOM compaction and archive purge",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.8"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.7"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "9d085365-7940-496f-9b10-d0649b94c9ee",
+        "identifier": "INF-99",
+        "url": "https://linear.app/infantry-cloud/issue/INF-99/story-98-sbom-compaction-and-archive-purge"
+      },
+      "evidence": {
+        "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
+        "approved": "Daniel, 2026-11-05"
+      },
+      "milestone_key": "epic:9"
+    },
+    {
+      "key": "story:9:9.9",
+      "kind": "story",
+      "title": "Story 9.9: Anchor ledger checkpoints in a Rekor transparency log",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-9.9"
+      },
+      "parent_key": "epic:9",
+      "after": [
+        "story:9:9.6"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "26015e79-d978-4b74-badc-e57059cd04cb",
+        "identifier": "INF-100",
+        "url": "https://linear.app/infantry-cloud/issue/INF-100/story-99-anchor-ledger-checkpoints-in-a-rekor-transparency-log"
+      },
+      "evidence": {
+        "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md (Decision R10)",
+        "approved": "Daniel, 2026-11-05"
+      },
       "milestone_key": "epic:9"
     },
     {
@@ -2017,7 +2627,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-87"
       },
       "evidence": null,
-      "milestone_key": "epic:10"
+      "milestone_key": "epic:10",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "c3cfcfca-45ae-4652-9d8a-90867383e2dd"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:10:10.2",
@@ -2041,7 +2660,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-88"
       },
       "evidence": null,
-      "milestone_key": "epic:10"
+      "milestone_key": "epic:10",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "1dc75ed4-a81b-46b2-a5b0-15c6c84c0843"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:10:10.3",
@@ -2065,7 +2693,16 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-89"
       },
       "evidence": null,
-      "milestone_key": "epic:10"
+      "milestone_key": "epic:10",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2263a5b6-c2cf-4029-a86d-dfc6d2b08f94"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     },
     {
       "key": "story:10:10.4",
@@ -2089,7 +2726,220 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-90"
       },
       "evidence": null,
-      "milestone_key": "epic:10"
+      "milestone_key": "epic:10",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "77cf173c-2ba8-4072-bc43-d9dfa8f7f72f"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "epic:11",
+      "kind": "epic",
+      "title": "Epic 11: Scan in CI and see the result in Armoury",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "epic-11"
+      },
+      "parent_key": null,
+      "after": [
+        "epic:2",
+        "epic:4",
+        "epic:5",
+        "epic:6",
+        "epic:7",
+        "epic:10"
+      ],
+      "done_when": "All child stories accepted by Code Review; retrospective accepted by the user",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "identifier": "INF-91",
+        "url": "https://linear.app/infantry-cloud/issue/INF-91/epic-11-scan-in-ci-and-see-the-result-in-armoury"
+      },
+      "evidence": {
+        "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
+        "approved": "Daniel, 2026-11-05"
+      },
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:epic:11:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "4d4a1261-5584-4237-92fb-8a39a60b4118"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:11:11.1",
+      "kind": "story",
+      "title": "Story 11.1: Submit a pushed image from CI by digest",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-11.1"
+      },
+      "parent_key": "epic:11",
+      "after": [],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "33793d00-22d5-4f2a-a2b6-478d3084589c",
+        "identifier": "INF-92",
+        "url": "https://linear.app/infantry-cloud/issue/INF-92/story-111-submit-a-pushed-image-from-ci-by-digest"
+      },
+      "evidence": null,
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.1:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "9c946a98-80ea-4f21-895f-89b5aa3d2281"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:11:11.2",
+      "kind": "story",
+      "title": "Story 11.2: Submit an artifact that is not in a connected registry",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-11.2"
+      },
+      "parent_key": "epic:11",
+      "after": [
+        "story:11:11.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "d2d7aade-de7b-473a-8cdb-7dce2c03f2ac",
+        "identifier": "INF-93",
+        "url": "https://linear.app/infantry-cloud/issue/INF-93/story-112-submit-an-artifact-that-is-not-in-a-connected-registry"
+      },
+      "evidence": null,
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.2:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "3b8ff058-00c7-4e1f-9caf-4b5c08523bce"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:11:11.3",
+      "kind": "story",
+      "title": "Story 11.3: Artifact identity and duplicate linking",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-11.3"
+      },
+      "parent_key": "epic:11",
+      "after": [
+        "story:11:11.1"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "775a33e1-d518-4038-bdf0-404267cb8501",
+        "identifier": "INF-94",
+        "url": "https://linear.app/infantry-cloud/issue/INF-94/story-113-artifact-identity-and-duplicate-linking"
+      },
+      "evidence": null,
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.3:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "d843236e-34b1-4a8b-81b5-7a6569597285"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:11:11.4",
+      "kind": "story",
+      "title": "Story 11.4: Fleet CI policy, server verdict and the CI report",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-11.4"
+      },
+      "parent_key": "epic:11",
+      "after": [
+        "story:11:11.3"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "359948b1-310e-4823-b053-9f8605d77dde",
+        "identifier": "INF-95",
+        "url": "https://linear.app/infantry-cloud/issue/INF-95/story-114-fleet-ci-policy-server-verdict-and-the-ci-report"
+      },
+      "evidence": null,
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.4:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "59148bd1-40d0-4b8b-9754-0fe91f5b1993"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "story:11:11.5",
+      "kind": "story",
+      "title": "Story 11.5: GitHub Action for CI scans",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/planning-artifacts/epics.md",
+        "id": "story-11.5"
+      },
+      "parent_key": "epic:11",
+      "after": [
+        "story:11:11.4"
+      ],
+      "done_when": "Approved contract delivered; accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "cbaf0da7-f393-4dde-b9a1-751f4820335c",
+        "identifier": "INF-96",
+        "url": "https://linear.app/infantry-cloud/issue/INF-96/story-115-github-action-for-ci-scans"
+      },
+      "evidence": null,
+      "milestone_key": "epic:11",
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.5:changed:scp-2026-11-05",
+          "kind": "comment",
+          "publication": "published",
+          "id": "fc998c4f-e41f-4bb2-9969-76cd3070d038"
+        }
+      ],
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
     }
   ],
   "workspace": {
@@ -2144,6 +2994,10 @@
     "epic:10": {
       "id": "e4daec88-25cf-44c3-8369-8f690ada5948",
       "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:10"
+    },
+    "epic:11": {
+      "id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:11"
     }
   },
   "milestones_note": "One project milestone per epic (user request 2026-11-05), for ordering and progress only; no target dates. Each epic issue and its stories are assigned to it. Milestone progress is not delivery evidence."

@@ -48,3 +48,36 @@ checksum = "sha256:c42316b10df04611bc65029a18bcb2d92636edddb6871d511f7bb4233e999
 checksum_source = "mise-versions"
 url = "https://github.com/jj-vcs/jj/releases/download/v0.46.0/jj-v0.46.0-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/jj-vcs/jj/releases/assets/619879226"
+
+[[tools.skaffold]]
+version = "2.25.0"
+backend = "aqua:GoogleContainerTools/skaffold"
+specifiers = ["2.25.0"]
+
+[tools.skaffold."platforms.linux-arm64"]
+checksum = "sha256:416f5fed2009c2b4adc62ae887ee5fc19ff08cc8a0250b81d8682d55626a75fd"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-linux-arm64"
+
+[tools.skaffold."platforms.linux-arm64-musl"]
+checksum = "sha256:416f5fed2009c2b4adc62ae887ee5fc19ff08cc8a0250b81d8682d55626a75fd"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-linux-arm64"
+
+[tools.skaffold."platforms.linux-x64"]
+checksum = "sha256:42b9e2e3246c19b78fcc53dd60cc7ded1da8704293886b909a2a02b9bef34d20"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-linux-amd64"
+
+[tools.skaffold."platforms.linux-x64-musl"]
+checksum = "sha256:42b9e2e3246c19b78fcc53dd60cc7ded1da8704293886b909a2a02b9bef34d20"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-linux-amd64"
+
+[tools.skaffold."platforms.macos-arm64"]
+checksum = "sha256:9adda767c94806827bcb22f2f7a9077bbde6b481331e891f9a7191e2f225dd27"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-darwin-arm64"
+
+[tools.skaffold."platforms.macos-x64"]
+checksum = "sha256:91facde91ba713328adb408be1949f538a5a5dcaee6a3b93725a2c5703bbbb5d"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-darwin-amd64"
+
+[tools.skaffold."platforms.windows-x64"]
+checksum = "sha256:4ca20b716f4756b0f5e2a06b13bf9cb189ebc8e6978665f274f8fd23fbcf47d6"
+url = "https://storage.googleapis.com/skaffold/releases/v2.25.0/skaffold-windows-amd64.exe"

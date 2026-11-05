@@ -1,7 +1,7 @@
 ---
 name: Armoury
 status: final
-updated: 2026-06-13
+updated: 2026-11-05
 sources:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/addendum.md
@@ -32,6 +32,8 @@ Slim left icon rail, 7 surfaces. No top nav.
 | Findings | Rail / `g f` | Triage workbench — KEV-first, EPSS-weighted ranked list (FR13); triage drawer launches from any row. |
 | Evidence | Rail / `g e` | Append-only evidence trail + evidence packs; "Generate CRA pack" lives here (FR21–25). |
 | Settings | Rail (pinned bottom) | Connections, policy, retention, metrics, theme, users/roles — see below. |
+
+**Settings layout (2026-11-05):** an in-page left list of panels; each panel has its own route `/settings/<panel>`, so links (for example from the freshness strip) open a panel directly. Groups: **Connections** (registries, package feeds, agents) · **Feeds** (feed status and history, bundle import) · **Policy** (license policy, CI policy, retention) · **Access** (users and roles, resolved auth configuration, CI tokens) · **Signals** (metrics, signing key) · **Personal** (theme, keyboard shortcuts). Panels use the heading block and existing components; no separate mockup. Edit controls are absent for roles without write access.
 
 **Settings panels:** registry connections (FR1) · package feeds (FR29) · agent install · feed-bundle import (FR10) · license policy authoring (fleet-wide allow/deny lists, FR27) · evidence retention (configurable; UI never permits below the 24-month compliance floor, FR23) · Prometheus endpoint panel (read-only: endpoint URL + exported metric list with copy action — how an operator wires Grafana, FR20) · theme · users/roles.
 
@@ -73,7 +75,7 @@ Three dark themes, user-selectable, shipping day 1: **Forge** (default), **High 
 
 - Switcher lives in Settings, in the compact header affordance, and as a command-palette action ("Switch theme…"). Live preview on focus, applies instantly, no reload.
 - Themes remap semantic tokens only (see `DESIGN.md` Colors); no layout, density, or behavior changes between themes.
-- [ASSUMPTION] Theme choice persists per user server-side (so it follows the user across browsers); falls back to Forge for new users. No OS-preference detection — there is no light mode to detect into.
+- Theme choice persists per user server-side (`user_preferences`, `GET`/`PUT /api/v1/me/preferences`; decided 2026-11-05), so it follows the user across browsers; falls back to Forge for new users. No OS-preference detection — there is no light mode to detect into.
 
 ## Command Palette
 
@@ -81,7 +83,7 @@ Full Linear-grade palette on `⌘K` / `Ctrl+K` (shadcn `Command`). Keyboard-firs
 
 - **⌘K doubles as blast-radius query entry:** typing a CVE ID, `package@version`, or digest into the palette routes straight to a blast-radius answer. The Posture header search affordance is the same palette, pre-scoped.
 - Results group: Answers (blast radius) → Navigate → Actions → Recent. `Enter` fires, `Esc` closes, results announce via `aria-live`.
-- Full shortcut map, discoverable via `?` and listed in Settings. [ASSUMPTION] Vim-style two-key nav (`g` + letter, per IA table) and single-key actions in lists: `t` open triage drawer, `e` explore in graph, `x` export — exact bindings open until usability pass.
+- Full shortcut map, discoverable via `?` and listed in Settings. Vim-style two-key nav (`g` + letter, per IA table) and single-key actions in lists: `t` open triage drawer, `e` explore in graph, `x` export. These are the v1 bindings (decided 2026-11-05); a later usability test changes them through Correct Course. No custom key bindings in v1.
 
 ## Data-Quality Score
 
@@ -90,13 +92,14 @@ FR30: a second score alongside risk — SBOM depth, scan coverage, feed freshnes
 - DQ always renders in {colors.data-quality} — never a severity hue. It is an instrument reading, not a threat level.
 - [ASSUMPTION] Presented as 0–100 score with a letter grade (e.g. "84 B+"); compact contexts (table rows) show grade-only dq-badge. Grade banding to be fixed with the scoring model.
 - DQ is always expandable to its component dimensions — the score is explainable on click, mirroring ranking explainability (FR13).
-- Low DQ dims, it never alarms ({components.dq-badge}); the corrective action ("connect feed", "rescan") is offered alongside.
+- Low DQ goes quieter, it never alarms ({components.dq-badge} uses the muted data-quality token, never opacity, and keeps its grade letter); the corrective action ("connect feed", "rescan") is offered alongside.
 
 ## Graph Views
 
 Two surfaces, one visual language ({components.graph-node}, {components.graph-edge-affected}):
 
 - **Blast-radius graph:** the answer rendered as a 4-tier left-to-right node-edge graph — CVE → vulnerable packages → affected artifacts → clusters/workloads. Severity hue only on the affected path; running workloads carry the ember ring; shipped-but-not-running nodes are dashed and muted. Graph/Table toggle — same evidence, two readings. Large result sets roll up ("+ 9 more artifacts") with expand-to-enumerate.
+- **Digest blast radius (2026-11-05):** a digest query uses the same surface, centred on the artifact. Headline: "12 CVEs · 7 vulnerable packages · runs in 3 workloads". Graph tiers left to right: CVEs → packages → artifact → clusters/workloads (CVE stays left, workload right). Table: one row per finding in ranked order (KEV first), with triage status.
 - **Graph explorer:** open-ended traversal from any starting node. Entered from the rail (search-first empty state: "Start from a CVE, package, or artifact") or via "Explore in graph" from any artifact, finding, or CVE — which opens the explorer pre-centered on that node.
 - Every node is labeled with its real identifier in mono and resolves to its detail surface (click) and its evidence (context action). Hover highlights the node's direct path; selection pins it.
 - Graph motion follows the global motion policy: entrance/layout transitions are subtle and disabled under `prefers-reduced-motion`.
@@ -110,7 +113,7 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | Icon rail | Global | One item per IA surface; active state mirrors route. Tooltips on hover/focus. Settings pinned bottom. Never collapses further — 58px is the floor. |
 | Command palette | Global (`⌘K`) | See Command Palette section. One palette, context-pre-scoped where launched from search affordances. |
 | Findings table | Findings, Posture, Artifact detail | KEV-first then EPSS-weighted order by default (FR13); header states the sort logic in words ("KEV first, then EPSS-weighted. Severity alone does not rank."). Row click or `t` opens the triage drawer; row hover reveals "Explore in graph". Pagination, not infinite scroll, at NFR3 scale. |
-| Triage drawer | Slide-over right drawer (shadcn `Sheet`) from any findings list | Contains: ranking explanation (FR13 — why this finding ranks here), VEX context with vendor attribution (FR15), full provenance (FR8/FR12), and the decision form (status + justification). Submitting the form records author and timestamp (FR14), updates the row in place, and keeps the user in the list — drawer advances to next finding on `⌘Enter`, closes on `Esc`. Decisions propagate to posture views and evidence packs. |
+| Triage drawer | Slide-over right drawer (shadcn `Sheet`) from any findings list | Contains: ranking explanation (FR13 — why this finding ranks here), VEX context with vendor attribution (FR15), full provenance (FR8/FR12), the decision that applies now and its source (for example "fleet-wide decision by Priya, 3 Nov" or "this artifact — overrides the fleet-wide decision"), and the decision form (status + justification + scope: "This artifact" by default, or "Fleet-wide — every artifact with `CVE-x` in `package`" with the count of artifacts it changes now). Submitting the form records author and timestamp (FR14), updates the row in place, and keeps the user in the list — drawer advances to next finding on `⌘Enter`, closes on `Esc`. Decisions propagate to posture views and evidence packs. |
 | Coverage-gap row | Any findings/artifacts list | Inline at the position the missing data would occupy. Not dismissible, not collapsible — it disappears only when the gap closes. Click-through to the gap's cause (unscanned artifacts, unreachable registry, disconnected agent). |
 | Populating banner | Posture, Artifacts | Appears whenever first-scan or re-evaluation backlog exists; states queue count and estimate; progress is live (see State Patterns). Never modal, never blocking. |
 | Hero stat | Posture, Blast radius answers | One per surface. Numerals animate count-up on populate (suppressed under reduced motion). |
@@ -120,11 +123,12 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | KEV tag | Anywhere a finding renders | Always adjacent to the CVE ID; never dropped in compact views — KEV is the one mark that survives every truncation. |
 | Node inspector | Graph explorer | Side panel ({components.node-inspector}); selection pins the node and shows identity, knowledge, and provenance, plus actions: open detail, view evidence, blast radius from here. `Esc` unpins. |
 | License chip | Posture, Findings, Artifact detail | License findings render the neutral {components.license-chip} — never severity-hued; the severity ramp is CVE-only. Same triage drawer flow as vulnerability findings. |
-| Evidence pack card | Evidence surface | Every pack card carries "Verify signature" — in-UI check showing result + signer identity — plus a copyable offline verification command (cosign; operator-key equivalent on air-gapped installs) so an external auditor can verify independently (FR25). |
-| Evidence pack generator | Evidence surface, `⌘K` | Visuals inherit shadcn `Dialog` + {components.button-primary}. One-click "Generate CRA pack" with smart defaults (last audit window, whole fleet); configuration is available *after* the click (window, scope, framework — FR22 extensible), not a wizard before it. Generation is asynchronous with a progress state [ASSUMPTION: minutes-scale; progress shown as pack sections complete]; result is signed (Sigstore, or operator keys when air-gapped) with PDF + machine-readable companions (SBOMs, VEX). |
+| Evidence pack card | Evidence surface | Every pack card carries "Verify signature" — in-UI check showing result + signer identity — plus a copyable offline verification command (cosign with the operator public key by default; the keyless command only when keyless signing is enabled) so an external auditor can verify independently (FR25). |
+| Evidence pack generator | Evidence surface, `⌘K` | Visuals inherit shadcn `Dialog` + {components.button-primary}. One-click "Generate CRA pack" with smart defaults (last audit window, whole fleet); configuration is available *after* the click (window, scope, framework — FR22 extensible), not a wizard before it. Generation is asynchronous with a progress state [ASSUMPTION: minutes-scale; progress shown as pack sections complete]; result is signed with cosign (the operator key by default; Sigstore keyless only when enabled, never when air-gapped) with PDF + machine-readable companions (SBOMs, VEX). |
 | Export | Blast radius, Posture | "Export evidence pack" / report / CSV (FR19). Export carries the same provenance footer and caveats as the on-screen answer — always. |
 | Freshness strip | Posture, Blast radius, Artifact detail | Read-only; each entry click-through to the feed's Settings page. |
 | Theme switcher | Header, Settings, `⌘K` | See Theme System. |
+| Page header | Every surface | Breadcrumb, the search field (opens the command palette pre-scoped to blast radius; before blast radius exists it opens the normal palette) and the compact theme switcher. Visual spec in `DESIGN.md`. |
 
 ## State Patterns
 
@@ -133,13 +137,13 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 | Populating (minute-29) | Posture | Posture is live and *visibly populating*, never blocked on completeness (NFR1): populating banner with queue count + estimate; coverage co-stat marked "populating"; hero numeral counts up as artifacts index; coverage-gap rows mark the unscanned remainder. Honest, partial, alive. |
 | Partial answer | Blast radius | Answer renders for scanned scope; caveat chip ("2 artifacts unscanned — not represented") + provenance footer scope the claim. Never blocks on gaps. |
 | Stale feeds | Global (freshness strip) + Posture | Feed age flips to {colors.warning} past freshness threshold; posture headline gains a scoped caveat; DQ score reflects it. Air-gapped instances additionally show feed-bundle age and "import bundle" action (FR10). |
-| Disconnected agent | Posture, Settings | Runtime entries in the freshness strip show last heartbeat; affected clusters' runtime data is marked stale-as-of, not removed — "last seen" honesty over silent decay. [ASSUMPTION] Heartbeat staleness threshold (warn at minutes, disconnect at an hour) pending architecture's agent-buffering design. |
-| Air-gapped mode | Global | [ASSUMPTION] Instance-level flag from deployment config; UI substitutes Sigstore copy with operator-key signing copy and shows bundle-import affordances. No phone-home affordances exist anywhere (NFR4). |
+| Disconnected agent | Posture, Settings | Runtime entries in the freshness strip show last heartbeat; affected clusters' runtime data is marked stale-as-of, not removed — "last seen" honesty over silent decay. Heartbeat every 30 s; `stale` after 5 min; `disconnected` after 60 min (Helm values; decided 2026-11-05). |
+| Air-gapped mode | Global | [ASSUMPTION] Instance-level flag from deployment config; UI always uses operator-key signing copy (keyless copy never appears) and shows bundle-import affordances. No phone-home affordances exist anywhere (NFR4). |
 | Empty (pre-setup) | Posture | First-run: heading block + the two setup actions that matter (connect registry, install agent) with copy-paste one-liners in mono. No illustration theatre. |
 | Empty (no results) | Blast radius, Graph explorer | "No artifacts affected — across the N% of the fleet that is scanned" — the coverage-scoped zero (see Honest Provenance). |
-| Long-running query | Blast radius | Answers stream progressively (NFR2); if not complete within seconds, partial results render with an explicit scope line ("searching — 1,204 of 3,000 artifact set evaluated"); worst case under a minute. Never an unexplained spinner. |
+| Long-running query | Blast radius | Partial results arrive by polling (NFR2, long-operation pattern); if the query is still running after 2 s, partial results render with an explicit scope line ("searching — 1,204 of 3,000 artifact set evaluated"); worst case under a minute. Never an unexplained spinner. |
 | Cold load | All surfaces | shadcn `Skeleton` mirroring the real layout (hero numeral block, table rows). |
-| Read-only auditor | Global | Triage forms, pack-config edits, and Settings mutations are absent (not disabled-and-teasing); generation/viewing of packs and all read surfaces fully available. |
+| Read-only auditor | Global | Triage forms, pack-config edits, pack generation, and Settings mutations are absent (not disabled-and-teasing); viewing, downloading and verifying packs and all read surfaces fully available. Pack generation appears for auditors only when an admin enables `rbac.auditorCanGeneratePacks` (Helm value, default off; PRD NFR6). |
 | Append-only evidence (NFR11) | Evidence, triage history | No edit or delete affordances on recorded decisions or trail entries — corrections are new entries superseding old, with both visible. The UI never offers silent rewrite. |
 | Error (pack generation) | Evidence | Pack fails closed with the failing section named; partial packs are never silently delivered. Retry re-runs failed sections. |
 | Palette no match | `⌘K` | "No matches. Try a CVE ID, package@version, or digest." + common actions. |
@@ -149,7 +153,7 @@ Behavioral. Visual specs live in `DESIGN.md` Components (or shadcn defaults wher
 **Keyboard-first.** The palette is the command center; the mouse is the fallback.
 
 - `⌘K` / `Ctrl+K` — command palette / blast-radius query (universal)
-- `g` + `p / b / g / a / f / e` — go to surface [ASSUMPTION — see Command Palette]
+- `g` + `p / b / g / a / f / e` — go to surface
 - `t` — open triage drawer on highlighted finding; `⌘Enter` — record decision and advance; `Esc` — close topmost layer
 - `e` — explore highlighted entity in graph; `x` — export current answer; `?` — shortcut map
 - Graph: arrows/`Tab` traverse nodes, `Enter` opens node detail, `+`/`−` zoom
@@ -221,9 +225,9 @@ Failure: query matches nothing → the coverage-scoped zero ("No artifacts affec
 ### Flow 3 — UJ-3: Audit day (Marta, compliance lead, read-only auditor)
 
 1. Marta signs in under the read-only auditor role. The rail is the same product Priya uses — minus mutation affordances; nothing is disabled-and-teasing.
-2. She opens Evidence and clicks **Generate CRA pack**. Smart defaults take the last audit window and the whole fleet — one click, no wizard. (Window, scope, and framework remain adjustable after the fact; the pack architecture is framework-extensible, FR22.)
-3. Generation runs async with visible progress; she keeps browsing the evidence trail — every triage decision from CVE day is there, append-only, attributed, timestamped.
-4. The pack lands: PDF + machine-readable companions (SBOMs, VEX statements), **Sigstore-signed** (operator keys on air-gapped installs), tamper-verifiable. Marta clicks "Verify signature" on the pack card — result and signer identity shown in the UI — and copies the offline verification command (cosign; operator-key equivalent on air-gapped) so the external auditor can verify independently (FR25).
+2. Priya (analyst) has opened Evidence and clicked **Generate CRA pack**. Smart defaults take the last audit window and the whole fleet — one click, no wizard. (Window, scope, and framework remain adjustable after the fact; the pack architecture is framework-extensible, FR22.) If an admin has enabled auditor pack generation, Marta can click it herself.
+3. Generation runs async with visible progress; Marta browses the evidence trail — every triage decision from CVE day is there, append-only, attributed, timestamped.
+4. The pack lands: PDF + machine-readable companions (SBOMs, VEX statements), **signed with cosign** (the operator key by default; Sigstore keyless only when enabled), tamper-verifiable. Marta opens it, clicks "Verify signature" on the pack card — result and signer identity shown in the UI — and copies the offline verification command so the external auditor can verify independently (FR25).
 5. **Climax:** the pack's cover sheet states its own coverage and data-quality score — the honest scope of the claim, in the document itself. Three weeks of spreadsheet archaeology is now a generated, signed document she hands to the auditor without a single hand-assembled appendix.
 
 Failure: the window includes coverage gaps → the pack discloses them on its cover exactly as the UI did at the time; pack polish never outruns data integrity. Generation failure → fails closed naming the failing section; no partial pack is silently delivered.

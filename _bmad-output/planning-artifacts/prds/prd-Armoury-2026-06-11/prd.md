@@ -2,7 +2,7 @@
 title: Armoury PRD
 status: final
 created: 2026-06-11
-updated: 2026-06-12
+updated: 2026-11-05
 ---
 
 # Armoury PRD
@@ -46,12 +46,12 @@ Three weeks later, a critical CVE in a popular logging library hits the news and
 Six months in, the annual audit lands `[ASSUMPTION: audit cadence]`. Marta, the compliance lead who championed Armoury to the CTO, opens Armoury with the read-only auditor role.
 
 1. Priya generates a CRA evidence pack for the audit window: inventory, scan uniformity, feed freshness, every finding with its documented handling decision, the license compliance section.
-2. The pack is Sigstore-signed; the auditor can verify nothing was edited after generation.
+2. The pack is signed with cosign; the auditor can verify nothing was edited after generation.
 3. What was three weeks of spreadsheet archaeology is now a generated, signed document plus machine-readable attachments. The audit moment passes without a scramble.
 
 ## Features
 
-Armoury v1 ships six feature groups. Deployment topology: a **control plane** (hosting the web UI, graph, and evidence store) installed via Helm, plus a lightweight **cluster agent** per Kubernetes cluster that reports workload inventory back to the control plane. FR IDs are stable and never renumbered; FR29–FR30 were added at finalize and sit out of numeric sequence.
+Armoury v1 ships six feature groups. Deployment topology: a **control plane** (hosting the web UI, graph, and evidence store) installed via Helm, plus a lightweight **cluster agent** per Kubernetes cluster that reports workload inventory back to the control plane. FR IDs are stable and never renumbered; FR29–FR30 were added at finalize and FR31 on 2026-11-05, so they sit out of numeric sequence.
 
 ### 1. Fleet Inventory
 
@@ -62,6 +62,7 @@ Two data sources, both operable by SecOps alone — zero dev-team cooperation.
 - **FR2** — Central SBOM generation: Armoury generates SBOMs (Syft) for every discovered artifact, centrally and uniformly — no per-repo configuration.
 - **FR3** — Live cluster inventory: a cluster agent watches the Kubernetes API in each connected cluster and maintains a live record of running image digests — what is deployed, where (cluster/namespace/workload) — reported back to the control plane.
 - **FR4** — Shipped-vs-running reconciliation: registry artifacts and running workloads are linked in one inventory, so "is this running anywhere?" is answerable per artifact.
+- **FR31** — Optional CI scan: a pipeline step can submit a built artifact to Armoury — an image digest from a connected registry, or an uploaded image or package archive (never source code). The CI runner only identifies the artifact or supplies its bytes; the server SBOMs, scans and license-checks it with the fleet toolchain and decides pass or fail with the fleet CI policy (NFR12). A known artifact is linked, not duplicated. The step always prints the verdict and a link to the artifact in Armoury. Central scanning (FR1, FR2) stays the default; no team has to change CI.
 - **FR5** — Coverage visibility: the inventory shows its own gaps — discovered-but-not-yet-SBOM'd images, unreachable registries, disconnected agents — so posture is never silently incomplete.
 
 ### 2. Consistent Scanning & Lifecycle Freshness
@@ -70,7 +71,7 @@ Two data sources, both operable by SecOps alone — zero dev-team cooperation.
 - **FR7** — Feed-driven re-evaluation: when vulnerability feeds update, Armoury automatically re-evaluates existing SBOMs against the new intel. Findings stay current without rebuilds or manual rescans.
 - **FR8** — Evaluation provenance: every finding records when it was last evaluated and against which feed versions — posture views and evidence packs prove freshness rather than assert it.
 - **FR9** — Continuous onboarding: newly discovered images and packages are SBOM'd and scanned automatically, within one hour of discovery `[ASSUMPTION: 1-hour discovery-to-scan bound]` — no manual triggering.
-- **FR10** — Air-gapped feed updates: vulnerability and enrichment feeds can be imported as a signed offline bundle, downloaded on a connected machine and applied to an air-gapped Armoury. Air-gapped operation is a v1 requirement, not a roadmap note.
+- **FR10** — Air-gapped feed updates: vulnerability and enrichment feeds can be imported as a signed offline bundle, downloaded on a connected machine and applied to an air-gapped Armoury. Armoury also publishes signed bundles, so an operator does not need a connected build machine. Air-gapped operation is a v1 requirement, not a roadmap note.
 
 ### 3. Enrichment & Prioritization
 
@@ -110,12 +111,13 @@ Two data sources, both operable by SecOps alone — zero dev-team cooperation.
 - **NFR3 — Scale anchor:** v1 must be comfortable at hundreds of repositories, thousands of container images, and up to ten connected clusters `[ASSUMPTION: cluster count ceiling]`.
 - **NFR4 — Deployment:** self-hosted only, delivered as a Helm chart into the customer's existing Kubernetes. Air-gapped operation is fully supported (see FR10) — no phone-home, no capability that silently requires internet access.
 - **NFR5 — Freshness:** after a feed update lands (online or via offline bundle), fleet-wide re-evaluation completes within one hour at the scale anchor `[ASSUMPTION: 1-hour bound]`.
-- **NFR6 — Access control:** sign-in via OIDC SSO, configured declaratively — environment variables / Helm values / config file, never a UI wizard. A bootstrap admin field in the same config provides first sign-in and IdP-outage recovery. OIDC is optional at install: its absence never blocks the install path. Three roles: admin (configuration, connections), analyst (triage decisions, pack generation), read-only auditor `[ASSUMPTION: role set]`.
-- **NFR7 — Armoury's own provenance:** releases (images, charts, feed bundles) are signed and provenance-attested (SLSA via Sigstore). A supply chain security tool whose own supply chain can't be verified is disqualified from its own market.
+- **NFR6 — Access control:** sign-in via OIDC SSO, configured declaratively — environment variables / Helm values / config file, never a UI wizard. A bootstrap admin field in the same config provides first sign-in and IdP-outage recovery. OIDC is optional at install: its absence never blocks the install path. Three roles: admin (configuration, connections), analyst (triage decisions, pack generation), read-only auditor `[ASSUMPTION: role set]`. CI pipelines authenticate with scoped CI tokens that an admin creates; a CI token can only submit CI scans and read their results, and is not a user role (FR31).
+- **NFR7 — Armoury's own provenance:** releases (images, charts, feed bundles) are signed and provenance-attested (SLSA via Sigstore). Each release publishes Armoury's own scan result. A supply chain security tool whose own supply chain can't be verified is disqualified from its own market.
 - **NFR8 — Honest degradation:** failures degrade visibly, never silently — disconnected agents, stale feeds, and unscanned artifacts are surfaced in the posture view and metrics (FR5, FR20). The fleet posture must never need a caveat the UI doesn't already show.
 - **NFR9 — Agent footprint:** cluster agents are lightweight and read-only — they require only watch/list access to the Kubernetes API and never need cluster-admin `[ASSUMPTION: read-only scope is sufficient for v1 inventory]`.
 - **NFR10 — Availability:** v1 targets single-instance control plane; HA is not a v1 requirement `[ASSUMPTION]`. Loss of the control plane never loses recorded evidence (durable storage).
-- **NFR11 — Evidence integrity:** the evidence store is append-only and tamper-evident — recorded scans, feed versions, and triage decisions cannot be silently edited or deleted. Pack signing (FR25) seals a snapshot; this requirement makes the history beneath it trustworthy.
+- **NFR11 — Evidence integrity:** the evidence store is append-only and tamper-evident — recorded scans, feed versions, and triage decisions cannot be silently edited or deleted. Pack signing (FR25) seals a snapshot; this requirement makes the history beneath it trustworthy. Optionally (off by default), signed ledger checkpoints can be anchored in a Rekor transparency log outside the installation.
+- **NFR12 — Server-side evaluation:** SBOM generation (Syft), vulnerability matching (Grype), license evaluation (Grant) and every policy check run only on the Armoury control plane, with the single fleet toolchain and configuration. CI runners, cluster agents and other clients only identify an artifact or supply its bytes; Armoury never uses an SBOM, finding, license result or verdict that a client computed. One toolchain keeps results consistent (FR2, FR6), and a changed runner cannot hide packages or findings.
 
 ## Scope & Roadmap
 
@@ -133,7 +135,7 @@ Two data sources, both operable by SecOps alone — zero dev-team cooperation.
 
 ### Roadmap (deliberately after v1)
 
-- **Build-time integration** — blessed CI steps, build provenance, Sigstore attestation at build. Upgrades evidence from "reconstructed from images" to "captured at build" and completes the three-source model: build, static/registry, live.
+- **Build-time integration** — build provenance and Sigstore attestation captured at build, completing the three-source model: build, static/registry, live. (The optional CI scan step moved into v1 as FR31 on 2026-11-05; scanning still runs on the server, NFR12.)
 - **MCP query server** — read-only interface letting AI assistants query posture and blast radius; rides the same query layer as the web UI.
 - **Assistive AI remediation** (~2027) — assistive, not autonomous.
 - **Additional compliance packs** — DORA, FedRAMP, PCI on the pack architecture (FR22).
@@ -155,7 +157,7 @@ Counter-signals to watch (the bars must not be gamed):
 
 ## Glossary
 
-- **Artifact** — a unit Armoury inventories and evaluates: in v1, a container image (FR1) or a package from a connected feed (FR29). Grant can additionally evaluate filesystems (FR26).
+- **Artifact** — a unit Armoury inventories and evaluates. v1 types: `image` (container image, FR1), `package` (from a connected feed, FR29), `oci_artifact` (a non-image OCI artifact in a connected registry, FR1) and `filesystem` (an uploaded filesystem archive that Grant evaluates, FR26). A CI scan (FR31) is a source of an artifact, not a type: an uploaded image is an `image`, an uploaded package is a `package`.
 - **Fleet** — everything across all connected clusters, registries, and feeds.
 - **Finding** — an evaluated condition against an artifact: a vulnerability match or a license-policy violation, carrying enrichment, triage status, and provenance.
 - **Posture** — the fleet-wide, freshness-labeled state of findings and coverage.

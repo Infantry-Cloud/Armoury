@@ -1,2 +1,3 @@
 [tools]
 jj = "0.46.0"
+skaffold = "2.25.0"

@@ -2,7 +2,7 @@
 name: Armoury
 description: Self-hosted software supply-chain evidence layer for SME security teams. shadcn-svelte on SvelteKit + Tailwind; dark-only, three user-selectable themes; this DESIGN.md specifies the full brand layer over shadcn defaults.
 status: final
-updated: 2026-06-13
+updated: 2026-11-05
 colors:
   # Semantic token layer mapped onto shadcn CSS variables. THREE dark themes
   # ship day 1, user-selectable: Forge (default, unsuffixed), High Signal
@@ -26,6 +26,11 @@ colors:
   success: '#9DBA8C'
   warning: '#D9B36B'
   data-quality: '#8FAFAF'
+  # Muted tokens (2026-11-05): replace opacity dimming on elements with text.
+  # data-quality-muted holds >= 4.5:1 on surface and background; node-inactive-border
+  # holds >= 3:1 on surface (measured 2026-11-05; Story 1.5 re-measures).
+  data-quality-muted: '#718887'
+  node-inactive-border: '#6E6660'
   # rail-* tints: rail background sits one step below background; hover/active
   # are raised tints. High Signal / Gunmetal values are derived interpolations
   # between background and surface (mechanical derivation, same relationship
@@ -49,6 +54,8 @@ colors:
   success-high-signal: '#A3D9B1'
   warning-high-signal: '#EFC98A'
   data-quality-high-signal: '#C7AEF0'
+  data-quality-muted-high-signal: '#8A7AA6'
+  node-inactive-border-high-signal: '#61666C'
   rail-background-high-signal: '#0C0E10'
   rail-hover-high-signal: '#101316'
   rail-active-high-signal: '#1A1D21'
@@ -68,6 +75,8 @@ colors:
   success-gunmetal: '#8FBF9F'
   warning-gunmetal: '#C9A86B'
   data-quality-gunmetal: '#A493C9'
+  data-quality-muted-gunmetal: '#897BA8'
+  node-inactive-border-gunmetal: '#616770'
   rail-background-gunmetal: '#101216'
   rail-hover-gunmetal: '#14161A'
   rail-active-gunmetal: '#1C1F25'
@@ -173,6 +182,7 @@ components:
   dq-badge:
     font: '{typography.mono-meta}'
     foreground: '{colors.data-quality}'
+    foreground-low-grade: '{colors.data-quality-muted}'
   findings-table:
     row-height: '{spacing.data-row}'
     row-border: '{colors.hairline}'
@@ -202,8 +212,9 @@ components:
     ring: '1.4px {colors.accent} at 0.55 alpha, 4px offset'
     pip: '{colors.accent}'
   graph-node-inactive:
-    border: '1px dashed {colors.border}'
-    opacity: '0.5–0.55'
+    border: '1px dashed {colors.node-inactive-border}'
+    text: '{colors.text-muted}'
+    fill: 'transparent'
   graph-edge-affected:
     stroke: 'severity hue, 0.3–0.55 alpha, 1.4–2px, soft bezier'
   button-primary:
@@ -235,7 +246,7 @@ Two hard postures define the character:
 1. **Asymmetric composition.** No uniform KPI-card grids, no centered cards, no template rhythm. One dominant hero numeral with co-stats in a hairline-divided band; strong left-aligned heading blocks with a short ember rule. The generic dashboard look is an explicit reject.
 2. **Soft data.** Charts, bands, and graph edges are rounded and muted — severity fills at 0.6–0.85 opacity, no neon, no glow. Severity is heat, but the room stays cool.
 
-shadcn/ui + Tailwind is the UI system. These tokens extend shadcn defaults via its CSS-variable layer; unlisted shadcn tokens are inherited and restated only when a theme remaps them.
+shadcn-svelte + Tailwind (SvelteKit) is the UI system. These tokens extend shadcn defaults via its CSS-variable layer; unlisted shadcn tokens are inherited and restated only when a theme remaps them.
 
 ## Colors
 
@@ -248,7 +259,7 @@ All components reference **semantic roles**; the three themes are value maps ove
 - **{colors.warning}** — owns honesty states: populating banners, coverage-gap rows, stale-feed flags, unscanned caveats. **{colors.success}** — fresh feeds, healthy agents, verified signatures.
 - **{colors.text-data}** — table/data text, one step quieter than {colors.text-primary}; {colors.text-muted} for labels and secondary copy.
 
-Contrast: Forge and Gunmetal hold WCAG AA for all text roles on their surfaces; High Signal targets AAA for {colors.text-primary-high-signal} (≈17:1 on surface) and ≥7:1 for muted text — it doubles as the product's high-contrast accessibility option.
+Contrast: Forge and Gunmetal hold WCAG AA for all text roles on their surfaces. **No opacity dimming on any element that contains text** — quieter states use a muted token ({colors.data-quality-muted}, {colors.text-muted}) that holds 4.5:1, and non-text state borders ({colors.node-inactive-border}) hold 3:1 (measured 2026-11-05: opacity 0.65 on {colors.data-quality} gave 3.87:1 in Forge and 3.48:1 in Gunmetal; 0.5 on muted text gave about 2.3:1). High Signal targets AAA for {colors.text-primary-high-signal} (≈17:1 on surface) and ≥7:1 for {colors.text-muted-high-signal}; the quieter-state tokens ({colors.data-quality-muted-high-signal}, 4.72:1) hold the 4.5:1 AA floor like the other themes — it doubles as the product's high-contrast accessibility option.
 
 ## Typography
 
@@ -287,22 +298,35 @@ shadcn components inherited as-is unless listed: `Dialog`, `Sheet`, `Popover`, `
 | Icon rail | 58px, icon-only items 40×40 {rounded.md}; active = raised tint + 2px {colors.accent} left indicator; tooltip flyout right. Settings pinned bottom. |
 | Hero stat | {typography.hero-numeral} + {typography.micro-label} label; co-stats in hairline band. Critical count may take {colors.severity-critical}; DQ grade takes {colors.data-quality}. |
 | Severity chip | Uppercase micro label on 0.13–0.16-alpha severity tint, {rounded.sm}. |
-| KEV tag | Mono, dark text on {colors.severity-critical} at 0.85 — the single highest-urgency mark in the system; nothing outranks it visually. |
+| KEV tag | Mono, dark text (full opacity) on a {colors.severity-critical} background at 0.85 alpha — background alpha, never element opacity — the single highest-urgency mark in the system; nothing outranks it visually. |
 | License chip | Neutral policy/license-type chip for license findings (token spec in frontmatter). Never a severity hue — the severity ramp is CVE-only. |
 | Triage pill | Outlined, status-hued text: fix planned = {colors.accent}, mitigated = {colors.success}, accepted = {colors.severity-medium}, not affected = {colors.text-muted}, untriaged = {colors.warning}. |
-| DQ badge | Mono grade + 6px pip, always {colors.data-quality}. Dims (0.65 opacity) for lower grades — never turns red. |
+| DQ badge | Mono grade + 6px pip, always the data-quality hue. Lower grades use {colors.data-quality-muted} (never opacity) and keep the grade letter — quieter, never red. |
 | Findings table | 30px rows, 9.5–10px uppercase headers, identifiers in mono, hover = {colors.rail-hover}. Coverage-gap rows sit inline (see below). |
 | Coverage-gap row | Full-width inline table row: dashed {colors.warning} rules, warning pip, bold warning lead-in. Gaps are first-class rows, not footnotes. |
 | Populating banner | Warning-tinted {rounded.md} band with pip; sits under the heading block. |
 | Severity band | 30px stacked distribution, 3px gaps, per-segment 4px radius, soft-opacity fills. |
 | Graph node | {rounded.node} surface-filled rect, mono identifier + muted 9px meta line. Affected nodes carry severity-hued 0.35–0.45-alpha border. |
 | Graph node — running | Outer {colors.accent} ring (1.4px, 0.55 alpha, 4px offset) + ember pip. Ring, never glow. |
-| Graph node — not running | 0.5 opacity, dashed border, muted text ("shipped, not running"). |
+| Graph node — not running | Dashed {colors.node-inactive-border} border, transparent fill, {colors.text-muted} text with the label "shipped, not running". No opacity dimming. |
 | Graph edges | Soft beziers; severity hue at 0.3–0.55 alpha only on the affected path; artifact→workload edges in {colors.accent} (running) or dashed muted (not). |
 | Node inspector | Side panel anchored right within Graph explorer (token spec in frontmatter); selection pins the node. |
 | Primary button | {colors.accent} fill, {colors.background} text — at most one per surface (e.g. "Export evidence pack"). |
 | Freshness strip | Mono micro-text row at page end: feed name bold, age in {colors.success}/{colors.warning}. |
 | Theme switcher | Compact affordance: 9px swatch + theme name; full picker lives in Settings and command palette. |
+| Page header | One row above the heading block on every surface: breadcrumb ({typography.body-dense}, muted, current item {colors.text-primary}), the search field ("Blast radius — CVE, package, or digest", `⌘K` hint) and the compact theme switcher; 1px {colors.border} bottom rule. Reference: `mockups/hybrid-posture-v2.html` header. |
+
+## Printed report
+
+PDF outputs (blast-radius and posture reports, evidence packs; rendered with Typst) use a **print palette**, not the dark themes. This is print only; the app keeps no light mode.
+
+- White page, dark text (near-black #1A1A1A body, #555555 secondary), hairline rules #D0D0D0. Inter for text, IBM Plex Mono for every identifier, the same type roles at print sizes (body 9.5pt, tables 8.5pt).
+- Page size A4 by default; US Letter as an option (PROC2).
+- The cover sheet comes first and carries the coverage and data-quality statement.
+- Every page has a footer with the pack or report ID, the time window, the generation time and the page number.
+- Severity always has a text label as well as a colour, so a black-and-white print stays readable.
+- Long tables repeat their header row on each page.
+- No mockup: Story 9.3 produces one sample PDF for user review.
 
 ## Do's and Don'ts
 

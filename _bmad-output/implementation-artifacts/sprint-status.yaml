@@ -1,0 +1,146 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 11-06-2026 00:18
+last_updated: 11-06-2026 00:18
+project: Armoury
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci: backlog
+  1-2-install-the-control-plane-with-one-helm-command-durable-stor: backlog
+  1-3-sign-in-with-the-bootstrap-admin: backlog
+  1-4-declarative-oidc-sign-in-and-role-based-access: backlog
+  1-5-design-tokens-and-the-three-themes: backlog
+  1-6-app-shell-navigation-and-the-empty-posture-page: backlog
+  1-7-accessibility-message-catalogue-and-responsive-baseline: backlog
+  1-8-command-palette-and-keyboard-map: backlog
+  1-9-banned-pattern-guards: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-tamper-evident-evidence-ledger: backlog
+  2-2-connect-a-container-registry-and-enumerate-its-images: backlog
+  2-3-central-sbom-generation-with-syft: backlog
+  2-4-uniform-vulnerability-scanning-of-stored-sboms: backlog
+  2-5-continuous-onboarding-within-one-hour: backlog
+  2-6-package-feed-connections-npm-and-pypi: backlog
+  2-7-package-feed-connections-maven-cargo-and-go-modules: backlog
+  2-8-oci-artifacts-beyond-container-images: backlog
+  2-9-posture-summary-populating-coverage-and-freshness: backlog
+  2-10-posture-findings-severity-band-and-findings-table: backlog
+  2-11-artifacts-list-and-artifact-detail: backlog
+  2-12-prove-minute-29-scripted-install-to-posture-run: backlog
+  2-13-prove-the-scale-anchor-initial-evaluation-load-test: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-agent-enrollment-and-mtls-identity: backlog
+  3-2-read-only-agent-reports-running-workloads: backlog
+  3-3-reconnect-by-stateless-re-derive-without-storms: backlog
+  3-4-https-long-poll-fallback-for-locked-down-networks: backlog
+  3-5-shipped-vs-running-reconciliation: backlog
+  3-6-runtime-coverage-on-posture-and-minute-29-with-the-agent: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-scheduled-vulnerability-database-updates-with-versioned-hist: backlog
+  4-2-feed-delta-re-evaluation-of-stored-sboms: backlog
+  4-3-kev-and-epss-enrichment-with-source-attribution: backlog
+  4-4-osv-and-cna-record-enrichment: backlog
+  4-5-offline-feed-bundle-format-and-creation: backlog
+  4-6-import-an-offline-bundle-into-an-air-gapped-instance: backlog
+  4-7-honest-feed-staleness-across-posture-and-findings: backlog
+  4-8-prove-one-hour-re-evaluation-at-the-scale-anchor: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-deterministic-explainable-ranking: backlog
+  5-2-findings-workbench-and-ranked-posture-table: backlog
+  5-3-record-triage-decisions-as-evidence: backlog
+  5-4-triage-drawer: backlog
+  5-5-evidence-trail-surface: backlog
+  5-6-emit-vex-from-triage-decisions: backlog
+  5-7-ingest-vendor-vex: backlog
+  5-8-fleet-wide-triage-decisions: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-graph-projection-of-inventory-and-findings: backlog
+  6-2-blast-radius-query-api: backlog
+  6-3-blast-radius-surface-answer-and-table-from-k: backlog
+  6-4-blast-radius-graph-reading: backlog
+  6-5-export-blast-radius-and-posture-answers: backlog
+  6-6-graph-explorer-and-node-inspector: backlog
+  6-7-prove-sub-minute-blast-radius-at-the-scale-anchor: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-license-evaluation-of-stored-sboms-with-grant: backlog
+  7-2-license-evaluation-of-images-and-filesystems-directly: backlog
+  7-3-fleet-license-policy: backlog
+  7-4-license-findings-in-posture-findings-and-triage: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-data-quality-scoring-model-and-artifact-score: backlog
+  8-2-fleet-data-quality-on-posture-and-artifacts: backlog
+  8-3-prometheus-metrics-endpoint: backlog
+  8-4-prometheus-panel-in-settings: backlog
+  epic-8-retrospective: optional
+
+  epic-9: backlog
+  9-1-point-in-time-evidence-queries-for-any-window: backlog
+  9-2-pack-architecture-and-the-cra-pack-definition: backlog
+  9-3-pdf-report-and-machine-readable-companions: backlog
+  9-4-sign-evidence-packs: backlog
+  9-5-generate-packs-and-verify-signatures-in-the-ui: backlog
+  9-6-signed-ledger-checkpoints: backlog
+  9-7-retention-with-archiving-to-the-object-store: backlog
+  9-8-sbom-compaction-and-archive-purge: backlog
+  9-9-anchor-ledger-checkpoints-in-a-rekor-transparency-log: backlog
+  epic-9-retrospective: optional
+
+  epic-10: backlog
+  10-1-signed-provenance-attested-releases: backlog
+  10-2-armoury-published-signed-feed-bundles: backlog
+  10-3-air-gapped-installation-from-an-internal-mirror: backlog
+  10-4-prove-the-full-air-gapped-journey-end-to-end: backlog
+  epic-10-retrospective: optional
+
+  epic-11: backlog
+  11-1-submit-a-pushed-image-from-ci-by-digest: backlog
+  11-2-submit-an-artifact-that-is-not-in-a-connected-registry: backlog
+  11-3-artifact-identity-and-duplicate-linking: backlog
+  11-4-fleet-ci-policy-server-verdict-and-the-ci-report: backlog
+  11-5-github-action-for-ci-scans: backlog
+  epic-11-retrospective: optional
