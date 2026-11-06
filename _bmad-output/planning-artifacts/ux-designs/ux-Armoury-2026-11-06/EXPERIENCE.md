@@ -1,7 +1,7 @@
 ---
 name: Armoury
 status: final
-updated: 2026-11-06
+updated: 2026-11-07
 supersedes: ux-Armoury-2026-06-12
 sources:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
@@ -26,11 +26,11 @@ Web product, desktop-first. shadcn-svelte + Tailwind on SvelteKit; `DESIGN.md` i
 **Two primary users, equal weight:**
 
 - **Security engineers** (Priya, the PRD's SME SecOps engineer) who need precision and the fastest route to information.
-- **Non-technical leaders** (Tom Reid, Head of Engineering in the mock) who need to know "are we safe, and what needs attention" quickly.
+- **Non-technical leaders** (Tom Reid, Head of Engineering in the mock, with the **Admin** role) who need to know "are we safe, and what needs attention" quickly.
 
 One layout and one density serve both. Plain words lead; the technical term stays, small and grey.
 
-**Roles** (unchanged): admin (configuration, connections), analyst (review, audit report generation), read-only auditor. Everything is operable by one security engineer alone — zero dev-team cooperation is a product gate.
+**Roles** (unchanged): admin (configuration, connections), analyst (review, audit report generation), read-only auditor. Tom Reid has the **Admin** role (decided 2026-11-07). [ASSUMPTION] Admin can also do everything an analyst can, which is why Tom sees Review and Review all 3. Everything is operable by one security engineer alone — zero dev-team cooperation is a product gate.
 
 ## Information Architecture
 
@@ -47,8 +47,8 @@ One layout and one density serve both. Plain words lead; the technical term stay
 | Home | `/` | Landing. "Are we safe, and what needs attention?" Fleet summary, coverage, freshness (FR16). | Review all 3 |
 | Software | `/software/<name>` | The real fleet, grouped Deployed / Not deployed, with what we haven't checked said plainly (FR18). | Add software |
 | Issues | `/issues?review=not-reviewed` | Every open issue — vulnerabilities and licences — grouped by severity; review without leaving the list (FR13, FR14, FR27). | Save and next |
-| Exposure | `/exposure?q=log4j-core@2.17.0[&view=table]` | Ask about a vulnerability, a package or a fingerprint; one answer as a map or a table (FR17, FR19). Absorbs the prior Blast radius and Graph explorer. | Review (in the inspector) |
-| Reports | `/reports/<id>` | Audit reports and exports, nothing else (FR19, FR21–25). | Generate audit report |
+| Exposure | `/exposure?q=log4j-core@2.17.0[&view=table]`; after a move `/exposure?q=software:acme/payments-api@sha256:9f2c41…&from=log4j-core@2.17.0` | Ask about a vulnerability, a package or a fingerprint; one answer as a map or a table (FR17, FR19). Absorbs the prior Blast radius and Graph explorer, including moving the map to any node. | Review (in the inspector); Open software when the map is centred on a piece of software |
+| Reports | `/reports/<id>` | Audit reports and exports, both kept as evidence, nothing else (FR19, FR21–25). | Generate audit report |
 | Settings | `/settings/<panel>` | Connections, sources, policy, access, signals, personal. | — |
 | Help | — | Not designed (see Open items). | — |
 
@@ -62,6 +62,7 @@ One layout and one density serve both. Plain words lead; the technical term stay
   - Overview: title, one plain sentence of what it means ("…lets an attacker run their own code. People are using it in real attacks right now."), severity, Actively exploited pill + KEV tag; Vulnerability (CVE ID), Found in, The fix, Review status; grey Review and See exposure; an Exposure cell (All / Deployed / Not deployed) listing the first places and "See all 14 on the map".
   - **Exposure tab:** a reduced summary of the Exposure page so people can scan it quickly, with a button that opens the full Exposure page for that query.
 - **"Across all software" band** under the issue, clearly separate from it: Checked (82% gauge, "671 are waiting their turn"), Open issues (last 30 days, sparkline, "247 fewer"), Audit report (last 12 months, signed, coverage, Download / Preview).
+- **No data-quality reading on Home** (decided 2026-11-07). The fleet-wide reading and its five parts live in Reports. It may be added to the Home Details tab later (Open items).
 - **Freshness strip** at the bottom.
 
 ### Issues
@@ -78,7 +79,14 @@ One layout and one density serve both. Plain words lead; the technical term stay
 - "Software" + "3,847 pieces of software. 1,126 deployed, 2,721 not deployed." The **real fleet**, grouped **Deployed N** (row line 2: "prod-eu-west · 4 copies") and **Not deployed N** (line 2: "Last deployed 12 days ago" or "Never deployed"; hint "Not seen running in any connected cluster."). Right column: issue count ("2 issues").
 - **Not checked yet 671** — the coverage-gap row, in place: "Counted above, but we haven't looked inside them yet, including 212 in prod-eu-west. Their issues are unknown, not absent."
 - Pager "1–25 of 3,847 · page 1 of 154"; lime **Add software**.
-- **Detail tabs: Overview · Issues · Packages · Audit trail**, with "Deployed" status at the bar's end. Overview: Name, Fingerprint (mono, copy), Runs in, Copies, Built, Last checked, Signed; grey Check again and Audit report; cells for Issues (with Review), Packages ("214 packages · SBOM", Direct 37 / Indirect 177, licence and end-of-life lines), Where it runs (each copy with zone), Latest in the audit trail ("Entries are never edited or removed"), and an issues trend.
+- **Detail tabs: Overview · Issues · Packages · Audit trail**, with "Deployed" status at the bar's end. **Overview, in this order:**
+  1. **Info** (left, tall): Name, Fingerprint (mono, copy), Runs in, Copies, Built, Last checked, **Data quality "91 A−"** ({components.dq-value}), Signed; grey Check again and Audit report. Beside it on the right, **Packages** ("214 packages · SBOM", Direct 37 / Indirect 177, licence and end-of-life lines) over **Where it runs** (each copy with zone).
+  2. **Issues** full width ("2 open"): the issues side by side, Review under them.
+  3. **Issues trend** chart ("Issues in payments-api · Last 30 days · from 9 to 2").
+  4. **Data quality** ("How much you can trust these numbers"): the {components.quality-meter} with the weakest part and its one reason ("Package lists 82 — version missing for 6 indirect packages, so their issues can't be matched yet. See them") and the technical terms on one grey line.
+  5. **Latest in the audit trail** at the bottom ("Entries are never edited or removed").
+- **No grade in Software list rows:** a row has one right column (issues), and a grade would add a third subject to every row. Data quality lives in the detail.
+- **Low grade** (legacy-ftp, "58 D"): see State Patterns.
 
 ### Exposure
 
@@ -89,15 +97,25 @@ One layout and one density serve both. Plain words lead; the technical term stay
 - **Inspector** under the map for the selected node: identity, How it got it, What to do (fix, review status), lime Review, grey Open software, "How we know".
 - **Table:** the same answer, same order (deployed first), sortable sentence-case headers; selection carries across Graph and Table; "2 not checked yet, not listed".
 - Queries accept a vulnerability ID, `package@version` or a fingerprint. A fingerprint query centres on that piece of software (prior digest layout).
+- **Moving around the map** (the prior Graph explorer's traversal, kept inside Exposure). One rule for every node: **click or `Enter` on a node moves the map to that node** and adds a step to the trail.
+  - **Ego view:** the new centre sits in the true centre of the map. What it contains is on the left (its packages and their vulnerabilities); where it runs and its copies are on the right. The node you came from carries a "Came from here" marker. Packages with no known issues roll up into one node ("212 more packages · No known issues"; caveat: "Showing the 2 packages with issues. The other 212 have none and sit in one group; Packages in Software lists them all.").
+  - **Trail** directly above the map once it has moved: Back, the previous steps as link chips, the current step in bold, and the key hints "↵ Move the map · ⌫ Back". Back, `Backspace`, any step in the trail or the browser's Back button returns to that map with its selection.
+  - **The centre drives everything:** the question ("What is in payments-api 3.4.1, and where does it run?"), the query field, the answer line ("payments-api 3.4.1 has 2 open issues. It runs in 1 place, with 4 copies."), Export, "Audit report for this answer" and the URL (`/exposure?q=software:acme/payments-api@sha256:9f2c41…&from=log4j-core@2.17.0`) all follow the current centre, so the view can be shared and reloaded.
+  - **List column** follows the centre too: Issues 2, Where it runs 1, Packages 214.
+  - Asking a new question with **⌘K starts a new trail**.
+  - **Table** lists the centre's neighbours: its issues, the packages they come from and where it runs. The selection carries across Graph and Table.
+  - **Inspector** for a software centre adds Issues ("2 open: 1 Critical, 1 Low"); the one lime action is **Open software**; **Show only this** stays grey; hint "Click any node to move the map to it. Enter does the same from the keyboard."
+  - [ASSUMPTION] The ego view is drawn for a piece of software only; for a package, vulnerability or place centre the same rule applies (contents on the left, where it is used and runs on the right), but those layouts are not drawn (Open items).
 - **No query** (`/exposure` from the sidebar): the answer slot asks "Ask about a vulnerability, a package or a fingerprint." with examples ("CVE-2026-23012 · log4j-core@2.17.0 · sha256:…"); the query button opens ⌘K.
 - **Unknown vulnerability:** when Armoury has no data for the queried ID, the answer reads "Armoury has no data for <ID> yet. Vulnerability data updated <age> ago." with **Check again**. It never says "No software has it" for an ID it doesn't know. A **known** vulnerability with no matches gets the coverage-scoped zero (State Patterns).
 
 ### Reports
 
 - **Audit reports N** and **Exports N**, nothing else. New report types (for example a management summary) are new scope and need Correct Course first.
-- Export rows say what and where from ("Exposure: log4j-core 2.17.0 · CSV · 14 rows · from Exposure"). "Exports are kept for 24 months, like audit reports. Make a new one from Exposure, Issues or Software with Export."
+- **Exports are stored as evidence** (decided 2026-11-07): every CSV made with Export in **Exposure, Issues or Software** is stored in Reports with an **audit-trail entry** (who, when, from which view and query) and the **same retention as audit reports** (24 months, never below the floor, FR23). They are listed under **Reports → Exports**, newest first. Export rows say what and where from ("Exposure: log4j-core 2.17.0 · CSV · 14 rows · from Exposure · 6 Nov"). "Exports are kept for 24 months, like audit reports. Make a new one from Exposure, Issues or Software with Export." Like audit reports, stored exports are never edited or removed by hand.
 - Lime **Generate audit report**.
-- **Detail tabs: Overview · Files · Audit trail**, with "Generated today, 08:31, by …" at the bar's end. Overview: coverage when it was made, Signature ({components.signature-status}: verified in product, plus the copyable `cosign verify-blob` command in a {components.code-block}: "Auditors can run this themselves, without Armoury."; when it does not verify, see State Patterns), Files (pack.pdf, sboms.tar.gz "Package lists … SBOM", vex.json "review decisions … VEX"), What it says.
+- **Detail tabs: Overview · Files · Audit trail**, with "Generated today, 08:31, by …" at the bar's end. Overview: title, lead and Download all / Preview; **row 1: Coverage when it was made | Signature** ({components.signature-status}: verified in product, plus the copyable `cosign verify-blob` command in a {components.code-block}: "Auditors can run this themselves, without Armoury."; when it does not verify, see State Patterns); **row 2: Data quality, full width** ("Data quality 84 B+ when it was made": the fleet-wide {components.quality-meter}, the weakest part with its reason — "Extra sources 78 — one of three extra sources had no answer for 412 packages; those use the main vulnerability data only." — and the technical terms on one grey line); then Files (pack.pdf, sboms.tar.gz "Package lists … SBOM", vex.json "review decisions … VEX") and What it says. This is the only place the fleet-wide five-part breakdown appears in the product.
+- The **printed cover page** carries the same reading (see Printed report).
 
 ### Settings
 
@@ -151,6 +169,12 @@ This **replaces the prior "locked glossary"**. Rule: **plain label first; the te
 | Where it runs | Cluster / namespace / workload | Shown as a path ("prod-eu-west/payments") |
 | Fingerprint | Image digest | The `sha256:` value in mono |
 | Checked / Not checked yet | Scanned / unscanned (coverage gap) | — |
+| Data quality | Data-quality score (FR30) | Docs, PRD; the score and letter ("91 A−") need no technical term |
+| Package lists (data-quality part) | SBOM depth | Grey "In technical terms" line under the meter; `title` attribute; small beside the name on the printed cover page |
+| Coverage (data-quality part) | Scan coverage | Same as above |
+| Freshness (data-quality part) | Feed freshness | Same as above |
+| Extra sources (data-quality part) | Enrichment | Same as above |
+| Vulnerability records (data-quality part) | CVE record quality | Same as above |
 | Check again | Rescan | — (on Exposure's "no data yet" answer, Check again re-asks the question against the latest vulnerability data; no rescan) |
 | Vulnerability data · Exploited list · Packages · Sources | Vulnerability feed (Grype DB) · KEV catalog · SBOM index · feeds | Freshness strip (small term) and "How we know: Syft v… · Grype DB v…" |
 | Review / Review status | Triage / triage status | Docs |
@@ -184,9 +208,12 @@ Behavioural. Visual specs live in `DESIGN.md` Components.
 | Review action | Home, Exposure inspector, Software Issues cell | One "Review" action replaces "Plan the fix" and "Mark reviewed". [ASSUMPTION] Outside Issues it opens that issue in Issues on its Review tab. |
 | Coverage-gap row | Software, Exposure (list and table), Home band | {components.coverage-gap-row}. Sits where the missing data would be, names the count and where ("including 212 in prod-eu-west"), says "unknown, not absent". Not dismissible, not collapsible; it disappears only when the gap closes. Click-through to the cause (unchecked software, unreachable registry, disconnected agent). |
 | Exposure answer | Exposure | Answer in words first, then the map or table. Every answer carries its caveat line for unchecked software and "Answered N min ago" / "How we know". Feed updates re-evaluate stored package lists; answers are current with no rescan (NFR5). |
-| Exposure graph | Exposure | {components.exposure-graph} with {components.inspector} and {components.table}. Graph and Table are two readings of one answer; selection carries across. Hover highlights a node's direct path; click selects and pins it (inspector updates); `Esc` unpins. Roll-up nodes ("8 more") expand. Nodes resolve to their detail (Open software). |
+| Exposure graph | Exposure | {components.exposure-graph} with {components.inspector} and {components.table}. Graph and Table are two readings of one answer; selection carries across. Hover, arrows or `Tab` highlight a node's direct path and show it in the inspector; `Esc` unpins. **Click or `Enter` on any node moves the map to that node** (ego view: the centre in the true centre, what it contains on the left, where it runs and its copies on the right; the node you came from marked "Came from here") and adds a step to the trail. Roll-up nodes ("8 more", "212 more packages") expand. Nodes resolve to their detail through the inspector (Open software). |
+| Exposure trail | Exposure (after the first move) | {components.exposure-trail}. Records each move as a step. **Back**, `Backspace` (outside text fields) or the browser's Back button goes back one step; any earlier step goes back to that map with its selection. The query field, answer line, Export, "Audit report for this answer" and the URL always follow the current centre; each move updates the URL (`&from=` the previous step), so a trail can be shared and reloaded. Asking a new question with ⌘K starts a new trail. Table lists the centre's neighbours. The trail is a `nav` named "How you got here"; the current step has `aria-current="location"`. |
+| Data-quality value | Software detail Info list, Reports detail heading, printed cover page | {components.dq-value}. One reading per subject: the score out of 100 and its letter ("91 A−"). Software shows its own; Reports and the cover page show the fleet's at generation time ("84 B+ when it was made"). **Not on Home and not in list rows.** [ASSUMPTION] Grade bands (which scores earn which letter, and that D and below counts as low) are a placeholder until the scoring model exists. |
+| Quality meter | Software detail (Data quality cell), Reports detail (Data quality row) | {components.quality-meter}. Five parts, each out of 100: Package lists, Coverage, Freshness, Extra sources, Vulnerability records. Only the weakest part is emphasised and explained in one sentence, with a link when there is a way to act ("See them"); at a low grade the weakest parts (at most two) each get a sentence and a grey **Check again** appears. Technical terms appear once, on the grey line, and in each name's `title` attribute; the list has an accessible name ("Data quality 91, grade A−, in five parts, each out of 100"). The fleet-wide breakdown appears only in Reports. |
 | Home Exposure tab | Home detail | Reduced summary of the Exposure page for the selected issue; a button opens the full Exposure page for that query. |
-| Export | Exposure, Issues, Software | CSV of the current view; lands in Reports → Exports; kept 24 months. Carries the same caveats and provenance as the screen ("The 2 not checked yet travel with the CSV and the audit report"). |
+| Export | Exposure, Issues, Software | CSV of the current view (on a moved Exposure map, of the current centre). **Stored as evidence:** lands in Reports → Exports with an audit-trail entry (who, when, from which view and query) and the same retention as audit reports (24 months). Carries the same caveats and provenance as the screen ("The 2 not checked yet travel with the CSV and the audit report"). A failed export shows the inline error with Try again. |
 | Audit report generator | Reports, ⌘K | One click on Generate audit report with smart defaults (last 12 months, whole fleet); window, scope and framework adjustable after the click, not a wizard (FR22). Asynchronous with progress. Signed with cosign using the operator key by default; keyless only when enabled, never when air-gapped. PDF + package lists (SBOM) + review decisions (VEX). |
 | Signature status | Reports | {components.signature-status}. "Signature verified" with the signer key in the product, plus the copyable offline command (FR25). When it does not verify: see State Patterns. |
 | Code block | Empty Home setup, agent install, Reports, Settings → Signals, Software fingerprint | {components.code-block}. **Copy** copies the whole command, never a truncated one; the label changes to "Copied" for 2 s and is announced politely (`aria-live`). Copy is keyboard reachable; the command text is selectable. |
@@ -233,12 +260,14 @@ The signature rule carries over: **the screen must never need a caveat it doesn'
 | Signature does not verify | Reports | {components.error-band} (clay-wash) in place of "Signature verified", naming the file and the reason ("The signature on pack.pdf does not verify: the file has changed since it was signed."). No download is hidden; a link opens the audit trail entry for the signing. |
 | All clear | Home | "Nothing needs you today." with the scope sentence, stats (0 Need attention · 1,094 Open, all reviewed · 82% Checked), the severity line, grey See open issues, lime Audit report. No Issues badge. |
 | Licences 0 | Issues, Home | Licences group hidden; the type filter still shows "Licences 0". |
+| Low data-quality grade | Software detail, Reports detail, cover page | [ASSUMPTION: D and below, placeholder bands] The score and letter turn quieter in {colors.dq-muted} ("58 D"), keep their number and letter, and never turn clay, amber or red: a reading, not a threat. The meter names the two weakest parts, each with what it means ("Package lists 24 — this image was built without package details, so 41 files couldn't be matched to a package. Their issues are unknown, not absent."), and offers a grey **Check again** — a low grade is not the view's main job, so it takes no lime. |
+| Moved map | Exposure | The map is centred on the node that was clicked or entered; the trail shows how you got there; header, answer, list, Export, audit report and URL describe the centre. Packages with no known issues roll up with a caveat line saying so. |
 | Stale source | Freshness strip, Home | The source's age turns amber with the age in words; the Home summary gains a scoped caveat. Air-gapped instances also show bundle age and an import-bundle action (FR10). |
 | Registry unreachable | Software (and gap rows elsewhere) | {components.error-band}: what failed, since when, what it affects, what still works, likely cause. Lime **Try again** is the one lime action; **Add software** turns grey (secondary) while the band shows. Grey **Open connection settings**. Affected rows say "As of 14:02 · registry" in amber with a clock; nothing is removed. |
 | Disconnected agent | Freshness strip, Software | "N clusters reporting"; that cluster's runtime data marked "as of", not removed. Heartbeat 30 s; stale after 5 min; disconnected after 60 min (Helm values). |
 | Air-gapped mode | Global | [ASSUMPTION] Instance-level flag from deployment config; operator-key signing copy only; bundle-import affordances; no phone-home anywhere (NFR4). |
 | Read-only auditor | Global | Review, Add software, Generate audit report and Settings mutations are absent, not disabled. Viewing, downloading and verifying audit reports fully available. Generation appears for auditors only when an admin enables `rbac.auditorCanGeneratePacks` (default off; NFR6). |
-| Append-only history | Audit trail, History | No edit or delete on recorded decisions or trail entries; a correction is a new entry superseding the old, both visible (NFR11). "Entries are never edited or removed." |
+| Append-only history | Audit trail, History, Reports | No edit or delete on recorded decisions, trail entries, audit reports or stored exports; a correction is a new entry superseding the old, both visible (NFR11). "Entries are never edited or removed." |
 | Audit report failure | Reports | Fails closed, naming the failing section; no partial report is delivered silently. Retry re-runs failed sections. |
 | Palette no match | ⌘K | "No matches. Try a CVE ID, package@version or fingerprint." plus common actions. |
 | Disabled | Buttons, pager | 0.45 opacity, not-allowed cursor; Save and next until a question is answered. |
@@ -257,7 +286,7 @@ Never an unexplained spinner, never modal, never blocking.
 
 **Keyboard-first, mouse as fallback, and still calm for people who never touch a shortcut.** Keys are shown, never required.
 
-- `⌘K` / `Ctrl+K` — search or jump (universal). Also the sidebar field and the Exposure query button.
+- `⌘K` / `Ctrl+K` — search or jump (universal). Also the sidebar field and the Exposure query button. On Exposure, a new question starts a new trail.
 - `g` + letter — go to a surface; the letters show next to each nav item after pressing `G`. Letters for the renamed surfaces are open (see Open items).
 - `J` / `K` — next / previous item in the list (shown at the end of the tab bar).
 - `/` — focus the list search.
@@ -265,10 +294,10 @@ Never an unexplained spinner, never modal, never blocking.
 - `Esc` — close the topmost layer (palette); unpin the graph selection.
 - Palette: `↑` `↓` move, `↵` open, `esc` close.
 - From the prior spine: `x` export current view, `?` shortcut map. `t` (open triage drawer) and `e` (explore in graph) need new meanings (see Open items).
-- **Single-key shortcuts** (`J`, `K`, `/`, `x`, `?`, `g` + letter) are active only when focus is not in a text field, and **can be turned off in Settings → Personal** (WCAG 2.1.4). Modified shortcuts (`⌘K`, `⌘↵`) stay on.
-- Graph: arrows / `Tab` traverse nodes, `↵` opens detail, `+` / `−` zoom, Fit.
+- **Single-key shortcuts** (`J`, `K`, `/`, `x`, `?`, `g` + letter, `Backspace` on the Exposure map) are active only when focus is not in a text field, and **can be turned off in Settings → Personal** (WCAG 2.1.4). Modified shortcuts (`⌘K`, `⌘↵`) stay on.
+- Graph: arrows / `Tab` move between nodes first; **click or `↵` on a node moves the map to it** (and adds a step to the trail); `Backspace` or the trail's Back goes back one step, as does the browser's Back button; `+` / `−` zoom, Fit; `Esc` unpins. The node's detail opens from the inspector (Open software). Key hints sit at the right end of the trail: "↵ Move the map · ⌫ Back".
 
-**Motion:** quiet. 0.16 s colour, background and shadow transitions on rows, tabs, nav, segments, buttons and fields; skeleton pulse. All motion is off under `prefers-reduced-motion`; progress then updates in steps with no information lost.
+**Motion:** quiet. 0.16 s colour, background and shadow transitions on rows, tabs, nav, segments, buttons and fields; skeleton pulse. **One authored moment:** when the Exposure map moves, the centre node's outer ring scales in once (0.62 → 1, 200 ms ease-out); nothing else animates on a move. All motion is off under `prefers-reduced-motion` (the ring is simply drawn); progress then updates in steps with no information lost.
 
 **Banned everywhere:** in-product notifications or toasts-as-alerts (signal leaves via the Prometheus endpoint only, FR20); badge counts for *new* findings; OIDC setup wizards (NFR6); edit/delete on evidence (NFR11); infinite scroll; modal stacks deeper than one (the ⌘K dialog is the only modal); hover-only affordances without a keyboard or focus equivalent; celebratory animation; a second lime action in a view.
 
@@ -290,7 +319,8 @@ Contrast lives in `DESIGN.md` (both themes hold AA; lowest text pair 4.9:1).
 - **Field edges** meet 3:1 at rest ({colors.field-border}, 1.4.11).
 - Full keyboard operability; `Tab` order = reading order; visible focus ring on every interactive element ({colors.focus}; lime on the sidebar and on forest selection). Selected rows use `aria-current`; segmented controls use `aria-pressed`.
 - **Never colour alone:** severity has its word and level marker; Actively exploited has its word and icon; review status has its word and icon; deployed vs not deployed has solid vs dashed **and** a label; stale has amber **and** a clock **and** the time in words; the selection changes text colour as well as fill.
-- The graph has a full table equivalent (Graph/Table switch). The map has an `aria-label` summarising the answer; nodes are focusable with labels carrying name, tier and state.
+- The graph has a full table equivalent (Graph/Table switch). The map has an `aria-label` summarising the answer (after a move, the centre and what sits on each side, including the node you came from); nodes are focusable with labels carrying name, tier and state. The trail is a `nav` ("How you got here") with the current step marked `aria-current="location"`; [ASSUMPTION] moving the map puts focus on the new centre and announces the new answer politely.
+- **Data quality** never relies on colour: the score and letter are always printed, the weakest part is named in words with its reason, the meter list has an accessible name, and each part's technical term is on a visible grey line as well as in its `title` attribute. Low grades use {colors.dq-muted} at ≥ 4.9:1.
 - Hover hints ("Not seen running in any connected cluster.") are also reachable on focus.
 - The ⌘K palette is a real modal dialog: focus trapped, returned on `Esc`; results announced via polite `aria-live`. Checking progress is a polite `role="status"`.
 - Screen readers announce the surface on navigation using title + summary ("Issues — 3 need attention today").
@@ -314,9 +344,11 @@ Visual spec: `DESIGN.md` → Printed report (print-only light palette). Behaviou
 
 - Produced by Generate audit report (and printable exports); Preview in the product before download.
 - The cover sheet comes first and states coverage at generation time ("3,176 of 3,847 checked (82%)"), listing the not-checked software rather than leaving it out — exactly as the product showed it that day.
+- **Data quality** comes second on the cover sheet, before Signature and before any finding: "84 B+", the same five parts with plain names and the technical term small beside each, and "Lowest part: Extra sources (78). …" — the same reading as Reports detail at generation time. Coverage, then data quality: what was checked, then how much to trust it.
+- The cover sheet ends with Signature (the operator key and the `cosign verify-blob` line anyone can run) and a sign-off line (name and role, date).
 - Plain labels with the technical term beside them; companions keep technical names (SBOM, VEX).
 - Every page footer carries report ID, window, generation time and page number.
-- No mock: one sample PDF is produced for review (prior spine: Story 9.3).
+- The cover page is drawn (Audit report — cover page frame); the remaining pages are not: one sample PDF is produced for review (prior spine: Story 9.3).
 
 ## Inspiration & Anti-patterns
 
@@ -352,9 +384,10 @@ Failure: registry unreachable → Software shows the clay-wash band "We can't re
 2. From anywhere: `⌘K`, types the CVE ID (or "log4j"); the Exposure result "Where are we exposed to log4j-core?" is in the list; `↵`.
 3. **Seconds later** (NFR2), **Exposure** answers: "14 pieces of software have it. 9 are deployed, 5 are not deployed." Actively exploited pill, KEV, Critical, CVSS 9.8, "Answered 38 min ago". The map draws Vulnerability → Package → Software → Where it runs, deployed solid and not deployed dashed. The caveat line scopes the claim: "2 pieces of software haven't been checked yet and aren't on the map." Feeds updated overnight and stored package lists were re-evaluated: no rescan, no rebuild (NFR5).
 4. She switches to **Table** to scan where it runs, sorts by Deployed?, and back to Graph; payments-api stays selected. **Open software** shows its copies and audit trail in **Software**.
-5. **Climax:** she presses **Export**. The CSV — carrying the same caveat and provenance — goes to the CTO before he's read the news, and is filed in **Reports → Exports**.
-6. She reviews from the inspector (**Review**) into **Issues**: "Does this vulnerability impact us?" With **All 14 places** she records **Fix it** → Fix planned; then, for each of the two services that don't use the vulnerable code, **Only this software** → **Not impacted** with a reason. The row's chip reads **Mixed · 2 of 14**, and the issue leaves Needs attention because no place is Not reviewed yet. `⌘↵` saves and moves on; the list stays in view. If a save fails, the panel stays put with "Try again" and her answers intact.
-7. Every decision is already in the audit trail with her name and time ("Saved with your name in the audit trail."). Nothing to write up later.
+5. **Following the map:** back on Exposure she clicks payments-api (or presses `Enter` on it). The map moves: payments-api sits in the centre, its two vulnerable packages and their vulnerabilities on the left (log4j-core marked "Came from here"), prod-eu-west/payments and its 4 copies on the right. The header now asks "What is in payments-api 3.4.1, and where does it run?" and answers "payments-api 3.4.1 has 2 open issues. It runs in 1 place, with 4 copies."; the URL follows. The trail above the map reads Back · log4j-core 2.17.0 › **payments-api 3.4.1**; `Backspace` or the log4j-core step takes her back to the CVE answer with payments-api still selected.
+6. **Climax:** she presses **Export** on the log4j-core answer. The CSV — carrying the same caveat and provenance — goes to the CTO before he's read the news, and is stored in **Reports → Exports** as evidence, with an audit-trail entry under her name.
+7. She reviews from the inspector (**Review**) into **Issues**: "Does this vulnerability impact us?" With **All 14 places** she records **Fix it** → Fix planned; then, for each of the two services that don't use the vulnerable code, **Only this software** → **Not impacted** with a reason. The row's chip reads **Mixed · 2 of 14**, and the issue leaves Needs attention because no place is Not reviewed yet. `⌘↵` saves and moves on; the list stays in view. If a save fails, the panel stays put with "Try again" and her answers intact.
+8. Every decision is already in the audit trail with her name and time ("Saved with your name in the audit trail."). Nothing to write up later.
 
 Failure: the CVE is in the news before the vulnerability data has it → "Armoury has no data for CVE-2026-23012 yet. Vulnerability data updated 41 min ago." with **Check again**; never "No software has it" for an ID Armoury doesn't know. A known vulnerability with nothing matching → the coverage-scoped zero ("No software has it — across the 3,176 pieces of software we've checked (82%)"), with the unchecked remainder one click away.
 
@@ -364,18 +397,18 @@ Failure: the CVE is in the news before the vulnerability data has it → "Armour
 2. Priya opens **Reports** and presses **Generate audit report**. Smart defaults take the last 12 months and the whole fleet; window, scope and framework stay adjustable afterwards (FR22). If an admin has enabled auditor generation, Marta can press it herself.
 3. Generation runs in the background with progress. Marta reads the audit trail meanwhile (a software's Audit trail tab, an issue's History): every decision from CVE day is there, attributed, timestamped, never edited.
 4. The report lands under **Audit reports**: "Production fleet · 12 Nov 2025 → 6 Nov 2026 · Signed". Overview shows "Signature verified", the signer key, and the `cosign verify-blob` command with Copy — "Auditors can run this themselves, without Armoury." Files: pack.pdf, package lists (SBOM), review decisions (VEX).
-5. **Climax:** the report's first fact is its own coverage — "3,176 of 3,847 checked (82%)", with the 671 not checked listed, not left out. Three weeks of spreadsheet archaeology is now a signed document she downloads and hands over without a single hand-assembled appendix.
+5. **Climax:** the report's first fact is its own coverage — "3,176 of 3,847 checked (82%)", with the 671 not checked listed, not left out — and its second is how much to trust it: "Data quality 84 B+", five parts, the lowest one explained, on the screen and on the printed cover page alike. Three weeks of spreadsheet archaeology is now a signed document she downloads and hands over without a single hand-assembled appendix.
 
 Failure: the window includes coverage gaps → the report discloses them exactly as the product showed them. Generation failure → fails closed naming the failing section; no partial report is delivered silently.
 
 ### Flow 4 — Tom Reid, Head of Engineering: the Monday one-minute check
 
-1. Monday morning, Tom opens Armoury. It lands on **Home**; the sidebar shows **Issues 3**.
+1. Monday morning, Tom opens Armoury, signed in with the **Admin** role. It lands on **Home**; the sidebar shows **Issues 3**.
 2. The line under the title answers the only question he came with: "You are in good shape. 3 things need attention today." "Last checked 38 min ago."
 3. **Needs attention 3:** log4j-core 2.17.0 — Critical · Actively exploited · 14 places; AGPL-3.0 — Licence · Needs a decision · report-render; jackson-databind 2.15.2 — Critical · 3 places. No acronyms to decode.
 4. The first item is open in the detail column: one plain sentence ("A vulnerability in a common logging library lets an attacker run their own code. People are using it in real attacks right now."), the fix ("Update to 2.17.2"), Review status "Not reviewed yet". The **Exposure** tab shows the short version — 14 pieces of software, 9 deployed — and its button opens the full **Exposure** page if he wants the map.
 5. Below, **Across all software**: 82% checked, open issues down 247 in 30 days, the audit report signed and covering 82%. The freshness strip shows every source current.
-6. **Climax — under a minute:** Tom knows we are in good shape, which three things need a decision, that the numbers are fresh and scoped to what was checked, and that the audit report is ready if anyone asks. Nothing on the screen alarmed him or needed translating. He presses **Review all 3** to work through them, or leaves them for Priya. [ASSUMPTION] Review all 3 opens the three Needs-attention issues in Issues, one after another.
+6. **Climax — under a minute:** Tom knows we are in good shape, which three things need a decision, that the numbers are fresh and scoped to what was checked, and that the audit report is ready if anyone asks. Nothing on the screen alarmed him or needed translating. As an Admin he can press **Review all 3** to work through them, or leave them for Priya. [ASSUMPTION] Review all 3 opens the three Needs-attention issues in Issues, one after another.
 
 Variation: on a quiet Monday Home reads "Nothing needs you today." with its scope sentence; the one lime action is the Audit report.
 Failure: a source is stale → its age turns amber on the strip and the summary line carries a scoped caveat, so "good shape" is never claimed on old data.
@@ -386,9 +419,9 @@ Failure: a source is stale → its age turns amber on the strip and the summary 
 |---|---|
 | Home | Flow 1 (climax), Flow 4 |
 | Software | Flow 1 (steps 4–5), Flow 2 (step 4), Flow 3 (step 3) |
-| Issues | Flow 2 (step 6), Flow 3 (step 3), Flow 4 (step 6) |
-| Exposure | Flow 2, Flow 4 (step 4) |
-| Reports | Flow 2 (step 5, Exports), Flow 3 |
+| Issues | Flow 2 (step 7), Flow 3 (step 3), Flow 4 (step 6) |
+| Exposure | Flow 2 (moving the map: step 5), Flow 4 (step 4) |
+| Reports | Flow 2 (step 6, Exports), Flow 3 (data quality: step 5) |
 | Settings | Flow 1 failure (Connections) |
 | Help | None — no source defines Help (Open items) |
 
@@ -405,16 +438,18 @@ Failure: a source is stale → its age turns amber on the strip and the summary 
 | Prometheus endpoint (FR20) | Settings → Signals |
 | Optional CI scan: a pipeline submits a built artifact; the server scans it and decides pass or fail with the fleet CI policy; the step prints the verdict and a link to the artifact in Armoury; a known artifact is linked, not duplicated (FR31, NFR12) | Settings → Policy (CI policy), Settings → Access (CI tokens); the printed link lands on the piece of software in **Software**. How CI-submitted software is grouped and labelled, and where the verdict shows, is **open** (Open items) |
 | VEX ingestion with vendor attribution (FR15) | **Gap** — no drawn surface (Open items) |
-| Data-quality score (FR30) | **Gap** — no surface or token (Open items) |
+| Data-quality score (FR30) | Software detail (Info list and Data quality cell), Reports detail (Data quality row), printed cover page. Not on Home (may join the Home Details tab later, Open items); not in list rows |
+| Follow the graph from any node (prior Graph explorer) | Exposure (moving the map, trail, Back) |
+| Exports kept as evidence (FR19) | Reports → Exports (audit-trail entry, audit-report retention) |
 
 ## Changes from ux-Armoury-2026-06-12
 
 For the downstream Correct Course.
 
 - **Theme:** three dark-only themes (Forge default, High Signal, Gunmetal; "no light mode planned") → **Light default + one calm Dark theme** with the same roles, layout and density. High Signal's role as the built-in high-contrast option is gone (both themes hold AA). The header theme switcher is gone with the header; switching stays in Settings → Personal and ⌘K. Persistence in `user_preferences` is unchanged; the default for new users becomes Light.
-- **Visual identity:** warm graphite + ember "workshop" → Greenhouse: black sidebar, light canvas, lime for the active nav item and the one primary action, forest for selection and charts. The ember accent, data-quality hue and success/warning roles are replaced by the token set in `DESIGN.md`.
+- **Visual identity:** warm graphite + ember "workshop" → Greenhouse: black sidebar, light canvas, lime for the active nav item and the one primary action, forest for selection and charts. The ember accent and success/warning roles are replaced by the token set in `DESIGN.md`; the data-quality hue becomes the blue-violet {colors.dq} with {colors.dq-muted} for low grades and {colors.print-dq} in print.
 - **Typography:** Inter Display + Inter + IBM Plex Mono for every identifier (76px hero numeral, 10px tracked micro-labels, eyebrows) → **IBM Plex Sans** for everything, Plex Mono only for IDs, fingerprints, commands and keys; nine sizes (12–40); no hero numeral, eyebrows or tracked-caps labels; sentence-case table headers; fonts embedded/self-hosted (OFL).
-- **Navigation:** 58px icon rail with seven surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings) plus a page header (breadcrumb, search, theme switcher) → a 252px labelled black **sidebar**: Home, Software, Issues, Exposure, Reports, Settings, **Help** (new). Graph explorer merges into Exposure; Evidence becomes Reports (audit reports + exports only); the page header becomes the sidebar search field. Page title equals the sidebar label plus a friendly summary line.
+- **Navigation:** 58px icon rail with seven surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings) plus a page header (breadcrumb, search, theme switcher) → a 252px labelled black **sidebar**: Home, Software, Issues, Exposure, Reports, Settings, **Help** (new). Graph explorer merges into Exposure, with its traversal kept (moving the map to any node); Evidence becomes Reports (audit reports + exports only); the page header becomes the sidebar search field. Page title equals the sidebar label plus a friendly summary line.
 - **Layout:** rail + single full-width main column with full-width tables → **three-column master-detail** (sidebar · grouped list · tabbed detail).
 - **Terminology:** the "locked glossary" (Artifact, Finding, Posture, Evidence pack, blast radius, triage; lowercase statuses; "never 'issue' or 'report'") → **plain labels first with the technical term small and grey** (glossary above). Statuses: **Not reviewed yet · Not impacted · Fix planned · Mitigated · Risk accepted**. KEV is shown as **"Actively exploited"**. Exports and audit reports keep the technical (VEX) terms. "Evidence pack" → "Audit report" in the UI. UI copy in British English ("Licences").
 - **Ranking:** a single KEV-first, EPSS-weighted ranked list with the logic stated in the header (FR13) → **severity groups** Critical / High / Medium / Low with Actively exploited first in each group, and a **Licences group at the top, hidden at 0**. EPSS is **not shown as a rating** anywhere (raw value only in technical details). The PRD's FR13 wording ("KEV first, then EPSS-weighted severity") needs reconciling.
@@ -424,13 +459,15 @@ For the downstream Correct Course.
 - **Density:** "dense within data zones", 30px table rows → **one comfortable density** (≈72–78px two-line rows). Compact was explored and rejected.
 - **Home (was Posture):** hero numeral, co-stat band, severity band → page summary line, Needs attention, Open issues summary rows, an "Across all software" band (gauge, sparkline, audit report) and the freshness strip. **Needs attention** is new (rule agreed 2026-11-06). An **Issues nav badge** with the Needs-attention count is new; the prior ban on badge counts now applies to new-finding counts only.
 - **Software (was Artifacts):** grouped **Deployed / Not deployed** (was running / shipped, not running) with pagination over the real fleet; detail tabs Overview · Issues · Packages · Audit trail.
-- **Exposure (was Blast radius + Graph explorer):** answer in words first; graph restyled from ember-ringed, severity-hued rounded-rect nodes to a **hairline graph**: circular nodes, four sentence-case tiers, **deployed solid / not deployed dashed**, clay only on the vulnerability node. "Explore in graph" becomes See exposure / See the map. The digest layout becomes a fingerprint query.
+- **Exposure (was Blast radius + Graph explorer):** answer in words first; graph restyled from ember-ringed, severity-hued rounded-rect nodes to a **hairline graph**: circular nodes, four sentence-case tiers, **deployed solid / not deployed dashed**, clay only on the vulnerability node. "Explore in graph" becomes See exposure / See the map. The digest layout becomes a fingerprint query. The Graph explorer's **traversal is kept inside Exposure**: click or Enter on any node moves the map there (ego view), with a trail, Back and a URL that follow the centre; ⌘K starts a new trail.
 - **Honesty states:** warning-tinted dashed coverage-gap rows and populating banner → plain "Not checked yet" rows and a paper **Checking band** with determinate progress; errors in a **clay-wash band**, never red; freshness strip in plain words (source names, technical term small, stale in amber) instead of mono feed versions in success/warning colours.
 - **⌘K palette:** groups Answers → Navigate → Actions → Recent → **Issues · Software · Exposure · Actions**. `g`-key letters must change with the surface names; `t` and `e` need new meanings; `J`/`K` and `/` are added.
 - **Opacity:** "no opacity dimming on any element with text" is kept, with one exception drawn in the approved mock: **disabled controls at 0.45**.
 - **Shapes and depth:** 5–12px soft radii → 3–6px quiet radii (10px for the ⌘K dialog), pill only for the exploited pill; shadows only on the ⌘K dialog (no drawer).
-- **Data-quality score (FR30):** the DQ badge, hue and Posture co-stat are **not carried into the approved design**; open (see below).
-- **Primary users:** Priya and Marta, plus **Tom Reid, Head of Engineering**, as an equal-weight non-technical protagonist.
+- **Data-quality score (FR30): carried over, with a new presentation.** The DQ badge, hue and Posture co-stat are gone; instead a small violet reading (score + letter, "91 A−") in the Software detail Info list, a five-part **quality meter** (Software detail, Reports detail) with only the weakest part emphasised and explained, a data-quality block on the printed cover page, and a quieter muted violet for low grades, never red. **Not on Home** and not in list rows.
+- **Exports (FR19):** exports are **stored in Reports as evidence** — CSV from Exposure, Issues and Software, each with an audit-trail entry and the same retention as audit reports. FR19 needs rewording to match.
+- **Software detail:** Overview reordered: Info beside Packages over Where it runs; Issues full width; Issues trend; Data quality; Latest in the audit trail last. **Reports detail:** Coverage beside Signature, then Data quality full width.
+- **Primary users:** Priya and Marta, plus **Tom Reid, Head of Engineering** (Admin role), as an equal-weight non-technical protagonist.
 
 ## Open items
 
@@ -445,33 +482,35 @@ Remaining assumptions:
 7. [ASSUMPTION, inherited] Air-gapped mode is an instance-level flag; audit report generation is minutes-scale with section progress; UJ-1 has a single primary registry (PRD).
 8. [ASSUMPTION, from the decision log] Surfaces for new scope (servers, live estate, K8s policy) are deferred and need Correct Course.
 9. [ASSUMPTION] **Review scope details:** a later "All places" decision does not overwrite places that have their own status; the **Review status** filter matches an issue when any of its places has that status.
+10. [ASSUMPTION] **Admin includes the analyst's actions** (review, audit report generation), which is why Tom Reid (Admin, decided 2026-11-07) sees Review and Review all 3.
+11. [ASSUMPTION] **Data-quality grade bands** (which score earns which letter, and that D and below counts as a low grade shown in {colors.dq-muted}) are a placeholder until the scoring model exists. The five parts and their plain names are fixed; their weights are not.
+12. [ASSUMPTION] **Moving the Exposure map:** focus goes to the new centre and the new answer is announced politely; the ego layout for a package, vulnerability or place centre follows the drawn software rule (contents left, where it is used and runs right).
 
 Not drawn in the final mock:
 
-10. **Keyboard focus and g-key frame** (not drawn; no frame in the final mock shows it); the **g-key letters** for the new surfaces and new meanings for `t` / `e`.
-11. **Home detail Exposure tab** (only the Overview's Exposure cell is drawn), **How to fix** and **Details** tabs.
-12. **Issues detail Exposure and History tabs**; Software's Issues, Packages and Audit trail tabs (only Overview cells); Reports' Files and Audit trail tabs.
-13. **Licence review:** the two questions are worded for vulnerabilities; the licence decision copy is not drawn.
-14. **Vendor VEX claims with attribution** plus "the decision that applies now and its source" (FR15) — not in the review panel. (Review scope is decided: see The issue unit and Review flow.)
-15. **"N more" rows** with the pager, Home **Open issues** row click behaviour, and the destination of **Add software**.
-16. **Graph explorer traversal** beyond the query (re-centring on any node) and whether the full **freshness strip** also appears on Exposure and Software detail, as in the prior spine.
-17. **⌘K "Recent"** group (prior) not drawn.
-18. **Home Needs attention order** (drawn: exploited, licence, Critical) — not decided; the Licences-at-top rule covers the Issues list and the Open issues summary only.
-19. **Audit report generation in progress:** the in-progress row in Audit reports, how window, scope and framework are adjusted after the click (FR22), and re-generation semantics.
-20. **Behavioural rows not yet written** for the segmented control (URL, keyboard), table (sort keys, keyboard sort, default order), pager (does `J`/`K` cross pages), search fields (clear), technical details (always open or collapsible) and gauges and charts (text alternative); until then shadcn defaults apply.
+13. **Keyboard focus and g-key frame** (not drawn; no frame in the final mock shows it); the **g-key letters** for the new surfaces and new meanings for `t` / `e`.
+14. **Home detail Exposure tab** (only the Overview's Exposure cell is drawn), **How to fix** and **Details** tabs. **Data quality on Home** is decided against for now (2026-11-07); it may be added to the Home **Details** tab later, which needs its own UX update.
+15. **Issues detail Exposure and History tabs**; Software's Issues, Packages and Audit trail tabs (only Overview cells); Reports' Files and Audit trail tabs, and the **detail of a stored export** (Reports → Exports row selected: file, who, when, from which query, its audit-trail entry).
+16. **Licence review:** the two questions are worded for vulnerabilities; the licence decision copy is not drawn.
+17. **Vendor VEX claims with attribution** plus "the decision that applies now and its source" (FR15) — not in the review panel. (Review scope is decided: see The issue unit and Review flow.)
+18. **"N more" rows** with the pager, Home **Open issues** row click behaviour, and the destination of **Add software**.
+19. **Moved Exposure map for other centres:** only a software centre is drawn ("Exposure — moved to payments-api"); centres on a package, a vulnerability other than the query, a place or a roll-up node, a long trail (how many steps show before they collapse), and the Table view of a moved map are not drawn. Whether the full **freshness strip** also appears on Exposure and Software detail, as in the prior spine, is also open.
+20. **⌘K "Recent"** group (prior) not drawn.
+21. **Home Needs attention order** (drawn: exploited, licence, Critical) — not decided; the Licences-at-top rule covers the Issues list and the Open issues summary only.
+22. **Audit report generation in progress:** the in-progress row in Audit reports, how window, scope and framework are adjusted after the click (FR22), and re-generation semantics.
+23. **Behavioural rows not yet written** for the segmented control (URL, keyboard), table (sort keys, keyboard sort, default order), pager (does `J`/`K` cross pages), search fields (clear), technical details (always open or collapsible) and gauges and charts (text alternative); until then shadcn defaults apply.
 
 Unresolved product questions and gaps:
 
-21. **Data-quality score (FR30):** no surface, token or presentation in the new design.
-22. **Help:** stays in the sidebar; the Help screen is deferred to a later UX update (decided 2026-11-06). The `?` shortcut map may belong there.
-23. **Tom Reid's role** (analyst, admin or read-only) — the mock shows him with Review actions — and whether he is the PRD's CTO.
-24. **High-contrast option:** with High Signal gone, confirm AA-only is acceptable.
-25. **PRD FR13** wording (KEV first, then EPSS-weighted) vs severity grouping; PRD glossary terms vs plain labels.
-26. **Mock housekeeping:** the stale header notes and the High 40 count were fixed in the mock on 2026-11-06. A few stylesheet contrast ratios differ slightly from computed values; the spine values win. The mock's lime avatar initials are not carried (DESIGN.md user menu).
-27. **Optional CI scan (FR31) landing:** the PRD fixes only that the CI step prints the verdict and a link to the artifact in Armoury, and that a known artifact is linked, not duplicated. Not decided: how CI-submitted software that is in no connected registry (an uploaded image or package archive) is grouped in Software (it fits neither "Deployed" nor "Not deployed · Last deployed …"), the label that says where it came from, and where the CI verdict and its history show in Software detail.
-28. **Unknown package or fingerprint:** the "no data yet" state covers vulnerability IDs; the copy for a `package@version` or fingerprint Armoury has never seen is not written.
-29. **Conflicting decisions:** two people reviewing the same issue at once (for example "Changed by Marta at 14:05. Review again.") has no rule.
-30. **Global states:** session expired and re-authentication; control plane unreachable (single instance, NFR10); a direct link to a Settings panel or action the role cannot use.
-31. **Token hygiene for code generation:** several component tokens are composite strings (for example `'1px {colors.rule}'`) rather than atomic keys; some dimensions are untokenised (26px tab padding, 128px term column, 120px gauge, 56px sparkline, 84px disc, 660px palette, the icon-rail width); `button-label`, `mono-id` and `display-reserved` have no line height; `display-reserved` and `rounded.DEFAULT` are unreferenced.
-32. **Printed report** content (cover sheet, footer, plain labels) is restated in both spines; visual rules should live in `DESIGN.md` and the content contract here, cross-linked.
-33. **Retired label "Running":** the ban should read "Running as a group or status label", since the hint "Not seen running…" and the glossary's "Running replicas" use the word.
+24. **Help:** stays in the sidebar; the Help screen is deferred to a later UX update (decided 2026-11-06). The `?` shortcut map may belong there.
+25. **High-contrast option:** with High Signal gone, confirm AA-only is acceptable.
+26. **PRD FR13** wording (KEV first, then EPSS-weighted) vs severity grouping; PRD glossary terms vs plain labels. **PRD FR19** wording must say exports are stored in Reports as evidence (audit-trail entry, audit-report retention).
+27. **Mock housekeeping:** the stale header notes and the High 40 count were fixed in the mock on 2026-11-06. A few stylesheet contrast ratios differ slightly from computed values; the spine values win. The mock's lime avatar initials are not carried (DESIGN.md user menu). The mock's graph labels use 11.5, 12.5 and 13.5px SVG text; product graph labels use the nine sizes.
+28. **Optional CI scan (FR31) landing:** the PRD fixes only that the CI step prints the verdict and a link to the artifact in Armoury, and that a known artifact is linked, not duplicated. Not decided: how CI-submitted software that is in no connected registry (an uploaded image or package archive) is grouped in Software (it fits neither "Deployed" nor "Not deployed · Last deployed …"), the label that says where it came from, and where the CI verdict and its history show in Software detail.
+29. **Unknown package or fingerprint:** the "no data yet" state covers vulnerability IDs; the copy for a `package@version` or fingerprint Armoury has never seen is not written.
+30. **Conflicting decisions:** two people reviewing the same issue at once (for example "Changed by Marta at 14:05. Review again.") has no rule.
+31. **Global states:** session expired and re-authentication; control plane unreachable (single instance, NFR10); a direct link to a Settings panel or action the role cannot use.
+32. **Data quality before a score exists:** what Software detail shows for a piece of software that is Not checked yet or still checking (no score yet), and how a score is explained when the scoring model changes.
+33. **Token hygiene for code generation:** several component tokens are composite strings (for example `'1px {colors.rule}'`) rather than atomic keys; some dimensions are untokenised (26px tab padding, 128px term column, 120px gauge, 56px sparkline, 84px disc, 660px palette, the icon-rail width, the 164px meter name column); `button-label`, `mono-id` and `display-reserved` have no line height; `display-reserved`, `rounded.DEFAULT` and `colors.dq-wash` are unreferenced by any component.
+34. **Printed report** content (cover sheet, footer, plain labels) is restated in both spines; visual rules should live in `DESIGN.md` and the content contract here, cross-linked.
+35. **Retired label "Running":** the ban should read "Running as a group or status label", since the hint "Not seen running…" and the glossary's "Running replicas" use the word.

@@ -2,7 +2,7 @@
 name: Armoury
 description: Self-hosted software supply-chain evidence layer for SME security teams and the engineering leaders they report to. Greenhouse visual system — calm light canvas by default, one calm dark theme, black sidebar, lime for the one action that matters, forest green for selection and charts. shadcn-svelte on SvelteKit + Tailwind; this DESIGN.md specifies the brand layer over shadcn defaults.
 status: final
-updated: 2026-11-06
+updated: 2026-11-07
 supersedes: ux-Armoury-2026-06-12
 colors:
   # Semantic tokens, mapped onto shadcn CSS variables (see "Colors → shadcn
@@ -57,6 +57,9 @@ colors:
   sprout-ring: '#F1FADF99'  # rgba(241,250,223,.6)
   shadow-far: '#1218142E'   # rgba(18,24,20,.18)
   shadow-near: '#12181414'  # rgba(18,24,20,.08)
+  dq: '#4E4A9C'             # data-quality reading: score, grade, weakest-part fill (blue-violet, hue 243°)
+  dq-muted: '#66637F'       # low grades (D and below): quieter, never red
+  dq-wash: '#ECEBF5'        # data-quality bar track (decorative; the score is always printed beside it)
   #
   # —— Print (audit report PDF, printed exports) ——
   # Print never follows the app theme: each print-*-dark pair repeats the
@@ -69,6 +72,7 @@ colors:
   print-high: '#855A14'     # High (= amber), 6.1:1, word always present
   print-medium: '#4A5E6B'   # Medium (= slate), 6.8:1, word always present
   print-low: '#1F3B33'      # Low (= forest-ink), 12.1:1, word always present
+  print-dq: '#4E4A9C'       # data-quality reading on the cover page (= dq), 7.5:1
   #
   # —— Dark ——
   ink-dark: '#070A08'
@@ -113,6 +117,9 @@ colors:
   sprout-ring-dark: '#1C261899' # rgba(28,38,24,.6)
   shadow-far-dark: '#0000008C'  # rgba(0,0,0,.55)
   shadow-near-dark: '#00000059' # rgba(0,0,0,.35)
+  dq-dark: '#A9A6E8'
+  dq-muted-dark: '#9C9AB8'
+  dq-wash-dark: '#23233A'
   print-page-dark: '#FFFFFF'    # print never follows the theme
   print-text-dark: '#1A1A1A'
   print-text-2-dark: '#555555'
@@ -121,6 +128,7 @@ colors:
   print-high-dark: '#855A14'
   print-medium-dark: '#4A5E6B'
   print-low-dark: '#1F3B33'
+  print-dq-dark: '#4E4A9C'
 typography:
   # IBM Plex Sans (variable 100–700) for everything; IBM Plex Sans Bold Italic
   # for the wordmark only; IBM Plex Mono 400 only for IDs, fingerprints,
@@ -455,6 +463,47 @@ components:
     node: 'circle, {colors.canvas} fill, 1.5px {colors.forest-ink} or {colors.forest-2} ring'
     node-vulnerability: '{colors.clay-wash} fill, 1.5px {colors.clay-dot} ring, pulse icon in {colors.clay} when actively exploited'
     rule: '1px {colors.rule}; dashed rule above the Not deployed band'
+    centre-node: '18px-radius circle, {colors.forest} fill, 1.5px {colors.forest-ink} ring, 6px {colors.lime} inner dot with a 1.5px {colors.forest} edge'
+    centre-label: '{typography.row-title} with the version in {colors.text-3}; "Centre of the map" in {typography.meta} weight 500 {colors.text-2}; fingerprint in {typography.mono-small} {colors.text-3}'
+    centre-ring: '28px radius, 1px {colors.forest-ink}; scales 0.62 → 1 once, 200ms ease-out; static under reduced motion'
+    came-from: '12px-radius circle, {colors.canvas} fill, 1.2px {colors.forest-2} ring, 6px {colors.forest-ink} dot; back icon + "Came from here" in {typography.meta} weight 500 {colors.text-2}'
+  exposure-trail:
+    background: '{colors.paper}'
+    rule: '1px {colors.rule} bottom'
+    padding: '12px 28px'
+    back: 'small grey {components.button} ({spacing.button-height-sm}) with a back icon'
+    step: '{spacing.button-height-sm} link chip: {colors.canvas}, 1px {colors.rule} edge with a bottom edge, {rounded.sm}, {typography.secondary} weight 500 in {colors.forest-ink}, version weight 400 in {colors.text-3}'
+    step-hover: '{colors.chip}'
+    separator: 'chevron, 1.5px {colors.text-3}'
+    current: '{typography.row-title} in {colors.text}, version in {colors.text-3}'
+    key-hint: '{typography.meta} in {colors.text-3} with {components.kbd} caps'
+  dq-value:
+    foreground: '{colors.dq}'
+    low-foreground: '{colors.dq-muted}'
+    score: 'inherits the context size, weight 500, tabular-nums'
+    grade: '{typography.severity-label}, +0.01em'
+    gap: 4px
+  quality-meter:
+    font: '{typography.secondary}, tabular-nums'
+    columns: '164px name · flexible track · 32px score, 14px gap'
+    row-padding-y: 5px
+    name: '{colors.text-2}'
+    score: '{colors.text-2}, right-aligned'
+    track: '2px {colors.rule}, radius 1px'
+    fill: '{colors.slate-dot}'
+    weakest: '{colors.dq} name, score and fill; name and score weight 500'
+    weakest-low: '{colors.dq-muted} name, score and fill'
+    reason: '{typography.secondary} in {colors.text-2}, max 52ch; lead ("Package lists 82") in {colors.dq} weight 500, {colors.dq-muted} when low'
+    terms: '{typography.meta} in {colors.text-3}'
+  print-cover-dq:
+    score: '{typography.headline-number} in {colors.print-dq}'
+    grade: '{typography.inspector-title} in {colors.print-dq}'
+    part-name: '{colors.print-text}'
+    part-term: '{colors.print-text-2}'
+    part-score: '{colors.print-text}'
+    track: '6px {colors.print-rule}, radius 4px'
+    fill: '{colors.print-dq}'
+    rule: '1px {colors.print-rule}'
   inspector:
     title: '{typography.inspector-title}'
     background: '{colors.canvas}'
@@ -490,7 +539,7 @@ components:
 
 # Armoury — Design Spine
 
-> Approved composition reference: [mockups/greenhouse-final.html](mockups/greenhouse-final.html) (Light / Dark switch top right; screens: Home, Issues, Software, Exposure graph, Exposure table, Reports, ⌘K palette, Checking, Registry unreachable, All clear, Palette and type). Inspiration: [imports/inspo-shost-server-dashboard.png](imports/inspo-shost-server-dashboard.png). Decision log: [.memlog.md](.memlog.md). **This spine wins on conflict with any mock.** Supersedes `ux-Armoury-2026-06-12`.
+> Approved composition reference: [mockups/greenhouse-final.html](mockups/greenhouse-final.html) (Light / Dark switch top right; screens: Home, Issues, Software, Software low grade, Exposure graph, Exposure moved to payments-api, Exposure table, Reports, Audit report cover page, ⌘K palette, Checking, Registry unreachable, All clear, Palette and type; the "What changed in v2" panel lists the 2026-11-07 additions: data quality and moving around the Exposure map). Inspiration: [imports/inspo-shost-server-dashboard.png](imports/inspo-shost-server-dashboard.png). Decision log: [.memlog.md](.memlog.md). **This spine wins on conflict with any mock.** Supersedes `ux-Armoury-2026-06-12`.
 
 ## Brand & Style
 
@@ -530,6 +579,16 @@ Three axes, never mixed: severity (how bad), actively exploited (yes/no), review
 - **Review status** chips are neutral ({colors.chip} / {colors.text-2}) with a drawn icon. Status never carries a colour, including the **Mixed** chip shown when places differ.
 - **Honesty states**: stale sources use {colors.amber} text with the age in words and an {colors.amber-dot}; errors use a {colors.clay-wash} band with a {colors.clay} icon. {colors.slate-dot} marks neutral dots and not-deployed dashes.
 
+### Data quality
+
+The data-quality score (PRD FR30) says how much to trust the numbers. It is an **instrument reading, not a threat**, so it has its own hue, apart from the risk axes.
+
+- **{colors.dq}** — blue-violet (hue 243° in both themes): the score, its letter grade and the weakest part of the quality meter. It is **hue-distinct** from every severity (Critical clay 16°, High amber 37°, Medium slate 204° at 18% saturation, Low forest-ink 163°), from lime (78°) and from clay. The nearest, slate, is 39° away at twice the saturation, so a grade never reads as a severity.
+- **{colors.dq-muted}** — **low grades** (D and below): a quieter, greyer violet. The score keeps its number and letter; it never turns clay, amber or red and never uses opacity.
+- **{colors.dq-wash}** — the data-quality bar track and tint (decorative; the score is always printed beside it). The approved meter draws its quiet rows on the neutral {colors.rule} track.
+- **{colors.print-dq}** — the same violet on the printed cover page.
+- No grade sits on a forest selection: list rows carry no grade.
+
 ### Interaction
 
 - **{colors.focus}** — 2px focus ring, 2px offset: forest on light, lime on dark. On ink (sidebar) and on forest (selection) the ring is always lime.
@@ -556,7 +615,7 @@ Three axes, never mixed: severity (how bad), actively exploited (yes/no), review
 | `--sidebar-primary` / `--sidebar-primary-foreground` | {colors.lime} / {colors.ink} |
 | `--sidebar-accent` / `--sidebar-border` / `--sidebar-ring` | {colors.ink-2} / {colors.ink-line} / {colors.lime} |
 
-Dark sets the same variables from the `-dark` tokens. Paper ({colors.paper}) has no shadcn equivalent; add it as `--paper`. The `print-*` tokens are not shadcn variables; they feed the Typst template only (see Printed report).
+Dark sets the same variables from the `-dark` tokens. Paper ({colors.paper}) has no shadcn equivalent; add it as `--paper`. The data-quality roles have none either; add them as `--dq`, `--dq-muted` and `--dq-wash`. The `print-*` tokens are not shadcn variables; they feed the Typst template only (see Printed report).
 
 ### Contrast (WCAG 2.x)
 
@@ -584,6 +643,9 @@ Computed from the token hexes (the mock's stylesheet comments agree to ±0.2 exc
 | on-ink on ink | 19.3 | 17.7 |
 | lime on ink-2 (nav badge) | 13.2 | 13.4 |
 | text / text-2 on lime-wash (all clear) | 16.7 / 6.0 | 12.6 / 7.2 |
+| dq (score, grade, weakest part) on canvas / paper / chip / row-hover / dq-wash | 7.5 / 7.0 / 6.5 / 6.6 / 6.4 | 7.8 / 8.2 / 6.7 / 7.6 / 6.8 |
+| dq-muted (low grade) on canvas / paper / chip / dq-wash | 5.7 / 5.3 / 4.9 / 4.9 | 6.5 / 6.8 / 5.6 / 5.6 |
+| print-dq on print-page (cover page) | 7.5 | 7.5 (print never follows the theme) |
 
 Non-text: focus ring 12.1 / 11.2:1 (light, canvas / paper), 13.7 / 14.3:1 (dark); lime ring on forest 9.4 / 6.7:1; scroll thumb on paper 3.1 / 3.7:1; **field border** on canvas / paper / chip 4.3 / 3.9 / 3.7:1 (light) and 4.3 / 4.5 / 3.7:1 (dark). Without selection colours, clay on forest would be 2.0:1 (light) and text-2 on forest 1.9:1, which is why every foreground on a selected row or table row switches as listed above. The mock comment gives side-text on ink as 12.9:1 (light); computed is 12.3:1. Markers below 3:1 — {colors.amber-dot} (2.1–2.3:1 light), {colors.slate-dot} (2.5–2.7:1 light) and the dark forest selection fill (2.1:1) — **never carry meaning alone**: each sits beside a word ("As of 14:02", "Not deployed") or a text-colour change.
 
@@ -615,7 +677,7 @@ Weights: 400 body, 500 emphasis in data, 600 headings and labels. Numerals are `
 2. **List column** ({colors.paper}, {spacing.list-width}; {spacing.list-width-issues} on Issues for the filters and status column; {spacing.list-width-reports} on Reports) — page title, summary line, filters, grouped list, pager, then the view's one primary action.
 3. **Detail column** ({colors.canvas}, the rest) — tab bar ({spacing.tab-height}), then a grid of cells separated by 1px rules, never cards.
 
-Exposure is the exception: a full-width header (title, query, Graph/Table switch, actions, answer) spans columns 2–3; below it, the list column and the map with its inspector.
+Exposure is the exception: a full-width header (title, query, Graph/Table switch, actions, answer) spans columns 2–3; below it, the list column and the map with its inspector. Once the map has moved, the {components.exposure-trail} sits directly above the map, never above a heading.
 
 **Narrower viewports** (behaviour in `EXPERIENCE.md` → Responsive & Platform): below 1280px the sidebar becomes an **icon rail** — the same 20px nav icons on {colors.ink}, active item lime, labels moved to tooltips and accessible names, the search field reduced to a ⌘K icon button and the user to the avatar alone. Below 1024px the list and detail columns **stack in one column**: the list fills the width, and opening an item shows its detail with a **Back** link at the top in {colors.forest-ink}. No other breakpoints.
 
@@ -649,7 +711,7 @@ shadcn-svelte components used with Armoury tokens: `Button`, `Tabs`, `ToggleGrou
 | Licence marker and kind tag | {components.licence-marker}: scale icon + word in {colors.text-2}. {components.kind-tag}: "Licence" on {colors.chip}. On a selected row both switch to {colors.sage-hi} (the kind tag on {colors.sel-chip}). |
 | Segmented control | {components.segmented-control}: one style everywhere (Issues type filter, Exposure card All/Deployed/Not deployed, Graph/Table, theme). 3px inset frame, forest pill for the active segment, label colour changes too. Graph/Table labels are uppercase {typography.button-label}. |
 | Tabs | {components.tabs}: 64px, 26px side padding, counts in {colors.text-3}; active tab is a forest block. The right end of the bar carries position and keys ("1 of 3 · J K") or context ("Generated today, 08:31, by …"). |
-| Detail cells | Grid of {spacing.detail-cell-y}/{spacing.detail-cell-x} cells divided by rules. {typography.detail-title} for the subject, {typography.body} lead in {colors.text-2} (max 58ch), tags row, then a definition list (128px term column, terms {colors.text-2}). Cell headings {typography.cell-heading} with meta or a segmented control on the same baseline. Home adds a {colors.paper} band "Across all software" for fleet readings, separate from the selected issue. |
+| Detail cells | Grid of {spacing.detail-cell-y}/{spacing.detail-cell-x} cells divided by rules. {typography.detail-title} for the subject, {typography.body} lead in {colors.text-2} (max 58ch), tags row, then a definition list (128px term column, terms {colors.text-2}). Cell headings {typography.cell-heading} with meta or a segmented control on the same baseline. Home adds a {colors.paper} band "Across all software" for fleet readings, separate from the selected issue (Checked, Open issues, Audit report; no data-quality reading). **Software detail Overview**, top to bottom: Info (tall, left) beside Packages over Where it runs (right); Issues full width, its issues side by side on the same column line as the cells above, Review under them; the Issues trend chart; Data quality; Latest in the audit trail last. **Reports detail Overview**: title and actions; row 1 Coverage beside Signature; row 2 Data quality full width; then Files and What it says. |
 | Review panel | In the Issues detail column (Review tab). Two fieldsets with {typography.row-title}-weight legends; options are {components.review-option} rows: 18px radio ring, bold option, {typography.meta} hint, and the resulting status chip at the right. The second question indents under "Yes" with a 1px rule. "Why?" {components.review-note-field} (min 66px). Above the questions, a **scope** {components.segmented-control}: "All 14 places" (default) · "Only this software"; choosing the second reveals a shadcn `Select` of the places, in {components.field} style. Actions: lime "Save and next ⌘↵" (disabled at 0.45 until a question is answered), grey "Decide later", hint "Saved with your name in the audit trail." in {colors.text-3}. A failed save shows the {components.inline-error} line directly above the actions. Ends with the {components.technical-details} block. |
 | Inline error | {components.inline-error}: one line in the panel where the action was taken (review panel, Export or Generate row, Settings panel), full width of that panel: {colors.clay-wash} fill, {rounded.sm}, 10px × 14px padding, 16px {colors.clay} alert icon, {typography.secondary} message in {colors.text} naming the problem ("Your decision wasn't saved: Armoury can't reach its database."), optional detail in {colors.text-2}, and a grey small **Try again** button ({spacing.button-height-sm}) at the right. No border, no shadow, no red. |
 | Technical details | Mono 12px, line-height 1.75, {colors.text-2}, under a rule with a sans 13px 600 heading. Holds CVE, KEV, CVSS, EPSS, source and check time. |
@@ -657,9 +719,12 @@ shadcn-svelte components used with Armoury tokens: `Button`, `Tabs`, `ToggleGrou
 | Fields | {components.field}: canvas, 1px {colors.field-border} edge (≥3:1), hover {colors.text-3} edge, focus 1.5px focus colour. The "Why?" textarea ({components.review-note-field}) uses the same edges on paper. Filter fields show label + bold value + count ("Review status: **Not reviewed yet** 312"). Search fields show a `/` key cap. |
 | Pager | {components.pager}: "1–25 of 312 · page 1 of 13" in {typography.meta} with bold numbers; previous/next 32px square buttons; disabled at 0.45. |
 | Coverage-gap row | {components.coverage-gap-row}: sits in the list where the missing rows would be. Title "Not checked yet" + count in {colors.text-3}; one {typography.secondary} sentence ("Counted above, but we haven't looked inside them yet, including 212 in prod-eu-west. Their issues are unknown, not absent."). No tint, no dashes, not dismissible. |
-| Exposure header | With no query (opened from the sidebar), the answer slot holds a prompt in {typography.answer} and three example queries in {typography.mono-id}; with an ID Armoury has no data for, it holds that sentence in {typography.answer}, the data age in {typography.meta} and a lime Check again — no map, no zero. Otherwise: page title + summary question; the query as a {spacing.query-height} paper button showing the subject ("log4j-core 2.17.0 · Vulnerability CVE-2026-23012", ⌘K cap); Graph/Table switch; grey Export and "Audit report for this answer". Answer in {typography.answer} with bold numbers, a meta line (exploited pill, KEV tag, severity, CVSS, "Answered 38 min ago"), and a right-hand split of deployed/not-deployed copy bars. |
-| Exposure graph | {components.exposure-graph}. Hairline, left to right, **four tiers** labelled in sentence case: Vulnerability · Package · Software · Where it runs (with counts). **Deployed edges solid** {colors.forest-2}; **not-deployed edges dashed** {colors.slate-dot}; the selected path heavier {colors.forest-ink}. Not-deployed software sits below a dashed rule labelled "Not deployed". Only the vulnerability node takes clay (pulse icon when actively exploited). Roll-ups as text nodes ("8 more", "5 more places"); edge labels ("direct · in 12", "bundles it · in 2"). Legend and zoom (+ / − / Fit) in a footer; a caveat line under it ("2 pieces of software haven't been checked yet and aren't on the map…"). |
-| Inspector | Under the map, two cells: identity (title {typography.inspector-title} with version and "Selected on the map" marker; Name, Fingerprint in mono, Runs in, Copies, How it got it) and "What to do" (The fix, Review status chip, actions). Ends with "How we know: Syft v… · Grype DB v… · checked 38 min ago" in {colors.text-3}. |
+| Exposure header | With no query (opened from the sidebar), the answer slot holds a prompt in {typography.answer} and three example queries in {typography.mono-id}; with an ID Armoury has no data for, it holds that sentence in {typography.answer}, the data age in {typography.meta} and a lime Check again — no map, no zero. Otherwise: page title + summary question; the query as a {spacing.query-height} paper button showing the subject ("log4j-core 2.17.0 · Vulnerability CVE-2026-23012", ⌘K cap); Graph/Table switch; grey Export and "Audit report for this answer". Answer in {typography.answer} with bold numbers, a meta line (exploited pill, KEV tag, severity, CVSS, "Answered 38 min ago"), and a right-hand split of deployed/not-deployed copy bars. On a moved map the header follows the centre: the question ("What is in payments-api 3.4.1, and where does it run?"), the query button ("payments-api 3.4.1 · acme/payments-api · sha256:9f2c41…"), the answer ("payments-api 3.4.1 has 2 open issues. It runs in 1 place, with 4 copies.") and its meta. |
+| Data-quality value | {components.dq-value}: small and calm — the score in tabular figures and the letter beside it ("91 A−"), the letter at 13px 600, both in {colors.dq}; {colors.dq-muted} for low grades ("58 D"). Size follows its context (15px in an Info list, 17px in a cell heading). Never a big numeral in the app, never a severity hue, never in list rows. Accessible name in full ("Data quality 91 out of 100, grade A−"). |
+| Quality meter | {components.quality-meter}: five rows, one per part — Package lists, Coverage, Freshness, Extra sources, Vulnerability records. Each row: the plain name, a 2px track, the score right-aligned. Quiet rows are {colors.text-2} on a neutral track with a {colors.slate-dot} fill; **only the weakest part** takes {colors.dq} (name, score, fill, weight 500) and gets **one reason** in words beside the meter ("**Package lists 82** — version missing for 6 indirect packages, so their issues can't be matched yet. See them"), with a {colors.forest-ink} link when there is somewhere to go. At a low grade the weakest parts use {colors.dq-muted} and each gets its reason (two at most). The technical terms sit on **one grey line** under it ("In technical terms: SBOM depth · scan coverage · feed freshness · enrichment · CVE record quality.") and in each name's `title` attribute. Meter left, reason right, on the same column line as the cells above. Cell heading "Data quality" with "How much you can trust these numbers" (Software) or the {components.dq-value} and "when it was made" (Reports) beside it. |
+| Exposure graph | {components.exposure-graph}. Hairline, left to right, **four tiers** labelled in sentence case: Vulnerability · Package · Software · Where it runs (with counts). **Deployed edges solid** {colors.forest-2}; **not-deployed edges dashed** {colors.slate-dot}; the selected path heavier {colors.forest-ink}. Not-deployed software sits below a dashed rule labelled "Not deployed". Only the vulnerability node takes clay (pulse icon when actively exploited). Roll-ups as text nodes ("8 more", "5 more places"); edge labels ("direct · in 12", "bundles it · in 2"). Legend and zoom (+ / − / Fit) in a footer; a caveat line under it ("2 pieces of software haven't been checked yet and aren't on the map…"). **Moved map (ego view):** the centre node sits in the true centre of the map — {colors.forest} disc, {colors.forest-ink} ring and a {colors.lime} inner dot (the selected-node lime exception), a 28px outer ring, its name and version below with "Centre of the map" and the fingerprint. What it contains sits on the left (Vulnerabilities · Packages tiers: packages and their vulnerabilities); where it runs and its copies on the right (Where it runs · Copies tiers). The node you came from carries the **came-from marker** (canvas disc, {colors.forest-2} ring, {colors.forest-ink} dot, back icon and "Came from here"); the selected path through the centre (back to the came-from node and on to where it runs) is the heavier {colors.forest-ink} edge. Packages with no known issues roll up ("212 more packages · No known issues"). The legend adds "Came from". **One motion moment:** the centre ring scales in once (0.62 → 1, 200ms ease-out) when the map moves; none under reduced motion. |
+| Exposure trail | {components.exposure-trail}: a {colors.paper} strip directly above the moved map, under a rule. A small grey **Back** button with a back icon, then the previous steps as link chips ({colors.forest-ink} name, version in {colors.text-3}) separated by chevrons, then the **current step in bold** ({colors.text}). Key hints at the right end in {colors.text-3}: ↵ Move the map · ⌫ Back. It appears after the first move. |
+| Inspector | Under the map, two cells: identity (title {typography.inspector-title} with version and "Selected on the map" marker; Name, Fingerprint in mono, Runs in, Copies, How it got it) and "What to do" (The fix, Review status chip, actions). Ends with "How we know: Syft v… · Grype DB v… · checked 38 min ago" in {colors.text-3}. On a moved map centred on a piece of software, the identity cell adds Issues ("2 open: 1 Critical, 1 Low"), the lime action is **Open software**, **Show only this** stays grey, and a {typography.meta} hint reads "Click any node to move the map to it. Enter does the same from the keyboard." |
 | Table | {components.table}: sentence-case sortable headers with a sort arrow, 14px cells, numbers right-aligned; selected row forest with {colors.on-forest} text, secondary (muted) cells in {colors.sage}, chips {colors.sage-hi} on {colors.sel-chip}, severity {colors.sage-hi}. Exposure table columns: Software, Version, Deployed? (Yes/No), Where it runs, Copies, Severity, Review. |
 | ⌘K palette | {components.command-palette}: 660px dialog, input row at 17px with search icon and `esc` cap; results grouped (Issues · Software · Exposure · Actions) under 13px 600 headings with counts; rows 15px with matched text underlined; active row forest; footer on paper with ↑ ↓ move · ↵ open · esc close and "Also finds CVE IDs, package@version and fingerprints". |
 | Freshness strip | {components.freshness-strip}: one row on paper under a rule at the bottom of the detail column. Each source and its age ("Vulnerability data 41 min ago · Exploited list KEV 6 Nov · Packages 38 min ago · 2 clusters reporting"), technical term small in {colors.text-3}; a stale source turns {colors.amber} with its age in words and an amber dot. "Sources" link at the end in {colors.forest-ink}. |
@@ -680,6 +745,7 @@ Audit reports (PDF, rendered with Typst) and printed exports use a **print-only 
 - IBM Plex Mono for every ID, fingerprint and command. [ASSUMPTION] Text face is IBM Plex Sans, replacing the prior spine's Inter so print matches the app. Body 9.5pt, tables 8.5pt.
 - A4 by default; US Letter as an option.
 - The cover sheet comes first and carries the coverage statement ("Covers 3,176 of 3,847 (82%)", with the not-checked software listed, not left out).
+- **Data-quality block** on the cover sheet, directly under Coverage and before Signature: heading "Data quality" with "How much you can trust these numbers" in {colors.print-text-2}; the score and grade ({components.print-cover-dq}: "84 B+" at 30px 500 with the letter at 20px, in {colors.print-dq} — the only big data-quality numeral anywhere); beside it the five parts, each with its plain name, the technical term small in {colors.print-text-2} beside it ("Package lists SBOM depth"), a 6px {colors.print-rule} track with a {colors.print-dq} fill and the score in {colors.print-text}; then one line naming the lowest part and why ("Lowest part: Extra sources (78). …"). The page stays white in the dark theme.
 - Every page has a footer with the report ID, the time window, the generation time and the page number.
 - Severity always has its word as well as its colour, so a black-and-white print stays readable; no red.
 - Long tables repeat their header row on each page.
@@ -703,3 +769,5 @@ Audit reports (PDF, rendered with Typst) and printed exports use a **print-only 
 | Coverage gaps as plain rows where the data would be | Hiding unchecked software in a footnote or tooltip |
 | Semantic tokens; themes only remap values | Components referencing a theme-specific hex |
 | Markers under 3:1 always beside a word | Meaning carried by a dot or dash colour alone |
+| Data quality as a small violet reading (score + letter), the weakest part named in words | A grade in red, clay, amber or opacity; a big data-quality numeral in the app; a grade in list rows |
+| Moving the Exposure map with a trail and Back | Opening a separate graph-explorer screen for traversal |
