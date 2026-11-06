@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>UX Design Validation: Armoury</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  /* Resolution status (added: the spines were updated after the review). */
+  .finding-status { margin-top: 8px; font-size: 13.5px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .status-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .status-decision { background: rgba(22, 163, 74, 0.14); color: var(--verdict-strong); }
+  .status-spine { background: rgba(101, 163, 13, 0.14); color: #4d7c0f; }
+  .status-open { background: rgba(217, 119, 6, 0.14); color: #b45309; }
+  .status-detail { color: var(--muted); }
+  .resolution-summary {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: -12px 0 24px;
+    font-size: 13px;
+    color: var(--muted);
+    align-items: center;
+  }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="report-header">
+      <div class="title">
+        <h1>Armoury — UX Design Validation Report</h1>
+        <div class="subtitle">_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/ (DESIGN.md + EXPERIENCE.md) · 2026-11-06</div>
+      </div>
+    </header>
+
+    <div class="synthesis">
+      <p>The pair is a clean, extractable contract. Every <code>{path.to.token}</code> reference resolves (357 in DESIGN.md, 25 in EXPERIENCE.md). All 42 colour roles have hex values in both Light and <code>-dark</code>. The stated contrast table matches recomputed values to ±0.05. UJ-1, UJ-2 and UJ-3 are covered verbatim, each with a protagonist, steps, a climax and a failure path. The weak spot is <strong>state coverage</strong>. Four high-impact gaps would have forced downstream teams to invent product behaviour. (1) An Exposure "zero" could not tell "no software has it" from "we don't know this ID yet". (2) No pattern covered a failed save of a review decision or any other mutation. (3) The unit of an "issue" was undefined when decisions differ across the places it affects. (4) The WCAG 2.2 AA claim could not hold while every viewport under 1280px was undesigned. There were no critical findings.</p>
+      <p><strong>Since the review:</strong> the spines were updated after the rubric walker ran. Each finding below carries a resolution status, checked against the current DESIGN.md and EXPERIENCE.md. User decisions on 2026-11-06 resolved all 4 high findings (memlog entries 80–83), and the spines now carry them. Of the 24 findings, <strong>16 are resolved</strong>: 4 by decision and 12 in the spine. <strong>8 remain as Open items</strong> (19, 20, 27, 30, 31 ×2, 32, 33). The verdicts in this report are the reviewer's verdicts at review time. Line references point to the spines as reviewed and may have shifted.</p>
+    </div>
+
+    <div class="dimension-summary">
+      <div class="dim-card">
+        <div class="dim-name">Flow coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Token completeness</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Component coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">State coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-thin)">thin</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Visual reference coverage</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Bloat &amp; overspecification</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Inheritance discipline</div>
+        <div class="dim-verdict" style="color: var(--verdict-strong)">strong</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-name">Shape fit</div>
+        <div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div>
+      </div>
+    </div>
+
+    <div class="resolution-summary">
+      <span>Findings: 0 critical · 4 high · 11 medium · 9 low</span>
+      <span class="status-pill status-decision">Resolved (decision) 4</span>
+      <span class="status-pill status-spine">Resolved in spine 12</span>
+      <span class="status-pill status-open">Open item 8</span>
+    </div>
+
+    <!-- 1. Flow coverage -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>1. Flow coverage</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Checked UJ-1 "The first 30 minutes", UJ-2 "CVE day" and UJ-3 "Audit day" (PRD lines 24/34/44) against Flows 1–3, plus Flow 4 (Tom, from the memlog). Each flow has a named protagonist, numbered steps, a <strong>Climax</strong> beat and a Failure line. Checked FR1–FR31 and NFR1–NFR12 against the Coverage tables and the inline FR citations. FR15 and FR30 are listed and acknowledged as gaps, and the deviation from FR13 is acknowledged.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">FR31 (Optional CI scan) has no surface or flow</h3>
+              <span class="finding-location">EXPERIENCE.md Coverage table; L99</span>
+            </header>
+            <div class="finding-note">FR31 was added to the PRD on 2026-11-05 but appears in neither the Coverage table nor any flow. The spine mentions only "CI policy" and "CI tokens" in the Settings panel list. The artifact link that every CI run prints needs a landing place. Uploaded image or package archives fit neither "Deployed" nor "Not deployed". The CI verdict and its history need a home in Software detail.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add an FR31 row to the "Stated need" table and one line to Software saying where CI-submitted software appears, its provenance label and where the CI verdict shows. Alternatively, list FR31 in Open items as undesigned.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 27</span><span class="status-detail">An FR31 row is now in the Stated need table. How CI-only software is grouped and labelled, and where the verdict shows, is still open.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 2. Token completeness -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>2. Token completeness</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Parsed the frontmatter and resolved every <code>{a.b}</code> reference in both files. None was unresolved apart from the literal placeholder <code>{path.to.token}</code>. All 84 colour values are valid hex. All 42 light roles have a <code>-dark</code> pair, with no orphans either way. Every mock <code>:root</code> and dark-remap value equals the spine. Every contrast pair recomputes correctly, and the lowest text pair is text-3 on chip at 4.88. Tokens defined but never referenced: <code>forest-3</code>, <code>amber-wash</code>, <code>display-reserved</code>, <code>rounded.DEFAULT</code>, <code>button-height-sm</code> and <code>button-height-wide</code>.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Selected-row foreground colours only partly specified</h3>
+              <span class="finding-location">DESIGN.md L283, L298, L301, L403</span>
+            </header>
+            <div class="finding-note"><code>exploited-text</code>, <code>kind-tag</code>, <code>licence-marker</code> and <code>table</code> (muted cells) had no on-selection colours, although the mock switches them to <code>sage-hi</code> / <code>sel-chip</code>. Because the spine wins, the contract read from the spine alone would put clay "Actively exploited" text on forest at 1.96:1 and text-2 on forest at 1.88:1.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add <code>on-selection-foreground: '{colors.sage-hi}'</code> to exploited-text, licence-marker and kind-tag, plus <code>on-selection-background: '{colors.sel-chip}'</code> on kind-tag. Add <code>selected-foreground</code> and <code>selected-secondary</code> to <code>table</code>.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">exploited-text, licence-marker and kind-tag now have on-selection tokens. <code>table</code> has selected-foreground, selected-secondary and selected-chip-* tokens. The Components prose matches.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Composite component tokens a resolver cannot flatten</h3>
+              <span class="finding-location">DESIGN.md L253, L392, L403ff</span>
+            </header>
+            <div class="finding-note">Values such as <code>'1px inset {colors.ink-line}'</code> and <code>'{typography.meta}, weight 500, {colors.text-3}'</code> mix several properties in one string. Generating a theme from them (for example Tailwind or shadcn) needs hand-parsing, and references embedded in prose drift easily.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Split them into atomic keys (border-width, border-color, font, font-weight, color), or keep each composite as a <code>note:</code> beside atomic keys.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 31</span><span class="status-detail">Composite strings remain and are listed under token hygiene.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Input boundaries miss non-text contrast (WCAG 1.4.11)</h3>
+              <span class="finding-location">DESIGN.md L334, L522, L586; EXPERIENCE.md L267</span>
+            </header>
+            <div class="finding-note">The "Why?" textarea was a paper fill with a 1px rule on canvas: 1.08:1 for the fill and 1.23:1 for the border in light, 1.31:1 in dark. An empty required field was effectively invisible at rest, yet the spine claims AA in both themes.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Give the resting border of <code>field</code> and <code>review-note-field</code> a token of at least 3:1, or justify the exemption. Add the pair to the non-text contrast line.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">New <code>{colors.field-border}</code> (#737D77 / dark #748079) is used on field and review-note-field. It is listed in the non-text contrast line and in the Accessibility Floor ("Field edges meet 3:1 at rest").</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Print palette is raw hex with no tokens</h3>
+              <span class="finding-location">DESIGN.md L605, L610</span>
+            </header>
+            <div class="finding-note">The print palette existed only as hex values in prose (<code>#1A1A1A</code>, <code>#555555</code>, <code>#D0D0D0</code>), and the print severity colours were never named. Whoever writes the Typst template for the UJ-3 audit report would have to guess.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add <code>print-*</code> tokens (text, text-2, rule and four severities, with contrast on white), or map print severity to the light-theme tokens.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">The frontmatter now has <code>print-page</code>, <code>print-text</code>, <code>print-text-2</code>, <code>print-rule</code> and <code>print-critical/high/medium/low</code>, with contrast on white. Printed report references them.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">22px wordmark breaks the nine-size rule</h3>
+              <span class="finding-location">DESIGN.md L108, L111, L528</span>
+            </header>
+            <div class="finding-note">The 22px wordmark broke the "Nine sizes only" rule and the "Intermediate sizes" Don't. The token also could not express Bold Italic.</div>
+            <div class="finding-fix"><strong>Fix:</strong> State "22 — wordmark only" as an exception and add an italic note to the token.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">The single exception is stated in the frontmatter, in Typography and in the Do's and Don'ts. Bold Italic is a YAML comment on the token, not a <code>note:</code> key.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Orphan tokens: amber-wash and forest-3</h3>
+              <span class="finding-location">DESIGN.md L30, L49</span>
+            </header>
+            <div class="finding-note"><code>amber-wash</code> was described as the background of an amber tag, but no such component existed. <code>forest-3</code> was described as the start of an avatar gradient, but there was no avatar component.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Either specify the avatar and the amber tag, or remove the tokens.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail"><code>amber-wash</code> was removed. <code>forest-3</code> is now <code>user-menu.avatar-start</code>.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 3. Component coverage -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>3. Component coverage</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Extracted 30 DESIGN.md Components rows and 20 EXPERIENCE.md Component Patterns rows. Most components in visual use have both a visual and a behavioural spec, though sometimes under different names. Sidebar, Grouped list, Actively exploited marker, Status chip, Review panel and flow, Coverage-gap row, Exposure graph, Freshness strip, Tabs and ⌘K palette have real behavioural rules.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">high</span>
+              <h3 class="finding-title">The unit of an "Issue" is undefined</h3>
+              <span class="finding-location">EXPERIENCE.md L57, L69, L75, L86, L176, L333, L351</span>
+            </header>
+            <div class="finding-note">An Issues or Home row was one package-version × vulnerability across the fleet ("14 places") with one status chip. The Exposure inspector and Software detail, however, show a review per piece of software, and Flow 2 records different decisions for different services. It was undefined what the single chip shows, whether a partly reviewed issue still counts as Not reviewed yet, and whether it leaves Needs attention. This blocked the data model, the per-product VEX output and the badge count.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Commit the issue unit. Then specify the aggregate chip for mixed decisions and how Needs attention and "not reviewed yet" count partial reviews.</div>
+            <div class="finding-status"><span class="status-pill status-decision">Resolved (decision 2026-11-06, memlog entry 82)</span><span class="status-detail">The spine now has The issue unit (IA), a scope control in the Review panel ("All 14 places" / "Only this software"), the Mixed · N of M status chip, and a Needs-attention rule for Mixed issues.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">The Needs-attention rule can be read two ways</h3>
+              <span class="finding-location">EXPERIENCE.md L57, L172</span>
+            </header>
+            <div class="finding-note">The rule read "Not reviewed yet AND (Actively exploited OR Critical), plus licence decisions". With 9 open licences, 1 of them not reviewed yet, "plus licence decisions" reads as 9, but the mock and Flow 4 show 1. The spine requires the same number everywhere.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Rewrite it as "Not reviewed yet AND (Actively exploited OR Critical OR Licence)".</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">Home and Component Patterns now read "Every licence issue that is Not reviewed yet also needs attention."</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Components used in flows have no spec (code block, signature, report generation)</h3>
+              <span class="finding-location">EXPERIENCE.md L183, L184, L210</span>
+            </header>
+            <div class="finding-note">Several components that carry the trust moments of UJ-1 and UJ-3 had no spec: the copyable command block with Copy, the "Signature verified" block, the in-progress audit-report row and the control that adjusts window, scope and framework after the click.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add <code>code-block</code> and <code>signature-status</code> rows to DESIGN.md Components. Add a Component Patterns row for report generation covering the in-progress row, adjustment after the click and re-generation.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 19</span><span class="status-detail">Code block and Signature status now have rows in both spines. The in-progress row, adjustment after the click and re-generation semantics remain open.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">DESIGN.md components with no behavioural row</h3>
+              <span class="finding-location">EXPERIENCE.md Component Patterns</span>
+            </header>
+            <div class="finding-note">Six components have a visual spec but no behaviour: Segmented control (URL and keyboard), Table (sort keys and default order), Pager (whether <code>J</code>/<code>K</code> cross pages), Fields/search (clearing), Technical details (always open or collapsible) and Gauges &amp; charts (text alternative).</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add one row each, or one line saying "Inherited shadcn behaviour unless stated".</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 20</span><span class="status-detail">These rows are listed as not yet written. Until they are, shadcn defaults apply.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Signed-in user at the sidebar foot has no behaviour</h3>
+              <span class="finding-location">EXPERIENCE.md Component Patterns</span>
+            </header>
+            <div class="finding-note">The account menu and sign out were not specified, and there was no avatar component.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add one Component Patterns row.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">User menu now has a row in both spines (<code>{components.user-menu}</code>), covering Personal settings, Sign out and the keyboard model.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 4. State coverage (thin: open by default) -->
+    <section class="dimension">
+      <details open>
+        <summary>
+          <h2>4. State coverage</h2>
+          <span class="verdict-pill verdict-thin">thin</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Walked Home, Software, Issues, Exposure, Reports, Settings, Help and ⌘K against these states: empty, cold load, focus, error, offline or stale, permission denied and long-running. Already covered: pre-setup Home, Checking, cold-load skeleton, partial and zero Exposure answers, All clear, Licences 0, stale source, registry unreachable, disconnected agent, air-gapped, read-only auditor, append-only history, audit report failure, palette no match and disabled. Already accepted: the focus/g-key frame, the undrawn tabs and Help.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">high</span>
+              <h3 class="finding-title">Exposure "zero" cannot tell "none" from "unknown ID"</h3>
+              <span class="finding-location">EXPERIENCE.md L214, L335</span>
+            </header>
+            <div class="finding-note">The Empty answer and Flow 2's failure path could only say "No software has it". Nothing covered an ID the vulnerability data doesn't know yet, which on CVE day is exactly the likely case. The screen would show a coverage-scoped all-clear for something it never evaluated, which breaks the signature rule and FR17.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a distinct state ("We don't have CVE-… in our vulnerability data yet") showing the feed age and linking to Sources, plus a separate "not found" message for unknown packages and fingerprints.</div>
+            <div class="finding-status"><span class="status-pill status-decision">Resolved (decision 2026-11-06, memlog entry 80)</span><span class="status-detail">The spine has an "Unknown vulnerability" state, the Exposure IA rule and the Flow 2 failure path: "Armoury has no data for &lt;ID&gt; yet…" with Check again. Copy for an unknown package or fingerprint is Open item 28.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">high</span>
+              <h3 class="finding-title">No failure pattern for any mutation</h3>
+              <span class="finding-location">EXPERIENCE.md L202, L253</span>
+            </header>
+            <div class="finding-note">No failure pattern covered Save and next, Decide later, Check again, Export, Generate audit report, Settings saves or conflicting decisions. Toasts are banned, so there was no permitted way to say "not saved". Because Save and next auto-advances, a silent failure would leave a missing audit decision that nobody notices.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a "Save failed" row: the panel stays on the issue, shows an inline clay-wash error and keeps "Why?". Add a generic inline-error rule and a stale-decision rule.</div>
+            <div class="finding-status"><span class="status-pill status-decision">Resolved (decision 2026-11-06, memlog entry 81)</span><span class="status-detail">The spine has a "Save failed" state, an Inline error pattern, the <code>{components.inline-error}</code> visual spec and a failure line in the Review flow. The rule for conflicting or concurrent decisions is Open item 29.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">First-visit and zero states missing</h3>
+              <span class="finding-location">EXPERIENCE.md State Patterns</span>
+            </header>
+            <div class="finding-note">Four zero states had no copy: Issues with the "Not reviewed yet" filter at 0, an Issues search with no match, Exposure opened from the sidebar with no query, and Reports with no audit reports or exports yet.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add three State Patterns rows with copy.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">State Patterns now has Nothing to review, Search no match, No query and Nothing yet (Reports), each with copy.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">No state for a signature that fails to verify</h3>
+              <span class="finding-location">EXPERIENCE.md L184; Flow 3 step 4</span>
+            </header>
+            <div class="finding-note">Only "Signature verified" was specified. A failed verification, a missing key and a key mismatch had no state, although verification is central to FR25 and to the auditor's trust in UJ-3.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add a "Signature does not verify" state: a clay-wash band naming the file and the key, with no download hidden.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">State Patterns has "Signature does not verify" (error band naming the file and the reason, no download hidden, link to the trail entry), and DESIGN.md has a Signature status row. The failure output of the offline command is not written separately.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Registry-unreachable state puts two lime actions in one view</h3>
+              <span class="finding-location">EXPERIENCE.md L77, L218, L253</span>
+            </header>
+            <div class="finding-note">The lime Try again appeared alongside the lime Add software. Two lime actions in one view is banned.</div>
+            <div class="finding-fix"><strong>Fix:</strong> While an error band shows, its recovery action takes the view's lime and the list's primary action turns grey.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">The registry-unreachable row now says "Add software turns grey (secondary) while the band shows".</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Global states missing</h3>
+              <span class="finding-location">EXPERIENCE.md State Patterns</span>
+            </header>
+            <div class="finding-note">Three global states were missing: session expired and re-authentication, control plane unreachable (single instance, NFR10), and a direct link to a panel or action the role cannot use.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add one row each.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 30</span><span class="status-detail">Listed as an unresolved gap.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 5. Visual reference coverage -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>5. Visual reference coverage</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>Two files exist, <code>mockups/greenhouse-final.html</code> and <code>imports/inspo-shost-server-dashboard.png</code>, and there is no <code>wireframes/</code> folder. Both spines link both files inline and say what each illustrates. "Wins on conflict" is stated once per spine, and Settings is explicitly "spine-only (no mock)". The mock's section names map one-to-one to spine surfaces. <code>.working/</code> directions appear in Inspiration as rejected options. No orphans and no findings.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 6. Bloat & overspecification -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>6. Bloat &amp; overspecification</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Components table restates token values as literal pixels</h3>
+              <span class="finding-location">DESIGN.md L581, L585</span>
+            </header>
+            <div class="finding-note">Rows such as "Tabs … 64px" and "Buttons … 42px … 32px … 54px" repeated token values as literal pixels. Other dimensions had no token at all: 26px tab padding, 128px term column, 120px gauge, 56px sparkline, 84px disc and 660px palette. Each duplicate can drift from its token.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Reference the tokens, tokenise recurring dimensions, and mark the rest as component-internal.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 31</span><span class="status-detail">Buttons now cite <code>{spacing.button-height*}</code>. The Tabs row still says 64px, and the untokenised dimensions are listed under token hygiene.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Printed report content restated in both spines</h3>
+              <span class="finding-location">DESIGN.md L601–612; EXPERIENCE.md L287–295</span>
+            </header>
+            <div class="finding-note">The cover sheet with its coverage statement, the page footer and the plain labels appear in both spines.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Keep the visual rules in DESIGN.md and the content contract in EXPERIENCE.md, and cross-link them.</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 32</span><span class="status-detail">Listed as open.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 7. Inheritance discipline -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>7. Inheritance discipline</h2>
+          <span class="verdict-pill verdict-strong">strong</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>All <code>sources</code> resolve (PRD, addendum, brief, research, memlog, mock, import). UJ names match the PRD verbatim. Plain labels are consistent across both spines and the mock. Every EXPERIENCE.md token reference resolves by name. The PRD glossary vs plain-label conflict is acknowledged.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">Component names drift between files</h3>
+              <span class="finding-location">EXPERIENCE.md L185; DESIGN.md L594</span>
+            </header>
+            <div class="finding-note">Several components had different names in each file: "Freshness strip" vs "Data-source freshness strip", "Key cap" vs <code>kbd</code>, "Actively exploited marker" vs "Actively exploited — text / pill", and "Grouped list" vs "List row" + "Group heading".</div>
+            <div class="finding-fix"><strong>Fix:</strong> Use one name per component in both spines, matching the token key.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">"Freshness strip" is now used in both files. Rows now cite their component token: Key cap cites <code>{components.kbd}</code>, the marker is now "Actively exploited marker — text / pill", and Grouped list names List row, Group heading and Pager. "Key cap" still differs from the key <code>kbd</code>.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-low">low</span>
+              <h3 class="finding-title">"Needs a decision" is undefined, and the "Running" ban is too broad</h3>
+              <span class="finding-location">EXPERIENCE.md L351</span>
+            </header>
+            <div class="finding-note">Flow 4 used "Needs a decision", which was not in the glossary. The retired-label list bans "Running", yet the hint says "Not seen running…" and the glossary says "Running replicas".</div>
+            <div class="finding-fix"><strong>Fix:</strong> Add "Needs a decision" to the glossary, and narrow the ban to "Running as a group or label".</div>
+            <div class="finding-status"><span class="status-pill status-open">Open item 33</span><span class="status-detail">"Needs a decision" is now in the glossary. The wording of the "Running" ban is still open.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <!-- 8. Shape fit -->
+    <section class="dimension">
+      <details>
+        <summary>
+          <h2>8. Shape fit</h2>
+          <span class="verdict-pill verdict-adequate">adequate</span>
+        </summary>
+        <div class="dim-body">
+          <div class="dim-judgment">
+            <p>DESIGN.md sections follow the canonical order, with Printed report as a subsection of Components. EXPERIENCE.md has every required default. Inspiration is present (triggered by the import and the memlog), and so is Responsive. The invented sections earn their place: Long-running operations, Theme, Printed report, Changes from …, Open items.</p>
+          </div>
+        </div>
+        <div class="findings-list">
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-high">high</span>
+              <h3 class="finding-title">Viewports under 1280px are undesigned, but WCAG 2.2 AA is contractual</h3>
+              <span class="finding-location">EXPERIENCE.md L267, L283</span>
+            </header>
+            <div class="finding-note">AA includes 1.4.10 Reflow (usable at 320 CSS px) and 1.4.4 Resize text (200%). Fixed column widths of 252 + 376/500 + detail cannot meet these without a collapse model. A 1280px laptop already yields a viewport under 1280 once browser chrome is counted. This decision also shapes the routing, persistence and focus model.</div>
+            <div class="finding-fix"><strong>Fix:</strong> Commit a collapse model now: below 1280px, list and detail stack as two routes with Back, and the sidebar becomes a rail and then a sheet.</div>
+            <div class="finding-status"><span class="status-pill status-decision">Resolved (decision 2026-11-06, memlog entry 83)</span><span class="status-detail">The Responsive &amp; Platform table now specifies an icon rail below 1280px and one stacked column with Back below 1024px. The Accessibility Floor has a Reflow line, and DESIGN.md Layout covers narrower viewports.</span></div>
+          </article>
+          <article class="finding">
+            <header>
+              <span class="badge badge-sev-medium">medium</span>
+              <h3 class="finding-title">Single-key shortcuts need an off switch (WCAG 2.1.4)</h3>
+              <span class="finding-location">EXPERIENCE.md L99, L243–248</span>
+            </header>
+            <div class="finding-note"><code>J</code>, <code>K</code>, <code>/</code>, <code>x</code>, <code>?</code> and <code>g</code>+letter must be possible to turn off or remap, unless they are active only on focus. Settings → Personal listed "keyboard shortcuts" but committed to neither.</div>
+            <div class="finding-fix"><strong>Fix:</strong> State that single-key shortcuts can be turned off in Settings → Personal.</div>
+            <div class="finding-status"><span class="status-pill status-spine">Resolved in spine</span><span class="status-detail">Interaction Primitives, the Accessibility Floor and Settings → Personal now state: active only outside text fields, and can be turned off.</span></div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <div class="mechanical">
+      <h3>Mechanical notes</h3>
+      <ul>
+        <li>No references were unresolved. The literal placeholder <code>{path.to.token}</code> at EXPERIENCE.md L18 would trip an automated resolver. <em>Now fixed: the line reads "curly-brace reference form".</em></li>
+        <li>Colours: 42/42 light↔dark pairs, and every value is valid hex. The mock CSS matches the spine exactly, and the spine contrast table checks out.</li>
+        <li>Typography tokens without <code>lineHeight</code>: <code>button-label</code>, <code>mono-id</code>, <code>display-reserved</code>. <em>Still open: Open item 31.</em></li>
+        <li>Open item 10 had a garbled fragment (a stray quote and parenthesis). <em>Now fixed.</em></li>
+        <li>In-page anchors resolve. There is no Mermaid. Frontmatter is complete in both files. At review time the Open items were numbered 1–24; they are now numbered 1–33.</li>
+      </ul>
+    </div>
+
+    <footer class="report-footer">
+      <div class="meta">
+        <span>Rubric: _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/review-rubric.md</span>
+        <span>DESIGN.md: _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/DESIGN.md</span>
+        <span>EXPERIENCE.md: _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/EXPERIENCE.md</span>
+        <span>Generated: 2026-11-06</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

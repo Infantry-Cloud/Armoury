@@ -137,7 +137,7 @@
       "title": "UX design (DESIGN.md + EXPERIENCE.md)",
       "skill": "bmad-ux",
       "source": {
-        "path": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/",
+        "path": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/",
         "id": "ux"
       },
       "parent_key": null,
@@ -157,7 +157,14 @@
         "status": "final",
         "validation": "validation-report.md",
         "amended": "2026-11-01 Svelte framework reference",
-        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled"
+        "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled",
+        "superseded_2026_11_06": {
+          "artifact": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/",
+          "status": "final",
+          "validation": "validation-report.md (rubric walker: 0 critical, 4 high resolved, 11 medium, 9 low)",
+          "accepted": "Daniel, 2026-11-06 (\"lock that all in, that's the one\")",
+          "jj_change": "tuszwtnr"
+        }
       },
       "notes": [
         {
@@ -165,6 +172,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "d26288cb-c431-4b94-9332-da6805fb8526"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:ux:changed:ux-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "330ad9d6-6d2c-4a41-8cfb-e90e807238f3"
         }
       ],
       "synced": {
@@ -173,7 +186,13 @@
         "milestone_id": null,
         "block_digest": "sha256:095d15247721a4a4",
         "at": "2026-11-06T03:14:15+00:00"
-      }
+      },
+      "source_history": [
+        {
+          "path": "_bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/",
+          "id": "ux"
+        }
+      ]
     },
     {
       "key": "planning:architecture",
@@ -619,7 +638,7 @@
     {
       "key": "epic:8",
       "kind": "epic",
-      "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
+      "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -640,15 +659,15 @@
       "evidence": null,
       "milestone_key": "epic:8",
       "synced": {
-        "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
+        "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
         "parent_id": null,
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:49868777b7293017",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "8",
-        "source_title": "Fleet signals — Prometheus metrics and data quality",
+        "source_title": "Fleet signals \u2014 Prometheus metrics and data quality",
         "source_digest": "sha256:304b0e4b8d7848ad",
-        "milestone_name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
+        "milestone_name": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality"
       }
     },
     {
@@ -1323,7 +1342,7 @@
     {
       "key": "story:2:2.6",
       "kind": "story",
-      "title": "Story 2.6: Package feed connections — npm and PyPI",
+      "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1353,20 +1372,20 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.6: Package feed connections — npm and PyPI",
+        "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:bd0075612d0643f9",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.6",
-        "source_title": "Package feed connections — npm and PyPI",
+        "source_title": "Package feed connections \u2014 npm and PyPI",
         "source_digest": "sha256:9fe8e261c4a10ee7"
       }
     },
     {
       "key": "story:2:2.7",
       "kind": "story",
-      "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
+      "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1396,13 +1415,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
+        "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:ae474f4662fe78b0",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.7",
-        "source_title": "Package feed connections — Maven, Cargo and Go modules",
+        "source_title": "Package feed connections \u2014 Maven, Cargo and Go modules",
         "source_digest": "sha256:ab5be3062c817d5b"
       }
     },
@@ -1443,7 +1462,7 @@
     {
       "key": "story:2:2.9",
       "kind": "story",
-      "title": "Story 2.9: Posture summary — populating, coverage and freshness",
+      "title": "Story 2.9: Posture summary \u2014 populating, coverage and freshness",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1473,20 +1492,20 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.9: Posture summary — populating, coverage and freshness",
+        "title": "Story 2.9: Posture summary \u2014 populating, coverage and freshness",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:8d8cb1bb3525d1fa",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.9",
-        "source_title": "Posture summary — populating, coverage and freshness",
+        "source_title": "Posture summary \u2014 populating, coverage and freshness",
         "source_digest": "sha256:450a76b21072cb83"
       }
     },
     {
       "key": "story:2:2.10",
       "kind": "story",
-      "title": "Story 2.10: Posture findings — severity band and findings table",
+      "title": "Story 2.10: Posture findings \u2014 severity band and findings table",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1507,13 +1526,13 @@
       "evidence": null,
       "milestone_key": "epic:2",
       "synced": {
-        "title": "Story 2.10: Posture findings — severity band and findings table",
+        "title": "Story 2.10: Posture findings \u2014 severity band and findings table",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:16ebccfc5d60d1d6",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.10",
-        "source_title": "Posture findings — severity band and findings table",
+        "source_title": "Posture findings \u2014 severity band and findings table",
         "source_digest": "sha256:369b07ae52e56d0b"
       }
     },
@@ -1563,7 +1582,7 @@
     {
       "key": "story:2:2.12",
       "kind": "story",
-      "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
+      "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1599,20 +1618,20 @@
       ],
       "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
       "synced": {
-        "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
+        "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:9ee87f7fc7784feb",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.12",
-        "source_title": "Prove minute 29 — scripted install-to-posture run",
+        "source_title": "Prove minute 29 \u2014 scripted install-to-posture run",
         "source_digest": "sha256:2e4482d2bcb5a6d6"
       }
     },
     {
       "key": "story:2:2.13",
       "kind": "story",
-      "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
+      "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1642,13 +1661,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
+        "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:21f205d28965b01e",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "2.13",
-        "source_title": "Prove the scale anchor — initial-evaluation load test",
+        "source_title": "Prove the scale anchor \u2014 initial-evaluation load test",
         "source_digest": "sha256:4bed46b73d87e445"
       }
     },
@@ -2616,7 +2635,7 @@
     {
       "key": "story:6:6.3",
       "kind": "story",
-      "title": "Story 6.3: Blast-radius surface — answer and table, from ⌘K",
+      "title": "Story 6.3: Blast-radius surface \u2014 answer and table, from \u2318K",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -2646,13 +2665,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 6.3: Blast-radius surface — answer and table, from ⌘K",
+        "title": "Story 6.3: Blast-radius surface \u2014 answer and table, from \u2318K",
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:b5664d852b6f5457",
         "at": "2026-11-06T03:14:15+00:00",
         "source_id": "6.3",
-        "source_title": "Blast-radius surface — answer and table, from ⌘K",
+        "source_title": "Blast-radius surface \u2014 answer and table, from \u2318K",
         "source_digest": "sha256:3d4a918958fa9687"
       }
     },
@@ -4307,7 +4326,7 @@
     "epic:8": {
       "id": "6b845ec6-d12a-41df-a767-da6532883c2a",
       "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:8",
-      "name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
+      "name": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality"
     },
     "epic:9": {
       "id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
