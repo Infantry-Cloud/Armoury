@@ -1,7 +1,7 @@
 # Agent readiness (AR) workflow
 
-<!-- Shared by the AR menu item on the architect (Winston), dev (Amelia) and TEA (Murat) agents.
-     Edit here only; the agent overrides load this file. -->
+<!-- Run by Vera, the Guardrail Steward (bmad-agent-steward, menu AR). The architect, dev and
+     TEA agents hand AR over to her. Edit here only; Vera's AR menu item loads this file. -->
 
 ## Purpose — improve agentic programming through mechanical feedback
 

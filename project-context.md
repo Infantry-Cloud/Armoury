@@ -64,6 +64,7 @@ jj workspace; never silently initialise it or fall back to Git.
 Guardrails counter probabilistic agent failures, not just process mistakes. Never bypass a check
 to finish. Code Review hands over to Vera's RV analysis; she discusses benefits, friction and blind
 spots with the user. Only the user's explicit decision authorises a mechanism change.
+Agent Readiness (AR) is run by Vera (`bmad-agent-steward`, menu AR); other agents hand it over to her.
 
 ## Methodology & structure — agreed per project
 
@@ -90,6 +91,6 @@ stop if it is missing rather than improvising. Reuse guidance already read while
 | Contract planning, approval, independent test design/review or revision | `_bmad/custom/story-contract.md` |
 | Linear kickoff, activation, publication, status changes or reconciliation | `_bmad/custom/linear-workflow.md` |
 | AR setup/reassessment, or auditing/changing the guardrail design | `_bmad/custom/project-guidance.md` |
-| Running/redesigning AR itself | `_bmad/custom/agent-readiness-workflow.md` |
+| Running/redesigning AR itself (Vera, `bmad-agent-steward`, menu AR) | `_bmad/custom/agent-readiness-workflow.md` |
 
 These are loading boundaries, not exemptions: every existing gate and lifecycle step still applies.

@@ -569,7 +569,7 @@
         "planning:sprint"
       ],
       "done_when": "Approved contract delivered; accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -2940,6 +2940,259 @@
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+    },
+    {
+      "key": "task:story:1:1.1:t1",
+      "kind": "task",
+      "title": "Task T1: Pin the toolchain and ignore build output",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t1"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-2 evidence for VAL-5 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "a681983d-26c9-428c-829a-48ba38899dce",
+        "identifier": "INF-101",
+        "url": "https://linear.app/infantry-cloud/issue/INF-101"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t2",
+      "kind": "task",
+      "title": "Task T2: Cargo workspace and agent-proto codegen",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t2"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-1, AC-5 evidence for VAL-1, VAL-2 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "0ac2180a-b554-48c4-9c57-d9757fee316f",
+        "identifier": "INF-102",
+        "url": "https://linear.app/infantry-cloud/issue/INF-102"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t3",
+      "kind": "task",
+      "title": "Task T3: Minimal control-plane and agent binaries with the AGE sqlx test",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t3"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-1, AC-3 evidence for VAL-1, VAL-3 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "22d3a082-a47c-48c5-a26b-82d8aa412937",
+        "identifier": "INF-103",
+        "url": "https://linear.app/infantry-cloud/issue/INF-103"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t4",
+      "kind": "task",
+      "title": "Task T4: OpenAPI generation and drift check",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t4"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-6 evidence for VAL-7 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "78a63977-a5b0-48f3-b330-1bd5af67c936",
+        "identifier": "INF-104",
+        "url": "https://linear.app/infantry-cloud/issue/INF-104"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t5",
+      "kind": "task",
+      "title": "Task T5: SvelteKit web app with lint, svelte-check and Vitest",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t5"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-1, AC-5 evidence for VAL-4 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "0adaf6b4-9631-479e-aaec-f56bc8563db6",
+        "identifier": "INF-105",
+        "url": "https://linear.app/infantry-cloud/issue/INF-105"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t6",
+      "kind": "task",
+      "title": "Task T6: Umbrella Helm chart with subcharts",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t6"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-3, AC-5 evidence for VAL-1 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ee3a1123-ea97-42a0-bc99-8de4cf997787",
+        "identifier": "INF-106",
+        "url": "https://linear.app/infantry-cloud/issue/INF-106"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t7",
+      "kind": "task",
+      "title": "Task T7: Aggregate check task, pin check and defect demonstration",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t7"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-2, AC-3, AC-4 evidence for VAL-1, VAL-5, VAL-6 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "b1b2afb1-5628-49e6-8abf-0e484f5874b0",
+        "identifier": "INF-107",
+        "url": "https://linear.app/infantry-cloud/issue/INF-107"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t8",
+      "kind": "task",
+      "title": "Task T8: Digest-pinned multi-stage Dockerfiles",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t8"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-7 evidence for VAL-8 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "0c447401-bb7a-431f-a0cb-d100c75ecc74",
+        "identifier": "INF-108",
+        "url": "https://linear.app/infantry-cloud/issue/INF-108"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t9",
+      "kind": "task",
+      "title": "Task T9: Skaffold kind dev loop and Playwright smoke test",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t9"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-8, AC-9 evidence for VAL-9, VAL-10 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "20720ec5-587f-4106-b731-c071d2f10d98",
+        "identifier": "INF-109",
+        "url": "https://linear.app/infantry-cloud/issue/INF-109"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t10",
+      "kind": "task",
+      "title": "Task T10: CI and image build workflows",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t10"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-10, AC-11 evidence for VAL-11, VAL-12 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "ccd648d1-66bc-4a42-ac3c-1e8125b60ccf",
+        "identifier": "INF-110",
+        "url": "https://linear.app/infantry-cloud/issue/INF-110"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t11",
+      "kind": "task",
+      "title": "Task T11: AGENTS.md and README.md",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t11"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-12 evidence for VAL-13 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "cd4e716f-d797-4294-85a4-8b873d740afb",
+        "identifier": "INF-111",
+        "url": "https://linear.app/infantry-cloud/issue/INF-111"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
     }
   ],
   "workspace": {

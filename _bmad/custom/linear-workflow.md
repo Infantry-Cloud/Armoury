@@ -112,7 +112,8 @@ contract-lifecycle compatibility.
    Propose the smallest ordered plan appropriate to this project, with skill/action,
    dependencies and observable completion criteria. Examples are product brief,
    PRD, UX, architecture, technical spec, epics/stories, implementation readiness,
-   sprint planning, and this repo's AR (Agent Readiness). They are candidates, NOT
+   sprint planning, and this repo's AR (Agent Readiness, run by Vera: skill
+   `bmad-agent-steward`, action AR). They are candidates, NOT
    mandatory boilerplate. Include installed TEA steps where the agreed risks require
    them. Distinguish already accepted output from drafts; file existence is not completion.
 3. Ask the user to approve/edit this plan and authorise publishing to the confirmed
@@ -162,8 +163,9 @@ approved amendment before executing it. Never skip a local gate because Linear i
 
 For a requested sequence or a selected step, resolve its manifest key, run Activation,
 then invoke its installed skill/action in a fresh context and check its result with
-the user. AR loads this repo's shared readiness recipe instead of inventing an upstream
-readiness skill. Follow Planning completion with actual evidence afterward. Keep this
+the user. AR runs through Vera (`bmad-agent-steward`, menu AR), which loads this repo's
+shared readiness recipe; never route it to the architect, dev or TEA agent or invent an
+upstream readiness skill. Follow Planning completion with actual evidence afterward. Keep this
 wrapper for selected module/custom steps without their own completion hook; don't
 invent unsupported TOML hooks. Stop on a local blocker, record the real result, and
 never execute the next step merely because a ticket exists. Reconcile is the recovery

@@ -18,5 +18,5 @@ prompt = "Read {project-root}/_bmad/custom/linear-workflow.md completely and run
 
 [[agent.menu]]
 code = "AR"
-description = "Agent readiness — engineer and prove mechanical feedback loops for better agentic programming (before implementation)"
-prompt = "Read {project-root}/_bmad/custom/agent-readiness-workflow.md completely and follow it exactly. The goal is proven agent-visible failure/repair loops, not checklist completion or score maximisation. If the file is missing, say so and stop; do not improvise the workflow."
+description = "Agent readiness — run by Vera, the Guardrail Steward (bmad-agent-steward); hands you over"
+prompt = "Agent Readiness (AR) is run by Vera, the Guardrail Steward (`bmad-agent-steward`), not by this agent. Do not run the readiness workflow here. Tell the user to start `bmad-agent-steward` in a fresh context and choose AR (for example: Vera, run AR), and pass on anything already learned this session. Offer to switch to Vera now if the host can activate another agent."

@@ -1,0 +1,167 @@
+# Agent Profile configuration (.agent-profile.yml)
+# Every value below is what agent-readiness is using for this repo right now.
+# Edit anything to change how it scans; delete a setting to fall back to the
+# built-in default. Regenerate with `agent-readiness --init` (after removing
+# this file) to pick up new checks or newly added sub-projects.
+
+# ── Pillars ─────────────────────────────────────────────────────
+# Turn whole areas on (true) or off (false).
+pillars:
+  style-linting: true
+  testing: true
+  documentation: true
+  dev-environment: true
+  ci-cd: true
+  code-health: true
+  security: true
+  architecture: true
+  context: true
+
+# ── Criteria ────────────────────────────────────────────────────
+# Turn individual checks on (true) or off (false).
+criteria:
+  # Style & Linting
+  linter: true
+  formatter: true
+  type-checker: true
+  pre-commit-hooks: true
+  editorconfig: true
+  naming-conventions: true
+  # Testing
+  test-framework: true
+  test-files-exist: true
+  test-script: true
+  coverage-config: true
+  e2e-tests: true
+  test-quality: true
+  # Documentation
+  readme: true
+  contributing: true
+  api-docs: true
+  codeowners: true
+  architecture-docs: true
+  readme-quality: true
+  docs-agent-friendliness: true
+  # Developer Environment
+  lock-file: true
+  containerization: true
+  env-documentation: true
+  setup-script: true
+  version-pinned: true
+  # CI/CD
+  ci-config: true
+  ci-runs-tests: true
+  ci-runs-linters: true
+  build-automated: true
+  deploy-pipeline: true
+  branch-protection: true
+  # Code Health
+  no-outdated-deps: true
+  dead-code-detection: true
+  bundle-analysis: true
+  # Security
+  license: true
+  security-scanning: true
+  secrets-detection: true
+  security-policy: true
+  dep-update-automation: true
+  # Architecture & Methodology
+  methodology-documented: true
+  boundary-enforcement: true
+  agent-harness-rules: true
+  # Agent Context & Capabilities
+  ai-context-file: true
+  mcp-servers: true
+  agent-skills: true
+  agent-guardrails: true
+  agent-edit-feedback: true
+
+# ── Paths ───────────────────────────────────────────────────────
+# Where each check looks. `.` is the repo root; other entries are folders
+# (repo-relative, globs allowed, e.g. services/*) or files.
+# - A folder: the check runs inside it and passes if it passes in any folder.
+# - A file: counts as evidence the check is met (for setups it can't recognise).
+# This list is exactly where the check looks, so keep `.` if the root counts.
+# Pre-filled with the repo root; add folders where your setup lives.
+paths:
+  # Style & Linting
+  linter: [.]
+  formatter: [.]
+  type-checker: [.]
+  pre-commit-hooks: [.]
+  editorconfig: [.]
+  naming-conventions: [.]
+  # Testing
+  test-framework: [.]
+  test-files-exist: [.]
+  test-script: [.]
+  coverage-config: [.]
+  e2e-tests: [.]
+  test-quality: [.]
+  # Documentation
+  readme: [.]
+  contributing: [.]
+  api-docs: [.]
+  codeowners: [.]
+  architecture-docs: [.]
+  readme-quality: [.]
+  docs-agent-friendliness: [.]
+  # Developer Environment
+  lock-file: [.]
+  containerization: [.]
+  env-documentation: [.]
+  setup-script: [.]
+  version-pinned: [.]
+  # CI/CD
+  ci-config: [.]
+  ci-runs-tests: [.]
+  ci-runs-linters: [.]
+  build-automated: [.]
+  deploy-pipeline: [.]
+  branch-protection: [.]
+  # Code Health
+  no-outdated-deps: [.]
+  dead-code-detection: [.]
+  bundle-analysis: [.]
+  # Security
+  license: [.]
+  security-scanning: [.]
+  secrets-detection: [.]
+  security-policy: [.]
+  dep-update-automation: [.]
+  # Architecture & Methodology
+  methodology-documented: [.]
+  boundary-enforcement: [.]
+  agent-harness-rules: [.]
+  # Agent Context & Capabilities
+  ai-context-file: [.]
+  mcp-servers: [.]
+  agent-skills: [.]
+  agent-guardrails: [.]
+  agent-edit-feedback: [.]
+
+# ── Harnesses ───────────────────────────────────────────────────
+# Coding-agent harnesses to tailor advice to: pi, claude, codex, cursor, gemini.
+# Changes only the how-to text, never the score. Detected from committed files.
+harnesses: [pi]
+
+# ── Workspaces ──────────────────────────────────────────────────
+# Folders scanned as extra roots for EVERY check, with their own languages and
+# notes. Entries are a path, or { name, path, description, languages, knowledge }.
+# Use `paths` above to point single checks somewhere specific.
+workspaces: []
+
+# ── Project knowledge ───────────────────────────────────────────
+# Static business or architecture notes that travel with the report.
+knowledge: []
+
+# ── Thresholds ──────────────────────────────────────────────────
+# Share of a level's checks that must pass to reach that level (0 to 1).
+thresholds:
+  level-pass: 0.8
+
+# ── AI checks ───────────────────────────────────────────────────
+# Enables the LLM-powered checks (or pass --ai). The API key is read from
+# --api-key, AGENT_READINESS_API_KEY or OPENAI_API_KEY; keep keys out of this file.
+aiEnabled: false
+apiBaseUrl: https://api.openai.com/v1

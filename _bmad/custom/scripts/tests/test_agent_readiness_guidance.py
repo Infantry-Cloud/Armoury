@@ -84,21 +84,54 @@ class AgentReadinessGuidanceTests(unittest.TestCase):
         self.assertIn("agent-visible failure/repair evidence", linear)
         self.assertIn("high score alone is not Done", linear)
 
-    def test_all_ar_entry_points_share_the_same_purpose_and_recipe(self) -> None:
-        prompts: list[str] = []
-        for name in ("bmad-agent-architect", "bmad-agent-dev", "bmad-tea"):
-            config = tomllib.loads((ROOT / f"_bmad/custom/{name}.toml").read_text())
-            entries = [item for item in config["agent"]["menu"] if item["code"] == "AR"]
-            self.assertEqual(len(entries), 1)
-            entry = entries[0]
-            self.assertIn("mechanical feedback loops", entry["description"])
-            self.assertIn("agent-readiness-workflow.md", entry["prompt"])
-            self.assertIn(
-                "not checklist completion or score maximisation", entry["prompt"]
-            )
-            self.assertIn("If the file is missing", entry["prompt"])
-            prompts.append(entry["prompt"])
-        self.assertEqual(len(set(prompts)), 1)
+    @staticmethod
+    def ar_entry(path: Path) -> dict[str, str]:
+        menu = tomllib.loads(path.read_text())["agent"]["menu"]
+        entries = [item for item in menu if item["code"] == "AR"]
+        assert len(entries) == 1, path
+        return entries[0]
+
+    def test_vera_runs_ar_and_other_agents_hand_it_over(self) -> None:
+        for path in (
+            ROOT / ".agents/skills/bmad-agent-steward/customize.toml",
+            ROOT / "projects/strata/_bmad/custom/bmad-agent-steward.toml",
+        ):
+            with self.subTest(owner=str(path.relative_to(ROOT))):
+                entry = self.ar_entry(path)
+                self.assertIn("mechanical feedback loops", entry["description"])
+                self.assertIn("agent-readiness-workflow.md", entry["prompt"])
+                self.assertIn(
+                    "not checklist completion or score maximisation", entry["prompt"]
+                )
+                self.assertIn("If the file is missing", entry["prompt"])
+        trees = [ROOT / "_bmad/custom", ROOT / "projects/strata/_bmad/custom"]
+        for tree in trees:
+            for name in ("bmad-agent-architect", "bmad-agent-dev", "bmad-tea"):
+                path = tree / f"{name}.toml"
+                if not path.exists():
+                    continue
+                with self.subTest(handover=str(path.relative_to(ROOT))):
+                    entry = self.ar_entry(path)
+                    self.assertIn("bmad-agent-steward", entry["prompt"])
+                    self.assertIn(
+                        "Do not run the readiness workflow here", entry["prompt"]
+                    )
+                    self.assertNotIn("agent-readiness-workflow.md", entry["prompt"])
+        # Every gate that recommends AR must name Vera, never the old agents.
+        for tree in trees:
+            for path in tree.glob("*.toml"):
+                text = path.read_text()
+                with self.subTest(gate=str(path.relative_to(ROOT))):
+                    self.assertNotIn("architect, dev or TEA agent", text)
+                    if "recommend AR" in text or "recommend running AR" in text:
+                        self.assertIn("`bmad-agent-steward`, menu AR", text)
+        steward = (ROOT / ".agents/skills/bmad-agent-steward/SKILL.md").read_text()
+        self.assertIn("Agent Readiness (AR)", steward.split("---", 2)[1])
+        self.assertNotIn("on architect, dev or TEA", steward)
+        linear = " ".join(
+            (ROOT / "_bmad/custom/linear-workflow.md").read_text().split()
+        )
+        self.assertIn("AR runs through Vera (`bmad-agent-steward`, menu AR)", linear)
 
     def test_shared_and_strata_context_preserve_purpose_and_environment_choices(
         self,

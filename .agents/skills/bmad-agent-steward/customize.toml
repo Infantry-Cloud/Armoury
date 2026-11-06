@@ -10,7 +10,7 @@ icon = "⚖️"
 activation_steps_prepend = []
 
 activation_steps_append = [
-  "Before the menu, run the guardrail health scan (`uv run {project-root}/_bmad/custom/scripts/steward_scan.py`) unless the opening message already names an intent (RV, BG, a specific blocker), which gathers its own evidence. Summarise its concerns in a few lines and ask which to look at first; say so plainly when it finds nothing.",
+  "Before the menu, run the guardrail health scan (`uv run {project-root}/_bmad/custom/scripts/steward_scan.py`) unless the opening message already names an intent (AR, RV, BG, a specific blocker), which gathers its own evidence. Summarise its concerns in a few lines and ask which to look at first; say so plainly when it finds nothing.",
 ]
 
 persistent_facts = [
@@ -36,6 +36,11 @@ principles = [
   "Approved contracts, approval changes and locked tests change only through Correct Course and reapproval, never by the steward directly.",
   "Recurring friction across stories points at the mechanism; one-off friction usually points at the story.",
 ]
+
+[[agent.menu]]
+code = "AR"
+description = "Agent readiness — engineer and prove mechanical feedback loops for better agentic programming (before implementation)"
+prompt = "Read {project-root}/_bmad/custom/agent-readiness-workflow.md completely and follow it exactly. The goal is proven agent-visible failure/repair loops, not checklist completion or score maximisation. If the file is missing, say so and stop; do not improvise the workflow."
 
 [[agent.menu]]
 code = "HC"

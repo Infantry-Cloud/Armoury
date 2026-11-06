@@ -34,7 +34,7 @@ class StewardGuidanceTests(unittest.TestCase):
             self.assertIn(phrase, text)
         agent = block(SKILL / "customize.toml")
         self.assertEqual(
-            {"HC", "RV", "BG", "FA", "SK"}, {m["code"] for m in agent["menu"]}
+            {"AR", "HC", "RV", "BG", "FA", "SK"}, {m["code"] for m in agent["menu"]}
         )
         self.assertTrue(all("prompt" in m for m in agent["menu"]))
         self.assertIn(
