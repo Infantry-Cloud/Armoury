@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armoury · Hybrid — Greenhouse Instruments</title>
+<style>
+/* =====================================================================
+   ARMOURY — HYBRID DIRECTION "GREENHOUSE INSTRUMENTS"
+   Base shell from Greenhouse (s.host), hero instrument from Calm
+   Instruments, product depth + ember amber from the prior Forge design.
+   Self-contained: system fonts, inline SVG, no JS, no network.
+
+   IA (prior name -> plain name)
+     Posture -> Home · Blast radius -> Where it's affected · Graph explorer -> Map
+     Artifacts -> Software · Findings -> Things to look at · Evidence -> Audit reports
+     Settings -> Settings.   Triage drawer -> Review, in the detail column.
+
+   COLOUR TOKENS — every hex used in this file (contrast = WCAG 2.x ratio)
+   ---------------------------------------------------------------------
+   Shell (Greenhouse)
+   --ink          #0B0F0C  sidebar background; text on lime (14.9:1 on lime)
+   --ink-2        #171D19  sidebar raised surface (search field, badge, user chip)
+   --ink-line     #252C27  sidebar dividers and field edge
+   --side-text    #C9D0CB  nav label on ink (12.3:1)
+   --side-muted   #8C968F  secondary text on ink (6.3:1)
+   --side-hint    #7E8780  key hints "g h" on ink (5.2:1; 4.6:1 on ink-2)
+   --lime         #C8F169  primary action, active nav, "you are here" marker
+   --lime-hint    #3F4C1C  key hint text on lime (7.2:1)
+   --lime-wash    #F1FADF  all-clear wash (decorative)
+   --forest       #1F3B33  selected row, active tab, progress arc, chart line (12.1:1 on white)
+   --forest-2     #2C5246  inner rule on forest
+   avatar-start   #3B5C50  avatar gradient start (decorative)
+   --forest-wash  #E8EFEC  forest-tinted chips (forest text 10.4:1)
+   --sage         #A9BDB5  secondary text on forest (6.1:1)
+   --sage-hi      #DCE7E2  chip text on forest (9.6:1)
+   --canvas       #FFFFFF  detail canvas
+   --paper        #F5F6F3  middle list column
+   --chip         #ECEEEA  neutral chip / grey uppercase button
+   --chip-edge    #E3E6E1  grey button bottom edge
+   --rule         #E6E8E3  1px rules
+   --rule-soft    #EEF0EB  faint rings / graph grid
+   --text         #121814  primary text (18.0:1 on white)
+   --text-2       #56615B  secondary text (6.5:1 white, 5.9:1 paper, 5.5:1 chip)
+   --text-3       #67716B  tertiary text, IDs, counts (5.1:1 white, 4.7:1 paper)
+   Calm urgency (prior Forge ember, reused — never a red fill)
+   --ember        #D9A05B  Forge accent: glow halos, rings (decorative only on light)
+   --ember-core   #B8782A  glowing dot core, affected edges (3.7:1 on white, non-text ≥3:1)
+   --ember-ink    #8A5410  "needs attention" text (6.3:1 white, 5.6:1 ember-wash, 5.4:1 chip)
+   --ember-wash   #FBF1E3  ember tag background
+   --ember-dark   #E6B877  ember text on forest (6.6:1)
+   Instrument greys (Calm Instruments — decorative)
+   --dot-off      #E1E5DF  "not checked yet" dots
+   --dot-on       #AEB8B0  "checked" dots
+   --tick         #C9CFC7  minor bezel ticks
+   --tick-major   #6F7871  major bezel ticks, centre pin
+   --leader       #9AA39B  leader lines, not-running edges (non-text)
+   Presentation
+   --stage        #D7DCD5  page backdrop        --stage-2  #CBD1C9  backdrop end
+   --chrome       #F3F4F1  browser toolbar      --chrome-line #DDE0DA toolbar edge
+   --chrome-pill  #E6E8E3  URL pill             --dot-1/2/3 #111311 #3D423E #A3A9A4 window dots
+   Optional dark mode (prior Forge theme, DESIGN.md 2026-06-12)
+   --f-bg         #121010  background           --f-rail   #151211  rail
+   --f-surface    #1C1917  surface              --f-hair   #221E1A  hairline / raised row
+   --f-border     #322C27  border               --f-text   #EDE7E0  text (15.5:1 on bg)
+   --f-data       #D4CCC2  data text (11.0:1 on surface)
+   --f-muted      #9A9087  muted text (6.1:1 bg, 5.6:1 surface, 5.3:1 hair)
+   --f-accent     #D9A05B  ember accent (8.2:1 bg, 7.6:1 surface)
+   --f-dot-off    #2B2521  dial dots off (decorative)   --f-dot-on #564D46 dial dots on (decorative)
+   --f-tick       #4A423B  dark bezel ticks (decorative) --f-node #6E6660 inactive border (3:1+)
+   Dark chrome    #1A1716  browser toolbar · #3A332E / #2B2622 window dots (decorative)
+   Shadows: rgba(18,24,20,.18) / rgba(18,24,20,.08). Glows: #D9A05B at .10–.45 opacity.
+   ===================================================================== */
+:root{
+  --ink:#0B0F0C; --ink-2:#171D19; --ink-line:#252C27;
+  --side-text:#C9D0CB; --side-muted:#8C968F; --side-hint:#7E8780;
+  --lime:#C8F169; --lime-hint:#3F4C1C; --lime-wash:#F1FADF;
+  --forest:#1F3B33; --forest-2:#2C5246; --forest-wash:#E8EFEC; --sage:#A9BDB5; --sage-hi:#DCE7E2;
+  --canvas:#FFFFFF; --paper:#F5F6F3; --chip:#ECEEEA; --chip-edge:#E3E6E1; --rule:#E6E8E3; --rule-soft:#EEF0EB;
+  --text:#121814; --text-2:#56615B; --text-3:#67716B;
+  --ember:#D9A05B; --ember-core:#B8782A; --ember-ink:#8A5410; --ember-wash:#FBF1E3; --ember-dark:#E6B877;
+  --dot-off:#E1E5DF; --dot-on:#AEB8B0; --tick:#C9CFC7; --tick-major:#6F7871; --leader:#9AA39B;
+  --stage:#D7DCD5; --stage-2:#CBD1C9; --chrome:#F3F4F1; --chrome-line:#DDE0DA; --chrome-pill:#E6E8E3;
+  --f-bg:#121010; --f-rail:#151211; --f-surface:#1C1917; --f-hair:#221E1A; --f-border:#322C27;
+  --f-text:#EDE7E0; --f-data:#D4CCC2; --f-muted:#9A9087; --f-accent:#D9A05B;
+  --sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--sans);color:var(--text);background:linear-gradient(180deg,var(--stage) 0%,var(--stage-2) 100%);
+  -webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1,"cv11" 1;line-height:1.45}
+a{color:inherit;text-decoration:none}
+svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+svg.i.sm{width:16px;height:16px}
+svg.i.xs{width:14px;height:14px;stroke-width:2}
+.mono{font-family:var(--mono)}
+.cap{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+
+/* ---------- presentation page (fixed 1440 design, zoomed to fit) ---------- */
+.page{width:1536px;margin:0 auto;padding:72px 48px 96px}
+@media (max-width:1535px){.page{zoom:.9}}
+@media (max-width:1391px){.page{zoom:.8}}
+@media (max-width:1247px){.page{zoom:.7}}
+@media (max-width:1103px){.page{zoom:.6}}
+@media (max-width:959px){.page{zoom:.5}}
+
+.intro{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:end;margin-bottom:60px}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);display:flex;align-items:center;gap:10px}
+.kicker .sw{display:inline-flex;gap:4px}
+.kicker .sw i{width:10px;height:10px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 1px var(--ink)}
+.kicker .sw i:nth-child(2){background:var(--forest);box-shadow:none}
+.kicker .sw i:nth-child(3){background:var(--ember-core);box-shadow:0 0 0 3px rgba(217,160,91,.25)}
+.intro h1{font-size:60px;line-height:1.02;letter-spacing:-.035em;margin:18px 0 22px;font-weight:700}
+.intro h1 span{color:var(--text-3);font-weight:400}
+.intro h1 em{font-style:italic;color:var(--forest)}
+.intro p{font-size:17.5px;line-height:1.6;color:var(--text-2);margin:0;max-width:660px}
+.intro p b{color:var(--text);font-weight:600}
+.from{background:var(--canvas);border-radius:6px;padding:26px 28px;box-shadow:0 1px 0 var(--rule)}
+.from h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);margin:0 0 6px;font-weight:600}
+.from ul{list-style:none;margin:0;padding:0}
+.from li{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--rule);font-size:14.5px;line-height:1.5;color:var(--text-2)}
+.from li:first-child{border-top:0}
+.from li b{color:var(--text);font-weight:600;display:flex;align-items:center;gap:9px;font-size:14.5px}
+.from li b i{width:9px;height:9px;border-radius:50%;flex:none}
+
+.section-label{display:flex;align-items:baseline;gap:16px;margin:0 0 18px}
+.section-label .num{font-family:var(--mono);font-size:12px;color:var(--text-2)}
+.section-label h3{font-size:20px;letter-spacing:-.01em;margin:0;font-weight:600}
+.section-label p{margin:0;color:var(--text-2);font-size:15px}
+.block{margin-bottom:80px}
+.caption{display:flex;gap:28px;margin-top:18px;font-size:13.5px;color:var(--text-2)}
+.caption div{display:flex;gap:10px;align-items:baseline;max-width:460px;line-height:1.5}
+.caption .k{font-family:var(--mono);font-size:11px;color:var(--ink);background:var(--lime);border-radius:3px;padding:1px 6px;flex:none}
+
+/* ---------- browser frame ---------- */
+.browser{width:1440px;background:var(--canvas);border-radius:12px;overflow:hidden;
+  box-shadow:0 40px 80px -30px rgba(18,24,20,.18),0 2px 6px rgba(18,24,20,.08)}
+.bar{height:54px;background:var(--chrome);border-bottom:1px solid var(--chrome-line);display:flex;align-items:center;padding:0 22px;gap:20px;color:var(--text-2)}
+.dots{display:flex;gap:9px}
+.dots i{width:13px;height:13px;border-radius:50%;background:#111311}
+.dots i:nth-child(2){background:#3D423E}.dots i:nth-child(3){background:#A3A9A4}
+.url{flex:0 1 640px;margin:0 auto;height:32px;border-radius:9px;background:var(--chrome-pill);display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:var(--text)}
+.url svg{color:var(--text-2)}
+.bar .tools{display:flex;gap:20px}
+
+/* ---------- app shell ---------- */
+.app{display:grid;grid-template-columns:260px 360px minmax(0,1fr)}
+.app.wide{grid-template-columns:260px minmax(0,1fr)}
+.side{background:var(--ink);color:var(--side-text);display:flex;flex-direction:column}
+.brand{height:84px;display:flex;align-items:center;gap:11px;padding:0 24px;color:#FFFFFF}
+.brand b{font-size:21px;font-weight:700;font-style:italic;letter-spacing:-.03em}
+.brand b span{color:var(--side-muted);font-weight:500}
+.jump{margin:0 18px 18px;height:40px;border-radius:6px;background:var(--ink-2);box-shadow:inset 0 0 0 1px var(--ink-line);display:flex;align-items:center;gap:10px;padding:0 10px 0 12px;font-size:13.5px;color:var(--side-muted)}
+.jump kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--side-hint);border:1px solid var(--ink-line);border-radius:4px;padding:2px 6px;background:var(--ink)}
+.nav{display:flex;flex-direction:column}
+.nav a{display:flex;align-items:center;gap:12px;height:50px;padding:0 18px 0 24px;font-size:14.5px;color:var(--side-text);white-space:nowrap}
+.nav a.on{background:var(--lime);color:var(--ink);font-weight:600}
+.nav a .r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav a kbd{font-family:var(--mono);font-size:10.5px;color:var(--side-hint);letter-spacing:.04em}
+.nav a.on kbd{color:var(--lime-hint)}
+.badge{min-width:24px;height:21px;padding:0 7px;border-radius:11px;background:var(--ink-2);color:var(--ember);font-size:12px;font-weight:700;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--ink-line)}
+.nav hr{border:0;border-top:1px solid var(--ink-line);margin:12px 24px}
+.side-foot{margin-top:auto}
+.live{display:flex;align-items:center;gap:9px;padding:0 24px 16px;font-size:12.5px;color:var(--side-muted)}
+.led{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px rgba(200,241,105,.14);flex:none}
+.me{padding:18px 24px 24px;display:flex;align-items:center;gap:12px;border-top:1px solid var(--ink-line)}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B5C50,var(--forest));color:var(--lime);display:grid;place-items:center;font-weight:600;font-size:14px;flex:none}
+.me .who{line-height:1.3;white-space:nowrap}
+.me .who b{display:block;color:#FFFFFF;font-weight:500;font-size:14.5px}
+.me .who span{color:var(--side-muted);font-size:12.5px}
+.me svg{margin-left:auto;color:var(--side-muted)}
+
+/* middle list column */
+.list{background:var(--paper);border-right:1px solid var(--rule);display:flex;flex-direction:column}
+.list-scroll{flex:1;padding-top:36px}
+.greet{padding:0 30px 26px}
+.greet h2{font-size:27px;line-height:1.15;letter-spacing:-.025em;margin:12px 0 10px;font-weight:600}
+.greet p{margin:0;font-size:14.5px;color:var(--text-2);line-height:1.55}
+.greet p b{color:var(--text);font-weight:600}
+.group{font-size:22px;line-height:1.2;font-weight:600;letter-spacing:-.02em;padding:0 30px;margin:6px 0 10px;white-space:nowrap;display:flex;align-items:baseline;gap:9px}
+.group .c{color:var(--text-3);font-weight:400}
+.group .cap{margin-left:auto;letter-spacing:.08em}
+.row{display:flex;align-items:center;gap:12px;padding:18px 30px;position:relative}
+.row::before{content:"";position:absolute;top:0;left:30px;right:30px;border-top:1px solid var(--rule)}
+.group + .row::before{display:none}
+.row.sel{background:var(--forest);color:#FFFFFF}
+.row.sel::before,.row.sel + .row::before{display:none}
+.row .main{min-width:0;flex:1}
+.row .t{font-size:15.5px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.row .t .v{font-weight:400;color:var(--text-3)}
+.row.sel .t .v{color:var(--sage)}
+.row .s{font-size:13.5px;color:var(--text-2);margin-top:4px;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.row .s.ember{color:var(--ember-ink)}
+.row.sel .s{color:var(--sage)}
+.row.sel .s.ember{color:var(--ember-dark)}
+.row .idx{font-family:var(--mono);font-size:10.5px;color:var(--text-3);align-self:flex-start;margin-top:4px}
+.row.sel .idx{color:var(--sage)}
+.gl{width:9px;height:9px;border-radius:50%;flex:none;background:var(--ember-core);box-shadow:0 0 0 3px rgba(217,160,91,.28),0 0 10px 3px rgba(217,160,91,.35)}
+.gl.soft{background:var(--ember);box-shadow:0 0 0 3px rgba(217,160,91,.18)}
+.gl.grey{background:var(--dot-on);box-shadow:none}
+.chip{font-size:12px;line-height:1;padding:6px 8px;border-radius:4px;background:var(--chip);color:var(--text-2);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.row.sel .chip{background:rgba(255,255,255,.09);color:var(--sage-hi)}
+.row.sel .chip.lime{background:var(--lime);color:var(--ink);font-weight:600}
+.row.fine{padding-top:13px;padding-bottom:13px;flex-wrap:wrap;row-gap:8px}
+.row.fine .t{font-size:14.5px;font-weight:500}
+.row.fine .n{font-size:14.5px;color:var(--text-2);font-variant-numeric:tabular-nums}
+.row.fine .bar-h{flex-basis:100%;height:2px;background:var(--rule);position:relative}
+.row.fine .bar-h i{position:absolute;left:0;top:0;bottom:0;background:var(--forest)}
+.row.fine .bar-h i.l{background:var(--dot-on)}
+.list-foot{padding:20px 30px 28px}
+.hints{font-family:var(--mono);font-size:10.5px;color:var(--text-3);display:flex;gap:14px;justify-content:center;margin-top:12px;letter-spacing:.03em}
+.hints i{font-style:normal;color:var(--text-2);border:1px solid var(--rule);background:var(--canvas);border-radius:3px;padding:0 4px;margin-right:3px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:.075em;white-space:nowrap;text-transform:uppercase;background:var(--chip);color:var(--text);border:0;font-family:inherit;box-shadow:inset 0 -1px 0 var(--chip-edge)}
+.btn.lime{background:var(--lime);color:var(--ink);box-shadow:none}
+.btn.wide{width:100%;height:54px;font-size:13px}
+.btn.icon{width:42px;padding:0}
+.btn kbd{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.02em;color:var(--lime-hint);text-transform:none}
+.btn.grey kbd{color:var(--text-3)}
+
+/* detail column */
+.detail{background:var(--canvas);display:flex;flex-direction:column;min-width:0}
+.tabs{display:flex;align-items:stretch;height:66px;border-bottom:1px solid var(--rule);flex:none}
+.tab{display:flex;align-items:center;gap:8px;padding:0 26px;font-size:15px;white-space:nowrap}
+.tab .n{color:var(--text-3)}
+.tab.on{background:var(--forest);color:#FFFFFF}
+.tab.on .n{color:var(--sage)}
+.tabs .end{margin-left:auto;display:flex;align-items:center;gap:14px;padding:0 24px;font-size:13px;color:var(--text-2);white-space:nowrap}
+.k-field{display:flex;align-items:center;gap:9px;height:36px;width:262px;padding:0 8px 0 11px;border-radius:6px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);color:var(--text-2);font-size:13.5px}
+.k-field kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text-3);background:var(--canvas);border:1px solid var(--rule);border-radius:4px;padding:1px 6px}
+.cells{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:start}
+.cell{padding:28px 34px;border-bottom:1px solid var(--rule);min-width:0}
+.cell.bl{border-left:1px solid var(--rule)}
+.cell.span{grid-column:1 / -1}
+.cell.last{border-bottom:0}
+.cell h4{margin:0;font-size:16px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.cell h4 .meta{margin-left:auto;font-size:13px;font-weight:400;color:var(--text-2)}
+.cell .sub{font-size:14px;color:var(--text-2);margin:6px 0 0;line-height:1.55}
+
+/* home instrument */
+.inst-head{display:flex;align-items:center;gap:14px;padding:22px 34px 0}
+.inst-head .r{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2)}
+.inst-head .led{box-shadow:0 0 0 3px rgba(31,59,51,.1);background:var(--forest)}
+.dial{padding:6px 36px 0}
+.dial svg{display:block;width:100%;height:auto}
+.legend{display:flex;align-items:center;gap:22px;padding:6px 34px 22px;border-bottom:1px solid var(--rule);font-size:13px;color:var(--text-2);white-space:nowrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend b{color:var(--text);font-weight:600}
+.legend i{width:8px;height:8px;border-radius:50%;flex:none}
+.legend .r{margin-left:auto}
+.big{font-size:32px;font-weight:500;letter-spacing:-.03em;line-height:1;margin-top:14px;display:flex;align-items:baseline;gap:12px}
+.big small{font-size:12.5px;font-weight:500;letter-spacing:0;color:var(--forest);background:var(--forest-wash);padding:4px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:5px}
+.spark{margin-top:16px}
+.spark svg{width:100%;height:72px;display:block;overflow:visible}
+.axis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--text-3);margin-top:6px;letter-spacing:.06em}
+.report{display:flex;gap:18px;align-items:flex-start;margin-top:16px}
+.doc{width:52px;height:66px;border-radius:4px;background:var(--paper);border:1px solid var(--rule);position:relative;flex:none}
+.doc::before{content:"";position:absolute;left:10px;right:10px;top:13px;height:2px;background:var(--rule);box-shadow:0 8px 0 var(--rule),0 16px 0 var(--rule),0 24px 0 var(--rule)}
+.doc .seal{position:absolute;right:-8px;bottom:-8px;width:24px;height:24px;border-radius:50%;background:var(--lime);color:var(--ink);display:grid;place-items:center;box-shadow:0 0 0 3px var(--canvas)}
+.report p{margin:0;font-size:14.5px;line-height:1.5}
+.report p span{color:var(--text-2);font-size:13.5px}
+.actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.prov{display:flex;gap:22px;padding:14px 34px;font-family:var(--mono);font-size:10.5px;color:var(--text-3);letter-spacing:.03em;white-space:nowrap;border-top:1px solid var(--rule);margin-top:auto}
+.prov b{font-weight:500;color:var(--text-2)}
+
+/* where it's affected */
+.wa{display:flex;flex-direction:column;min-width:0;background:var(--canvas)}
+.wa-head{padding:34px 40px 0}
+.wa-top{display:flex;align-items:center;gap:14px}
+.query{flex:0 1 560px;height:44px;border-radius:6px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);display:flex;align-items:center;gap:10px;padding:0 10px 0 14px;font-size:15px;color:var(--text)}
+.query .mono{font-size:12px;color:var(--text-3)}
+.query kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text-3);background:var(--canvas);border:1px solid var(--rule);border-radius:4px;padding:1px 6px}
+.seg{display:inline-flex;border-radius:4px;background:var(--chip);padding:3px;gap:2px}
+.seg a{height:34px;padding:0 14px;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-2);border-radius:3px}
+.seg a.on{background:var(--forest);color:#FFFFFF}
+.seg a kbd{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-3)}
+.seg a.on kbd{color:var(--sage)}
+.wa-top .r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.summary{display:flex;align-items:flex-end;gap:40px;margin:30px 0 0}
+.summary h2{margin:0;font-size:34px;line-height:1.15;letter-spacing:-.03em;font-weight:600}
+.summary h2 span{color:var(--text-3);font-weight:400}
+.summary p{margin:10px 0 0;font-size:16px;color:var(--text-2)}
+.summary p b{color:var(--text);font-weight:600}
+.split{margin-left:auto;text-align:right;flex:none}
+.split .ticks{display:flex;gap:5px;justify-content:flex-end;margin-bottom:10px}
+.split .ticks i{width:6px;height:26px;border-radius:2px;background:var(--ember-core)}
+.split .ticks i.o{background:transparent;box-shadow:inset 0 0 0 1px var(--leader)}
+.split .cap{display:flex;gap:18px;justify-content:flex-end}
+.canvas-wrap{margin:26px 40px 0;border:1px solid var(--rule);border-radius:8px;background-color:var(--canvas);
+  background-image:radial-gradient(circle,var(--rule) 1px,transparent 1.2px);background-size:22px 22px;background-position:11px 11px;padding:18px 20px 10px}
+.canvas-wrap svg{display:block;width:100%;height:auto}
+.glegend{display:flex;gap:26px;padding:12px 4px 4px;font-size:12.5px;color:var(--text-2);border-top:1px solid var(--rule);margin-top:6px;background:var(--canvas);white-space:nowrap}
+.glegend span{display:inline-flex;align-items:center;gap:8px}
+.glegend .r{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--text-3)}
+.wa-cells{display:grid;grid-template-columns:1.25fr 1fr 1fr;margin:24px 40px 34px;border:1px solid var(--rule);border-radius:8px}
+.wa-cells .cell{border-bottom:0;padding:24px 26px}
+dl.info{display:grid;grid-template-columns:118px 1fr;margin:14px 0 0;row-gap:9px;font-size:14px}
+dl.info dt{color:var(--text-2)}
+dl.info dd{margin:0;color:var(--text);display:flex;align-items:center;gap:7px;min-width:0;white-space:nowrap}
+dl.info dd .mono{font-size:12.5px;color:var(--text-2)}
+dl.info dd .ok{color:var(--forest);display:inline-flex}
+dl.tech{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:7px;margin:12px 0 0;font-family:var(--mono);font-size:11.5px;color:var(--text-3)}
+dl.tech dt{color:var(--text-3);white-space:nowrap}
+.spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:12px;border-top:1px solid var(--rule)}
+.spec div{padding:10px 0 0;min-width:0}
+.spec div:nth-child(n+5){padding-top:12px}
+.spec .cap{font-size:9.5px;display:block}
+.spec span.v{display:block;font-family:var(--mono);font-size:12px;color:var(--text-2);margin-top:3px;white-space:nowrap}
+dl.tech dd{margin:0;color:var(--text-2);white-space:nowrap}
+
+/* things to look at detail */
+.ttl-head{padding:22px 30px 18px;border-bottom:1px solid var(--rule)}
+.ttl-head h2{margin:0;font-size:26px;letter-spacing:-.025em;font-weight:600;display:flex;align-items:baseline;gap:10px}
+.ttl-head h2 .c{color:var(--text-3);font-weight:400}
+.filters{display:flex;gap:6px;margin-top:14px;white-space:nowrap}
+.filters a{font-size:12.5px;padding:6px 10px;border-radius:4px;color:var(--text-2);background:var(--chip)}
+.filters a.on{background:var(--ink);color:#FFFFFF}
+.more{display:block;padding:10px 30px 18px;font-size:13.5px;font-weight:500;color:var(--forest)}
+.issue-name{font-size:30px;font-weight:600;letter-spacing:-.025em;line-height:1.1;margin:10px 0 10px}
+.issue-name span{color:var(--text-3);font-weight:400}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:6px 10px;border-radius:4px;background:var(--chip);color:var(--text-2)}
+.tag.ember{background:var(--ember-wash);color:var(--ember-ink)}
+.tag .tiny{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:2px 5px;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(138,84,16,.35);font-weight:600}
+.minidial{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+.minidial svg{width:168px;height:168px;display:block}
+.minidial p{margin:8px 0 0;font-size:13px;color:var(--text-2);text-align:center;line-height:1.5}
+.steps{list-style:none;margin:16px 0 0;padding:0;counter-reset:s}
+.steps li{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--rule);font-size:14.5px;line-height:1.5;counter-increment:s}
+.steps li:first-child{border-top:0;padding-top:2px}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--text-3);padding-top:3px}
+.steps li span{display:block;color:var(--text-2);font-size:13.5px}
+.steps li span.ver{display:inline-block;margin-left:4px;font-family:var(--mono);font-size:12.5px;color:var(--text-2);background:var(--paper);padding:2px 6px;border-radius:3px;box-shadow:inset 0 0 0 1px var(--rule)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.opt{border-radius:5px;padding:11px 12px;box-shadow:inset 0 0 0 1px var(--rule);display:grid;grid-template-columns:16px 1fr;gap:9px;align-items:start}
+.opt b{display:block;font-size:13.5px;font-weight:600}
+.opt span{display:block;font-size:12px;color:var(--text-2);margin-top:2px;line-height:1.4}
+.opt .rad{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--tick-major);margin-top:2px}
+.opt.on{background:var(--forest);box-shadow:none;color:#FFFFFF}
+.opt.on span{color:var(--sage)}
+.opt.on .rad{background:var(--lime);box-shadow:inset 0 0 0 4px var(--forest),0 0 0 1.5px var(--lime)}
+.why{margin-top:14px}
+.why label{font-size:12.5px;color:var(--text-2);display:flex;justify-content:space-between}
+.why .ta{margin-top:6px;border-radius:5px;box-shadow:inset 0 0 0 1px var(--rule);background:var(--paper);padding:10px 12px;font-size:13.5px;line-height:1.5;color:var(--text);min-height:66px}
+.why .meta-row{display:flex;gap:8px;margin-top:10px}
+.saveline{margin-top:8px;font-size:12px;color:var(--text-3)}
+
+/* state frames */
+.pair{display:grid;grid-template-columns:700px 700px;gap:40px;align-items:start}
+.browser.small{width:700px}
+.browser.small .bar{height:42px;gap:14px;padding:0 16px}
+.browser.small .dots i{width:10px;height:10px}
+.browser.small .url{height:26px;font-size:12px;flex-basis:300px}
+.mini{display:grid;grid-template-columns:56px 228px minmax(0,1fr);height:440px}
+.rail{background:var(--ink);display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:6px;color:var(--side-muted)}
+.rail .rl{width:36px;height:36px;display:grid;place-items:center;border-radius:6px}
+.rail .rl.on{background:var(--lime);color:var(--ink)}
+.rail .lg{margin-bottom:10px}
+.mlist{background:var(--paper);border-right:1px solid var(--rule);padding:22px 0}
+.mlist .cap{padding:0 20px}
+.mlist h5{margin:8px 0 12px;padding:0 20px;font-size:17px;font-weight:600;letter-spacing:-.015em;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+.mlist h5 .c{color:var(--text-3);font-weight:400}
+.mrow{padding:11px 20px;display:flex;align-items:center;gap:9px;border-top:1px solid var(--rule);font-size:13px;white-space:nowrap}
+.mrow .n{margin-left:auto;color:var(--text-2)}
+.mrow.sel{background:var(--forest);color:#FFFFFF;border-top-color:transparent}
+.mrow .s{display:block;font-size:11.5px;color:var(--text-2)}
+.mrow.sel .s{color:var(--ember-dark)}
+.mmain{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;text-align:center}
+.mmain svg{width:300px;height:300px;display:block}
+.mmain h6{margin:6px 0 0;font-size:17px;font-weight:600;letter-spacing:-.015em}
+.mmain p{margin:4px 0 0;font-size:12.5px;color:var(--text-2)}
+.allclear .mmain{background:radial-gradient(260px 220px at 50% 44%,var(--lime-wash),rgba(241,250,223,0) 70%),var(--canvas)}
+.state-cap{margin:14px 0 0;font-size:13.5px;line-height:1.6;color:var(--text-2)}
+.state-cap b{color:var(--text);font-weight:600;margin-right:8px;white-space:nowrap}
+.state-cap .opt-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ember-ink);background:var(--ember-wash);padding:3px 7px;border-radius:3px;white-space:nowrap;margin-right:8px}
+
+/* dark (Forge) */
+.forge{background:var(--f-bg)}
+.forge .bar{background:#1A1716;border-bottom-color:var(--f-border);color:var(--f-muted)}
+.forge .url{background:var(--f-hair);color:var(--f-data)}
+.forge .url svg{color:var(--f-muted)}
+.forge .dots i{background:#3A332E}.forge .dots i:nth-child(2){background:#2B2622}.forge .dots i:nth-child(3){background:#221E1A}
+.forge .rail{background:var(--f-rail);color:var(--f-muted);border-right:1px solid var(--f-hair)}
+.forge .rail .rl.on{background:var(--f-hair);color:var(--f-accent);box-shadow:inset 2px 0 0 var(--f-accent)}
+.forge .mlist{background:var(--f-surface);border-right-color:var(--f-border)}
+.forge .mlist .cap{color:var(--f-muted)}
+.forge .mlist h5{color:var(--f-text)}
+.forge .mlist h5 .c{color:var(--f-muted)}
+.forge .mrow{border-top-color:var(--f-hair);color:var(--f-text)}
+.forge .mrow .s{color:var(--f-muted)}
+.forge .mrow .n{color:var(--f-muted)}
+.forge .mrow.sel{background:var(--f-hair);color:var(--f-text);box-shadow:inset 2px 0 0 var(--f-accent)}
+.forge .mrow.sel .s{color:var(--f-accent)}
+.forge .mmain{background:radial-gradient(260px 220px at 50% 44%,rgba(217,160,91,.06),rgba(217,160,91,0) 70%),var(--f-bg)}
+.forge .mmain h6{color:var(--f-text)}
+.forge .mmain p{color:var(--f-muted)}
+
+/* palette */
+.pal{display:grid;gap:14px}
+.pal h4{margin:0 0 4px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600}
+.sw-row{display:grid;grid-template-columns:repeat(8,1fr);border-radius:6px;overflow:hidden;box-shadow:0 1px 0 var(--rule)}
+.swatch{height:112px;padding:12px 13px;display:flex;flex-direction:column;justify-content:flex-end;font-size:12px;line-height:1.35}
+.swatch b{font-weight:600;font-size:13px}
+.swatch span{font-family:var(--mono);font-size:11px}
+.swatch em{font-style:normal;font-size:11px;margin-top:3px}
+.notes{margin-top:18px;font-size:13.5px;color:var(--text-2);line-height:1.6;background:var(--canvas);border-radius:6px;padding:18px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.notes b{color:var(--text);font-weight:600}
+footer{font-size:13px;color:var(--text-2);display:flex;justify-content:space-between;border-top:1px solid var(--stage-2);padding-top:22px;margin-top:60px}
+</style>
+</head>
+<body>
+
+<!-- ============ ICON SPRITE (inline, no network) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="i-radius" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><circle cx="19" cy="12" r="2"/><path d="M6.7 10.9 10.3 7.1M6.7 13.1l3.6 3.8M13.7 7.1l3.6 3.8M13.7 16.9l3.6-3.8"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M20.5 7.5 12 3 3.5 7.5v9L12 21l8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H6.5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V7.5z"/><path d="M14 3v4.5h4.5M9 12.5h6M9 16.5h4"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="18.5" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="m8 14 4-4 4 4"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+    <symbol id="i-fwd" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7.5l4-4 4 4M5 12v7.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V12"/></symbol>
+    <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M9 5v14"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 7h14"/><path d="m5 7-2.5 6a2.5 2.5 0 0 0 5 0zM19 7l-2.5 6a2.5 2.5 0 0 0 5 0z"/></symbol>
+    <symbol id="logo" viewBox="0 0 24 24"><path d="M12 2.2 4 5.2v6.3c0 5 3.4 8.8 8 10.3 4.6-1.5 8-5.3 8-10.3V5.2z" fill="#C8F169" stroke="none"/><circle cx="12" cy="11.6" r="4.6" fill="none" stroke="#0B0F0C" stroke-width="1.3"/><circle cx="13.9" cy="10" r="1.25" fill="#0B0F0C"/></symbol>
+    <symbol id="logo-forge" viewBox="0 0 24 24"><path d="M12 2.2 4 5.2v6.3c0 5 3.4 8.8 8 10.3 4.6-1.5 8-5.3 8-10.3V5.2z" fill="#D9A05B" stroke="none"/><circle cx="12" cy="11.6" r="4.6" fill="none" stroke="#121010" stroke-width="1.3"/><circle cx="13.9" cy="10" r="1.25" fill="#121010"/></symbol>
+  </defs>
+</svg>
+
+<main class="page">
+
+  <!-- ===================== 1. HEADER ===================== -->
+  <header class="intro">
+    <div>
+      <div class="kicker"><span class="sw"><i></i><i></i><i></i></span>Armoury UX exploration · Hybrid direction</div>
+      <h1>Hybrid <span>—</span><br>Greenhouse <em>Instruments</em></h1>
+      <p>The calm, ordered s.host room from Greenhouse, with <b>one precise instrument at its heart</b>: a hairline dial where all 3,847 pieces of software are still grey dots and only the three that need someone today glow ember. Underneath sits the full depth of the earlier operator console, with the same pages, graph, keyboard paths and exact identifiers, <b>turned down to a quiet second layer</b> so Tom gets an answer in a minute and Priya never loses precision.</p>
+    </div>
+    <aside class="from">
+      <h2>What came from where</h2>
+      <ul>
+        <li><b><i style="background:#C8F169;box-shadow:0 0 0 1px #0B0F0C"></i>Greenhouse</b><div>The shell: black sidebar with lime active item, white canvas, forest green selection and charts, three columns (nav / list grouped by state with counts / tabbed detail), thin rules, small uppercase buttons, lime primary.</div></li>
+        <li><b><i style="background:#AEB8B0"></i>Calm Instruments</b><div>The dot-field dial (1 dot = 1 piece of software), bezel ticks, the 82% hairline arc, leader-line labels and small monospace captions. The same thin-line style draws the graph and the mini gauges.</div></li>
+        <li><b><i style="background:#B8782A;box-shadow:0 0 0 3px rgba(217,160,91,.25)"></i>Prior final design</b><div>The full information architecture (renamed), the “Where it’s affected” graph, ⌘K and <span class="mono" style="font-size:12.5px">g&nbsp;h</span>-style key hints, Forge ember as the one urgency colour, digests and CVE/KEV/EPSS as small grey detail, and Review in place of the slide-over drawer.</div></li>
+      </ul>
+    </aside>
+  </header>
+
+  <!-- ===================== 2. HOME (Tom) ===================== -->
+  <section class="block">
+    <div class="section-label"><span class="num">01</span><h3>Home: Tom’s one-minute check</h3><p>“Are we safe? What needs attention?” Three glowing dots out of 3,847.</p></div>
+    <div class="browser">
+      <div class="bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <svg class="i"><use href="#i-panel"/></svg>
+        <svg class="i"><use href="#i-back"/></svg>
+        <svg class="i" style="color:#A3A9A4"><use href="#i-fwd"/></svg>
+        <div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal</div>
+        <div class="tools"><svg class="i"><use href="#i-download"/></svg><svg class="i"><use href="#i-share"/></svg><svg class="i"><use href="#i-plus"/></svg><svg class="i"><use href="#i-copy"/></svg></div>
+      </div>
+
+      <div class="app">
+        <!-- sidebar -->
+        <nav class="side" aria-label="Main">
+          <div class="brand"><svg width="28" height="28"><use href="#logo"/></svg><b>armoury<span>.</span></b></div>
+          <div class="jump"><svg class="i sm"><use href="#i-search"/></svg>Search or jump…<kbd>⌘K</kbd></div>
+          <div class="nav">
+            <a class="on" href="#"><svg class="i"><use href="#i-home"/></svg>Home<span class="r"><kbd>g h</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-radius"/></svg>Where it’s affected<span class="r"><kbd>g w</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-map"/></svg>Map<span class="r"><kbd>g m</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-box"/></svg>Software<span class="r"><kbd>g s</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-eye"/></svg>Things to look at<span class="r"><span class="badge">3</span><kbd>g t</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-doc"/></svg>Audit reports<span class="r"><kbd>g a</kbd></span></a>
+            <hr>
+            <a href="#"><svg class="i"><use href="#i-sliders"/></svg>Settings<span class="r"><kbd>g ,</kbd></span></a>
+          </div>
+          <div class="side-foot">
+            <div class="live"><span class="led"></span>Checking continuously</div>
+            <div class="me"><div class="avatar">TR</div><div class="who"><b>Tom Reid</b><span>Head of Engineering</span></div><svg class="i sm"><use href="#i-chev"/></svg></div>
+          </div>
+        </nav>
+
+        <!-- middle: grouped by need -->
+        <section class="list">
+          <div class="list-scroll">
+            <div class="greet">
+              <div class="cap">Good morning, Tom · Thu 6 Nov</div>
+              <h2>You’re in good shape.</h2>
+              <p><b>3 of 1,094</b> open items need someone today. Everything else is known and being handled.</p>
+            </div>
+
+            <h2 class="group">Needs attention today <span class="c">3</span></h2>
+            <a class="row sel" href="#">
+              <span class="gl"></span>
+              <div class="main">
+                <div class="t">log4j-core <span class="v">2.17.0</span></div>
+                <div class="s ember">Being attacked in the wild</div>
+              </div>
+              <span class="chip lime">14 places</span>
+            </a>
+            <a class="row" href="#">
+              <span class="gl soft"></span>
+              <div class="main">
+                <div class="t">AGPL-3.0 licence</div>
+                <div class="s">Needs a decision · report-render</div>
+              </div>
+              <span class="chip">1 place</span>
+            </a>
+            <a class="row" href="#">
+              <span class="gl soft"></span>
+              <div class="main">
+                <div class="t">openssl <span class="v">3.0.13</span></div>
+                <div class="s">Medium weakness · checkout-web</div>
+              </div>
+              <span class="chip">1 place</span>
+            </a>
+
+            <h2 class="group" style="margin-top:30px">Being handled <span class="c">1,091</span></h2>
+            <a class="row fine" href="#"><div class="main"><div class="t">Low chance of attack</div></div><span class="n">604</span><span class="bar-h"><i class="l" style="width:55%"></i></span></a>
+            <a class="row fine" href="#"><div class="main"><div class="t">Fix planned</div></div><span class="n">241</span><span class="bar-h"><i style="width:22%"></i></span></a>
+            <a class="row fine" href="#"><div class="main"><div class="t">Fixed for now</div></div><span class="n">164</span><span class="bar-h"><i style="width:15%"></i></span></a>
+            <a class="row fine" href="#"><div class="main"><div class="t">Accepted</div></div><span class="n">82</span><span class="bar-h"><i style="width:7.5%"></i></span></a>
+          </div>
+          <div class="list-foot">
+            <a class="btn lime wide" href="#"><svg class="i sm"><use href="#i-eye"/></svg>Review all 3 <kbd>r</kbd></a>
+            <div class="hints"><span><i>j</i><i>k</i>move</span><span><i>↵</i>open</span><span><i>?</i>all keys</span></div>
+          </div>
+        </section>
+
+        <!-- detail: the instrument -->
+        <section class="detail">
+          <div class="tabs">
+            <a class="tab on" href="#">Overview</a>
+            <a class="tab" href="#">Today <span class="n">3</span></a>
+            <a class="tab" href="#">Coverage <span class="n">82%</span></a>
+            <div class="end"><div class="k-field"><svg class="i sm"><use href="#i-search"/></svg>Search or jump…<kbd>⌘K</kbd></div></div>
+          </div>
+
+          <div class="inst-head">
+            <span class="cap">Fleet · 3,847 pieces of software</span>
+            <span class="r"><span class="led"></span>Last checked 38 min ago</span>
+          </div>
+          <div class="dial">
+            <!-- Dot field: pitch 5px inside r=175 ≈ 3,848 cells → 1 dot per piece of software.
+                 Checked sector = 82% (295.2° clockwise from 12 o'clock). -->
+            <svg viewBox="0 0 748 470" role="img" aria-label="Dial of all 3,847 pieces of software. 82% checked. Three glowing dots need attention today: log4j-core, an AGPL-3.0 licence, and openssl.">
+              <defs>
+                <pattern id="h-off" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r=".95" fill="#E1E5DF"/></pattern>
+                <pattern id="h-on" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.2" fill="#AEB8B0"/></pattern>
+                <clipPath id="h-checked"><path d="M374 235 L374 50 A185 185 0 1 1 206.6 156.2 Z"/></clipPath>
+                <radialGradient id="h-glow"><stop offset="0" stop-color="#D9A05B" stop-opacity=".55"/><stop offset=".5" stop-color="#D9A05B" stop-opacity=".16"/><stop offset="1" stop-color="#D9A05B" stop-opacity="0"/></radialGradient>
+              </defs>
+              <!-- bezel -->
+              <circle cx="374" cy="235" r="222" fill="none" stroke="#EEF0EB"/>
+              <circle cx="374" cy="235" r="212" fill="none" stroke="#E6E8E3" stroke-dasharray="2 4"/>
+              <circle cx="374" cy="235" r="212" fill="none" stroke="#1F3B33" stroke-width="1.75" stroke-dasharray="1092.3 1332" transform="rotate(-90 374 235)"/>
+              <circle cx="374" cy="235" r="200" fill="none" stroke="#C9CFC7" stroke-width="6" stroke-dasharray="0.8 20.144" transform="rotate(-90 374 235)"/>
+              <circle cx="374" cy="235" r="200" fill="none" stroke="#6F7871" stroke-width="11" stroke-dasharray="1.4 103.32" transform="rotate(-90.4 374 235)"/>
+              <circle cx="374" cy="235" r="188" fill="none" stroke="#E6E8E3"/>
+              <!-- dot field -->
+              <circle cx="374" cy="235" r="175" fill="url(#h-off)"/>
+              <circle cx="374" cy="235" r="175" fill="url(#h-on)" clip-path="url(#h-checked)"/>
+              <path d="M374 235 V60 M374 235 L215.7 160.5" stroke="#E6E8E3"/>
+              <circle cx="374" cy="235" r="3" fill="#FFFFFF" stroke="#6F7871"/>
+              <!-- zero mark + arc end -->
+              <path d="M374 6 V20" stroke="#0B0F0C" stroke-width="1.5"/>
+              <circle cx="182.2" cy="144.7" r="5" fill="#C8F169" stroke="#0B0F0C" stroke-width="1.2"/>
+
+              <!-- three glowing dots (ember) -->
+              <g transform="translate(454.4 167.5)"><circle r="32" fill="url(#h-glow)"/><circle r="12" fill="none" stroke="#D9A05B" stroke-width="1"/><circle r="4.6" fill="#B8782A"/></g>
+              <g transform="translate(299.1 293.5)"><circle r="24" fill="url(#h-glow)"/><circle r="9.5" fill="none" stroke="#D9A05B" stroke-width="1"/><circle r="3.8" fill="#B8782A"/></g>
+              <g transform="translate(422 353.7)"><circle r="24" fill="url(#h-glow)"/><circle r="9.5" fill="none" stroke="#D9A05B" stroke-width="1"/><circle r="3.8" fill="#B8782A"/></g>
+
+              <!-- leaders -->
+              <g fill="none" stroke="#9AA39B" stroke-width=".9">
+                <path d="M463 158.8 L540 80 H580"/>
+                <path d="M292.4 300.5 L200 400 H150"/>
+                <path d="M429 360.5 L500 430 H580"/>
+                <path d="M177.2 144.7 H120"/>
+              </g>
+              <g fill="#9AA39B"><circle cx="580" cy="80" r="2"/><circle cx="150" cy="400" r="2"/><circle cx="580" cy="430" r="2"/><circle cx="120" cy="144.7" r="2"/></g>
+
+              <!-- labels: text #121814 (18:1), #56615B (6.5:1), #8A5410 (6.3:1), captions #67716B (5.1:1) -->
+              <g font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="10" letter-spacing="1.1" fill="#67716B">
+                <text x="588" y="62">01 · MOST URGENT</text>
+                <text x="142" y="381" text-anchor="end">02 · DECISION</text>
+                <text x="588" y="412">03 · WEAKNESS</text>
+                <text x="112" y="139" text-anchor="end" fill="#1F3B33" font-weight="600">82% CHECKED</text>
+              </g>
+              <g font-size="12">
+                <text x="588" y="82" font-size="14.5" font-weight="600" fill="#121814">log4j-core 2.17.0</text>
+                <text x="588" y="100" fill="#8A5410">Being attacked in the wild</text>
+                <text x="588" y="117" fill="#56615B">In 14 pieces of software</text>
+
+                <text x="142" y="401" text-anchor="end" font-size="14.5" font-weight="600" fill="#121814">AGPL-3.0 licence</text>
+                <text x="142" y="419" text-anchor="end" fill="#56615B">Needs a decision</text>
+                <text x="142" y="436" text-anchor="end" fill="#56615B">report-render 0.9.4</text>
+
+                <text x="588" y="432" font-size="14.5" font-weight="600" fill="#121814">openssl 3.0.13</text>
+                <text x="588" y="450" fill="#56615B">Medium · checkout-web</text>
+
+                <text x="112" y="157" text-anchor="end" fill="#56615B">3,176 of 3,847</text>
+              </g>
+            </svg>
+          </div>
+          <div class="legend">
+            <span><i style="background:#E1E5DF;box-shadow:inset 0 0 0 1px #C9CFC7"></i>Not checked yet <b>671</b></span>
+            <span><i style="background:#AEB8B0"></i>Checked <b>3,176</b></span>
+            <span><i style="background:#B8782A;box-shadow:0 0 0 3px rgba(217,160,91,.3)"></i>Needs attention today <b>3</b></span>
+            <span class="r cap">1 dot = 1 piece of software</span>
+          </div>
+
+          <div class="cells">
+            <div class="cell last">
+              <h4>Open items <span class="meta">Last 30 days</span></h4>
+              <div class="big">1,094 <small><svg class="i xs"><use href="#i-arrow-down"/></svg>247 fewer</small></div>
+              <div class="spark">
+                <svg viewBox="0 0 300 72" preserveAspectRatio="none" aria-label="Open items going down over 30 days, from 1,341 to 1,094">
+                  <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F3B33" stop-opacity=".12"/><stop offset="1" stop-color="#1F3B33" stop-opacity="0"/></linearGradient></defs>
+                  <line x1="0" y1="71.5" x2="300" y2="71.5" stroke="#E6E8E3" vector-effect="non-scaling-stroke"/>
+                  <line x1="0" y1="12" x2="300" y2="12" stroke="#E6E8E3" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"/>
+                  <path d="M0 12 L10 13 L20 12.6 L30 16 L40 16.9 L50 15.4 L60 20.2 L70 21.2 L80 22.4 L90 21.6 L100 26.4 L110 28 L120 27.4 L130 30.8 L140 32.4 L150 31.8 L160 36.2 L170 38.3 L180 37.6 L190 41.1 L200 42.8 L210 42.3 L220 46.1 L230 48.3 L240 48.7 L250 51.8 L260 54 L270 53.2 L280 56.6 L290 59.7 L300 61.3 V72 H0 Z" fill="url(#g1)"/>
+                  <polyline points="0,12 10,13 20,12.6 30,16 40,16.9 50,15.4 60,20.2 70,21.2 80,22.4 90,21.6 100,26.4 110,28 120,27.4 130,30.8 140,32.4 150,31.8 160,36.2 170,38.3 180,37.6 190,41.1 200,42.8 210,42.3 220,46.1 230,48.3 240,48.7 250,51.8 260,54 270,53.2 280,56.6 290,59.7 300,61.3" fill="none" stroke="#1F3B33" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+                </svg>
+                <div class="axis"><span>7 Oct · 1,341</span><span>6 Nov · 1,094</span></div>
+              </div>
+            </div>
+            <div class="cell bl last">
+              <h4>Audit report</h4>
+              <div class="report">
+                <div class="doc"><span class="seal"><svg class="i xs"><use href="#i-check"/></svg></span></div>
+                <p>Ready for the last 12 months<br><span>Signed, and ready for auditors and customers.</span></p>
+              </div>
+              <div class="actions">
+                <a class="btn" href="#"><svg class="i sm"><use href="#i-download"/></svg>Download</a>
+                <a class="btn" href="#">Preview</a>
+              </div>
+            </div>
+          </div>
+          <div class="prov"><span>What’s inside · <b>Syft v1.18</b></span><span>Matching · <b>Grype DB v5.12</b></span><span>Attack list · <b>KEV, current</b></span><span>Chance of attack · <b>EPSS, today</b></span></div>
+        </section>
+      </div>
+    </div>
+    <div class="caption">
+      <div><span class="k">A</span>The dial is the answer. 3,844 still grey dots, 3 glowing ember. Labels are plain words; IDs wait for the detail view.</div>
+      <div><span class="k">B</span><span>Power is present but quiet: ⌘K in two places and grey <span class="mono">g h</span> hints on every nav item.</span></div>
+      <div><span class="k">C</span>Engineer precision sits at the foot: toolchain versions in small grey monospace, never a headline.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 3. WHERE IT'S AFFECTED ===================== -->
+  <section class="block">
+    <div class="section-label"><span class="num">02</span><h3>Where it’s affected: log4j-core</h3><p>The prior blast-radius graph, redrawn as an instrument. Only the affected path is in colour.</p></div>
+    <div class="browser">
+      <div class="bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <svg class="i"><use href="#i-panel"/></svg>
+        <svg class="i"><use href="#i-back"/></svg>
+        <svg class="i" style="color:#A3A9A4"><use href="#i-fwd"/></svg>
+        <div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal/where/log4j-core</div>
+        <div class="tools"><svg class="i"><use href="#i-download"/></svg><svg class="i"><use href="#i-share"/></svg><svg class="i"><use href="#i-plus"/></svg><svg class="i"><use href="#i-copy"/></svg></div>
+      </div>
+      <div class="app wide" style="min-height:0">
+        <nav class="side" aria-label="Main">
+          <div class="brand"><svg width="28" height="28"><use href="#logo"/></svg><b>armoury<span>.</span></b></div>
+          <div class="jump"><svg class="i sm"><use href="#i-search"/></svg>Search or jump…<kbd>⌘K</kbd></div>
+          <div class="nav">
+            <a href="#"><svg class="i"><use href="#i-home"/></svg>Home<span class="r"><kbd>g h</kbd></span></a>
+            <a class="on" href="#"><svg class="i"><use href="#i-radius"/></svg>Where it’s affected<span class="r"><kbd>g w</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-map"/></svg>Map<span class="r"><kbd>g m</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-box"/></svg>Software<span class="r"><kbd>g s</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-eye"/></svg>Things to look at<span class="r"><span class="badge">3</span><kbd>g t</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-doc"/></svg>Audit reports<span class="r"><kbd>g a</kbd></span></a>
+            <hr>
+            <a href="#"><svg class="i"><use href="#i-sliders"/></svg>Settings<span class="r"><kbd>g ,</kbd></span></a>
+          </div>
+          <div class="side-foot">
+            <div class="live"><span class="led"></span>Checking continuously</div>
+            <div class="me"><div class="avatar">P</div><div class="who"><b>Priya</b><span>Security engineer</span></div><svg class="i sm"><use href="#i-chev"/></svg></div>
+          </div>
+        </nav>
+
+        <section class="wa">
+          <div class="wa-head">
+            <div class="wa-top">
+              <div class="query"><svg class="i sm" style="color:#56615B"><use href="#i-search"/></svg>log4j-core 2.17.0 <span class="mono">· weakness CVE-2026-23012</span><svg class="i sm" style="color:#67716B;margin-left:auto"><use href="#i-x"/></svg><kbd>⌘K</kbd></div>
+              <div class="r">
+                <div class="seg"><a class="on" href="#">Graph <kbd>g</kbd></a><a href="#">Table <kbd>t</kbd></a></div>
+                <a class="btn" href="#"><svg class="i sm"><use href="#i-download"/></svg>Audit report</a>
+              </div>
+            </div>
+            <div class="summary">
+              <div>
+                <div class="cap">Where it’s affected · answered in 1.8 s</div>
+                <h2 style="margin-top:10px">log4j-core is in 14 pieces of software.</h2>
+                <p><b>9 running in production</b>, 5 shipped but not running. Across 2 clusters.</p>
+              </div>
+              <div class="split" aria-label="9 of 14 running">
+                <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i></div>
+                <div class="cap"><span style="color:#8A5410">9 running</span><span>5 not running</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <!-- Nodes: weakness -> package -> software -> where it runs.
+                 Ember #B8782A = affected and running (3.7:1 on white). Grey dashed #9AA39B = shipped, not running.
+                 Labels: titles #121814, captions #67716B (5.1:1). White halo via paint-order for legibility. -->
+            <svg viewBox="0 0 1112 600" role="img" aria-label="Graph: weakness CVE-2026-23012 to 2 packages to 14 pieces of software to where they run. 9 running, 5 not running.">
+              <defs>
+                <radialGradient id="w-glow"><stop offset="0" stop-color="#D9A05B" stop-opacity=".5"/><stop offset=".5" stop-color="#D9A05B" stop-opacity=".14"/><stop offset="1" stop-color="#D9A05B" stop-opacity="0"/></radialGradient>
+                <pattern id="w-other" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r=".95" fill="#C9CFC7"/></pattern>
+              </defs>
+
+              <!-- column captions -->
+              <g font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="10" letter-spacing="1.2" fill="#67716B">
+                <text x="30" y="22">WEAKNESS</text>
+                <text x="310" y="22">PACKAGE · 2</text>
+                <text x="590" y="22">SOFTWARE · 14</text>
+                <text x="870" y="22">WHERE IT RUNS</text>
+              </g>
+              <path d="M0 36.5 H1112" stroke="#E6E8E3"/>
+              <!-- divider between running and not running -->
+              <path d="M590 336.5 H1112" stroke="#E6E8E3" stroke-dasharray="3 4"/>
+              <text x="1112" y="330" text-anchor="end" font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="10" letter-spacing="1.2" fill="#67716B">SHIPPED, NOT RUNNING</text>
+
+              <!-- ===== edges ===== -->
+              <g fill="none" stroke-linecap="round">
+                <!-- weakness underline + to packages -->
+                <path d="M30 300 H200 C255 300 255 230 310 230" stroke="#B8782A" stroke-width="1.75"/>
+                <path d="M200 300 C255 300 255 410 310 410" stroke="#B8782A" stroke-width="1.2"/>
+                <!-- log4j-core -> software -->
+                <path d="M310 230 H480 C535 230 535 80 590 80" stroke="#B8782A" stroke-width="1.75"/>
+                <path d="M480 230 C535 230 535 150 590 150" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M480 230 C535 230 535 290 590 290" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M480 230 C535 230 535 380 590 380" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+                <path d="M480 230 C535 230 535 520 590 520" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+                <!-- logging-shim -> software -->
+                <path d="M310 410 H480 C535 410 535 220 590 220" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M480 410 C535 410 535 450 590 450" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+                <!-- software -> where it runs -->
+                <path d="M590 80 H870" stroke="#B8782A" stroke-width="1.75"/>
+                <path d="M590 150 H870" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M590 220 H870" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M590 290 H870" stroke="#B8782A" stroke-width="1.2"/>
+                <path d="M590 380 H870" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+                <path d="M590 450 H870" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+                <path d="M590 520 H870" stroke="#9AA39B" stroke-width="1" stroke-dasharray="3 4"/>
+              </g>
+
+              <!-- ===== nodes ===== -->
+              <!-- weakness -->
+              <g transform="translate(30 300)"><circle r="30" fill="url(#w-glow)"/><circle r="12" fill="#FFFFFF" stroke="#D9A05B"/><circle r="5.5" fill="#B8782A"/></g>
+              <!-- packages -->
+              <g transform="translate(310 230)"><circle r="9" fill="#FFFFFF" stroke="#D9A05B"/><circle r="4.5" fill="#B8782A"/></g>
+              <g transform="translate(310 410)"><circle r="9" fill="#FFFFFF" stroke="#D9A05B"/><circle r="4.5" fill="#B8782A"/></g>
+              <!-- software running -->
+              <g transform="translate(590 80)"><circle r="11" fill="#FFFFFF" stroke="#1F3B33" stroke-width="1.2"/><circle r="5.5" fill="#C8F169" stroke="#1F3B33" stroke-width="1.5"/></g>
+              <circle cx="590" cy="150" r="5" fill="#FFFFFF" stroke="#B8782A" stroke-width="1.5"/>
+              <circle cx="590" cy="220" r="5" fill="#FFFFFF" stroke="#B8782A" stroke-width="1.5"/>
+              <g transform="translate(590 290)"><circle r="5" fill="#FFFFFF" stroke="#B8782A" stroke-width="1.5"/><circle cx="-2" r="5" fill="none" stroke="#D9A05B" stroke-width=".8" transform="translate(-6 0)"/></g>
+              <!-- software not running -->
+              <circle cx="590" cy="380" r="5" fill="#FFFFFF" stroke="#9AA39B" stroke-width="1.2" stroke-dasharray="2 2"/>
+              <circle cx="590" cy="450" r="5" fill="#FFFFFF" stroke="#9AA39B" stroke-width="1.2" stroke-dasharray="2 2"/>
+              <circle cx="590" cy="520" r="5" fill="#FFFFFF" stroke="#9AA39B" stroke-width="1.2" stroke-dasharray="2 2"/>
+              <!-- where it runs -->
+              <g fill="#1F3B33">
+                <circle cx="870" cy="80" r="5"/><circle cx="870" cy="150" r="5"/><circle cx="870" cy="220" r="5"/><circle cx="870" cy="290" r="5"/>
+              </g>
+              <g fill="#FFFFFF" stroke="#9AA39B" stroke-width="1.2"><circle cx="870" cy="380" r="4.5"/><circle cx="870" cy="450" r="4.5"/><circle cx="870" cy="520" r="4.5"/></g>
+              <!-- copies: tiny ticks -->
+              <g fill="#1F3B33">
+                <rect x="1060" y="65" width="4" height="12" rx="1"/><rect x="1067" y="65" width="4" height="12" rx="1"/><rect x="1074" y="65" width="4" height="12" rx="1"/><rect x="1081" y="65" width="4" height="12" rx="1"/>
+                <rect x="1060" y="135" width="4" height="12" rx="1"/><rect x="1067" y="135" width="4" height="12" rx="1"/><rect x="1074" y="135" width="4" height="12" rx="1"/>
+                <rect x="1060" y="205" width="4" height="12" rx="1"/><rect x="1067" y="205" width="4" height="12" rx="1"/>
+              </g>
+
+              <!-- ===== labels (title above the line, caption below) ===== -->
+              <g paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">
+                <g font-size="14" font-weight="600" fill="#121814">
+                  <text x="50" y="292">Lets attackers run code</text>
+                  <text x="324" y="222">log4j-core 2.17.0</text>
+                  <text x="324" y="402">logging-shim 1.4.2</text>
+                  <text x="606" y="72">payments-api 3.4.1</text>
+                  <text x="602" y="142">checkout-web 2.11.0</text>
+                  <text x="602" y="212">auth-service 1.9.3</text>
+                  <text x="602" y="282">+ 6 more running</text>
+                  <text x="602" y="372" fill="#56615B" font-weight="500">billing-worker 5.0.2</text>
+                  <text x="602" y="442" fill="#56615B" font-weight="500">legacy-ftp 0.3.1</text>
+                  <text x="602" y="512" fill="#56615B" font-weight="500">+ 3 more</text>
+                </g>
+                <g font-size="13" fill="#121814">
+                  <text x="882" y="72">prod-eu-west / payments</text>
+                  <text x="882" y="142">prod-eu-west / checkout</text>
+                  <text x="882" y="212">prod-us-east / auth</text>
+                  <text x="882" y="282">6 more places</text>
+                </g>
+                <g font-size="12.5" fill="#56615B">
+                  <text x="882" y="372">Not running · last ran 12 days ago</text>
+                  <text x="882" y="442">Never seen running</text>
+                  <text x="882" y="512">Not running</text>
+                </g>
+                <g font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="10.5" fill="#67716B">
+                  <text x="50" y="315">CVE-2026-23012</text>
+                  <text x="50" y="331" fill="#8A5410">KEV · EPSS 0.94</text>
+                  <text x="324" y="245">direct · in 12</text>
+                  <text x="324" y="425">bundles log4j · in 2</text>
+                  <text x="606" y="95">sha256:9f2c41…</text>
+                  <text x="602" y="165">sha256:4c77e0…</text>
+                  <text x="602" y="235">sha256:b81d22…</text>
+                  <text x="602" y="305">expand · e</text>
+                  <text x="602" y="395">sha256:e30a9c…</text>
+                  <text x="602" y="465">sha256:71fe02…</text>
+                  <text x="602" y="535">expand · e</text>
+                  <text x="882" y="95">4 copies running</text>
+                  <text x="882" y="165">3 copies running</text>
+                  <text x="882" y="235">2 copies · nightly</text>
+                  <text x="882" y="305">2 clusters</text>
+                </g>
+              </g>
+
+              <!-- context: everything else, still and grey -->
+              <rect x="30" y="556" width="250" height="20" fill="url(#w-other)"/>
+              <text x="292" y="571" font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="10" letter-spacing="1.1" fill="#67716B">3,833 OTHER PIECES OF SOFTWARE · NOT AFFECTED</text>
+            </svg>
+            <div class="glegend">
+              <span><svg width="26" height="8"><path d="M1 4 H25" stroke="#B8782A" stroke-width="1.5"/></svg>Affected and running</span>
+              <span><svg width="26" height="8"><path d="M1 4 H25" stroke="#9AA39B" stroke-dasharray="3 4"/></svg>Shipped, not running</span>
+              <span><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#C8F169" stroke="#1F3B33" stroke-width="1.5"/></svg>Selected</span>
+              <span class="r">Syft v1.18 · Grype DB v5.12, synced 41 min ago · KEV catalogue, current</span>
+            </div>
+          </div>
+
+          <div class="wa-cells">
+            <div class="cell">
+              <h4>payments-api <span style="color:#67716B;font-weight:400">3.4.1</span><span class="meta">Selected</span></h4>
+              <dl class="info">
+                <dt>Name</dt><dd>acme/payments-api</dd>
+                <dt>Fingerprint</dt><dd><span class="mono">sha256:9f2c41…</span><svg class="i xs" style="color:#67716B"><use href="#i-copy"/></svg></dd>
+                <dt>Runs in</dt><dd>prod-eu-west / payments · 4 copies</dd>
+                <dt>What’s inside</dt><dd>214 ingredients · 37 chosen directly</dd>
+                <dt>Built</dt><dd>3 days ago <span style="color:#56615B">· signed</span><span class="ok"><svg class="i xs"><use href="#i-check"/></svg></span></dd>
+              </dl>
+            </div>
+            <div class="cell bl">
+              <h4>What to do</h4>
+              <p class="sub" style="font-size:14.5px;color:#121814;margin-top:12px">Update log4j-core to <b>2.17.2</b>. Start with the 9 running in production; the 5 that aren’t running can wait for their next build.</p>
+              <div class="actions">
+                <a class="btn lime" href="#">Plan the fix</a>
+                <a class="btn" href="#"><svg class="i sm"><use href="#i-map"/></svg>Open in Map</a>
+              </div>
+            </div>
+            <div class="cell bl">
+              <h4>How we know</h4>
+              <dl class="tech">
+                <dt>Weakness</dt><dd>CVE-2026-23012</dd>
+                <dt>Being attacked</dt><dd>KEV · listed</dd>
+                <dt>Chance of attack</dt><dd>EPSS 0.94 · high</dd>
+                <dt>Source</dt><dd>Grype · NVD + KEV</dd>
+                <dt>Last evaluated</dt><dd>38 min ago</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="caption">
+      <div><span class="k">A</span>Small round nodes and hairline edges on a light canvas. Ember marks only the path that is affected and running.</div>
+      <div><span class="k">B</span>Plain summary first: “14 pieces of software, 9 running in production, 5 shipped but not running”. Digests stay small and grey.</div>
+      <div><span class="k">C</span><span>Graph / Table is one toggle (<span class="mono">g</span> / <span class="mono">t</span>). Both read the same answer.</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== 4. THINGS TO LOOK AT ===================== -->
+  <section class="block">
+    <div class="section-label"><span class="num">03</span><h3>Things to look at: Priya reviews in place</h3><p>The old slide-over drawer is now the third column. Plain words first, IDs at the foot.</p></div>
+    <div class="browser">
+      <div class="bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <svg class="i"><use href="#i-panel"/></svg>
+        <svg class="i"><use href="#i-back"/></svg>
+        <svg class="i" style="color:#A3A9A4"><use href="#i-fwd"/></svg>
+        <div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal/look-at/log4j-core</div>
+        <div class="tools"><svg class="i"><use href="#i-download"/></svg><svg class="i"><use href="#i-share"/></svg><svg class="i"><use href="#i-plus"/></svg><svg class="i"><use href="#i-copy"/></svg></div>
+      </div>
+      <div class="app">
+        <nav class="side" aria-label="Main">
+          <div class="brand"><svg width="28" height="28"><use href="#logo"/></svg><b>armoury<span>.</span></b></div>
+          <div class="jump"><svg class="i sm"><use href="#i-search"/></svg>Search or jump…<kbd>⌘K</kbd></div>
+          <div class="nav">
+            <a href="#"><svg class="i"><use href="#i-home"/></svg>Home<span class="r"><kbd>g h</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-radius"/></svg>Where it’s affected<span class="r"><kbd>g w</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-map"/></svg>Map<span class="r"><kbd>g m</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-box"/></svg>Software<span class="r"><kbd>g s</kbd></span></a>
+            <a class="on" href="#"><svg class="i"><use href="#i-eye"/></svg>Things to look at<span class="r"><kbd>g t</kbd></span></a>
+            <a href="#"><svg class="i"><use href="#i-doc"/></svg>Audit reports<span class="r"><kbd>g a</kbd></span></a>
+            <hr>
+            <a href="#"><svg class="i"><use href="#i-sliders"/></svg>Settings<span class="r"><kbd>g ,</kbd></span></a>
+          </div>
+          <div class="side-foot">
+            <div class="live"><span class="led"></span>Checking continuously</div>
+            <div class="me"><div class="avatar">P</div><div class="who"><b>Priya</b><span>Security engineer</span></div><svg class="i sm"><use href="#i-chev"/></svg></div>
+          </div>
+        </nav>
+
+        <section class="list">
+          <div class="ttl-head">
+            <h2>Things to look at <span class="c">1,094</span></h2>
+            <div class="filters"><a class="on" href="#">All</a><a href="#">Running only</a><a href="#">Mine</a><a href="#">Licences</a></div>
+          </div>
+          <div class="list-scroll" style="padding-top:22px">
+            <h2 class="group">Not reviewed yet <span class="c">3</span></h2>
+            <a class="row sel" href="#">
+              <span class="gl"></span>
+              <div class="main"><div class="t">log4j-core <span class="v">2.17.0</span></div><div class="s ember">Being attacked in the wild</div></div>
+              <span class="chip lime">14 places</span>
+            </a>
+            <a class="row" href="#">
+              <span class="gl soft"></span>
+              <div class="main"><div class="t">AGPL-3.0 licence</div><div class="s">Needs a decision · report-render</div></div>
+              <span class="chip">1 place</span>
+            </a>
+            <a class="row" href="#">
+              <span class="gl soft"></span>
+              <div class="main"><div class="t">openssl <span class="v">3.0.13</span></div><div class="s">Medium weakness · checkout-web</div></div>
+              <span class="chip">1 place</span>
+            </a>
+
+            <h2 class="group" style="margin-top:26px">Fix planned <span class="c">241</span></h2>
+            <a class="row" href="#">
+              <span class="gl grey"></span>
+              <div class="main"><div class="t">netty-codec <span class="v">4.1.94</span></div><div class="s">Low chance · payments-api</div></div>
+              <span class="chip">by 14 Nov</span>
+            </a>
+            <a class="row" href="#">
+              <span class="gl grey"></span>
+              <div class="main"><div class="t">jackson-databind <span class="v">2.16.1</span></div><div class="s">Low chance · 3 places</div></div>
+              <span class="chip">by 20 Nov</span>
+            </a>
+            <a class="more" href="#">+ 239 more</a>
+
+            <a class="row fine" href="#"><div class="main"><div class="t">Fixed for now</div></div><span class="n">164</span><svg class="i sm" style="color:#67716B"><use href="#i-chev"/></svg></a>
+            <a class="row fine" href="#"><div class="main"><div class="t">Accepted</div></div><span class="n">82</span><svg class="i sm" style="color:#67716B"><use href="#i-chev"/></svg></a>
+            <a class="row fine" href="#"><div class="main"><div class="t">Low chance of attack</div></div><span class="n">604</span><svg class="i sm" style="color:#67716B"><use href="#i-chev"/></svg></a>
+          </div>
+          <div class="list-foot" style="padding-top:8px">
+            <div class="hints" style="margin-top:0"><span><i>j</i><i>k</i>move</span><span><i>r</i>review</span><span><i>⌘↵</i>save</span></div>
+          </div>
+        </section>
+
+        <section class="detail">
+          <div class="tabs">
+            <a class="tab on" href="#">Review</a>
+            <a class="tab" href="#">Where it’s affected <span class="n">14</span></a>
+            <a class="tab" href="#">History <span class="n">2</span></a>
+            <div class="end"><span class="mono" style="font-size:12px;color:#67716B">1 of 3</span><a class="btn icon" href="#" aria-label="Previous" style="height:34px;width:34px"><svg class="i sm"><use href="#i-up"/></svg></a><a class="btn icon" href="#" aria-label="Next" style="height:34px;width:34px"><svg class="i sm"><use href="#i-chev"/></svg></a></div>
+          </div>
+          <div class="cells">
+            <div class="cell">
+              <div class="cap">Not reviewed yet · 01 of 03</div>
+              <div class="issue-name">log4j-core <span>2.17.0</span></div>
+              <p class="sub" style="margin:0;font-size:15px;max-width:440px">A weakness in a common logging library lets an attacker run their own code on our servers. People are using it in real attacks right now.</p>
+              <div class="tags">
+                <span class="tag ember"><svg class="i xs"><use href="#i-pulse"/></svg>Being attacked in the wild <span class="tiny">KEV</span></span>
+                <span class="tag">Chance of attack: high</span>
+              </div>
+            </div>
+            <div class="cell bl">
+              <div class="minidial">
+                <!-- 14 ticks on r=58 (C=364.42, step 26.03): 9 ember running, 5 grey not running -->
+                <svg viewBox="0 0 168 168" aria-label="14 pieces of software: 9 running, 5 not running">
+                  <circle cx="84" cy="84" r="74" fill="none" stroke="#EEF0EB"/>
+                  <circle cx="84" cy="84" r="58" fill="none" stroke="#B8782A" stroke-width="14" stroke-dasharray="2 24.03 2 24.03 2 24.03 2 24.03 2 24.03 2 24.03 2 24.03 2 24.03 2 24.03 0 130.15" transform="rotate(-90 84 84)"/>
+                  <circle cx="84" cy="84" r="58" fill="none" stroke="#C9CFC7" stroke-width="14" stroke-dasharray="0 234.27 2 24.03 2 24.03 2 24.03 2 24.03 2 24.03" transform="rotate(-90 84 84)"/>
+                  <circle cx="84" cy="84" r="44" fill="none" stroke="#E6E8E3"/>
+                  <path d="M84 4 V14" stroke="#0B0F0C" stroke-width="1.5"/>
+                  <text x="84" y="90" text-anchor="middle" font-size="26" font-weight="500" fill="#121814" letter-spacing="-.5">14</text>
+                  <text x="84" y="106" text-anchor="middle" font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="9" letter-spacing="1" fill="#67716B">PLACES</text>
+                </svg>
+                <p><span style="color:#8A5410">9 running in production</span><br>5 shipped, not running</p>
+              </div>
+            </div>
+
+            <div class="cell">
+              <h4>What to do</h4>
+              <ol class="steps">
+                <li><div>Update log4j-core <span class="ver">2.17.0 → 2.17.2</span><span>One line in each build file. No code changes expected.</span></div></li>
+                <li><div>Start with the 9 running in production<span>payments-api, checkout-web, auth-service and 6 more.</span></div></li>
+                <li><div>Let the 5 that aren’t running pick it up<span>Their next build will include the fix.</span></div></li>
+              </ol>
+              <div class="actions" style="margin-top:14px">
+                <a class="btn" href="#"><svg class="i sm"><use href="#i-radius"/></svg>Where it’s affected <kbd style="color:#67716B">e</kbd></a>
+              </div>
+            </div>
+            <div class="cell bl">
+              <h4>Your review <span class="meta">Saved to the audit report</span></h4>
+              <div class="opts">
+                <div class="opt"><span class="rad"></span><div><b>Not affected</b><span>We don’t use the risky part</span></div></div>
+                <div class="opt"><span class="rad"></span><div><b>Fixed for now</b><span>A workaround is in place</span></div></div>
+                <div class="opt"><span class="rad"></span><div><b>Accepted</b><span>We’ll live with it, for a reason</span></div></div>
+                <div class="opt on"><span class="rad"></span><div><b>Fix planned</b><span>We’ll update it</span></div></div>
+              </div>
+              <div class="why">
+                <label><span>Why? <span style="color:#67716B">(needed for the audit report)</span></span></label>
+                <div class="ta">Updating to 2.17.2 across all 14. Rollout starts with the 9 running in production; tracked in CHG-4821.</div>
+                <div class="meta-row"><span class="chip">Owner · Priya</span><span class="chip">Due · Fri 14 Nov</span></div>
+              </div>
+              <div class="actions" style="margin-top:16px">
+                <a class="btn lime" href="#">Save review <kbd>⌘↵</kbd></a>
+                <a class="btn" href="#">Skip</a>
+              </div>
+            </div>
+
+            <div class="cell span last">
+              <h4 style="font-size:13px;color:#56615B;font-weight:500">Technical details</h4>
+              <div class="spec">
+                <div><span class="cap">Weakness</span><span class="v">CVE-2026-23012</span></div>
+                <div><span class="cap">Being attacked</span><span class="v">KEV · listed 4 Nov</span></div>
+                <div><span class="cap">Chance of attack</span><span class="v">EPSS 0.94 · top 1%</span></div>
+                <div><span class="cap">Fixed in</span><span class="v">2.17.2</span></div>
+                <div><span class="cap">Source</span><span class="v">Grype · NVD + KEV</span></div>
+                <div><span class="cap">Last evaluated</span><span class="v">38 min ago</span></div>
+                <div><span class="cap">What’s inside</span><span class="v">Syft v1.18</span></div>
+                <div><span class="cap">Matching</span><span class="v">Grype DB v5.12</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="caption">
+      <div><span class="k">A</span>Grouped by review state with counts, like s.host’s “Active servers 3”. The selected row is forest; ember marks only what’s urgent.</div>
+      <div><span class="k">B</span>Review lives in the detail column: four plain choices, a reason, an owner, and ⌘↵ to save and move to the next one.</div>
+      <div><span class="k">C</span>CVE, KEV, EPSS, source and toolchain sit in one small grey monospace spec block at the foot.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. STATES ===================== -->
+  <section class="block">
+    <div class="section-label"><span class="num">04</span><h3>States: all clear, and an optional dark mode</h3><p>The same layout. The dial goes still, or moves into the prior Forge palette.</p></div>
+    <div class="pair">
+      <!-- (a) all clear -->
+      <div>
+        <div class="browser small allclear">
+          <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal</div></div>
+          <div class="mini">
+            <div class="rail">
+              <svg class="lg" width="24" height="24"><use href="#logo"/></svg>
+              <span class="rl on"><svg class="i sm"><use href="#i-home"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-radius"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-map"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-box"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-eye"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-doc"/></svg></span>
+            </div>
+            <div class="mlist">
+              <div class="cap">Good morning, Tom</div>
+              <h5>Needs attention today <span class="c">0</span></h5>
+              <div class="mrow" style="color:#56615B">Nothing waiting for you</div>
+              <h5 style="margin-top:22px">Being handled <span class="c">1,094</span></h5>
+              <div class="mrow">Low chance of attack<span class="n">604</span></div>
+              <div class="mrow">Fix planned<span class="n">244</span></div>
+              <div class="mrow">Fixed for now<span class="n">164</span></div>
+              <div class="mrow">Accepted<span class="n">82</span></div>
+            </div>
+            <div class="mmain">
+              <!-- still dial: 3,847 dots at pitch 4 inside r=140; no glow -->
+              <svg viewBox="0 0 340 340" aria-label="Still dial: nothing needs attention">
+                <defs>
+                  <pattern id="c-off" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".75" fill="#E1E5DF"/></pattern>
+                  <pattern id="c-on" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".95" fill="#AEB8B0"/></pattern>
+                  <clipPath id="c-checked"><path d="M170 170 L170 25 A145 145 0 1 1 38.8 108.3 Z"/></clipPath>
+                </defs>
+                <circle cx="170" cy="170" r="164" fill="none" stroke="#E6E8E3"/>
+                <circle cx="170" cy="170" r="158" fill="none" stroke="#1F3B33" stroke-width="1.5" stroke-dasharray="814.05 992.74" transform="rotate(-90 170 170)"/>
+                <circle cx="170" cy="170" r="151" fill="none" stroke="#C9CFC7" stroke-width="5" stroke-dasharray="0.7 15.11" transform="rotate(-90 170 170)"/>
+                <circle cx="170" cy="170" r="151" fill="none" stroke="#6F7871" stroke-width="9" stroke-dasharray="1.2 77.85" transform="rotate(-90.4 170 170)"/>
+                <circle cx="170" cy="170" r="140" fill="url(#c-off)"/>
+                <circle cx="170" cy="170" r="140" fill="url(#c-on)" clip-path="url(#c-checked)"/>
+                <circle cx="170" cy="170" r="3" fill="#FFFFFF" stroke="#6F7871"/>
+                <path d="M170 0 V12" stroke="#0B0F0C" stroke-width="1.5"/>
+                <circle cx="27" cy="102.7" r="4.5" fill="#C8F169" stroke="#0B0F0C" stroke-width="1.2"/>
+              </svg>
+              <div class="cap" style="margin-top:4px">Needs attention · 0</div>
+              <h6>Nothing needs you today.</h6>
+              <p>All 1,094 open items have a plan. Checked 38 min ago.</p>
+            </div>
+          </div>
+        </div>
+        <div class="state-cap"><b>(a) All clear</b>The dial goes still: no glow, only the lime coverage marker. The list says so in words.</div>
+      </div>
+
+      <!-- (b) optional dark mode (Forge) -->
+      <div>
+        <div class="browser small forge">
+          <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal</div></div>
+          <div class="mini">
+            <div class="rail">
+              <svg class="lg" width="24" height="24"><use href="#logo-forge"/></svg>
+              <span class="rl on"><svg class="i sm"><use href="#i-home"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-radius"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-map"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-box"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-eye"/></svg></span>
+              <span class="rl"><svg class="i sm"><use href="#i-doc"/></svg></span>
+            </div>
+            <div class="mlist">
+              <div class="cap">Good morning, Tom</div>
+              <h5>Needs attention today <span class="c">3</span></h5>
+              <div class="mrow sel"><span class="gl"></span><div>log4j-core 2.17.0<span class="s">Being attacked in the wild</span></div></div>
+              <div class="mrow"><span class="gl soft"></span><div>AGPL-3.0 licence<span class="s">Needs a decision</span></div></div>
+              <div class="mrow"><span class="gl soft"></span><div>openssl 3.0.13<span class="s">Medium · checkout-web</span></div></div>
+              <h5 style="margin-top:18px">Being handled <span class="c">1,091</span></h5>
+            </div>
+            <div class="mmain">
+              <!-- Forge dial: dots #2B2521 / #564D46 (decorative), arc + marker ember #D9A05B -->
+              <svg viewBox="0 0 340 340" aria-label="Dark dial: three ember dots need attention">
+                <defs>
+                  <pattern id="d-off" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".75" fill="#2B2521"/></pattern>
+                  <pattern id="d-on" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".95" fill="#564D46"/></pattern>
+                  <clipPath id="d-checked"><path d="M170 170 L170 25 A145 145 0 1 1 38.8 108.3 Z"/></clipPath>
+                  <radialGradient id="d-glow"><stop offset="0" stop-color="#D9A05B" stop-opacity=".6"/><stop offset=".5" stop-color="#D9A05B" stop-opacity=".18"/><stop offset="1" stop-color="#D9A05B" stop-opacity="0"/></radialGradient>
+                </defs>
+                <circle cx="170" cy="170" r="164" fill="none" stroke="#221E1A"/>
+                <circle cx="170" cy="170" r="158" fill="none" stroke="#D9A05B" stroke-width="1.5" stroke-dasharray="814.05 992.74" transform="rotate(-90 170 170)"/>
+                <circle cx="170" cy="170" r="151" fill="none" stroke="#322C27" stroke-width="5" stroke-dasharray="0.7 15.11" transform="rotate(-90 170 170)"/>
+                <circle cx="170" cy="170" r="151" fill="none" stroke="#6E6660" stroke-width="9" stroke-dasharray="1.2 77.85" transform="rotate(-90.4 170 170)"/>
+                <circle cx="170" cy="170" r="140" fill="url(#d-off)"/>
+                <circle cx="170" cy="170" r="140" fill="url(#d-on)" clip-path="url(#d-checked)"/>
+                <circle cx="170" cy="170" r="3" fill="#121010" stroke="#6E6660"/>
+                <path d="M170 0 V12" stroke="#EDE7E0" stroke-width="1.5"/>
+                <circle cx="27" cy="102.7" r="4.5" fill="#D9A05B" stroke="#121010" stroke-width="1.2"/>
+                <g transform="translate(213 122)"><circle r="26" fill="url(#d-glow)"/><circle r="10" fill="none" stroke="#D9A05B" stroke-width=".9"/><circle r="4" fill="#E6B877"/></g>
+                <g transform="translate(128 206)"><circle r="20" fill="url(#d-glow)"/><circle r="8" fill="none" stroke="#D9A05B" stroke-width=".9"/><circle r="3.4" fill="#E6B877"/></g>
+                <g transform="translate(196 252)"><circle r="20" fill="url(#d-glow)"/><circle r="8" fill="none" stroke="#D9A05B" stroke-width=".9"/><circle r="3.4" fill="#E6B877"/></g>
+              </svg>
+              <div class="cap" style="margin-top:4px;color:#9A9087">82% checked · 3,176 of 3,847</div>
+              <h6>3 things need attention today.</h6>
+              <p>Everything else is moving at a normal pace.</p>
+            </div>
+          </div>
+        </div>
+        <div class="state-cap"><span class="opt-tag">Optional dark mode</span><b>(b) Forge</b>Warm graphite and ember from the prior design, same calm layout. Text #EDE7E0 on #121010 (15.5:1).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6. PALETTE ===================== -->
+  <section class="block" style="margin-bottom:0">
+    <div class="section-label"><span class="num">05</span><h3>Palette</h3><p>One shell green, one action lime, one urgency ember. Greys do the rest.</p></div>
+    <div class="pal">
+      <h4>Light (default)</h4>
+      <div class="sw-row">
+        <div class="swatch" style="background:#0B0F0C;color:#C9D0CB"><b style="color:#FFFFFF">ink</b><span>#0B0F0C</span><em>sidebar</em></div>
+        <div class="swatch" style="background:#C8F169;color:#0B0F0C"><b>lime</b><span>#C8F169</span><em>action · you are here</em></div>
+        <div class="swatch" style="background:#1F3B33;color:#DCE7E2"><b style="color:#FFFFFF">forest</b><span>#1F3B33</span><em>selection · charts</em></div>
+        <div class="swatch" style="background:#FFFFFF;color:#56615B"><b style="color:#121814">canvas</b><span>#FFFFFF</span><em>detail</em></div>
+        <div class="swatch" style="background:#F5F6F3;color:#56615B"><b style="color:#121814">paper</b><span>#F5F6F3</span><em>list column</em></div>
+        <div class="swatch" style="background:#D9A05B;color:#121010"><b>ember</b><span>#D9A05B</span><em>glow (decorative)</em></div>
+        <div class="swatch" style="background:#B8782A;color:#121010"><b>ember-core</b><span>#B8782A</span><em>dots · edges 3.7:1</em></div>
+        <div class="swatch" style="background:#8A5410;color:#FBF1E3"><b style="color:#FFFFFF">ember-ink</b><span>#8A5410</span><em>text 6.3:1</em></div>
+      </div>
+      <div class="sw-row">
+        <div class="swatch" style="background:#121814;color:#C9D0CB;height:84px"><b style="color:#FFFFFF">text</b><span>#121814 · 18.0:1</span></div>
+        <div class="swatch" style="background:#56615B;color:#E8EFEC;height:84px"><b style="color:#FFFFFF">text-2</b><span>#56615B · 6.5:1</span></div>
+        <div class="swatch" style="background:#67716B;color:#F5F6F3;height:84px"><b style="color:#FFFFFF">text-3</b><span>#67716B · 5.1:1</span></div>
+        <div class="swatch" style="background:#9AA39B;color:#121814;height:84px"><b>leader</b><span>#9AA39B</span></div>
+        <div class="swatch" style="background:#AEB8B0;color:#121814;height:84px"><b>dot-on</b><span>#AEB8B0</span></div>
+        <div class="swatch" style="background:#E1E5DF;color:#56615B;height:84px"><b style="color:#121814">dot-off</b><span>#E1E5DF</span></div>
+        <div class="swatch" style="background:#FBF1E3;color:#8A5410;height:84px"><b>ember-wash</b><span>#FBF1E3</span></div>
+        <div class="swatch" style="background:#E8EFEC;color:#1F3B33;height:84px"><b>forest-wash</b><span>#E8EFEC</span></div>
+      </div>
+      <h4 style="margin-top:10px">Optional dark (prior Forge)</h4>
+      <div class="sw-row">
+        <div class="swatch" style="background:#121010;color:#9A9087;height:84px"><b style="color:#EDE7E0">f-bg</b><span>#121010</span></div>
+        <div class="swatch" style="background:#151211;color:#9A9087;height:84px"><b style="color:#EDE7E0">f-rail</b><span>#151211</span></div>
+        <div class="swatch" style="background:#1C1917;color:#9A9087;height:84px"><b style="color:#EDE7E0">f-surface</b><span>#1C1917</span></div>
+        <div class="swatch" style="background:#322C27;color:#D4CCC2;height:84px"><b style="color:#EDE7E0">f-border</b><span>#322C27</span></div>
+        <div class="swatch" style="background:#EDE7E0;color:#56615B;height:84px"><b style="color:#121010">f-text</b><span>#EDE7E0 · 15.5:1</span></div>
+        <div class="swatch" style="background:#D4CCC2;color:#322C27;height:84px"><b style="color:#121010">f-data</b><span>#D4CCC2</span></div>
+        <div class="swatch" style="background:#9A9087;color:#121010;height:84px"><b>f-muted</b><span>#9A9087 · 6.1:1</span></div>
+        <div class="swatch" style="background:#D9A05B;color:#121010;height:84px"><b>f-accent</b><span>#D9A05B · 8.2:1</span></div>
+      </div>
+      <div class="notes">
+        <div><b>Ember is the only urgency colour.</b> On white it is never text: glows use #D9A05B, dot cores and graph edges use #B8782A (3.7:1, above the 3:1 for graphics), words use #8A5410 (6.3:1). No red fills anywhere.</div>
+        <div><b>Lime means “act here” or “you are here”.</b> Active nav, primary buttons, the coverage marker on the dial and the selected graph node. Forest means “looking at this”.</div>
+        <div><b>Precision is grey and monospace.</b> CVE IDs, KEV/EPSS tags, digests and toolchain versions use text-3 #67716B at 10.5–12.5px (5.1:1 on white, 4.7:1 on paper).</div>
+      </div>
+    </div>
+    <footer><span>Armoury · UX exploration 2026-11-06 · Hybrid direction “Greenhouse Instruments”</span><span>Static mockup · system fonts · inline SVG · no scripts</span></footer>
+  </section>
+
+</main>
+</body>
+</html>
