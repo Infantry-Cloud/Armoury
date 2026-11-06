@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armoury — Wildcard direction: Sumi</title>
+<style>
+/* =====================================================================
+   ARMOURY · WILDCARD DIRECTION "SUMI" (墨 — ink)
+   Ink on paper. Light washi canvas, near-black-brown ink, muted indigo,
+   stone rules, and ONE vermilion seal colour reserved for "needs you today".
+   Every colour used in this file is documented here.
+   ---------------------------------------------------------------------
+   PAPER (surfaces)
+   #F4EFE4  --washi        Main canvas, warm rice paper          (L ≈ 0.865)
+   #EFE9DC  --washi-col    Software list column (a fold of the paper)
+   #ECE5D6  --washi-deep   Quiet panels
+   #FAF7F0  --paper-hi     Selected row / lifted sheet           (L ≈ 0.93)
+   #E6DFD0  (page)         Presentation background behind frames
+   #E3DCCD  (chrome)       Browser chrome bar
+   #D6CDBC  (chrome line)  Browser chrome bottom rule / frame edge
+   #CBC1AF  (chrome dots)  Window dots (deliberately colourless)
+   Paper grain: inline SVG feTurbulence in a data URI (no network). Its
+   colour comes from a matrix (r .42 g .36 b .28 ≈ #6B5C47) at 5–11% alpha.
+   INK (text)  — contrast measured on --washi #F4EFE4
+   #2A2420  --sumi         Primary ink (near-black brown)        13.4:1
+   #4E453D  --sumi-2       Secondary text                         8.1:1
+   #6B6158  --sumi-3       Meta, IDs, labels                      5.3:1 (4.9:1 on --washi-col, 5.6:1 on --paper-hi)
+   #FBF6EC  --on-ink       Text on sumi buttons (on #2A2420)     13.9:1
+   STONE (rules)
+   #CFC6B8  --stone        Hairline rules, ghost-button borders (non-text)
+   #E2DACB  --stone-soft   Faint dividers between rows (non-text)
+   #B9AE9C  --stone-deep   Hand-drawn numeral rings, chart axis (non-text)
+   INDIGO (藍 ai) — links, charts, "can wait", signatures
+   #34507A  --ai           Links, indigo text, signature seal fill  7.0:1 on washi (on-ink on it 7.6:1)
+   #DDE2E8  --ai-soft      Faint indigo wash behind tags (ai text on it 6.1:1)
+   #9AA8BE  --ai-mist      Chart ghost marks (non-text)
+   VERMILION (朱 shu) — the hanko. Only ever marks what needs you today.
+   #C8412B  --shu          Seal fill; --on-ink text on it 6.4:1 (seal text is decorative + repeated in plain text)
+   #A8361F  --shu-ink      Vermilion text ("Being attacked in the wild") 5.6:1 on washi, 5.3:1 on washi-col
+   #F3E2D8  --shu-wash     Barely-there wash behind the urgent tag (shu-ink on it 5.0:1)
+   OCHRE (朽葉 kuchiba) — "needs a decision"
+   #7A5719  --kuchiba      Ochre text 5.7:1 on washi
+   #EFE4CC  --kuchiba-wash Tag wash (kuchiba on it 5.2:1)
+   ===================================================================== */
+:root{
+  --washi:#F4EFE4; --washi-col:#EFE9DC; --washi-deep:#ECE5D6; --paper-hi:#FAF7F0;
+  --sumi:#2A2420; --sumi-2:#4E453D; --sumi-3:#6B6158; --on-ink:#FBF6EC;
+  --stone:#CFC6B8; --stone-soft:#E2DACB; --stone-deep:#B9AE9C;
+  --ai:#34507A; --ai-soft:#DDE2E8; --ai-mist:#9AA8BE;
+  --shu:#C8412B; --shu-ink:#A8361F; --shu-wash:#F3E2D8;
+  --kuchiba:#7A5719; --kuchiba-wash:#EFE4CC;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Sans","Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42  0 0 0 0 .36  0 0 0 0 .28  0 0 0 .075 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --fibre:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.012 .16' numOctaves='3' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42  0 0 0 0 .36  0 0 0 0 .28  0 0 0 .11 -.03'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#E6DFD0}
+body{font-family:var(--sans);color:var(--sumi);background:#E6DFD0 var(--grain);
+  -webkit-font-smoothing:antialiased;padding:72px 40px 120px;line-height:1.5}
+.paper{background-color:var(--washi);background-image:var(--fibre),var(--grain)}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i.s{width:15px;height:15px}
+svg.i.xs{width:13px;height:13px;stroke-width:1.7}
+a{color:var(--ai);text-decoration:none}
+
+/* ---------- presentation page ---------- */
+.intro{max-width:1440px;margin:0 auto 64px;display:grid;grid-template-columns:420px 1fr;gap:80px;align-items:end}
+.intro .mark{display:flex;align-items:flex-end;gap:28px}
+.intro .kanji{font-family:"Hiragino Mincho ProN","Yu Mincho",var(--serif);font-size:120px;line-height:.9;color:var(--sumi);opacity:.9}
+.intro .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--sumi-3);margin-bottom:10px}
+.intro h1{font-family:var(--serif);font-weight:400;font-size:64px;line-height:1;letter-spacing:-.01em}
+.intro h1 small{display:block;font-size:20px;font-style:italic;color:var(--sumi-2);margin-top:12px;letter-spacing:0}
+.intro .why{font-family:var(--serif);font-size:20px;line-height:1.6;color:var(--sumi-2);max-width:820px}
+.intro .why p+p{margin-top:14px}
+.intro .why strong{color:var(--sumi);font-weight:600}
+.intro .diff{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--sans);font-size:13px;color:var(--sumi-3)}
+.intro .diff span{display:inline-flex;align-items:center;gap:8px}
+.intro .diff span::before{content:"";width:14px;height:1.5px;background:var(--sumi-3)}
+
+.label{max-width:1440px;margin:0 auto 18px;display:flex;align-items:baseline;gap:18px}
+.label b{font-family:var(--serif);font-weight:400;font-size:26px}
+.label span{font-size:14px;color:var(--sumi-3)}
+.label .num{font-family:var(--mono);font-size:12px;color:var(--sumi-3);border:1px solid var(--stone);border-radius:20px;padding:1px 9px}
+section.shot{margin-bottom:96px}
+
+/* ---------- browser frame ---------- */
+.frame{border-radius:14px;overflow:hidden;border:1px solid #D6CDBC;margin:0 auto;
+  box-shadow:0 40px 80px -40px rgba(74,58,40,.35),0 12px 24px -16px rgba(74,58,40,.25)}
+.frame.wide{width:1440px}
+.frame.mid{width:1120px}
+@media (max-width:1519px){.frame.wide{zoom:.86}}
+@media (max-width:1317px){.frame.wide{zoom:.72}.frame.mid{zoom:.86}}
+@media (max-width:1116px){.frame.wide{zoom:.58}.frame.mid{zoom:.7}}
+@media (max-width:914px){.frame.wide{zoom:.44}.frame.mid{zoom:.55}}
+.chrome{height:44px;background:#E3DCCD;border-bottom:1px solid #D6CDBC;display:flex;align-items:center;padding:0 18px;gap:18px}
+.dots{display:flex;gap:8px}.dots i{width:11px;height:11px;border-radius:50%;background:#CBC1AF;display:block}
+.url{flex:1;max-width:520px;margin:0 auto;height:26px;border-radius:7px;background:var(--washi);border:1px solid #D6CDBC;
+  font:12px var(--mono);color:var(--sumi-3);display:flex;align-items:center;justify-content:center;gap:8px}
+.chrome .sp{width:52px}
+
+/* ---------- app top bar ---------- */
+.top{height:76px;display:flex;align-items:center;padding:0 64px;border-bottom:1px solid var(--stone)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:23px;letter-spacing:.01em;margin-right:64px}
+.brand svg{width:30px;height:30px}
+.nav{display:flex;gap:34px;font-size:14.5px;color:var(--sumi-2)}
+.nav a{color:var(--sumi-2);position:relative;display:flex;align-items:center;gap:8px;padding:6px 0;white-space:nowrap}
+.nav a.on{color:var(--sumi);font-weight:600}
+.nav a.on .ul{position:absolute;left:-4px;bottom:-6px;height:10px;width:calc(100% + 8px)}
+.nav .count{font-family:var(--serif);font-size:15px;color:var(--shu-ink);font-weight:600}
+.util{margin-left:auto;display:flex;align-items:center;gap:26px;font-size:14px;color:var(--sumi-2)}
+.util a{color:var(--sumi-2);display:flex;align-items:center;gap:7px}
+.me{display:flex;align-items:center;gap:12px;padding-left:26px;border-left:1px solid var(--stone)}
+.me .av{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--sumi);display:grid;place-items:center;font-family:var(--serif);font-size:14px;color:var(--sumi)}
+.me b{display:block;font-weight:600;color:var(--sumi);font-size:14px;line-height:1.2}
+.me small{font-size:12px;color:var(--sumi-3)}
+
+/* ---------- shared bits ---------- */
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;line-height:1;white-space:nowrap}
+.tag.shu{color:var(--shu-ink);font-weight:600}
+.tag.kuchiba{color:var(--kuchiba);font-weight:600}
+.tag.ai{color:var(--ai);font-weight:600}
+.tag.plain{color:var(--sumi-2)}
+.tag.plain b{color:var(--sumi);margin-left:4px}
+.wash{padding:6px 10px 6px 8px;border-radius:4px}
+.wash.shu{background:var(--shu-wash)}.wash.kuchiba{background:var(--kuchiba-wash)}.wash.ai{background:var(--ai-soft)}
+.tech{font-family:var(--mono);font-size:11.5px;color:var(--sumi-3);letter-spacing:.02em}
+.ktag{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--sumi-3);border:1px solid var(--stone);border-radius:3px;padding:2px 5px;line-height:1}
+.sep{color:var(--stone-deep)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:6px;font-size:14px;font-weight:600;white-space:nowrap}
+.btn.ink{background:var(--sumi);color:var(--on-ink)}
+.btn.ghost{border:1px solid var(--stone);color:var(--sumi);background:transparent}
+.link{display:inline-flex;align-items:center;gap:6px;color:var(--ai);font-size:14px;font-weight:600}
+.seal{mix-blend-mode:multiply;display:block;overflow:visible}
+.vlabel{writing-mode:vertical-rl;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--sumi-3);display:flex;align-items:center;gap:18px;white-space:nowrap}
+.vlabel::after{content:"";width:1px;height:120px;background:var(--stone)}
+
+/* ---------- HOME ---------- */
+.home{display:grid;grid-template-columns:40px minmax(0,1fr) 340px;column-gap:72px;padding:64px 64px 80px}
+.greet{font-size:14px;color:var(--sumi-3);display:flex;gap:10px;align-items:center;margin-bottom:22px}
+.home h2{font-family:var(--serif);font-weight:400;font-size:58px;line-height:1.06;letter-spacing:-.012em;color:var(--sumi)}
+.home h2 em{font-style:italic;color:var(--sumi-2)}
+.lead{font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--sumi-2);margin-top:22px;max-width:620px}
+.lead b{color:var(--sumi);font-weight:600}
+.today{margin-top:60px}
+.today header{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--stone)}
+.today header h3{font-family:var(--serif);font-weight:400;font-size:24px}
+.today header span{font-size:13.5px;color:var(--sumi-3)}
+.item{display:grid;grid-template-columns:64px minmax(0,1fr) auto;column-gap:26px;padding:30px 0;border-bottom:1px solid var(--stone-soft);align-items:start}
+.item .nb{width:58px;height:58px;position:relative;display:grid;place-items:center;font-family:var(--serif);font-size:26px;color:var(--sumi-3)}
+.item .nb svg.ring{position:absolute;inset:0;width:58px;height:58px}
+.item h4{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.25;color:var(--sumi)}
+.item h4 .pkg{font-family:var(--mono);font-size:19px;letter-spacing:-.01em}
+.item .meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:14px}
+.item .fix{margin-top:14px;font-size:14.5px;color:var(--sumi-2);display:flex;align-items:center;gap:10px}
+.item .fix b{color:var(--sumi);font-weight:600}
+.item .act{display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:4px}
+.item .act .when{font-size:12.5px;color:var(--sumi-3)}
+.rest{margin-top:26px;display:flex;align-items:center;gap:14px;font-size:14.5px;color:var(--sumi-2)}
+.rest svg{flex:none}
+
+.aside{padding-top:6px}
+.aside .blk{padding:0 0 36px;margin-bottom:36px;border-bottom:1px solid var(--stone)}
+.aside .blk:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.aside .k{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sumi-3);margin-bottom:14px;display:flex;justify-content:space-between}
+.enso{position:relative;width:240px;height:240px;margin:0 0 0 -8px}
+.enso svg{position:absolute;inset:0}
+.enso .c{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.enso .c b{font-family:var(--serif);font-weight:400;font-size:60px;line-height:1;letter-spacing:-.02em}
+.enso .c span{font-size:14px;color:var(--sumi-2);margin-top:4px}
+.aside p.note{font-size:15px;line-height:1.55;color:var(--sumi-2);margin-top:14px}
+.aside p.note b{color:var(--sumi);font-weight:600}
+.big{font-family:var(--serif);font-size:44px;line-height:1;letter-spacing:-.015em}
+.trendhead{display:flex;align-items:baseline;gap:14px}
+.trendhead .tag{font-size:14px}
+.trend{margin-top:14px}
+.trend .ax{display:flex;justify-content:space-between;font-size:12px;color:var(--sumi-3);margin-top:4px}
+.report{display:grid;grid-template-columns:1fr 70px;gap:18px;align-items:start}
+.report h5{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.25}
+.report p{font-size:14.5px;color:var(--sumi-2);margin-top:6px}
+.report .link{margin-top:14px}
+
+/* ---------- SOFTWARE ---------- */
+.sw{display:grid;grid-template-columns:420px minmax(0,1fr)}
+.list{border-right:1px solid var(--stone);padding:44px 0 40px}
+.list .hd{padding:0 36px 0 44px}
+.list h2{font-family:var(--serif);font-weight:400;font-size:36px;line-height:1.1}
+.list .sub{font-size:13.5px;color:var(--sumi-3);margin-top:6px}
+.find{margin:26px 0 8px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--stone);padding:8px 0;color:var(--sumi-3);font-size:14.5px}
+.find kbd{margin-left:auto;font:11px var(--mono);border:1px solid var(--stone);border-radius:3px;padding:1px 5px;color:var(--sumi-3)}
+.grp{margin-top:30px}
+.grp h3{padding:0 36px 10px 44px;display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-weight:400;font-size:17px;color:var(--sumi)}
+.grp h3 .n{font-family:var(--serif);color:var(--sumi-3);font-size:15px}
+.grp h3 .rl{flex:1;height:1px;background:var(--stone);transform:translateY(-4px)}
+.row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:15px 36px 15px 44px;align-items:center;border-top:1px solid transparent}
+.row+.row{border-top-color:var(--stone-soft)}
+.row .nm{font-size:15.5px;font-weight:600;color:var(--sumi);display:flex;gap:8px;align-items:baseline}
+.row .nm .v{font-family:var(--mono);font-weight:400;font-size:13px;color:var(--sumi-3)}
+.row .wh{font-size:13px;color:var(--sumi-3);margin-top:3px}
+.row .st{text-align:right}
+.row.sel{background:var(--paper-hi);border-top-color:var(--stone-soft);border-bottom:1px solid var(--stone-soft);margin-right:-1px}
+.row.sel + .row{border-top-color:transparent}
+.row.sel .stroke{position:absolute;left:20px;top:13px;width:9px;height:48px}
+.row .st .tag{font-size:13px}
+.quiet{color:var(--sumi-3);font-size:13px;display:inline-flex;gap:6px;align-items:center}
+
+.detail{padding:40px 64px 56px}
+.crumb{font-size:13px;color:var(--sumi-3);display:flex;gap:8px;align-items:center}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;margin-top:18px}
+.dhead h2{font-family:var(--serif);font-weight:400;font-size:50px;line-height:1;letter-spacing:-.01em;display:flex;align-items:baseline;gap:16px}
+.dhead h2 .v{font-family:var(--mono);font-size:20px;color:var(--sumi-3);letter-spacing:0}
+.dhead .id{font-family:var(--mono);font-size:12.5px;color:var(--sumi-3);margin-top:12px}
+.dhead .btns{display:flex;gap:12px;padding-top:6px}
+.summary{font-family:var(--serif);font-size:20px;line-height:1.55;color:var(--sumi-2);margin-top:22px;max-width:760px}
+.summary b{color:var(--sumi);font-weight:600}
+.tabs{display:flex;gap:40px;margin-top:34px;border-bottom:1px solid var(--stone)}
+.tabs a{position:relative;padding:0 0 14px;font-size:15px;color:var(--sumi-2);display:flex;gap:8px;align-items:baseline}
+.tabs a .c{font-family:var(--serif);font-size:15px;color:var(--sumi-3)}
+.tabs a .c.shu{color:var(--shu-ink);font-weight:600}
+.tabs a.on{color:var(--sumi);font-weight:600}
+.tabs a.on svg{position:absolute;left:-4px;bottom:-5px;height:10px;width:calc(100% + 8px)}
+.ov{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:52px;margin-top:36px}
+.ov h3{font-family:var(--serif);font-weight:400;font-size:21px;display:flex;align-items:baseline;gap:10px}
+.ov h3 small{font-family:var(--sans);font-size:13px;color:var(--sumi-3)}
+.things{margin-top:12px;border-top:1px solid var(--stone)}
+.thing{padding:24px 0;border-bottom:1px solid var(--stone-soft);display:grid;grid-template-columns:48px minmax(0,1fr);gap:18px}
+.thing .t{font-size:17px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.thing .t .pkg{font-family:var(--mono);font-weight:500;font-size:15.5px}
+.thing .t .to{font-weight:400;color:var(--sumi-2);font-size:15px}
+.thing .meta{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:12px;align-items:center}
+.thing .meta .gap{width:6px}
+.thing .tech{display:block;margin-top:12px}
+.decide{margin-top:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.decide .lab{font-size:12.5px;color:var(--sumi-3);margin-right:6px;display:inline-flex;align-items:center;gap:7px}
+.decide.col .lab{flex-basis:100%;margin-bottom:2px}
+.decide .lab i{width:9px;height:9px;border-radius:50%;border:1.5px dashed var(--sumi-3);display:block}
+.pill{font-size:13px;height:32px;padding:0 13px;border:1px solid var(--stone);border-radius:16px;display:inline-flex;align-items:center;gap:6px;color:var(--sumi);white-space:nowrap}
+.pill.on{border-color:var(--sumi-2);background:var(--paper-hi);font-weight:600}
+.facts dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sumi-3)}
+.facts dd{font-size:15.5px;color:var(--sumi);margin:6px 0 22px;line-height:1.45}
+.facts dd small{display:block;font-size:13px;color:var(--sumi-3)}
+.copies{display:flex;gap:12px;margin-top:10px}
+.copies svg{width:30px;height:30px}
+.signed{display:flex;gap:14px;align-items:center}
+
+/* ---------- ALL CLEAR ---------- */
+.clear{display:grid;grid-template-columns:380px minmax(0,1fr);gap:56px;padding:72px 88px 84px 72px;align-items:center}
+.clear .art{position:relative;height:340px}
+.clear h2{font-family:var(--serif);font-weight:400;font-size:52px;line-height:1.08;letter-spacing:-.01em}
+.clear h2 em{font-style:italic;color:var(--sumi-2)}
+.clear p{font-family:var(--serif);font-size:20px;color:var(--sumi-2);line-height:1.55;margin-top:20px;max-width:520px}
+.clear .meta{display:flex;gap:28px;margin-top:34px;font-size:14px;color:var(--sumi-3);flex-wrap:wrap}
+.clear .meta span{display:flex;gap:8px;align-items:center}
+.clear .meta b{color:var(--sumi);font-weight:600}
+.top.mini{height:64px;padding:0 48px}
+.top.mini .nav{gap:28px;font-size:14px}
+
+/* ---------- PALETTE ---------- */
+.pal{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--stone);border-bottom:1px solid var(--stone)}
+.sw8{padding:22px 22px 24px;border-right:1px solid var(--stone)}
+.sw8:last-child{border-right:0}
+.chip{height:96px;border-radius:4px;border:1px solid rgba(42,36,32,.12);margin-bottom:16px}
+.sw8 b{display:block;font-family:var(--serif);font-weight:400;font-size:19px}
+.sw8 code{display:block;font:12px var(--mono);color:var(--sumi-3);margin-top:3px}
+.sw8 p{font-size:13px;color:var(--sumi-2);margin-top:10px;line-height:1.45}
+@media (max-width:1317px){
+  .intro{grid-template-columns:1fr;gap:28px}
+  .pal{grid-template-columns:repeat(4,1fr)}
+  .sw8{border-bottom:1px solid var(--stone)}
+  .sw8:nth-child(4){border-right:0}
+  .sw8:nth-child(n+5){border-bottom:0}
+}
+.rules{max-width:1440px;margin:28px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;font-size:14.5px;color:var(--sumi-2)}
+.rules b{display:block;font-family:var(--serif);font-weight:400;font-size:19px;color:var(--sumi);margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<!-- shared SVG definitions: icons, brush filters, reusable strokes -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- rough seal edges + ink speckle (hanko texture) -->
+    <filter id="rough" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="2.6" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="11" result="n2"/>
+      <feColorMatrix in="n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -5 3.9" result="sp"/>
+      <feComposite in="d" in2="sp" operator="in"/>
+    </filter>
+    <!-- brush: wobbly edges and dry-brush voids -->
+    <filter id="brush" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="5" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="3" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".32" numOctaves="3" seed="2" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.4 2.95" result="m"/>
+      <feComposite in="d" in2="m" operator="in"/>
+    </filter>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="2" seed="9" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="2"/>
+    </filter>
+    <symbol id="enso-s" viewBox="0 0 32 32"><path d="M14.2 5.5 L14.9 5.4 L15.7 5.7 L16.4 6.0 L17.1 6.4 L17.8 6.9 L18.4 7.2 L19.0 7.4 L19.6 7.5 L20.3 7.7 L20.9 7.9 L21.5 8.2 L22.1 8.5 L22.7 8.9 L23.2 9.3 L23.8 9.8 L24.3 10.3 L24.7 10.8 L25.1 11.4 L25.5 12.0 L25.8 12.7 L26.0 13.4 L26.2 14.1 L26.3 14.8 L26.4 15.5 L26.4 16.3 L26.3 17.0 L26.2 17.7 L26.1 18.4 L25.9 19.1 L25.6 19.8 L25.3 20.5 L25.0 21.2 L24.7 21.8 L24.3 22.4 L23.8 23.0 L23.3 23.6 L22.8 24.1 L22.3 24.7 L21.7 25.2 L21.1 25.6 L20.4 26.0 L19.7 26.3 L19.0 26.6 L18.2 26.9 L17.5 27.1 L16.7 27.2 L15.9 27.2 L15.1 27.2 L14.3 27.2 L13.5 27.0 L12.7 26.8 L12.0 26.6 L11.2 26.3 L10.5 26.0 L9.8 25.6 L9.1 25.1 L8.4 24.7 L7.8 24.1 L7.2 23.6 L6.6 23.0 L6.1 22.4 L5.6 21.7 L5.1 21.0 L4.7 20.2 L4.4 19.4 L4.1 18.6 L3.8 17.8 L3.6 16.9 L3.5 16.1 L3.5 15.2 L3.5 14.3 L3.5 13.4 L3.6 12.5 L3.8 11.6 L4.0 10.7 L4.3 9.8 L4.7 9.0 L5.2 8.2 L5.8 7.4 L5.3 7.0 L4.7 7.8 L4.2 8.7 L3.7 9.5 L3.3 10.4 L2.9 11.3 L2.6 12.3 L2.3 13.2 L2.2 14.2 L2.1 15.2 L2.1 16.2 L2.1 17.1 L2.3 18.1 L2.5 19.1 L2.7 20.0 L3.0 21.0 L3.4 21.9 L3.9 22.7 L4.4 23.6 L5.0 24.4 L5.6 25.1 L6.3 25.8 L7.0 26.4 L7.8 27.0 L8.6 27.5 L9.5 28.0 L10.4 28.4 L11.3 28.7 L12.2 29.0 L13.1 29.1 L14.1 29.3 L15.0 29.4 L15.9 29.4 L16.9 29.3 L17.8 29.2 L18.8 29.1 L19.7 28.9 L20.6 28.6 L21.5 28.3 L22.3 27.9 L23.2 27.4 L24.0 26.9 L24.8 26.4 L25.5 25.8 L26.2 25.1 L26.8 24.4 L27.4 23.6 L27.9 22.8 L28.4 21.9 L28.8 21.0 L29.1 20.1 L29.3 19.1 L29.4 18.2 L29.5 17.2 L29.5 16.3 L29.4 15.3 L29.3 14.4 L29.1 13.4 L28.9 12.5 L28.6 11.6 L28.2 10.7 L27.8 9.9 L27.4 9.0 L26.9 8.2 L26.3 7.5 L25.7 6.7 L25.1 6.0 L24.3 5.4 L23.6 4.8 L22.8 4.3 L21.9 3.8 L21.1 3.4 L20.1 3.1 L19.2 2.9 L18.2 3.0 L17.3 3.3 L16.4 3.7 L15.6 4.1 L14.8 4.6 L14.0 4.9Z" fill="currentColor"/></symbol>
+    <symbol id="under" viewBox="0 0 80 10" preserveAspectRatio="none"><path d="M2.0 5.3 L3.9 5.5 L5.8 6.0 L7.6 6.4 L9.5 6.9 L11.4 6.9 L13.3 7.0 L15.3 7.0 L17.2 7.0 L19.1 7.1 L21.0 7.1 L22.9 7.1 L24.8 7.1 L26.7 7.0 L28.6 7.0 L30.5 6.9 L32.4 6.9 L34.3 6.8 L36.2 6.7 L38.1 6.6 L40.0 6.5 L41.9 6.4 L43.8 6.3 L45.7 6.1 L47.6 6.0 L49.5 5.9 L51.4 5.8 L53.3 5.6 L55.2 5.5 L57.1 5.4 L59.0 5.3 L60.9 5.2 L62.8 5.1 L64.7 5.0 L66.6 4.9 L68.5 4.8 L70.4 4.8 L72.3 4.7 L74.2 4.7 L76.1 4.7 L76.1 3.7 L74.2 3.7 L72.3 3.7 L70.4 3.7 L68.5 3.7 L66.6 3.7 L64.7 3.7 L62.8 3.7 L60.9 3.8 L59.0 3.8 L57.1 3.9 L55.2 3.9 L53.3 4.0 L51.4 4.1 L49.5 4.1 L47.6 4.2 L45.7 4.3 L43.8 4.3 L41.9 4.4 L40.0 4.5 L38.1 4.5 L36.2 4.5 L34.3 4.6 L32.4 4.6 L30.5 4.6 L28.6 4.6 L26.7 4.6 L24.8 4.5 L22.9 4.5 L21.0 4.4 L19.1 4.4 L17.2 4.3 L15.3 4.2 L13.5 4.1 L11.6 4.0 L9.7 3.9 L7.8 4.2 L5.8 4.4 L3.9 4.7 L2.0 4.7Z" fill="currentColor"/></symbol>
+    <symbol id="vstroke" viewBox="0 0 9 80" preserveAspectRatio="none"><path d="M3.7 2.0 L3.4 3.9 L2.9 5.9 L2.4 7.8 L2.5 9.7 L2.7 11.6 L2.8 13.5 L2.9 15.4 L2.9 17.2 L3.0 19.1 L3.0 21.0 L3.0 22.9 L3.0 24.8 L3.0 26.6 L2.9 28.5 L2.9 30.4 L2.8 32.3 L2.7 34.2 L2.6 36.1 L2.5 38.0 L2.4 39.9 L2.3 41.8 L2.2 43.7 L2.1 45.6 L2.1 47.5 L2.0 49.5 L2.0 51.4 L2.0 53.3 L2.0 55.2 L2.0 57.1 L2.1 59.0 L2.2 60.9 L2.3 62.8 L2.4 64.8 L2.5 66.7 L2.7 68.6 L2.8 70.5 L3.0 72.4 L3.2 74.3 L3.3 76.2 L5.0 76.0 L4.9 74.1 L4.8 72.2 L4.7 70.3 L4.6 68.4 L4.5 66.5 L4.5 64.6 L4.4 62.8 L4.4 60.9 L4.4 59.0 L4.4 57.1 L4.4 55.2 L4.4 53.3 L4.5 51.4 L4.6 49.5 L4.7 47.7 L4.8 45.8 L5.0 43.9 L5.1 42.0 L5.3 40.1 L5.5 38.2 L5.6 36.3 L5.8 34.4 L5.9 32.5 L6.1 30.6 L6.2 28.7 L6.3 26.8 L6.4 24.8 L6.5 22.9 L6.6 21.0 L6.6 19.1 L6.6 17.2 L6.6 15.2 L6.6 13.3 L6.5 11.4 L6.5 9.5 L6.4 7.6 L5.6 5.7 L4.8 3.9 L4.3 2.0Z" fill="currentColor"/></symbol>
+    <symbol id="ring" viewBox="0 0 58 58"><path d="M29 6.5c12.6-.4 22.8 9.6 22.6 22.3-.2 12.2-10.4 22.4-22.8 22.2C16.6 50.8 6.4 41 6.6 28.6 6.9 17.4 15 8.2 25.8 6.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3h7.5l4 4v14H6.5z"/><path d="M14 3v4h4M9.5 12h5.5M9.5 15.5h5.5"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.7M12 17.2v.1"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M7 7l10 10M17 9.5V17H9.5"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6.1 0-3.7 3.4-5.6 3.9-9.4 2.4 1.5 3.4 3.6 3.2 5.7 1-.6 1.6-1.6 1.8-2.9 2 1.6 4.1 4 4.1 6.6 0 3.5-2.6 6.1-6.5 6.1z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M8 20h8M5 7h14"/><path d="M5 7 2.6 13a2.5 2.5 0 0 0 4.8 0zM19 7l-2.4 6a2.5 2.5 0 0 0 4.8 0z"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 10c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></symbol>
+  </defs>
+</svg>
+
+<!-- =================== 1. HEADER =================== -->
+<header class="intro">
+  <div class="mark">
+    <div class="kanji" aria-hidden="true">墨</div>
+    <div>
+      <div class="eyebrow">Wildcard direction</div>
+      <h1>Sumi<small>Ink on paper.</small></h1>
+    </div>
+  </div>
+  <div class="why">
+    <p>Security news is loud, so Armoury should feel like a quiet page written by hand. Warm rice paper, brown-black ink, a lot of empty space, and an off-centre layout that reads top to bottom like a short letter: <strong>are we safe, what needs you, what can wait.</strong></p>
+    <p>One rule does most of the work: <strong>vermilion only ever marks what needs you today</strong>, like a hanko seal on a document. If there’s no seal on the page, you can close the tab.</p>
+    <div class="diff">
+      <span>Light paper instead of a black sidebar</span>
+      <span>Thin top bar, no side column</span>
+      <span>Indigo + vermilion instead of lime + forest green</span>
+      <span>Serif-led type, brush-drawn charts</span>
+      <span>Two columns, set off-centre</span>
+    </div>
+  </div>
+</header>
+
+<!-- =================== 2. HERO: HOME =================== -->
+<section class="shot">
+  <div class="label"><span class="num">01</span><b>Home — Tom, Friday morning</b><span>Answers “Are we safe? What needs attention?” in one read.</span></div>
+  <div class="frame wide">
+    <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal</div><div class="sp"></div></div>
+    <div class="paper">
+      <nav class="top">
+        <div class="brand"><svg style="color:var(--sumi)"><use href="#enso-s"/></svg>Armoury</div>
+        <div class="nav">
+          <a class="on" href="#">Home<svg class="ul" style="color:var(--sumi)"><use href="#under"/></svg></a>
+          <a href="#">Software</a>
+          <a href="#">Things to look at <span class="count">3</span></a>
+          <a href="#">Where it’s affected</a>
+          <a href="#">Audit reports</a>
+        </div>
+        <div class="util">
+          <a href="#"><svg class="i s"><use href="#i-gear"/></svg>Settings</a>
+          <a href="#"><svg class="i s"><use href="#i-help"/></svg>Help</a>
+          <div class="me"><div class="av">TR</div><div><b>Tom Reid</b><small>Head of Engineering</small></div></div>
+        </div>
+      </nav>
+
+      <div class="home">
+        <div class="vlabel">Home · Friday 6 November</div>
+
+        <main>
+          <div class="greet"><svg class="i s"><use href="#i-clock"/></svg>Good morning, Tom · last checked 38 minutes ago</div>
+          <h2>You’re mostly safe.<br><em>Three things need you today.</em></h2>
+          <p class="lead">Out of <b>1,094</b> open items across <b>3,847</b> pieces of software, only these three can’t wait. Everything else is tracked, and none of it changed overnight.</p>
+
+          <div class="today">
+            <header><h3>What needs you today</h3><span>Things to look at · 3 of 1,094</span></header>
+
+            <!-- 1 — the only vermilion seal on the page -->
+            <article class="item">
+              <div class="nb">
+                <svg class="seal" width="58" height="58" viewBox="0 0 58 58" style="transform:rotate(-8deg)" role="img" aria-label="Seal: needs you today">
+                  <g filter="url(#rough)">
+                    <circle cx="29" cy="29" r="26" fill="#C8412B"/>
+                    <circle cx="29" cy="29" r="21.5" fill="none" stroke="#FBF6EC" stroke-width="1.3"/>
+                    <text x="29" y="28" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="18" fill="#FBF6EC">1</text>
+                    <text x="29" y="39.5" text-anchor="middle" font-family="-apple-system,Helvetica Neue,sans-serif" font-size="7.2" font-weight="700" letter-spacing="1.3" fill="#FBF6EC">TODAY</text>
+                  </g>
+                </svg>
+              </div>
+              <div>
+                <h4>Update <span class="pkg">log4j-core 2.17.0</span> — it’s being attacked right now</h4>
+                <div class="meta">
+                  <span class="tag shu wash"><svg class="i xs"><use href="#i-flame"/></svg>Being attacked in the wild</span>
+                  <span class="tag plain">Chance of attack:<b>high</b></span>
+                  <span class="tag plain">In 14 pieces of software</span>
+                </div>
+                <div class="fix"><svg class="i s" style="color:var(--ai)"><use href="#i-arrow"/></svg>Fix: <b>update to 2.17.2</b><span class="tech">· weakness CVE-2026-23012</span></div>
+              </div>
+              <div class="act"><a class="btn ink" href="#">Review<svg class="i s"><use href="#i-arrow"/></svg></a><span class="when">about 10 minutes</span></div>
+            </article>
+
+            <!-- 2 -->
+            <article class="item">
+              <div class="nb"><svg class="ring" style="color:var(--stone-deep)"><use href="#ring"/></svg>2</div>
+              <div>
+                <h4>Decide on the <span class="pkg">AGPL-3.0</span> licence in report-render</h4>
+                <div class="meta">
+                  <span class="tag kuchiba wash"><svg class="i xs"><use href="#i-scale"/></svg>Needs a decision</span>
+                  <span class="tag plain">Licence · in report-render 0.9.4</span>
+                </div>
+                <div class="fix">Accept it, or plan a replacement. Either answer clears it.</div>
+              </div>
+              <div class="act"><a class="btn ghost" href="#">Decide</a></div>
+            </article>
+
+            <!-- 3 -->
+            <article class="item">
+              <div class="nb"><svg class="ring" style="color:var(--stone-deep);transform:rotate(140deg)"><use href="#ring"/></svg>3</div>
+              <div>
+                <h4>Plan a fix for <span class="pkg">openssl 3.0.13</span> in checkout-web</h4>
+                <div class="meta">
+                  <span class="tag ai wash"><svg class="i xs"><use href="#i-wave"/></svg>Medium weakness</span>
+                  <span class="tag plain">In checkout-web 2.11.0</span>
+                </div>
+                <div class="fix">Not urgent on its own — worth putting on this sprint.</div>
+              </div>
+              <div class="act"><a class="btn ghost" href="#">Plan a fix</a></div>
+            </article>
+
+            <div class="rest">
+              <svg width="48" height="10" style="color:var(--sumi-3)"><use href="#under"/></svg>
+              The other 1,091 open items can wait. <a class="link" href="#">See them all<svg class="i xs"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+        </main>
+
+        <aside class="aside">
+          <div class="blk">
+            <div class="k"><span>Checked</span><span>today</span></div>
+            <div class="enso">
+              <svg viewBox="0 0 240 240" aria-hidden="true">
+                <!-- faint track: the unchecked 18% -->
+                <circle cx="120" cy="120" r="94" fill="none" stroke="#CFC6B8" stroke-width="1.2" stroke-dasharray="1.5 6"/>
+                <g filter="url(#brush)" fill="#2A2420"><path d="M104.1 29.7 L107.1 29.6 L110.1 29.9 L113.1 30.4 L116.1 30.9 L119.0 31.6 L121.8 32.3 L124.7 33.1 L127.4 34.1 L130.1 35.1 L132.8 36.2 L135.4 37.4 L138.0 38.1 L140.7 38.6 L143.3 39.2 L145.9 39.9 L148.6 40.7 L151.2 41.5 L153.7 42.4 L156.3 43.4 L158.8 44.4 L161.3 45.6 L163.8 46.8 L166.3 48.1 L168.7 49.5 L171.0 50.9 L173.3 52.5 L175.6 54.1 L177.8 55.8 L180.0 57.6 L182.1 59.4 L184.1 61.3 L186.1 63.4 L188.0 65.4 L189.8 67.6 L191.6 69.8 L193.2 72.1 L194.8 74.4 L196.3 76.9 L197.7 79.3 L199.0 81.8 L200.2 84.4 L201.3 87.0 L202.4 89.7 L203.3 92.3 L204.1 95.0 L204.8 97.8 L205.5 100.6 L206.0 103.3 L206.4 106.1 L206.8 108.9 L207.0 111.8 L207.2 114.6 L207.2 117.4 L207.2 120.2 L207.0 123.0 L206.8 125.9 L206.5 128.7 L206.1 131.4 L205.7 134.2 L205.1 137.0 L204.5 139.7 L203.8 142.4 L203.0 145.1 L202.1 147.8 L201.2 150.4 L200.1 153.0 L199.0 155.6 L197.9 158.2 L196.6 160.7 L195.3 163.2 L193.9 165.6 L192.4 168.0 L190.9 170.4 L189.3 172.7 L187.6 174.9 L185.8 177.1 L184.0 179.3 L182.1 181.4 L180.1 183.4 L178.1 185.4 L176.0 187.3 L173.8 189.2 L171.6 191.0 L169.3 192.7 L167.0 194.3 L164.6 195.8 L162.1 197.3 L159.6 198.6 L157.1 199.9 L154.5 201.1 L151.9 202.2 L149.2 203.3 L146.5 204.2 L143.7 205.0 L141.0 205.7 L138.2 206.4 L135.4 206.9 L132.5 207.4 L129.7 207.7 L126.9 208.0 L124.0 208.2 L121.1 208.3 L118.3 208.2 L115.4 208.1 L112.6 207.9 L109.7 207.7 L106.9 207.3 L104.1 206.8 L101.2 206.3 L98.5 205.7 L95.7 205.0 L92.9 204.2 L90.2 203.3 L87.5 202.3 L84.8 201.3 L82.2 200.2 L79.6 199.0 L77.0 197.7 L74.4 196.4 L71.9 194.9 L69.4 193.4 L67.0 191.9 L64.6 190.2 L62.3 188.5 L60.0 186.7 L57.8 184.8 L55.6 182.9 L53.5 180.8 L51.5 178.8 L49.5 176.6 L47.6 174.4 L45.7 172.1 L43.9 169.8 L42.2 167.4 L40.6 164.9 L39.1 162.4 L37.6 159.8 L36.3 157.2 L35.0 154.5 L33.8 151.8 L32.7 149.0 L31.7 146.2 L30.8 143.3 L29.9 140.5 L29.0 137.6 L28.3 134.7 L27.7 131.7 L27.2 128.8 L26.8 125.8 L26.5 122.7 L26.3 119.7 L26.2 116.7 L26.2 113.6 L26.3 110.6 L26.5 107.5 L26.8 104.5 L27.2 101.5 L27.7 98.4 L28.3 95.4 L27.1 95.1 L26.3 98.1 L25.6 101.2 L25.0 104.2 L24.5 107.3 L24.1 110.4 L23.8 113.5 L23.6 116.6 L23.5 119.8 L23.5 122.9 L23.6 126.0 L23.8 129.1 L24.1 132.3 L24.5 135.4 L25.0 138.5 L25.6 141.6 L26.3 144.6 L27.1 147.6 L28.1 150.6 L29.1 153.6 L30.3 156.5 L31.5 159.4 L32.8 162.2 L34.3 165.0 L35.8 167.8 L37.3 170.5 L39.0 173.2 L40.8 175.8 L42.6 178.3 L44.5 180.8 L46.5 183.2 L48.6 185.6 L50.7 187.9 L52.9 190.1 L55.2 192.2 L57.6 194.3 L60.0 196.3 L62.5 198.2 L65.1 200.0 L67.7 201.8 L70.4 203.4 L73.1 205.0 L75.9 206.4 L78.7 207.8 L81.6 209.1 L84.5 210.3 L87.4 211.3 L90.4 212.3 L93.4 213.2 L96.5 214.0 L99.5 214.6 L102.6 215.2 L105.7 215.7 L108.8 216.0 L111.9 216.3 L115.0 216.5 L118.2 216.6 L121.3 216.5 L124.4 216.4 L127.5 216.2 L130.6 215.9 L133.7 215.5 L136.8 215.0 L139.9 214.4 L142.9 213.7 L145.9 212.9 L148.9 212.1 L151.9 211.1 L154.9 210.1 L157.8 209.0 L160.7 207.8 L163.5 206.5 L166.3 205.1 L169.1 203.7 L171.9 202.1 L174.6 200.5 L177.2 198.8 L179.8 197.0 L182.4 195.1 L184.9 193.2 L187.3 191.2 L189.7 189.1 L192.0 186.9 L194.2 184.6 L196.4 182.3 L198.5 179.9 L200.5 177.4 L202.4 174.8 L204.3 172.2 L206.0 169.5 L207.7 166.7 L209.2 163.9 L210.7 161.1 L212.1 158.1 L213.3 155.2 L214.5 152.2 L215.6 149.1 L216.5 146.0 L217.3 142.9 L218.0 139.7 L218.7 136.5 L219.1 133.3 L219.5 130.1 L219.8 126.9 L220.0 123.6 L220.0 120.4 L219.9 117.1 L219.8 113.9 L219.5 110.7 L219.1 107.5 L218.6 104.3 L218.0 101.1 L217.4 97.9 L216.6 94.8 L215.7 91.7 L214.7 88.6 L213.6 85.5 L212.5 82.5 L211.2 79.5 L209.9 76.6 L208.5 73.7 L206.9 70.8 L205.4 68.0 L203.7 65.2 L201.9 62.5 L200.1 59.8 L198.1 57.2 L196.1 54.6 L194.0 52.1 L191.9 49.7 L189.6 47.3 L187.3 45.0 L184.9 42.8 L182.4 40.6 L179.9 38.5 L177.3 36.6 L174.6 34.7 L171.8 32.8 L169.0 31.1 L166.2 29.5 L163.2 28.0 L160.2 26.6 L157.2 25.3 L154.1 24.1 L151.0 23.0 L147.9 22.1 L144.7 21.2 L141.4 20.5 L138.1 20.2 L134.8 20.5 L131.5 20.9 L128.2 21.5 L125.0 22.1 L121.8 22.9 L118.7 23.8 L115.6 24.7 L112.6 25.8 L109.7 26.9 L106.8 28.1 L104.0 29.1Z"/></g>
+                <g filter="url(#soft)" fill="none" stroke="#2A2420" stroke-linecap="round" opacity=".35">
+                  <path d="M163.5 44.7 L166.2 46.1 L168.8 47.7 L171.4 49.4 L173.9 51.2 L176.4 53.0 L178.8 55.0 L181.1 57.0 L183.4 59.1 L185.6 61.3 L187.7 63.6 L189.7 66.0 L191.6 68.4 L193.4 71.0 L195.2 73.5 L196.8 76.2 L198.4 78.9 L199.8 81.7 L201.2 84.5 L202.4 87.3 L203.6 90.3 L204.6 93.2 L205.5 96.2 L206.3 99.2 L207.0 102.3 L207.6 105.4 L208.0 108.4 L208.4 111.6 L208.6 114.7 L208.7 117.8 L208.7 120.9 L208.6 124.1 L208.4 127.2 L208.0 130.3 L207.6 133.4 L207.0 136.4 L206.3 139.5 L205.5 142.5 L204.6 145.5 L203.6 148.4 L202.5 151.3 L201.3 154.2 L200.0 157.0 L198.5 159.8 L197.0 162.5 L195.4 165.2 L193.7 167.8 L192.0 170.3 L190.1 172.8 L188.2 175.2 L186.1 177.5 L184.0 179.8 L181.9 182.0 L179.6 184.1 L177.3 186.1 L174.9 188.1 L172.4 189.9 L169.9 191.7 L167.4 193.4 L164.7 195.0 L162.1 196.6 L159.3 198.0 L156.6 199.4 L153.8 200.6 L150.9 201.8 L148.0 202.8 L145.1 203.8 L142.1 204.7 L139.1 205.5 L136.1 206.1 L133.1 206.7 L130.0 207.2 L127.0 207.5 L123.9 207.8 L120.8 208.0 L117.7 208.0 L114.6 208.0 L111.5 207.8 L108.4 207.6 L105.3 207.2 L102.2 206.8 L99.1 206.2 L96.0 205.5 L93.0 204.7 L90.0 203.8 L87.0 202.8 L84.1 201.7 L81.2 200.5 L78.3 199.2 L75.5 197.7 L72.7 196.2 L70.0 194.6 L67.3 192.9 L64.7 191.0 L62.2 189.1 L59.7 187.1 L57.4 185.0 L55.0 182.8 L52.8 180.5 L50.7 178.2" stroke-width=".8"/>
+                  <path d="M212.1 86.5 L213.3 89.5 L214.3 92.7 L215.3 95.8 L216.2 99.0 L216.9 102.2 L217.6 105.4 L218.1 108.7 L218.5 112.0 L218.9 115.3 L219.0 118.6 L219.1 121.9 L219.1 125.2 L218.9 128.6 L218.7 131.9 L218.3 135.2 L217.8 138.5 L217.2 141.8 L216.4 145.0 L215.6 148.2 L214.6 151.4 L213.5 154.6 L212.3 157.7 L211.0 160.8 L209.6 163.8 L208.1 166.8 L206.5 169.7 L204.8 172.6 L203.0 175.4 L201.0 178.1 L199.0 180.8 L196.9 183.4 L194.7 185.9 L192.5 188.4 L190.1 190.7 L187.7 193.0 L185.1 195.2 L182.6 197.3 L179.9 199.3 L177.2 201.2 L174.4 203.0 L171.5 204.7 L168.6 206.4 L165.7 207.9 L162.7 209.3 L159.7 210.6 L156.6 211.8 L153.5 213.0 L150.3 214.0 L147.1 214.9 L143.9 215.7 L140.7 216.4 L137.5 217.0 L134.2 217.5 L130.9 217.9 L127.6 218.1 L124.3 218.3 L121.0 218.4 L117.7 218.4 L114.5 218.2 L111.2 218.0 L107.9 217.6 L104.6 217.2 L101.4 216.6 L98.1 216.0 L94.9 215.2 L91.8 214.3 L88.6 213.4 L85.5 212.3 L82.4 211.2 L79.3 209.9 L76.3 208.6 L73.3 207.1 L70.4 205.6 L67.5 203.9 L64.7 202.2 L61.9 200.4 L59.2 198.5 L56.5 196.5 L53.9 194.4 L51.4 192.2 L49.0 189.9 L46.6 187.6 L44.3 185.2 L42.0 182.7 L39.9 180.1 L37.8 177.4 L35.9 174.7 L34.0 171.9 L32.2 169.1 L30.5 166.1 L28.9 163.2 L27.4 160.1 L26.0 157.0 L24.8 153.9 L23.6 150.7 L22.5 147.5 L21.6 144.2 L20.7 141.0 L20.0 137.6" stroke-width=".7"/>
+                </g>
+              </svg>
+              <div class="c"><b>82%</b><span>checked</span></div>
+            </div>
+            <p class="note"><b>3,176 of 3,847</b> pieces of software checked. 671 are still waiting their turn.</p>
+          </div>
+
+          <div class="blk">
+            <div class="k"><span>Open items</span><span>30 days</span></div>
+            <div class="trendhead"><span class="big">1,094</span><span class="tag ai"><svg class="i xs"><use href="#i-down"/></svg>going down</span></div>
+            <div class="trend">
+              <svg viewBox="0 0 460 130" width="100%" role="img" aria-label="Open items over 30 days, going down">
+                <line x1="14" y1="126" x2="446" y2="126" stroke="#CFC6B8" stroke-width="1"/>
+                <g fill="#9AA8BE"><circle cx="14" cy="126" r="1.6"/><circle cx="158" cy="126" r="1.6"/><circle cx="302" cy="126" r="1.6"/><circle cx="446" cy="126" r="1.6"/></g>
+                <g filter="url(#brush)"><path d="M13.9 21.7 L15.5 22.0 L17.7 22.8 L20.3 23.6 L23.2 24.5 L26.0 25.3 L28.8 25.9 L31.6 26.2 L34.2 26.2 L36.8 26.1 L39.2 25.7 L41.4 25.5 L43.5 25.6 L45.6 26.0 L47.9 26.6 L50.2 27.4 L52.7 28.3 L55.3 29.2 L57.9 29.9 L60.4 30.6 L62.9 31.2 L65.5 31.8 L68.1 32.4 L70.7 32.8 L73.5 33.0 L76.3 32.9 L79.0 32.4 L81.5 31.8 L83.9 31.3 L86.1 31.0 L88.2 31.0 L90.4 31.4 L92.7 32.2 L95.1 33.1 L97.6 34.2 L100.1 35.3 L102.7 36.2 L105.2 37.0 L107.7 37.8 L110.3 38.6 L112.8 39.3 L115.5 39.8 L118.2 40.1 L120.9 40.1 L123.6 39.7 L126.2 39.2 L128.6 38.8 L130.8 38.5 L132.9 38.7 L135.0 39.2 L137.2 40.0 L139.6 41.1 L142.1 42.3 L144.6 43.5 L147.2 44.5 L149.7 45.5 L152.1 46.4 L154.7 47.3 L157.3 48.2 L160.0 48.9 L162.8 49.3 L165.6 49.3 L168.4 48.8 L170.9 48.2 L173.3 47.7 L175.5 47.4 L177.5 47.4 L179.6 47.9 L181.9 48.8 L184.3 49.9 L186.8 51.1 L189.4 52.3 L192.1 53.3 L194.6 54.1 L197.2 54.8 L199.7 55.4 L202.3 56.0 L204.8 56.4 L207.4 56.9 L210.0 57.2 L212.5 57.3 L215.0 57.4 L217.5 57.4 L219.9 57.6 L222.2 58.0 L224.6 58.6 L227.0 59.3 L229.4 60.2 L231.9 61.1 L234.4 62.1 L236.8 63.0 L239.3 63.9 L241.7 64.9 L244.2 66.0 L246.8 67.0 L249.4 67.8 L252.2 68.3 L255.0 68.2 L257.7 67.8 L260.3 67.1 L262.7 66.5 L264.9 66.2 L267.0 66.3 L269.1 66.8 L271.4 67.8 L273.7 69.0 L276.2 70.3 L278.7 71.6 L281.3 72.8 L283.8 73.8 L286.4 74.8 L288.9 75.8 L291.4 76.7 L294.0 77.5 L296.6 78.2 L299.3 78.6 L301.9 78.8 L304.4 78.9 L306.8 79.0 L309.2 79.2 L311.5 79.6 L313.9 80.3 L316.3 81.1 L318.8 82.1 L321.3 83.2 L323.8 84.2 L326.3 85.2 L328.8 86.1 L331.3 87.1 L333.8 88.1 L336.3 88.9 L338.9 89.7 L341.6 90.2 L344.3 90.2 L346.9 89.9 L349.4 89.5 L351.8 89.1 L354.2 88.8 L356.4 89.0 L358.7 89.5 L361.1 90.4 L363.5 91.5 L365.9 92.6 L368.5 93.8 L371.0 94.8 L373.5 95.7 L376.0 96.6 L378.5 97.4 L381.0 98.2 L383.5 98.9 L386.0 99.5 L388.6 100.1 L391.1 100.6 L393.6 101.0 L396.1 101.4 L398.5 101.9 L400.9 102.4 L403.4 103.1 L405.8 103.8 L408.3 104.6 L410.8 105.4 L413.3 106.2 L415.8 106.9 L418.4 107.5 L420.9 108.0 L423.4 108.5 L425.9 109.0 L428.4 109.5 L430.8 110.0 L433.5 110.6 L436.4 111.2 L439.2 111.8 L441.9 112.4 L444.1 112.8 L445.8 113.2 L446.2 111.1 L444.6 110.8 L442.4 110.2 L439.7 109.6 L436.9 108.9 L434.0 108.3 L431.4 107.6 L428.9 107.1 L426.4 106.5 L423.9 106.0 L421.5 105.4 L419.0 104.8 L416.6 104.1 L414.1 103.4 L411.7 102.6 L409.2 101.8 L406.7 100.9 L404.2 100.1 L401.7 99.4 L399.1 98.8 L396.6 98.3 L394.1 97.9 L391.7 97.5 L389.2 97.0 L386.8 96.5 L384.3 95.8 L381.9 95.1 L379.4 94.4 L377.0 93.6 L374.5 92.8 L372.0 92.0 L369.6 91.1 L367.2 90.0 L364.7 88.8 L362.1 87.7 L359.5 86.8 L356.8 86.2 L354.1 86.1 L351.5 86.4 L348.9 86.8 L346.5 87.3 L344.1 87.6 L341.9 87.5 L339.6 87.1 L337.2 86.4 L334.8 85.5 L332.3 84.5 L329.8 83.5 L327.3 82.5 L324.9 81.5 L322.5 80.4 L320.0 79.3 L317.5 78.2 L314.9 77.2 L312.3 76.4 L309.7 75.9 L307.1 75.6 L304.6 75.4 L302.1 75.2 L299.8 74.9 L297.4 74.5 L295.1 73.8 L292.7 73.0 L290.3 72.1 L287.9 71.1 L285.4 70.1 L283.0 69.0 L280.6 67.9 L278.2 66.6 L275.7 65.3 L273.1 64.0 L270.4 62.9 L267.5 62.2 L264.6 62.1 L261.9 62.6 L259.3 63.2 L256.9 63.9 L254.6 64.3 L252.5 64.4 L250.3 64.1 L248.0 63.4 L245.6 62.6 L243.1 61.6 L240.6 60.6 L238.0 59.7 L235.6 58.8 L233.1 57.9 L230.6 57.0 L228.1 56.1 L225.5 55.3 L222.9 54.7 L220.3 54.2 L217.7 54.0 L215.2 53.9 L212.7 53.8 L210.3 53.6 L207.9 53.3 L205.5 52.8 L203.1 52.3 L200.7 51.6 L198.3 51.0 L195.8 50.2 L193.5 49.4 L191.1 48.4 L188.8 47.2 L186.3 45.9 L183.7 44.6 L181.1 43.5 L178.2 42.7 L175.3 42.6 L172.5 42.9 L169.9 43.4 L167.5 43.9 L165.3 44.2 L163.2 44.2 L161.0 43.9 L158.7 43.3 L156.4 42.5 L153.9 41.6 L151.4 40.7 L149.0 39.8 L146.6 38.9 L144.2 37.8 L141.6 36.6 L139.0 35.5 L136.3 34.6 L133.5 34.0 L130.6 33.9 L127.8 34.3 L125.3 34.9 L122.8 35.4 L120.6 35.8 L118.4 35.9 L116.1 35.6 L113.8 35.2 L111.4 34.6 L109.0 33.8 L106.5 33.1 L104.0 32.3 L101.7 31.4 L99.2 30.4 L96.8 29.3 L94.2 28.2 L91.5 27.3 L88.7 26.6 L85.9 26.5 L83.2 26.8 L80.6 27.2 L78.1 27.7 L75.8 28.0 L73.7 28.0 L71.5 27.7 L69.2 27.2 L66.8 26.6 L64.4 25.9 L61.9 25.1 L59.5 24.4 L57.1 23.7 L54.7 22.8 L52.3 21.8 L49.7 20.9 L47.0 20.1 L44.1 19.6 L41.2 19.5 L38.5 19.7 L35.9 20.1 L33.5 20.7 L31.2 21.4 L29.0 21.8 L26.4 21.9 L23.6 21.9 L20.7 21.7 L18.0 21.5 L15.7 21.3 L14.1 20.9Z" fill="#34507A"/></g>
+                <circle cx="446" cy="112.2" r="4.2" fill="#34507A"/>
+              </svg>
+              <div class="ax"><span>30 days ago</span><span>today</span></div>
+            </div>
+            <p class="note">Fewer open items every week. Most of what remains is low risk and already reviewed.</p>
+          </div>
+
+          <div class="blk">
+            <div class="k"><span>Audit report</span><span>last 12 months</span></div>
+            <div class="report">
+              <div>
+                <h5>Your audit report is ready</h5>
+                <p>Covers the last 12 months. Signed, so auditors can check nothing was changed.</p>
+                <a class="link" href="#">Open audit report<svg class="i xs"><use href="#i-arrow"/></svg></a>
+              </div>
+              <!-- indigo seal: signatures are ink, not alarm -->
+              <svg class="seal" width="66" height="66" viewBox="0 0 66 66" style="transform:rotate(5deg)" role="img" aria-label="Signed">
+                <g filter="url(#rough)">
+                  <rect x="4" y="4" width="58" height="58" rx="5" fill="#34507A"/>
+                  <rect x="9" y="9" width="48" height="48" rx="3" fill="none" stroke="#FBF6EC" stroke-width="1.2"/>
+                  <text x="33" y="31" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="12.5" fill="#FBF6EC">Signed</text>
+                  <text x="33" y="45" text-anchor="middle" font-family="-apple-system,Helvetica Neue,sans-serif" font-size="7" font-weight="700" letter-spacing="1.2" fill="#FBF6EC">12 MO</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== 3. SOFTWARE + DETAIL =================== -->
+<section class="shot">
+  <div class="label"><span class="num">02</span><b>Software — grouped by state, payments-api open</b><span>Plain words first for Tom; IDs, digests and tags in small type for Priya.</span></div>
+  <div class="frame wide">
+    <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal/software/payments-api</div><div class="sp"></div></div>
+    <div class="paper">
+      <nav class="top">
+        <div class="brand"><svg style="color:var(--sumi)"><use href="#enso-s"/></svg>Armoury</div>
+        <div class="nav">
+          <a href="#">Home</a>
+          <a class="on" href="#">Software<svg class="ul" style="color:var(--sumi)"><use href="#under"/></svg></a>
+          <a href="#">Things to look at <span class="count">3</span></a>
+          <a href="#">Where it’s affected</a>
+          <a href="#">Audit reports</a>
+        </div>
+        <div class="util">
+          <a href="#"><svg class="i s"><use href="#i-gear"/></svg>Settings</a>
+          <a href="#"><svg class="i s"><use href="#i-help"/></svg>Help</a>
+          <div class="me"><div class="av">TR</div><div><b>Tom Reid</b><small>Head of Engineering</small></div></div>
+        </div>
+      </nav>
+
+      <div class="sw">
+        <div class="list paper" style="background-color:var(--washi-col)">
+          <div class="hd">
+            <h2>Software</h2>
+            <div class="sub">3,847 pieces · grouped by where they are</div>
+            <div class="find"><svg class="i s"><use href="#i-search"/></svg>Find software or an ingredient<kbd>/</kbd></div>
+          </div>
+
+          <div class="grp">
+            <h3>Running <span class="n">4</span><span class="rl"></span></h3>
+            <div class="row sel">
+              <svg class="stroke" style="color:var(--sumi)"><use href="#vstroke"/></svg>
+              <div><div class="nm">payments-api <span class="v">3.4.1</span></div><div class="wh">prod-eu-west · 4 copies</div></div>
+              <div class="st"><span class="tag shu"><svg class="i xs"><use href="#i-flame"/></svg>2 to look at</span></div>
+            </div>
+            <div class="row">
+              <div><div class="nm">checkout-web <span class="v">2.11.0</span></div><div class="wh">prod-eu-west · 6 copies</div></div>
+              <div class="st"><span class="tag ai"><svg class="i xs"><use href="#i-wave"/></svg>1 to plan</span></div>
+            </div>
+            <div class="row">
+              <div><div class="nm">auth-service <span class="v">1.9.3</span></div><div class="wh">prod-eu-west · 3 copies</div></div>
+              <div class="st"><span class="quiet"><svg class="i xs"><use href="#i-check"/></svg>Nothing new</span></div>
+            </div>
+            <div class="row">
+              <div><div class="nm">report-render <span class="v">0.9.4</span></div><div class="wh">internal-tools · 1 copy</div></div>
+              <div class="st"><span class="tag kuchiba"><svg class="i xs"><use href="#i-scale"/></svg>1 decision</span></div>
+            </div>
+          </div>
+
+          <div class="grp">
+            <h3>Shipped, not running <span class="n">2</span><span class="rl"></span></h3>
+            <div class="row">
+              <div><div class="nm">billing-worker <span class="v">5.0.2</span></div><div class="wh">Last ran 12 days ago</div></div>
+              <div class="st"><span class="quiet"><svg class="i xs"><use href="#i-check"/></svg>Nothing new</span></div>
+            </div>
+            <div class="row">
+              <div><div class="nm">legacy-ftp <span class="v">0.3.1</span></div><div class="wh">Last ran 4 months ago</div></div>
+              <div class="st"><span class="quiet"><svg class="i xs"><use href="#i-moon"/></svg>Resting</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="crumb">Software <span class="sep">/</span> Running <span class="sep">/</span> payments-api</div>
+          <div class="dhead">
+            <div>
+              <h2>payments-api <span class="v">3.4.1</span></h2>
+              <div class="id">acme/payments-api · sha256:9f2c41…</div>
+            </div>
+            <div class="btns"><a class="btn ghost" href="#"><svg class="i s"><use href="#i-doc"/></svg>Audit report</a><a class="btn ink" href="#">Review 2 things<svg class="i s"><use href="#i-arrow"/></svg></a></div>
+          </div>
+          <p class="summary">Running in production. One of its ingredients is <b>being attacked in the wild</b> — updating log4j-core to 2.17.2 makes it safe again.</p>
+
+          <div class="tabs">
+            <a class="on" href="#">Overview<svg style="color:var(--sumi)"><use href="#under"/></svg></a>
+            <a href="#">Things to look at <span class="c shu">2</span></a>
+            <a href="#">What’s inside <span class="c">214</span></a>
+            <a href="#">Audit trail</a>
+          </div>
+
+          <div class="ov">
+            <div>
+              <h3>Things to look at <small>2 · most urgent first</small></h3>
+              <div class="things">
+              <div class="thing">
+                <div>
+                  <svg class="seal" width="44" height="44" viewBox="0 0 58 58" style="transform:rotate(-6deg)" role="img" aria-label="Seal: needs you today">
+                    <g filter="url(#rough)"><circle cx="29" cy="29" r="26" fill="#C8412B"/><circle cx="29" cy="29" r="21.5" fill="none" stroke="#FBF6EC" stroke-width="1.5"/>
+                    <text x="29" y="33" text-anchor="middle" font-family="-apple-system,Helvetica Neue,sans-serif" font-size="10" font-weight="700" letter-spacing="1" fill="#FBF6EC">TODAY</text></g>
+                  </svg>
+                </div>
+                <div>
+                  <div class="t"><span class="pkg">log4j-core 2.17.0</span><span class="to">→ update to 2.17.2</span></div>
+                  <div class="meta">
+                    <span class="tag shu wash"><svg class="i xs"><use href="#i-flame"/></svg>Being attacked in the wild</span><span class="ktag">KEV</span><span class="gap"></span>
+                    <span class="tag plain">Chance of attack:<b>high</b></span><span class="ktag">EPSS</span>
+                  </div>
+                  <span class="tech">Weakness CVE-2026-23012 · also in 13 other pieces of software</span>
+                  <div class="decide col">
+                    <span class="lab"><i></i>Not reviewed yet · mark it as</span>
+                    <span class="pill">Not affected</span><span class="pill">Fixed for now</span><span class="pill">Accepted</span><span class="pill">Fix planned</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="thing">
+                <div style="position:relative;width:44px;height:44px;display:grid;place-items:center;color:var(--ai)"><svg width="44" height="44" style="position:absolute;inset:0;color:var(--stone-deep)"><use href="#ring"/></svg><svg class="i s"><use href="#i-check"/></svg></div>
+                <div>
+                  <div class="t"><span class="pkg">netty-codec-http 4.1.100</span><span class="to">→ 4.1.108</span></div>
+                  <div class="meta">
+                    <span class="tag ai wash"><svg class="i xs"><use href="#i-wave"/></svg>Low weakness</span><span class="gap"></span>
+                    <span class="tag plain">Chance of attack:<b>low</b></span>
+                  </div>
+                  <span class="tech">Weakness CVE-2026-1187 · reviewed by Priya, 2 days ago</span>
+                  <div class="decide"><span class="lab">Status</span><span class="pill on"><svg class="i xs"><use href="#i-check"/></svg>Fix planned</span></div>
+                </div>
+              </div>
+              </div>
+            </div>
+
+            <dl class="facts">
+              <dt>Where it’s affected</dt>
+              <dd>prod-eu-west / payments<small>4 copies running</small>
+                <div class="copies">
+                  <svg viewBox="0 0 32 32" style="color:var(--sumi)"><use href="#enso-s"/></svg>
+                  <svg viewBox="0 0 32 32" style="color:var(--sumi);transform:rotate(80deg)"><use href="#enso-s"/></svg>
+                  <svg viewBox="0 0 32 32" style="color:var(--sumi);transform:rotate(170deg)"><use href="#enso-s"/></svg>
+                  <svg viewBox="0 0 32 32" style="color:var(--sumi);transform:rotate(260deg)"><use href="#enso-s"/></svg>
+                </div>
+              </dd>
+              <dt>Built</dt><dd>3 days ago</dd>
+              <dt>Last checked</dt><dd>38 minutes ago</dd>
+              <dt>What’s inside</dt>
+              <dd>214 ingredients<small>37 chosen directly, 177 came along with them</small>
+                <svg viewBox="0 0 300 14" width="100%" height="14" preserveAspectRatio="none" style="margin-top:10px;display:block" aria-hidden="true">
+                  <line x1="2" y1="7" x2="298" y2="7" stroke="#CFC6B8" stroke-width="1" stroke-dasharray="2 4"/>
+                  <g filter="url(#soft)"><path d="M2.0 6.4 L9.5 7.4 L17.0 8.5 L24.5 9.5 L32.0 9.9 L39.5 10.1 L47.0 9.7 L54.5 9.7 L62.0 10.1 L69.5 9.9 L77.0 9.5 L84.5 9.6 L92.0 9.8 L99.5 9.4 L107.0 9.0 L114.5 9.2 L122.1 9.2 L129.5 8.7 L137.0 8.5 L144.5 8.7 L152.0 8.5 L159.5 8.1 L167.0 8.2 L174.5 8.4 L182.0 8.2 L189.5 7.9 L197.0 8.2 L204.5 8.4 L212.0 8.1 L219.5 8.1 L227.0 8.5 L234.5 8.6 L242.0 8.4 L249.5 8.6 L257.0 8.9 L264.5 8.8 L272.0 8.7 L279.5 8.9 L287.0 9.1 L294.5 8.8 L294.5 4.4 L287.0 4.1 L279.5 4.2 L272.0 4.3 L264.5 4.0 L257.0 3.7 L249.5 3.8 L242.0 3.7 L234.5 3.3 L227.0 3.1 L219.5 3.3 L212.0 3.1 L204.5 2.7 L197.0 2.7 L189.5 2.9 L182.0 2.6 L174.5 2.4 L167.0 2.7 L159.5 2.8 L152.0 2.6 L144.5 2.6 L137.0 3.0 L129.5 3.0 L121.9 2.8 L114.5 3.0 L107.0 3.4 L99.5 3.2 L92.0 3.0 L84.5 3.4 L77.0 3.6 L69.5 3.3 L62.0 3.1 L54.5 3.5 L47.0 3.4 L39.5 2.9 L32.0 2.9 L24.5 3.2 L17.0 4.0 L9.5 4.9 L2.0 5.6Z" fill="#34507A" transform="scale(.177 1)"/></g>
+                </svg>
+                <small class="tech" style="margin-top:6px">SBOM · CycloneDX</small>
+              </dd>
+              <dt>Signed</dt>
+              <dd class="signed">
+                <svg class="seal" width="38" height="38" viewBox="0 0 66 66" style="transform:rotate(4deg);flex:none" aria-hidden="true"><g filter="url(#rough)"><rect x="4" y="4" width="58" height="58" rx="5" fill="#34507A"/><rect x="10" y="10" width="46" height="46" rx="3" fill="none" stroke="#FBF6EC" stroke-width="2"/><path d="m22 34 7 7 15-16" fill="none" stroke="#FBF6EC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+                <span>Yes — signature checks out<small>by the acme release pipeline</small></span>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== 4. STATE: ALL CLEAR =================== -->
+<section class="shot">
+  <div class="label"><span class="num">03</span><b>State — all clear</b><span>Nothing needs attention today. No vermilion anywhere: the missing seal is the message.</span></div>
+  <div class="frame mid">
+    <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url"><svg class="i xs"><use href="#i-lock"/></svg>armoury.acme.internal</div><div class="sp"></div></div>
+    <div class="paper">
+      <nav class="top mini">
+        <div class="brand" style="margin-right:48px"><svg style="color:var(--sumi)"><use href="#enso-s"/></svg>Armoury</div>
+        <div class="nav">
+          <a class="on" href="#">Home<svg class="ul" style="color:var(--sumi)"><use href="#under"/></svg></a>
+          <a href="#">Software</a>
+          <a href="#">Things to look at</a>
+          <a href="#">Where it’s affected</a>
+          <a href="#">Audit reports</a>
+        </div>
+        <div class="util"><div class="me" style="border:0;padding:0"><div class="av">TR</div></div></div>
+      </nav>
+      <div class="clear">
+        <div class="art">
+          <svg viewBox="0 0 300 300" width="330" height="330" aria-hidden="true" style="position:absolute;left:10px;top:-10px">
+            <circle cx="178" cy="122" r="26" fill="#DDE2E8"/>
+            <g filter="url(#brush)" fill="#2A2420"><path d="M111.8 45.0 L115.9 44.2 L120.1 43.8 L124.3 43.6 L128.4 43.5 L132.5 43.7 L136.6 43.9 L140.6 44.4 L144.6 45.0 L148.6 45.7 L152.4 46.6 L156.2 47.6 L160.0 48.2 L163.8 48.5 L167.5 49.0 L171.3 49.6 L175.0 50.3 L178.8 51.1 L182.4 52.1 L186.1 53.2 L189.8 54.4 L193.4 55.8 L196.9 57.2 L200.4 58.9 L203.9 60.6 L207.2 62.5 L210.6 64.5 L213.8 66.6 L217.0 68.9 L220.1 71.3 L223.1 73.8 L226.0 76.4 L228.8 79.2 L231.5 82.0 L234.0 85.0 L236.5 88.1 L238.8 91.3 L241.0 94.6 L243.1 97.9 L245.0 101.4 L246.8 104.9 L248.4 108.5 L249.9 112.2 L251.2 115.9 L252.4 119.7 L253.4 123.5 L254.3 127.4 L255.0 131.3 L255.6 135.2 L256.0 139.1 L256.2 143.1 L256.4 147.0 L256.3 151.0 L256.1 154.9 L255.8 158.8 L255.3 162.7 L254.7 166.6 L253.9 170.5 L253.0 174.3 L252.0 178.1 L250.9 181.8 L249.6 185.5 L248.2 189.2 L246.6 192.8 L245.0 196.3 L243.2 199.8 L241.3 203.3 L239.3 206.6 L237.1 209.9 L234.9 213.1 L232.5 216.3 L230.1 219.3 L227.5 222.3 L224.8 225.2 L222.0 228.0 L219.1 230.7 L216.2 233.3 L213.1 235.8 L209.9 238.1 L206.7 240.4 L203.3 242.5 L199.9 244.5 L196.4 246.4 L192.8 248.1 L189.2 249.7 L185.5 251.2 L181.7 252.5 L177.9 253.7 L174.1 254.7 L170.2 255.6 L166.3 256.3 L162.3 256.9 L158.3 257.3 L154.3 257.6 L150.3 257.7 L146.3 257.7 L142.3 257.5 L138.4 257.1 L134.4 256.6 L130.4 256.0 L126.5 255.2 L122.6 254.2 L118.8 253.1 L115.0 251.9 L111.2 250.5 L107.5 249.0 L103.9 247.4 L100.3 245.6 L96.8 243.7 L93.3 241.7 L89.9 239.6 L86.6 237.3 L83.4 234.9 L80.2 232.4 L77.2 229.8 L74.2 227.1 L71.4 224.3 L68.6 221.4 L65.9 218.4 L63.3 215.3 L60.9 212.1 L58.5 208.8 L56.3 205.5 L54.2 202.0 L52.2 198.5 L50.3 194.9 L48.6 191.2 L47.0 187.5 L45.5 183.7 L44.2 179.8 L43.0 175.9 L41.9 172.0 L41.0 168.0 L40.2 163.9 L39.6 159.9 L39.2 155.8 L38.9 151.7 L38.7 147.6 L38.8 143.4 L38.9 139.3 L39.3 135.2 L39.8 131.0 L40.4 126.9 L41.2 122.9 L42.1 118.8 L43.1 114.7 L44.3 110.7 L45.7 106.8 L47.2 102.9 L48.8 99.0 L50.6 95.2 L52.6 91.4 L54.7 87.8 L56.9 84.2 L59.3 80.7 L61.8 77.3 L64.4 74.0 L67.2 70.7 L70.1 67.6 L73.1 64.6 L72.3 63.7 L69.1 66.6 L66.0 69.6 L63.1 72.8 L60.2 76.0 L57.5 79.4 L54.9 82.8 L52.4 86.4 L50.1 90.0 L47.9 93.7 L45.8 97.5 L43.9 101.4 L42.1 105.4 L40.5 109.4 L39.0 113.4 L37.6 117.6 L36.4 121.7 L35.4 126.0 L34.6 130.3 L34.0 134.5 L33.5 138.9 L33.2 143.2 L33.0 147.5 L33.0 151.9 L33.1 156.2 L33.4 160.6 L33.8 164.9 L34.4 169.2 L35.2 173.5 L36.1 177.7 L37.2 181.9 L38.4 186.1 L39.8 190.2 L41.3 194.3 L43.0 198.3 L44.9 202.3 L46.9 206.1 L49.0 209.9 L51.3 213.6 L53.7 217.3 L56.2 220.8 L58.9 224.2 L61.7 227.6 L64.7 230.8 L67.7 233.9 L70.9 236.9 L74.2 239.7 L77.6 242.4 L81.1 245.0 L84.7 247.5 L88.4 249.8 L92.1 252.0 L96.0 254.0 L99.9 255.9 L103.9 257.7 L107.9 259.3 L112.0 260.7 L116.1 262.0 L120.3 263.2 L124.5 264.2 L128.8 265.0 L133.1 265.7 L137.4 266.3 L141.7 266.7 L146.0 266.9 L150.4 267.0 L154.7 267.0 L159.0 266.8 L163.4 266.4 L167.7 265.9 L172.0 265.3 L176.3 264.5 L180.5 263.5 L184.7 262.4 L188.9 261.2 L193.1 259.8 L197.2 258.2 L201.2 256.5 L205.2 254.7 L209.1 252.7 L213.0 250.6 L216.8 248.4 L220.5 246.0 L224.1 243.4 L227.6 240.7 L231.0 237.9 L234.3 235.0 L237.5 231.9 L240.6 228.7 L243.6 225.4 L246.4 221.9 L249.1 218.4 L251.7 214.7 L254.1 210.9 L256.4 207.1 L258.5 203.1 L260.5 199.1 L262.3 195.0 L263.9 190.8 L265.4 186.5 L266.7 182.2 L267.8 177.9 L268.8 173.5 L269.5 169.1 L270.2 164.6 L270.6 160.2 L270.9 155.7 L271.0 151.2 L270.9 146.7 L270.6 142.2 L270.2 137.7 L269.7 133.3 L268.9 128.9 L268.1 124.5 L267.0 120.1 L265.8 115.8 L264.5 111.5 L263.0 107.3 L261.3 103.1 L259.5 99.0 L257.6 94.9 L255.5 91.0 L253.3 87.1 L251.0 83.2 L248.5 79.5 L245.9 75.8 L243.1 72.2 L240.3 68.7 L237.3 65.4 L234.2 62.1 L230.9 58.9 L227.6 55.9 L224.1 52.9 L220.5 50.1 L216.8 47.5 L213.1 45.0 L209.2 42.6 L205.2 40.3 L201.1 38.3 L197.0 36.3 L192.8 34.6 L188.5 33.0 L184.1 31.6 L179.7 30.3 L175.3 29.3 L170.8 28.4 L166.2 27.7 L161.7 27.2 L157.1 27.2 L152.5 28.0 L148.0 29.0 L143.6 30.2 L139.3 31.5 L135.0 33.0 L130.9 34.6 L126.8 36.4 L122.9 38.3 L119.0 40.4 L115.3 42.5 L111.6 44.5Z"/></g>
+            <g filter="url(#soft)" fill="none" stroke="#2A2420" opacity=".3"><path d="M186.3 50.4 L190.3 51.8 L194.3 53.5 L198.2 55.2 L202.1 57.2 L205.9 59.3 L209.6 61.5 L213.2 63.9 L216.7 66.5 L220.0 69.2 L223.3 72.0 L226.5 75.0 L229.5 78.1 L232.4 81.3 L235.2 84.7 L237.9 88.1 L240.3 91.7 L242.7 95.4 L244.9 99.2 L246.9 103.0 L248.7 107.0 L250.4 111.0 L252.0 115.1 L253.3 119.3 L254.5 123.5 L255.5 127.7 L256.3 132.0 L256.9 136.4 L257.4 140.7 L257.6 145.1 L257.7 149.4 L257.6 153.8 L257.3 158.2 L256.9 162.5 L256.2 166.8 L255.4 171.1 L254.4 175.3 L253.3 179.5 L251.9 183.7 L250.4 187.8 L248.8 191.8 L246.9 195.7 L244.9 199.6 L242.8 203.4 L240.5 207.0 L238.1 210.6 L235.5 214.1 L232.8 217.5 L229.9 220.8 L227.0 223.9 L223.9 226.9 L220.7 229.8 L217.3 232.6 L213.9 235.2 L210.4 237.7 L206.8 240.0 L203.0 242.2 L199.3 244.3 L195.4 246.2 L191.4 248.0 L187.4 249.6 L183.4 251.0 L179.2 252.3 L175.1 253.4 L170.9 254.3 L166.6 255.1 L162.4 255.8 L158.1 256.2 L153.8 256.5 L149.4 256.6 L145.1 256.6 L140.8 256.4 L136.5 256.0 L132.2 255.4 L127.9 254.7 L123.7 253.8 L119.4 252.7 L115.3 251.5 L111.2 250.1 L107.1 248.5 L103.1 246.8 L99.1 244.9 L95.3 242.9 L91.5 240.7 L87.8 238.3 L84.2 235.8 L80.7 233.2 L77.3 230.4 L74.0 227.4 L70.9 224.4 L67.9 221.2 L65.0 217.9 L62.2 214.4 L59.6 210.9 L57.1 207.2 L54.8 203.4 L52.6 199.6 L50.6 195.6 L48.8 191.6 L47.1 187.5" stroke-width=".8"/></g>
+          </svg>
+          <svg viewBox="0 0 600 60" width="380" height="38" aria-hidden="true" style="position:absolute;left:0;bottom:0">
+            <g filter="url(#brush)" fill="#34507A" opacity=".85"><path d="M20.0 30.4 L25.6 30.8 L31.2 31.6 L36.7 32.3 L42.3 33.1 L47.9 33.9 L53.5 34.6 L59.1 34.6 L64.7 34.6 L70.3 34.6 L76.0 34.5 L81.6 34.5 L87.2 34.4 L92.8 34.4 L98.4 34.3 L104.0 34.3 L109.6 34.3 L115.2 34.3 L120.8 34.3 L126.4 34.3 L132.1 34.3 L137.7 34.2 L143.3 34.1 L148.9 34.0 L154.5 33.8 L160.1 33.6 L165.7 33.4 L171.3 33.1 L176.9 32.8 L182.5 32.5 L188.1 32.3 L193.7 32.0 L199.3 31.8 L204.9 31.6 L210.5 31.5 L216.1 31.4 L221.6 31.3 L227.2 31.2 L232.8 31.2 L238.4 31.2 L244.0 31.2 L249.6 31.1 L255.2 31.1 L260.8 31.1 L266.4 31.1 L272.0 31.0 L277.6 31.0 L283.2 31.0 L288.8 30.9 L294.4 31.0 L300.0 31.0 L305.6 31.1 L311.2 31.2 L316.7 31.3 L322.3 31.5 L327.9 31.7 L333.5 31.9 L339.1 32.1 L344.7 32.3 L350.3 32.5 L355.9 32.6 L361.5 32.8 L367.2 32.9 L372.8 33.0 L378.4 33.0 L384.0 33.0 L389.6 33.0 L395.2 33.0 L400.8 33.0 L406.4 33.0 L412.0 33.0 L417.6 33.0 L423.2 32.9 L428.8 32.9 L434.4 32.9 L440.0 32.8 L445.6 32.8 L451.2 32.7 L456.8 32.6 L462.4 32.4 L468.0 32.3 L473.6 32.1 L479.2 31.9 L484.8 31.7 L490.4 31.4 L496.0 31.2 L501.6 31.0 L507.2 30.8 L512.8 30.5 L518.4 30.4 L524.0 30.2 L529.6 30.0 L535.2 29.9 L540.8 29.8 L546.4 29.7 L552.0 29.6 L557.6 29.6 L563.2 29.5 L568.8 29.5 L574.4 29.5 L574.4 27.5 L568.8 27.5 L563.2 27.5 L557.6 27.6 L552.0 27.6 L546.4 27.7 L540.8 27.8 L535.2 27.9 L529.6 28.1 L524.0 28.2 L518.4 28.3 L512.8 28.4 L507.2 28.5 L501.6 28.6 L496.0 28.7 L490.4 28.8 L484.8 28.9 L479.2 29.0 L473.6 29.1 L468.0 29.2 L462.4 29.4 L456.8 29.5 L451.2 29.6 L445.6 29.7 L440.0 29.8 L434.4 29.9 L428.8 30.0 L423.2 30.0 L417.6 30.0 L412.0 30.0 L406.4 29.9 L400.8 29.8 L395.2 29.7 L389.6 29.6 L384.0 29.4 L378.4 29.2 L372.8 29.0 L367.2 28.8 L361.7 28.6 L356.1 28.5 L350.5 28.3 L344.9 28.2 L339.3 28.1 L333.7 27.9 L328.1 27.8 L322.5 27.7 L316.9 27.5 L311.2 27.4 L305.6 27.2 L300.0 27.0 L294.4 26.8 L288.8 26.6 L283.2 26.4 L277.6 26.3 L272.0 26.1 L266.4 26.0 L260.8 25.9 L255.2 25.9 L249.6 25.9 L244.0 25.9 L238.4 26.0 L232.8 26.2 L227.2 26.3 L221.6 26.5 L215.9 26.6 L210.3 26.8 L204.7 26.9 L199.1 27.0 L193.5 27.1 L187.9 27.2 L182.3 27.2 L176.7 27.3 L171.1 27.3 L165.5 27.4 L159.9 27.4 L154.3 27.5 L148.7 27.7 L143.1 27.8 L137.5 27.9 L131.9 28.1 L126.4 28.3 L120.8 28.4 L115.2 28.6 L109.6 28.6 L104.0 28.7 L98.4 28.7 L92.8 28.6 L87.2 28.5 L81.6 28.4 L76.0 28.2 L70.5 28.0 L64.9 27.7 L59.3 27.5 L53.7 27.3 L48.1 27.7 L42.5 28.2 L36.9 28.6 L31.2 29.1 L25.6 29.6 L20.0 29.6Z"/></g>
+          </svg>
+        </div>
+        <div>
+          <div class="greet" style="margin-bottom:18px"><svg class="i s"><use href="#i-clock"/></svg>Friday 6 November · last checked 12 minutes ago</div>
+          <h2>All calm.<br><em>Nothing needs you today.</em></h2>
+          <p>Every open item has been reviewed or has a plan. If something new appears, it will be the first thing on this page.</p>
+          <div class="meta">
+            <span><svg class="i s"><use href="#i-box"/></svg><b>3,847</b> pieces of software</span>
+            <span><svg class="i s"><use href="#i-check"/></svg><b>82%</b> checked</span>
+            <span><svg class="i s"><use href="#i-doc"/></svg>Audit report ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== 5. PALETTE =================== -->
+<section>
+  <div class="label"><span class="num">04</span><b>Palette</b><span>Paper, ink, stone — and one seal.</span></div>
+  <div class="pal">
+    <div class="sw8"><div class="chip" style="background:#F4EFE4"></div><b>Washi</b><code>--washi #F4EFE4</code><p>Canvas, with grain drawn in CSS.<br>Column #EFE9DC · lifted #FAF7F0</p></div>
+    <div class="sw8"><div class="chip" style="background:#2A2420"></div><b>Sumi</b><code>--sumi #2A2420</code><p>Ink for text and brush marks. 13.4:1 on washi.</p></div>
+    <div class="sw8"><div class="chip" style="background:linear-gradient(90deg,#4E453D 50%,#6B6158 50%)"></div><b>Sumi 2 · 3</b><code>#4E453D · #6B6158</code><p>Secondary 8.1:1 · meta 5.3:1 on washi.</p></div>
+    <div class="sw8"><div class="chip" style="background:linear-gradient(90deg,#CFC6B8 33%,#E2DACB 33% 66%,#B9AE9C 66%)"></div><b>Stone</b><code>#CFC6B8 · #E2DACB · #B9AE9C</code><p>Rules, dividers, hand-drawn rings. Never text.</p></div>
+    <div class="sw8"><div class="chip" style="background:linear-gradient(90deg,#34507A 60%,#DDE2E8 60% 80%,#9AA8BE 80%)"></div><b>Ai · indigo</b><code>--ai #34507A · #DDE2E8 · #9AA8BE</code><p>Links, charts, “can wait”, signatures. 7.0:1.</p></div>
+    <div class="sw8"><div class="chip" style="background:linear-gradient(90deg,#7A5719 60%,#EFE4CC 60%)"></div><b>Kuchiba · ochre</b><code>--kuchiba #7A5719 · #EFE4CC</code><p>“Needs a decision”. 5.7:1 on washi.</p></div>
+    <div class="sw8"><div class="chip" style="background:linear-gradient(90deg,#C8412B 60%,#A8361F 60% 80%,#F3E2D8 80%)"></div><b>Shu · vermilion</b><code>--shu #C8412B · #A8361F · #F3E2D8</code><p>The seal. Only for “needs you today”. Text 5.6:1.</p></div>
+  </div>
+  <div class="rules">
+    <div><b>One seal per worry</b>Vermilion never fills a panel or a row. It appears as a small stamp beside the thing that needs a person today, and nowhere else.</div>
+    <div><b>Brush, not gauges</b>Progress is an enso that closes as more is checked; the trend is a single stroke. Hand-made marks feel human rather than alarming.</div>
+    <div><b>Plain words, small tags</b>“Being attacked in the wild” comes first; <span class="ktag">KEV</span> <span class="ktag">EPSS</span>, weakness IDs and digests follow in small mono for Priya.</div>
+  </div>
+</section>
+
+</body>
+</html>
