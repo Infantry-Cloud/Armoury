@@ -443,3 +443,45 @@ class StoryContractValidatorTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+RUST_ACTIVE = (
+    "#[test]\n"
+    "fn val_2_generated_message_roundtrip() {\n"
+    "    assert_eq!(roundtrip(1), 1);\n"
+    "}\n"
+)
+
+
+class RustIgnoreTests(unittest.TestCase):
+    """Rust `#[ignore]` is a skip marker: removing it keeps the lock, keeping it is a skip."""
+
+    def ignored(self, marker: str) -> str:
+        return RUST_ACTIVE.replace("#[test]\n", f"#[test]\n{marker}\n")
+
+    def test_removing_ignore_keeps_the_lock(self) -> None:
+        for marker in ("#[ignore]", '#[ignore = "red phase: VAL-2"]', "    #[ignore]"):
+            with self.subTest(marker=marker):
+                self.assertEqual(
+                    validator.lock_digest(RUST_ACTIVE),
+                    validator.lock_digest(self.ignored(marker)),
+                )
+
+    def test_weakening_a_rust_test_changes_the_lock(self) -> None:
+        weakened = RUST_ACTIVE.replace("roundtrip(1), 1", "1, 1")
+        self.assertNotEqual(
+            validator.lock_digest(RUST_ACTIVE), validator.lock_digest(weakened)
+        )
+
+    def test_ignored_rust_test_is_detected_as_skipped(self) -> None:
+        for marker in ("#[ignore]", '#[ignore = "red phase"]'):
+            with self.subTest(marker=marker):
+                lines = self.ignored(marker).splitlines()
+                index = next(i for i, line in enumerate(lines) if "val_2_" in line)
+                self.assertTrue(validator.is_skipped(lines, index))
+
+    def test_active_rust_test_is_not_skipped(self) -> None:
+        lines = RUST_ACTIVE.splitlines()
+        self.assertFalse(validator.is_skipped(lines, 1))
+        ignored_name = RUST_ACTIVE.replace("fn val_2_", "fn ignore_val_2_").splitlines()
+        self.assertFalse(validator.is_skipped(ignored_name, 1))

@@ -261,7 +261,8 @@ Approval also locks the acceptance tests ATDD produced, so they cannot be quietl
   (`SPEC-*`) may use `- None.` when they have no ATDD tests.
 
 Limits: skip-marker handling is a pattern list for common frameworks (pytest, unittest, Playwright,
-Jest/Vitest/Mocha, Go, JUnit), so an unusual marker may need reapproval to remove. Fixtures and
+Jest/Vitest/Mocha, Go, JUnit, Rust `#[ignore]` on its own line), so an unusual marker may need
+reapproval to remove. Fixtures and
 helpers outside the locked files are not covered; add them with `--file` if they define the oracle.
 Outside a jj workspace the lock table itself could be rewritten together with the tests.
 

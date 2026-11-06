@@ -38,7 +38,8 @@ SKIP_LINE_RE = re.compile(
     r"^\s*(?:@(?:pytest\.mark\.(?:skip|skipif|xfail)|unittest\.(?:skip\w*|expectedFailure)"
     r"|Disabled|Ignore)\b.*"
     r"|(?:test|it)\.(?:skip|fixme)\((?!.*(?:=>|function)).*\)\s*;?"
-    r"|t\.Skip(?:f|Now)?\(.*\)\s*;?)\s*$"
+    r"|t\.Skip(?:f|Now)?\(.*\)\s*;?"
+    r'|#\[ignore(?:\s*=\s*"[^"]*")?\])\s*$'
 )
 INLINE_SKIP_RE = re.compile(
     r"\b(test|it|describe|context|suite)(\.describe)?\.(?:skip|fixme|only)\("
@@ -49,7 +50,7 @@ SKIP_MARK_RE = re.compile(
     r"\b(?:test|it|describe|context|suite)(?:\.describe)?\.(?:skip|fixme|todo)\b"
     r"|\bx(?:it|test|describe)\(|@pytest\.mark\.(?:skip|skipif|xfail)\b"
     r"|\bunittest\.(?:skip\w*|expectedFailure)\b|@(?:Disabled|Ignore)\b"
-    r"|\bt\.Skip(?:f|Now)?\("
+    r"|\bt\.Skip(?:f|Now)?\(|#\[ignore\b"
 )
 FILE_SKIP_RE = re.compile(
     r"\b(?:test\.)?describe\.(?:skip|fixme)\(|\bxdescribe\(|^\s*pytestmark\b.*\bskip",
@@ -1419,7 +1420,7 @@ def is_skipped(lines: list[str], index: int) -> bool:
     """Skip marker on the declaration, its decorators, or the first body lines."""
     window = [lines[index], *lines[index + 1 : index + 4]]
     above = index - 1
-    while above >= 0 and lines[above].strip().startswith("@"):
+    while above >= 0 and lines[above].strip().startswith(("@", "#[")):
         window.append(lines[above])
         above -= 1
     return any(SKIP_MARK_RE.search(line) for line in window)
