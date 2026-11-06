@@ -42,6 +42,7 @@ The repository has planning artifacts but no code. Every later story and Agent R
 - OQ-1 → The local container runtime is a local Podman machine. kind runs with `KIND_EXPERIMENTAL_PROVIDER=podman` (set in `mise.toml` `[env]`), and the mise tasks call the `docker`-compatible CLI so they also work with Docker on GitHub-hosted runners.
 - OQ-2 → The user creates the GitHub repository and pushes the story before Code Review, so VAL-11 and VAL-12 use real workflow runs.
 - OQ-3 → Only `AGENTS.md` is written. The project does not use Claude Code, so there is no `CLAUDE.md`.
+- OQ-4 → "No floating version" (AC-2) also applies to manifests: `Cargo.toml` requirements use `=x.y.z`, `web/package.json` uses exact versions (no `^`, `~`, `*`, ranges or `latest`), and mise tools use exact versions. Committed lockfiles are still required.
 
 ### Sources
 
@@ -77,17 +78,17 @@ The repository has planning artifacts but no code. Every later story and Agent R
 | VAL ID | Covers | Method | Level | Planned check or procedure | Expected evidence | Owner | Manual reason |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | VAL-1 | AC-1, AC-3, AC-5 | mechanical | integration | `mise install && mise run check` in a fresh temporary copy of the tracked files (`jj file list` copied outside the repository) | Exit 0; every step listed in the log; log saved under `_bmad-output/implementation-artifacts/evidence/1-1/` | Dev | - |
-| VAL-2 | AC-1, AC-5 | mechanical | unit | `agent-proto/src/lib.rs::tests::val_2_generated_message_roundtrip` | A prost type generated from `agent.proto` encodes and decodes to an equal value | Dev | - |
+| VAL-2 | AC-1, AC-5 | mechanical | unit | `agent-proto/tests/val_2_roundtrip.rs::val_2_generated_message_roundtrip` | A prost type generated from `agent.proto` (`armoury.agent.v1.Heartbeat`, exposed as `agent_proto::v1`) encodes and decodes to an equal value | Dev | - |
 | VAL-3 | AC-3, AC-5 | mechanical | integration | `control-plane/tests/val_3_age.rs::val_3_age_extension_is_available` | `#[sqlx::test]` passes against the digest-pinned AGE image and reads `age` extension version `1.8.0` | Dev | - |
-| VAL-4 | AC-1, AC-5 | mechanical | unit | `web/src/routes/val-4.test.ts::VAL-4 root layout disables SSR and prerenders` | Vitest passes: root layout exports `ssr = false` and the static adapter is configured | Dev | - |
-| VAL-5 | AC-2 | mechanical | analysis | `mise-tasks/check/pins` run as a step of `mise run check` | Fails on `latest`, an image without `@sha256:`, or an action ref that is not a 40-hex SHA; passes on the scaffold | Dev | - |
+| VAL-4 | AC-1, AC-5 | mechanical | unit | `web/src/routes/val-4.test.ts::VAL-4 root layout disables SSR and uses the static adapter` | Vitest passes: root layout exports `ssr = false` and the static adapter is configured | Dev | - |
+| VAL-5 | AC-2 | mechanical | analysis | `mise-tasks/check/pins.test.mjs::VAL-5 pins check rejects floating references` | node:test, run as a step of `mise run check`: the `mise-tasks/check/pins` checker exits 0 on this repository and on a clean fixture, and exits 1 naming the offending file for each fixture defect: a `latest` tool, a non-exact mise tool version, a `FROM` without `@sha256:`, an action ref that is not a 40-hex SHA, a Cargo requirement without `=`, a `^` or `~` npm range, and a missing `Cargo.lock`, `web/package-lock.json` or `mise.lock` | Dev | - |
 | VAL-6 | AC-4 | manual | demonstration | In a temporary copy of the tracked files outside the repository, inject each of the nine AC-4 defects in turn, run `mise run check`, record the exit code and failing step, then restore the file before the next defect | Nine non-zero runs, each naming the right step, in a saved observation record | Dev | One-off mutation of source per category; a permanent mutation harness is disproportionate for a scaffold |
 | VAL-7 | AC-6 | mechanical | integration | `mise run gen:api` twice, then `jj diff --stat` | Generated files exist in `control-plane/src/httpapi/` and `web/src/lib/api/`; second run gives an empty diff; no `java` on `PATH` is needed | Dev | - |
 | VAL-8 | AC-7 | manual | inspection | Build both images; read both Dockerfiles; list each image filesystem (`docker image inspect`, `docker create` + `docker export \| tar -t`) | Agent image holds only `armoury-agent` and base files, no syft/grype/grant/cosign; control-plane image holds `armoury` and the SPA; every `FROM` has `@sha256:`; `cargo-chef` stage and `ponytail:` comment present | Test Architect | Image content is a one-time structural fact; release SBOMs (Epic 10) give the lasting check |
 | VAL-9 | AC-8 | manual | demonstration | Run `skaffold dev -p kind`; check pod image refs with `kubectl get pods -o jsonpath='{..image}'`; open `localhost:8080`; edit one source string; observe redeploy and a cached `cargo-chef` layer in the build log | Image refs contain `@sha256:`; page loads; redeploy log shows cached dependency layer; observation record saved | Test Architect | A watch loop on a workstation is not credibly automated |
 | VAL-10 | AC-9 | mechanical | e2e | `web/e2e/smoke.spec.ts::loads the web app @VAL-10` | Passes against the Skaffold deployment; with the deployment stopped, `mise run e2e` exits non-zero (output saved) | Dev | - |
 | VAL-11 | AC-10 | manual | demonstration | Push the story to the GitHub repository; record one green `ci.yml` run, then push one injected defect and record the red run | Two run URLs with commit IDs in a saved record; red run fails at the same step as local | Test Architect | The workflow runs only on GitHub-hosted infrastructure |
-| VAL-12 | AC-11 | manual | demonstration | Record a `build.yml` run on a non-`main` push (builds, packages, no push) and on `main` (pushes images by digest to GHCR) | Run URLs and the pushed `@sha256` digests in a saved record | Test Architect | Registry push needs the real repository and token |
+| VAL-12 | AC-11 | manual | demonstration | Record a `build.yml` run on a non-`main` push (builds, packages, no push) and on `main` (pushes images by digest to GHCR) | Run URLs and the pushed `@sha256` digests in a saved record; `ci.yml` and `build.yml` declare top-level `permissions: contents: read`, only the `main` push job gets `packages: write`, and neither uses `pull_request_target` | Test Architect | Registry push needs the real repository and token |
 | VAL-13 | AC-12 | manual | inspection | Read `AGENTS.md` and `README.md`; check that no `CLAUDE.md` exists; follow the README commands on a fresh checkout | All ARCH25 rules, the layout and PROC3 are stated; every README command works as written | Test Architect | Documentation quality needs human judgement |
 
 ### Open Questions
@@ -141,7 +142,7 @@ The repository has no code yet. Everything below is new, except where noted.
 - Validation approved by: pending
 - Approved at: pending
 - Contract digest: pending
-- Validation artifacts: pending
+- Validation artifacts: `_bmad-output/test-artifacts/atdd-checklist-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md`; `agent-proto/tests/val_2_roundtrip.rs`; `control-plane/tests/val_3_age.rs`; `web/src/routes/val-4.test.ts`; `mise-tasks/check/pins.test.mjs`; `web/e2e/smoke.spec.ts`
 
 ### Locked Tests
 
