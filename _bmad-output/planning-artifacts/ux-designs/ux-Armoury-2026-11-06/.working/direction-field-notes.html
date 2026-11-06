@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armoury — Direction: Field Notes</title>
+<style>
+/* =====================================================================
+   DIRECTION: FIELD NOTES — editorial calm
+   ---------------------------------------------------------------------
+   PALETTE (every hex used in this file)
+   --paper        #FBFAF6  main canvas, warm paper white
+   --paper-2      #F4F2EA  middle list column / quiet panels
+   --paper-3      #EEECE4  button + chip fill
+   --rule         #E4E1D6  thin hairline rules, ring/track
+   --rule-2       #D6D2C4  slightly stronger rule (double rule, borders)
+   --ink          #16181A  primary text            (17.0:1 on paper)
+   --ink-2        #4A4F4B  secondary text          ( 8.0:1 on paper)
+   --ink-3        #646962  muted text / meta       ( 5.4:1 on paper, 5.0:1 on paper-2)
+   --night        #0E0F0E  sidebar black
+   --night-2      #1A1C1A  sidebar hover / active surface
+   --night-rule   #262926  sidebar divider
+   --night-text   #D9DCD5  sidebar text            (14.6:1 on night)
+   --night-muted  #8C918A  sidebar secondary text  ( 6.0:1 on night)
+   --lime         #D4F36A  highlighter mark — used sparingly
+   --lime-deep    #B8DA45  highlighter edge / ring end-dot
+   --green        #1F4D3A  deep green: links, charts, selected row (9.2:1 on paper)
+   --green-2      #2E6B52  chart stroke secondary
+   --green-tint   #E6EEE8  green chip / area tint
+   --green-soft   #B9CEC2  muted text on selected green row (5.8:1 on green)
+   --rust         #8A3B1E  "being attacked" text   (6.5:1 on rust-tint)
+   --rust-tint    #F6E8DF  "being attacked" chip
+   --ochre        #7A5A12  medium / decision text  (5.4:1 on ochre-tint)
+   --ochre-tint   #F5EEDA  medium / decision chip
+   --stage        #E3E5DF  page backdrop behind the browser frames
+   --chrome       #F1F1EC  browser chrome bar
+   --chrome-pill  #E4E5DE  browser URL pill
+   --dot-1        #3B3D3A  window control dot
+   --dot-2        #6E716B  window control dot
+   --dot-3        #A3A69F  window control dot
+   --white        #FFFFFF  text on deep green, card highlight
+   Shadow colour: rgba(22,24,26,.10) / rgba(22,24,26,.06)  (= --ink at low alpha)
+   ===================================================================== */
+:root{
+  --paper:#FBFAF6; --paper-2:#F4F2EA; --paper-3:#EEECE4;
+  --rule:#E4E1D6; --rule-2:#D6D2C4;
+  --ink:#16181A; --ink-2:#4A4F4B; --ink-3:#646962;
+  --night:#0E0F0E; --night-2:#1A1C1A; --night-rule:#262926; --night-text:#D9DCD5; --night-muted:#8C918A;
+  --lime:#D4F36A; --lime-deep:#B8DA45;
+  --green:#1F4D3A; --green-2:#2E6B52; --green-tint:#E6EEE8; --green-soft:#B9CEC2;
+  --rust:#8A3B1E; --rust-tint:#F6E8DF;
+  --ochre:#7A5A12; --ochre-tint:#F5EEDA;
+  --stage:#E3E5DF; --chrome:#F1F1EC; --chrome-pill:#E4E5DE;
+  --white:#FFFFFF;
+  --serif: ui-serif, "New York", "Iowan Old Style", "Charter", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--stage);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--green);text-decoration:none}
+svg{display:block}
+.ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ico.sm{width:14px;height:14px}
+.ico.xs{width:12px;height:12px;stroke-width:1.9}
+
+/* ---------- page shell ---------- */
+.page{width:1520px;margin:0 auto;padding:64px 40px 96px}
+@media (max-width:1560px){.page{zoom:.86}}
+@media (max-width:1340px){.page{zoom:.72}}
+@media (max-width:1120px){.page{zoom:.6}}
+@media (max-width:940px){.page{zoom:.48}}
+@media (max-width:760px){.page{zoom:.36}}
+
+.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:72px;padding:0 40px 56px;align-items:end}
+.eyebrow{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.intro h1{font:400 76px/1 var(--serif);letter-spacing:-.02em;margin:18px 0 22px}
+.intro h1 em{font-style:italic}
+.intro p{font:400 19px/1.55 var(--serif);color:var(--ink-2);max-width:640px}
+.intro .diff{border-left:1px solid var(--rule-2);padding-left:28px}
+.intro .diff h4{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+.intro .diff li{list-style:none;font:400 15px/1.5 var(--sans);color:var(--ink-2);padding:9px 0;border-bottom:1px solid var(--rule-2);display:flex;gap:12px}
+.intro .diff li b{font-weight:600;color:var(--ink);min-width:104px}
+
+.section-label{display:flex;align-items:baseline;gap:16px;padding:0 40px;margin:72px 0 20px}
+.section-label .n{font:italic 400 15px/1 var(--serif);color:var(--ink-3)}
+.section-label h2{font:400 28px/1 var(--serif);letter-spacing:-.01em}
+.section-label span.note{margin-left:auto;font:400 13px/1.4 var(--sans);color:var(--ink-3)}
+.caption{padding:16px 40px 0;font:italic 400 14px/1.5 var(--serif);color:var(--ink-3)}
+
+/* ---------- browser frame ---------- */
+.browser{width:1440px;border-radius:14px;overflow:hidden;background:var(--paper);
+  box-shadow:0 1px 0 rgba(22,24,26,.06),0 30px 80px -30px rgba(22,24,26,.10),0 12px 30px -12px rgba(22,24,26,.10)}
+.chrome{height:52px;background:var(--chrome);display:flex;align-items:center;padding:0 20px;gap:18px;border-bottom:1px solid var(--rule)}
+.dots{display:flex;gap:8px}
+.dots i{width:12px;height:12px;border-radius:50%;background:#3B3D3A}
+.dots i:nth-child(2){background:#6E716B}.dots i:nth-child(3){background:#A3A69F}
+.chrome .nav{display:flex;gap:14px;color:var(--ink-3)}
+.url{flex:1;max-width:620px;margin:0 auto;height:32px;border-radius:9px;background:var(--chrome-pill);display:flex;align-items:center;justify-content:center;gap:8px;font:400 13px/1 var(--sans);color:var(--ink-2)}
+.chrome .tools{display:flex;gap:16px;color:var(--ink-3)}
+
+/* ---------- app shell ---------- */
+.app{display:grid;height:960px}
+.app.home{grid-template-columns:264px 1fr 376px;height:1090px}
+.app.list{grid-template-columns:264px 360px 1fr;height:1080px}
+
+/* sidebar */
+.side{background:var(--night);color:var(--night-text);display:flex;flex-direction:column;padding:28px 0 22px}
+.brand{display:flex;align-items:center;gap:11px;padding:0 28px 30px}
+.brand .word{font:400 23px/1 var(--serif);letter-spacing:-.01em;color:var(--white)}
+.brand .word i{font-style:italic;color:var(--night-muted)}
+.side nav{display:flex;flex-direction:column;gap:2px;padding:0 14px}
+.side nav a{display:flex;align-items:center;gap:13px;padding:11px 14px;border-radius:8px;color:var(--night-text);font:450 14px/1 var(--sans);white-space:nowrap}
+.side nav a .ico{color:var(--night-muted)}
+.side nav a.on{background:var(--night-2);color:var(--white)}
+.side nav a.on .ico{color:var(--lime)}
+.side nav a.on .lbl{background:linear-gradient(transparent 58%,rgba(212,243,106,.38) 58%,rgba(212,243,106,.38) 94%,transparent 94%)}
+.side nav a .badge{margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:999px;background:var(--lime);color:var(--ink);font:600 11.5px/20px var(--sans);text-align:center}
+.side nav a .kbd{margin-left:auto;font:500 10.5px/1 var(--mono);color:var(--night-muted);border:1px solid var(--night-rule);border-radius:4px;padding:3px 5px}
+.side hr{border:0;border-top:1px solid var(--night-rule);margin:16px 28px}
+.side .me{margin-top:auto;display:flex;align-items:center;gap:12px;padding:16px 28px 0;border-top:1px solid var(--night-rule)}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(140deg,#2E6B52,#1F4D3A);color:var(--white);display:grid;place-items:center;font:500 13.5px/1 var(--serif);letter-spacing:.02em}
+.me .who b{display:block;font:500 14px/1.2 var(--sans);color:var(--white)}
+.me .who span{font:400 12.5px/1.4 var(--sans);color:var(--night-muted);white-space:nowrap}
+.me .ico{margin-left:auto;color:var(--night-muted)}
+
+/* highlighter */
+.hl{background:linear-gradient(176deg,transparent 52%,var(--lime) 52%,var(--lime) 90%,transparent 90%);padding:0 .08em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* ---------- HOME : briefing ---------- */
+.brief{padding:30px 72px 40px 72px;overflow:hidden}
+.masthead{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--ink);position:relative}
+.masthead:after{content:"";position:absolute;left:0;right:0;bottom:-4px;border-bottom:1px solid var(--ink)}
+.masthead .t{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.masthead .t i{font:italic 400 14px/1 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink-3);margin-left:10px}
+.masthead .d{font:400 12.5px/1 var(--sans);color:var(--ink-3);display:flex;gap:8px;align-items:center}
+.masthead .d .live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-tint)}
+.q{font:italic 400 19px/1 var(--serif);color:var(--ink-3);margin:40px 0 12px}
+.headline{font:400 50px/1.08 var(--serif);letter-spacing:-.022em;max-width:660px}
+.standfirst{font:400 18px/1.6 var(--serif);color:var(--ink-2);max-width:620px;margin-top:20px}
+.standfirst b{font-weight:600;color:var(--ink)}
+.subhead{display:flex;align-items:center;gap:14px;margin:38px 0 4px}
+.subhead h3{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.subhead .line{flex:1;border-top:1px solid var(--rule-2)}
+.subhead a{font:500 13px/1 var(--sans);display:flex;gap:6px;align-items:center}
+
+.item{display:grid;grid-template-columns:58px 1fr;padding:22px 0 20px;border-bottom:1px solid var(--rule)}
+.item:last-of-type{border-bottom:0}
+.item .num{font:400 46px/.9 var(--serif);color:var(--green);font-feature-settings:"lnum"}
+.item .tags{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.item h4{font:500 22px/1.25 var(--serif);letter-spacing:-.01em;margin-bottom:7px}
+.item p.why{font:400 15px/1.55 var(--sans);color:var(--ink-2);max-width:640px}
+.todo{display:flex;align-items:baseline;gap:14px;margin-top:12px;font:400 15px/1.5 var(--sans)}
+.todo .k{font:600 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--green);white-space:nowrap;padding-top:3px;min-width:86px}
+.todo .v{color:var(--ink)}
+.todo a{white-space:nowrap;margin-left:auto;font-weight:500;display:inline-flex;gap:6px;align-items:center}
+.meta{font:400 12px/1 var(--mono);color:var(--ink-3);margin-top:10px;display:flex;gap:14px}
+
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--sans);padding:5px 10px 5px 8px;border-radius:999px;white-space:nowrap}
+.tag.rust{color:var(--rust);background:var(--rust-tint)}
+.tag.ochre{color:var(--ochre);background:var(--ochre-tint)}
+.tag.green{color:var(--green);background:var(--green-tint)}
+.tag.plain{color:var(--ink-2);background:var(--paper-3);padding-left:10px}
+.tag.tiny{font-size:10.5px;padding:3px 7px;letter-spacing:.06em;font-weight:600}
+.id{font:400 11.5px/1 var(--mono);color:var(--ink-3)}
+
+/* margin column */
+.margin{border-left:1px solid var(--rule);padding:30px 36px 40px;display:flex;flex-direction:column;background:var(--paper)}
+.margin .mh{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid var(--rule-2);display:flex;justify-content:space-between}
+.margin .mh i{font:italic 400 13px/1 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.note{padding:26px 0;border-bottom:1px solid var(--rule)}
+.note:last-child{border-bottom:0}
+.note h5{font:500 14px/1.3 var(--sans);margin-bottom:4px}
+.note .sub{font:400 13px/1.5 var(--sans);color:var(--ink-3)}
+.ringwrap{display:flex;align-items:center;gap:22px;margin-top:16px}
+.ring{position:relative;width:132px;height:132px;flex:none}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .c b{font:400 34px/1 var(--serif);letter-spacing:-.02em}
+.ring .c span{font:400 11.5px/1 var(--sans);color:var(--ink-3);margin-top:6px}
+.legend{display:flex;flex-direction:column;gap:10px;font:400 13px/1.35 var(--sans);color:var(--ink-2)}
+.legend b{font-weight:600;color:var(--ink);font-feature-settings:"tnum"}
+.legend .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px;vertical-align:1px}
+.bigfig{display:flex;align-items:baseline;gap:10px;margin:14px 0 6px}
+.bigfig b{font:400 36px/1 var(--serif);letter-spacing:-.02em;font-feature-settings:"tnum"}
+.bigfig .down{font:500 12.5px/1 var(--sans);color:var(--green);display:flex;align-items:center;gap:4px}
+.axis{display:flex;justify-content:space-between;font:400 11px/1 var(--sans);color:var(--ink-3);margin-top:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 15px;border-radius:6px;background:var(--paper-3);color:var(--ink);font:600 11px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;border:0;white-space:nowrap}
+.btn.ink{background:var(--ink);color:var(--white)}
+.btn.ink .ico{color:var(--lime)}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--rule-2)}
+.btn.sq{width:36px;padding:0;justify-content:center}
+.report{display:flex;gap:14px;margin-top:14px;align-items:flex-start}
+.doc{width:46px;height:58px;border-radius:3px;background:var(--white);box-shadow:0 0 0 1px var(--rule-2),3px 3px 0 0 var(--paper-3),3px 3px 0 1px var(--rule-2);position:relative;flex:none;padding:9px 8px}
+.doc i{display:block;height:2px;background:var(--rule-2);margin-bottom:5px;border-radius:2px}
+.doc i:nth-child(1){width:70%;background:var(--ink-3)}
+.doc i:nth-child(4){width:55%}
+.doc .seal{position:absolute;right:-7px;bottom:-7px;width:20px;height:20px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:var(--white);box-shadow:0 0 0 2px var(--paper)}
+.signoff{margin-top:auto;padding-top:20px;font:italic 400 14px/1.5 var(--serif);color:var(--ink-3)}
+
+/* ---------- SOFTWARE : list ---------- */
+.col{background:var(--paper-2);border-right:1px solid var(--rule);display:flex;flex-direction:column;padding:30px 0 22px}
+.col .top{display:flex;align-items:center;justify-content:space-between;padding:0 30px 18px}
+.col .top h2{font:400 26px/1 var(--serif);letter-spacing:-.01em}
+.search{margin:0 30px 8px;height:38px;border-radius:8px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);display:flex;align-items:center;gap:10px;padding:0 12px;color:var(--ink-3);font:400 13.5px/1 var(--sans)}
+.group{display:flex;align-items:baseline;gap:10px;padding:26px 30px 8px}
+.group h3{font:400 22px/1 var(--serif);letter-spacing:-.01em}
+.group span{font:300 22px/1 var(--serif);color:var(--ink-3)}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:16px 30px;position:relative}
+.row + .row:before{content:"";position:absolute;left:30px;right:30px;top:0;border-top:1px solid var(--rule)}
+.row .nm{font:500 15px/1.2 var(--sans)}
+.row .nm i{font-style:normal;font-weight:400;color:var(--ink-3);margin-left:6px}
+.row .sb{font:400 13px/1.2 var(--sans);color:var(--ink-3);grid-column:1}
+.row .chip{grid-row:1 / span 2;grid-column:2;align-self:center;font:500 11.5px/1 var(--sans);padding:6px 9px;border-radius:5px;background:var(--paper-3);color:var(--ink-2);display:flex;gap:6px;align-items:center}
+.row .chip.rust{background:var(--rust-tint);color:var(--rust)}
+.row .chip.ochre{background:var(--ochre-tint);color:var(--ochre)}
+.row .chip.green{background:var(--green-tint);color:var(--green)}
+.row.sel{background:var(--green);color:var(--white)}
+.row.sel:before,.row.sel + .row:before{display:none}
+.row.sel .nm i,.row.sel .sb{color:var(--green-soft)}
+.row.sel .chip{background:rgba(255,255,255,.12);color:var(--white)}
+.row.sel:after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lime)}
+.col .add{margin:auto 30px 0;height:46px;border-radius:7px;background:var(--ink);color:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;font:600 11.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase}
+.col .add .ico{color:var(--lime)}
+
+/* detail */
+.detail{display:flex;flex-direction:column;background:var(--paper);min-width:0}
+.tabs{display:flex;align-items:stretch;height:60px;border-bottom:1px solid var(--rule);padding:0 0 0 0}
+.tabs a{display:flex;align-items:center;gap:8px;padding:0 26px;font:450 15px/1 var(--sans);color:var(--ink-2);position:relative}
+.tabs a span{color:var(--ink-3);font-weight:400}
+.tabs a.on{color:var(--white);background:var(--green)}
+.tabs a.on span{color:var(--green-soft)}
+.tabs .gear{margin-left:auto;display:flex;align-items:center;padding:0 26px;color:var(--ink-3)}
+.dhead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:30px 36px 26px;border-bottom:1px solid var(--rule)}
+.dhead h2{font:400 40px/1 var(--serif);letter-spacing:-.022em;display:flex;align-items:baseline;gap:12px}
+.dhead h2 small{font:400 20px/1 var(--serif);color:var(--ink-3);letter-spacing:0}
+.dhead .ref{font:400 12px/1 var(--mono);color:var(--ink-3);margin-top:12px;display:flex;gap:14px}
+.dhead .say{font:400 17px/1.5 var(--serif);color:var(--ink-2);margin-top:14px}
+.dhead .say b{font-weight:600;color:var(--ink)}
+.dhead .acts{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:1fr 1.18fr;flex:1}
+.card{padding:26px 36px 28px;border-bottom:1px solid var(--rule)}
+.card + .card{border-left:1px solid var(--rule)}
+.card.full{grid-column:1 / -1;border-left:0}
+.card h3{font:500 15px/1 var(--sans);margin-bottom:20px;display:flex;align-items:baseline;gap:8px}
+.card h3 span{color:var(--ink-3);font-weight:400}
+.card h3 a{margin-left:auto;font:500 13px/1 var(--sans);display:flex;align-items:center;gap:6px}
+dl.info{display:grid;grid-template-columns:112px 1fr;row-gap:15px;font:400 14.5px/1.3 var(--sans)}
+dl.info dt{color:var(--ink-3)}
+dl.info dd{color:var(--ink);display:flex;align-items:center;gap:8px;white-space:nowrap}
+dl.info dd small{color:var(--ink-3);font-size:13px}
+.copies{display:flex;gap:4px}
+.copies i{width:10px;height:10px;border-radius:2px;background:var(--green)}
+.find{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;padding:16px 0;border-top:1px solid var(--rule)}
+.find:first-of-type{border-top:0;padding-top:0}
+.find .mk{grid-row:1 / span 3;align-self:start;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
+.find .mk.rust{background:var(--rust-tint);color:var(--rust)}
+.find .mk.ochre{background:var(--ochre-tint);color:var(--ochre)}
+.find .t{font:500 15px/1.3 var(--sans)}
+.find .t i{font-style:normal;font-weight:400;color:var(--ink-3)}
+.find .d{font:400 13.5px/1.45 var(--sans);color:var(--ink-2);grid-column:2}
+.find .x{grid-column:2;display:flex;gap:10px;align-items:center;margin-top:8px}
+.find .st{font:500 12px/1 var(--sans);color:var(--ink-3);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.find .st i{width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink-3)}
+.compo{height:12px;border-radius:3px;overflow:hidden;display:flex;margin:18px 0 14px}
+.compo i{display:block;height:100%}
+.trail{display:grid;grid-template-columns:repeat(4,1fr);position:relative;margin-top:6px}
+.trail:before{content:"";position:absolute;left:6px;right:6px;top:6px;border-top:1px solid var(--rule-2)}
+.ev{position:relative;padding-right:20px}
+.ev .pt{width:13px;height:13px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--green);margin-bottom:14px;position:relative}
+.ev .pt.now{background:var(--lime);box-shadow:inset 0 0 0 2px var(--green)}
+.ev .pt.warn{box-shadow:inset 0 0 0 2px var(--rust)}
+.ev b{display:block;font:500 14px/1.35 var(--sans)}
+.ev span{display:block;font:400 12.5px/1.5 var(--sans);color:var(--ink-3);margin-top:3px}
+
+/* ---------- STATE : all clear ---------- */
+.state{display:grid;grid-template-columns:900px 1fr;gap:56px;padding:0 0 0 40px;align-items:center}
+.browser.small{width:900px}
+.calm{display:grid;grid-template-columns:68px 1fr;height:560px}
+.mini-side{background:var(--night);display:flex;flex-direction:column;align-items:center;padding:24px 0;gap:6px;color:var(--night-muted)}
+.mini-side .slot{width:40px;height:40px;border-radius:8px;display:grid;place-items:center}
+.mini-side .slot.on{background:var(--night-2);color:var(--lime)}
+.mini-side .gap{height:18px}
+.calm-main{position:relative;padding:28px 56px 36px;overflow:hidden;display:flex;flex-direction:column}
+.calm-main .masthead .t{font-size:10.5px}
+.calm .q{margin-top:44px}
+.calm .headline{font-size:54px;max-width:520px}
+.calm .standfirst{font-size:17px;max-width:430px}
+.horizon{position:absolute;right:-6px;top:118px;width:420px;height:300px}
+.facts{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule-2)}
+.facts div{padding:18px 18px 0 0}
+.facts div + div{padding-left:18px;border-left:1px solid var(--rule)}
+.facts b{display:flex;align-items:center;gap:8px;font:400 22px/1 var(--serif);letter-spacing:-.01em}
+.facts span{display:block;font:400 12.5px/1.4 var(--sans);color:var(--ink-3);margin-top:6px}
+.state-notes h3{font:400 26px/1.15 var(--serif);letter-spacing:-.01em;margin-bottom:14px}
+.state-notes p{font:400 15px/1.6 var(--sans);color:var(--ink-2);max-width:420px;margin-bottom:12px}
+.state-notes ul{list-style:none;margin-top:18px;border-top:1px solid var(--rule-2);max-width:420px}
+.state-notes li{font:400 14px/1.5 var(--sans);color:var(--ink-2);padding:10px 0;border-bottom:1px solid var(--rule-2);display:flex;gap:12px}
+.state-notes li b{font:italic 400 15px/1.4 var(--serif);color:var(--green);min-width:18px}
+
+/* ---------- palette ---------- */
+.palette{margin:0 40px;background:var(--paper);border-radius:14px;padding:30px 32px 32px;box-shadow:0 1px 0 rgba(22,24,26,.06)}
+.swatches{display:grid;grid-template-columns:repeat(9,1fr);gap:14px}
+.sw-card .chip{height:84px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(22,24,26,.08);display:flex;align-items:flex-end;padding:10px;font:400 22px/1 var(--serif)}
+.sw-card b{display:block;font:500 13px/1.3 var(--sans);margin-top:10px}
+.sw-card code{font:400 12px/1.4 var(--mono);color:var(--ink-3)}
+.sw-card span{display:block;font:400 12px/1.4 var(--sans);color:var(--ink-3);margin-top:2px}
+.type-row{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:32px;margin-top:30px;padding-top:24px;border-top:1px solid var(--rule)}
+.type-row .s1{font:400 40px/1.05 var(--serif);letter-spacing:-.02em}
+.type-row .s2{font:400 16px/1.5 var(--sans);color:var(--ink-2)}
+.type-row .lab{font:600 10.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<!-- Icon set (inline, no network) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M20.5 7.5 12 3 3.5 7.5v9L12 21l8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4M5.5 4.5h11l-2.2 4 2.2 4h-11"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3h8l4 4v14h-12z"/><path d="M14.5 3v4h4M9.5 12.5h6M9.5 16.5h6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .8-1 1.5v.6"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7.5 20h9M5 7.5h14M5 7.5l-2.6 6a2.8 2.8 0 0 0 5.2 0zM19 7.5l-2.6 6a2.8 2.8 0 0 0 5.2 0z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><path d="M12 8v4.5M12 15.8h.01"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.3 3.2 7.9 7.5 9 4.3-1.1 7.5-4.7 7.5-9V6z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M12 6h.01M12 12h.01M12 18h.01" stroke-width="2.6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M9 5v14"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.5v11M8 7.5l4-4 4 4M6 11v8.5h12V11"/></symbol>
+  <symbol id="i-tabs" viewBox="0 0 24 24"><rect x="4" y="7" width="13" height="13" rx="2"/><path d="M8 4h10a2 2 0 0 1 2 2v10"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="logo" viewBox="0 0 28 28"><path d="M14 2.5 4 6.5v7.2c0 5.6 4.2 10.4 10 11.8 5.8-1.4 10-6.2 10-11.8V6.5z" fill="#D4F36A" stroke="none"/><path d="M9 14.5c2.2-1.2 4.2-3.4 5-6.5.8 3.1 2.8 5.3 5 6.5-2.2 1.2-4.2 3.4-5 6.5-.8-3.1-2.8-5.3-5-6.5z" fill="#0E0F0E" stroke="none"/></symbol>
+</svg>
+
+<div class="page">
+
+  <!-- ============ 1. HEADER BLOCK ============ -->
+  <header class="intro">
+    <div>
+      <div class="eyebrow">Armoury · UX direction</div>
+      <h1>Field <em>Notes</em></h1>
+      <p>Security news, delivered like a calm weekly letter. Home is a short briefing with a headline that answers "are we safe?", three numbered things to look at, and a plain "What to do" line under each, so Tom is done in a minute. Priya gets the same clean pages with the exact IDs, tags and history in small grey type underneath.</p>
+    </div>
+    <div class="diff">
+      <h4>How it departs from s.host</h4>
+      <ul>
+        <li><b>Kept</b>The black sidebar, the three-column master–detail, lists grouped by state with counts, the selected row in deep green, the tabs, thin rules, sparklines, the ring gauge and small uppercase buttons.</li>
+        <li><b>Changed</b>White becomes warm paper. A serif carries the headlines. Home reads top to bottom like an article, not a grid of cards.</li>
+        <li><b>Lime</b>Not a big button fill. A highlighter pen: one marked phrase, the active item, a single dot on a chart.</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ============ 2. HERO — HOME ============ -->
+  <div class="section-label"><span class="n">i.</span><h2>Home — Tom's briefing</h2><span class="note">1440 × 1090 · answers "Are we safe? What needs attention?" in under a minute</span></div>
+  <div style="padding:0 40px">
+  <div class="browser">
+    <div class="chrome">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="nav"><svg class="ico"><use href="#i-sidebar"/></svg><svg class="ico"><use href="#i-left"/></svg><svg class="ico"><use href="#i-right"/></svg></div>
+      <div class="url"><svg class="ico xs"><use href="#i-lock"/></svg>armoury.acme.internal</div>
+      <div class="tools"><svg class="ico"><use href="#i-down"/></svg><svg class="ico"><use href="#i-share"/></svg><svg class="ico"><use href="#i-tabs"/></svg></div>
+    </div>
+
+    <div class="app home">
+      <!-- sidebar -->
+      <aside class="side">
+        <div class="brand"><svg width="28" height="28"><use href="#logo"/></svg><span class="word">Armoury</span></div>
+        <nav>
+          <a class="on"><svg class="ico"><use href="#i-home"/></svg><span class="lbl">Home</span></a>
+          <a><svg class="ico"><use href="#i-box"/></svg>Software</a>
+          <a><svg class="ico"><use href="#i-flag"/></svg>Things to look at<span class="badge">3</span></a>
+          <a><svg class="ico"><use href="#i-search"/></svg>Where it's affected<span class="kbd">/</span></a>
+          <a><svg class="ico"><use href="#i-doc"/></svg>Audit reports</a>
+        </nav>
+        <hr>
+        <nav>
+          <a><svg class="ico"><use href="#i-gear"/></svg>Settings</a>
+          <a><svg class="ico"><use href="#i-help"/></svg>Help</a>
+        </nav>
+        <div class="me"><div class="avatar">TR</div><div class="who"><b>Tom Reid</b><span>Head of Engineering</span></div><svg class="ico sm"><use href="#i-chev"/></svg></div>
+      </aside>
+
+      <!-- briefing -->
+      <main class="brief">
+        <div class="masthead">
+          <div class="t">The Briefing <i>No. 45</i></div>
+          <div class="d"><span class="live"></span>Friday 6 November 2026 · last checked 38 min ago</div>
+        </div>
+
+        <div class="q">Are we safe?</div>
+        <h1 class="headline">Yes, mostly. <span class="hl">Three things</span> need a look today.</h1>
+        <p class="standfirst">We keep an eye on <b>3,847 pieces of software</b>. There are 1,094 open items, but nearly all are low risk or already being handled. These three are the ones worth your attention.</p>
+
+        <div class="subhead"><h3>Today's three</h3><div class="line"></div><a>See all things to look at <svg class="ico sm"><use href="#i-arrow"/></svg></a></div>
+
+        <article class="item">
+          <div class="num">1</div>
+          <div>
+            <div class="tags">
+              <span class="tag rust"><svg class="ico xs"><use href="#i-target"/></svg>Being attacked in the wild</span>
+              <span class="tag plain">Chance of attack: high</span>
+              <span class="tag plain">In 14 pieces of software</span>
+            </div>
+            <h4>An old logging library is being attacked in the wild</h4>
+            <p class="why">log4j-core 2.17.0 has a known flaw that's being used in real attacks. It sits inside payments-api, auth-service and 12 others.</p>
+            <div class="todo"><span class="k">What to do</span><span class="v">Update log4j-core to <b>2.17.2</b>. It's a small change, and we re-check automatically afterwards.</span><a>Review <svg class="ico sm"><use href="#i-arrow"/></svg></a></div>
+            <div class="meta"><span>CVE-2026-23012</span><span>log4j-core 2.17.0 → 2.17.2</span></div>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="num">2</div>
+          <div>
+            <div class="tags">
+              <span class="tag ochre"><svg class="ico xs"><use href="#i-scale"/></svg>Needs a decision</span>
+              <span class="tag plain">Licence</span>
+            </div>
+            <h4>report-render uses code with a "share-alike" licence</h4>
+            <p class="why">report-render 0.9.4 includes code under the AGPL-3.0 licence. If we offer it as a service, we may have to publish our own source code.</p>
+            <div class="todo"><span class="k">What to do</span><span class="v">Choose to accept it, replace the library, or ask legal. About five minutes.</span><a>Decide <svg class="ico sm"><use href="#i-arrow"/></svg></a></div>
+            <div class="meta"><span>AGPL-3.0</span><span>report-render 0.9.4</span></div>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="num">3</div>
+          <div>
+            <div class="tags">
+              <span class="tag ochre"><svg class="ico xs"><use href="#i-drop"/></svg>Medium weakness</span>
+              <span class="tag plain">Not being attacked</span>
+            </div>
+            <h4>A medium weakness in checkout-web's encryption</h4>
+            <p class="why">openssl 3.0.13 inside checkout-web has a moderate flaw. Nobody is exploiting it right now, so there's time to plan the fix.</p>
+            <div class="todo"><span class="k">What to do</span><span class="v">Plan the update for the next sprint. No rush today.</span><a>Plan fix <svg class="ico sm"><use href="#i-arrow"/></svg></a></div>
+          </div>
+        </article>
+      </main>
+
+      <!-- margin notes -->
+      <aside class="margin">
+        <div class="mh">In the margin <i>at a glance</i></div>
+
+        <div class="note">
+          <h5>How much we've checked</h5>
+          <div class="sub">Checking continues automatically, day and night.</div>
+          <div class="ringwrap">
+            <div class="ring">
+              <!-- 270° gauge: r=56, C=351.86, 75% = 263.9; 82% of that = 216.4 -->
+              <svg width="132" height="132" viewBox="0 0 132 132">
+                <g transform="rotate(135 66 66)" fill="none" stroke-linecap="round">
+                  <circle cx="66" cy="66" r="56" stroke="#E4E1D6" stroke-width="7" stroke-dasharray="263.9 400"/>
+                  <circle cx="66" cy="66" r="56" stroke="#1F4D3A" stroke-width="7" stroke-dasharray="216.4 400"/>
+                </g>
+                <!-- end-dot at 82% along the arc: angle 135+221.4 = 356.4° -->
+                <circle cx="121.9" cy="62.5" r="5" fill="#D4F36A" stroke="#1F4D3A" stroke-width="2"/>
+              </svg>
+              <div class="c"><b>82%</b><span>checked</span></div>
+            </div>
+            <div class="legend">
+              <div><span class="sw" style="background:#1F4D3A"></span><b>3,176</b> checked</div>
+              <div><span class="sw" style="background:#E4E1D6"></span><b>671</b> in the queue</div>
+              <div style="color:#646962">of 3,847 pieces of software</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          <h5>Open items, last 30 days</h5>
+          <div class="bigfig"><b>1,094</b><span class="down"><svg class="ico xs"><use href="#i-down"/></svg>going down</span></div>
+          <div class="sub">Steadily fewer each week. Most are low risk.</div>
+          <svg width="312" height="78" viewBox="0 0 312 78" style="margin-top:14px">
+            <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F4D3A" stop-opacity=".14"/><stop offset="1" stop-color="#1F4D3A" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0 77.5H312" stroke="#E4E1D6"/>
+            <path d="M0 39H312" stroke="#E4E1D6" stroke-dasharray="2 4"/>
+            <path d="M0,14 L11,12 L22,16 L33,13 L44,19 L55,17 L66,22 L77,20 L88,21 L99,26 L110,24 L121,29 L132,27 L143,31 L154,30 L165,36 L176,33 L187,38 L198,37 L209,42 L220,40 L231,45 L242,44 L253,49 L264,47 L275,52 L286,51 L297,55 L304,54 L304,78 L0,78 Z" fill="url(#ga)"/>
+            <path d="M0,14 L11,12 L22,16 L33,13 L44,19 L55,17 L66,22 L77,20 L88,21 L99,26 L110,24 L121,29 L132,27 L143,31 L154,30 L165,36 L176,33 L187,38 L198,37 L209,42 L220,40 L231,45 L242,44 L253,49 L264,47 L275,52 L286,51 L297,55 L304,54" fill="none" stroke="#1F4D3A" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle cx="304" cy="54" r="4.5" fill="#D4F36A" stroke="#1F4D3A" stroke-width="1.6"/>
+          </svg>
+          <div class="axis"><span>7 Oct</span><span>Today</span></div>
+        </div>
+
+        <div class="note">
+          <h5>Audit report</h5>
+          <div class="report">
+            <div class="doc"><i></i><i></i><i></i><i></i><span class="seal"><svg class="ico xs"><use href="#i-check"/></svg></span></div>
+            <div class="sub" style="color:#4A4F4B">Ready for the last 12 months. Signed, so auditors and customers can trust it hasn't been changed.</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:18px">
+            <span class="btn ink"><svg class="ico sm"><use href="#i-down"/></svg>Download</span>
+            <span class="btn ghost">Share link</span>
+          </div>
+        </div>
+
+        <div class="signoff">Prepared for Tom Reid. Next briefing on Monday, or sooner if something changes.</div>
+      </aside>
+    </div>
+  </div>
+  </div>
+  <p class="caption">Fig. 1 — Home is a short letter, not a dashboard: the headline answers "are we safe?", then three numbered items, each with a one-line explanation and a "What to do" line. Technical IDs sit in small grey mono type for Priya.</p>
+
+  <!-- ============ 3. SECONDARY — SOFTWARE ============ -->
+  <div class="section-label"><span class="n">ii.</span><h2>Software — list and detail</h2><span class="note">s.host master–detail · grouped by state with counts · payments-api selected</span></div>
+  <div style="padding:0 40px">
+  <div class="browser">
+    <div class="chrome">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="nav"><svg class="ico"><use href="#i-sidebar"/></svg><svg class="ico"><use href="#i-left"/></svg><svg class="ico"><use href="#i-right"/></svg></div>
+      <div class="url"><svg class="ico xs"><use href="#i-lock"/></svg>armoury.acme.internal/software/payments-api</div>
+      <div class="tools"><svg class="ico"><use href="#i-down"/></svg><svg class="ico"><use href="#i-share"/></svg><svg class="ico"><use href="#i-tabs"/></svg></div>
+    </div>
+
+    <div class="app list">
+      <aside class="side">
+        <div class="brand"><svg width="28" height="28"><use href="#logo"/></svg><span class="word">Armoury</span></div>
+        <nav>
+          <a><svg class="ico"><use href="#i-home"/></svg>Home</a>
+          <a class="on"><svg class="ico"><use href="#i-box"/></svg><span class="lbl">Software</span></a>
+          <a><svg class="ico"><use href="#i-flag"/></svg>Things to look at<span class="badge">3</span></a>
+          <a><svg class="ico"><use href="#i-search"/></svg>Where it's affected<span class="kbd">/</span></a>
+          <a><svg class="ico"><use href="#i-doc"/></svg>Audit reports</a>
+        </nav>
+        <hr>
+        <nav>
+          <a><svg class="ico"><use href="#i-gear"/></svg>Settings</a>
+          <a><svg class="ico"><use href="#i-help"/></svg>Help</a>
+        </nav>
+        <div class="me"><div class="avatar">TR</div><div class="who"><b>Tom Reid</b><span>Head of Engineering</span></div><svg class="ico sm"><use href="#i-chev"/></svg></div>
+      </aside>
+
+      <!-- list column -->
+      <section class="col">
+        <div class="top"><h2>Software</h2><span class="btn ghost sq" style="height:32px;width:32px"><svg class="ico sm"><use href="#i-search"/></svg></span></div>
+        <div class="search"><svg class="ico sm"><use href="#i-search"/></svg>Find software or an ingredient…</div>
+
+        <div class="group"><h3>Running</h3><span>4</span></div>
+        <div class="row sel"><div class="nm">payments-api<i>3.4.1</i></div><div class="sb">prod-eu-west · 4 copies</div><div class="chip">2 to look at</div></div>
+        <div class="row"><div class="nm">checkout-web<i>2.11.0</i></div><div class="sb">prod-eu-west</div><div class="chip ochre">1 to look at</div></div>
+        <div class="row"><div class="nm">auth-service<i>1.9.3</i></div><div class="sb">prod-eu-west</div><div class="chip rust">1 to look at</div></div>
+        <div class="row"><div class="nm">report-render<i>0.9.4</i></div><div class="sb">prod-eu-west</div><div class="chip ochre">Licence decision</div></div>
+
+        <div class="group"><h3>Shipped, not running</h3><span>2</span></div>
+        <div class="row"><div class="nm">billing-worker<i>5.0.2</i></div><div class="sb">Last ran 12 days ago</div><div class="chip">Quiet</div></div>
+        <div class="row"><div class="nm">legacy-ftp<i>0.3.1</i></div><div class="sb">Not seen running</div><div class="chip">Quiet</div></div>
+
+        <div class="add"><svg class="ico sm"><use href="#i-plus"/></svg>Add software</div>
+      </section>
+
+      <!-- detail -->
+      <section class="detail">
+        <div class="tabs">
+          <a class="on">Overview</a>
+          <a>Things to look at <span>2</span></a>
+          <a>What's inside <span>214</span></a>
+          <a>Audit trail</a>
+          <span class="gear"><svg class="ico"><use href="#i-gear"/></svg></span>
+        </div>
+
+        <div class="dhead">
+          <div>
+            <h2>payments-api <small>3.4.1</small></h2>
+            <div class="ref"><span>acme/payments-api</span><span>sha256:9f2c41…</span></div>
+            <p class="say">Running normally in 4 copies. <b>Two things to look at</b>, and one of them is urgent.</p>
+          </div>
+          <div class="acts">
+            <span class="btn ink"><svg class="ico sm"><use href="#i-flag"/></svg>Review</span>
+            <span class="btn">Get ingredients list</span>
+            <span class="btn sq"><svg class="ico sm"><use href="#i-more"/></svg></span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Info</h3>
+            <dl class="info">
+              <dt>Runs in</dt><dd>prod-eu-west/payments</dd>
+              <dt>Copies</dt><dd><span class="copies"><i></i><i></i><i></i><i></i></span>4 running</dd>
+              <dt>Built</dt><dd>3 days ago</dd>
+              <dt>Last checked</dt><dd>38 min ago</dd>
+              <dt>Ingredients</dt><dd>214 <small>· 37 chosen directly</small></dd>
+              <dt>Signed</dt><dd style="color:#1F4D3A"><svg class="ico sm"><use href="#i-shield"/></svg>Yes, verified</dd>
+            </dl>
+          </div>
+
+          <div class="card">
+            <h3>Things to look at <span>2</span><a>Open in Review <svg class="ico sm"><use href="#i-arrow"/></svg></a></h3>
+            <div class="find">
+              <div class="mk rust"><svg class="ico sm"><use href="#i-target"/></svg></div>
+              <div class="t">log4j-core <i>2.17.0</i></div>
+              <div class="d">Being attacked in the wild. Chance of attack: high. Fix: update to 2.17.2.</div>
+              <div class="x"><span class="st"><i></i>Not reviewed yet</span><span class="tag rust tiny">KEV</span><span class="id">CVE-2026-23012</span></div>
+            </div>
+            <div class="find">
+              <div class="mk ochre"><svg class="ico sm"><use href="#i-drop"/></svg></div>
+              <div class="t">netty-codec <i>4.1.100</i></div>
+              <div class="d">Low weakness, not being attacked. Chance of attack: low. A fix is available.</div>
+              <div class="x"><span class="st"><i></i>Not reviewed yet</span><span class="id">came along with spring-boot</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>What's inside <span>214 ingredients</span></h3>
+            <div class="compo"><i style="width:17.3%;background:#1F4D3A"></i><i style="width:.6%;background:#FBFAF6"></i><i style="flex:1;background:#E6EEE8"></i></div>
+            <div class="legend" style="flex-direction:row;gap:28px">
+              <div><span class="sw" style="background:#1F4D3A"></span><b>37</b> chosen directly</div>
+              <div><span class="sw" style="background:#E6EEE8;box-shadow:inset 0 0 0 1px #B9CEC2"></span><b>177</b> came along with them</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:20px">
+              <span class="tag green"><svg class="ico xs"><use href="#i-check"/></svg>All licences OK</span>
+              <span class="tag plain">Ingredients list signed</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Things to look at, last 30 days <a style="color:#646962;font-weight:400">6 → 2</a></h3>
+            <svg width="100%" height="86" viewBox="0 0 440 86" preserveAspectRatio="none">
+              <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F4D3A" stop-opacity=".12"/><stop offset="1" stop-color="#1F4D3A" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0 85.5H440" stroke="#E4E1D6"/>
+              <path d="M0,12 H70 V12 H96 V26 H170 V40 H232 V40 H260 V54 H340 V68 H360 V54 H372 V68 H440 V86 H0 Z" fill="url(#gb)"/>
+              <path d="M0,12 H96 V26 H170 V40 H260 V54 H340 V68 H360 V54 H372 V68 H436" fill="none" stroke="#1F4D3A" stroke-width="1.6"/>
+            </svg>
+            <div class="axis"><span>7 Oct</span><span>New log4j weakness found · 4 Nov</span><span>Today</span></div>
+          </div>
+
+          <div class="card full">
+            <h3>Audit trail <span>latest</span><a>Full history <svg class="ico sm"><use href="#i-arrow"/></svg></a></h3>
+            <div class="trail">
+              <div class="ev"><div class="pt"></div><b>Built and signed</b><span>3 days ago · by CI, signature verified</span></div>
+              <div class="ev"><div class="pt"></div><b>Started running in prod-eu-west</b><span>3 days ago · 4 copies</span></div>
+              <div class="ev"><div class="pt warn"></div><b>New weakness found in log4j-core</b><span>2 days ago · added to Things to look at</span></div>
+              <div class="ev"><div class="pt now"></div><b>Checked again</b><span>38 min ago · nothing new</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  </div>
+  <p class="caption">Fig. 2 — The list keeps the s.host grouping ("Running 4", "Shipped, not running 2") and the deep-green selected row. Lime appears only as a thin edge on that row. The detail opens with a one-sentence summary before any numbers.</p>
+
+  <!-- ============ 4. STATE — ALL CLEAR ============ -->
+  <div class="section-label"><span class="n">iii.</span><h2>State — all clear</h2><span class="note">Nothing needs attention today</span></div>
+  <div class="state">
+    <div class="browser small">
+      <div class="chrome" style="height:44px">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="url" style="height:28px;max-width:380px;font-size:12px"><svg class="ico xs"><use href="#i-lock"/></svg>armoury.acme.internal</div>
+        <div style="width:52px"></div>
+      </div>
+      <div class="calm">
+        <div class="mini-side">
+          <svg width="26" height="26" style="margin-bottom:18px"><use href="#logo"/></svg>
+          <div class="slot on"><svg class="ico"><use href="#i-home"/></svg></div>
+          <div class="slot"><svg class="ico"><use href="#i-box"/></svg></div>
+          <div class="slot"><svg class="ico"><use href="#i-flag"/></svg></div>
+          <div class="slot"><svg class="ico"><use href="#i-search"/></svg></div>
+          <div class="slot"><svg class="ico"><use href="#i-doc"/></svg></div>
+          <div class="gap"></div>
+          <div class="slot"><svg class="ico"><use href="#i-gear"/></svg></div>
+          <div class="slot" style="margin-top:auto"><div class="avatar" style="width:32px;height:32px;font-size:11.5px">TR</div></div>
+        </div>
+        <div class="calm-main">
+          <div class="masthead"><div class="t">The Briefing <i>No. 46</i></div><div class="d"><span class="live"></span>Monday 9 November 2026</div></div>
+
+          <!-- horizon line drawing -->
+          <svg class="horizon" viewBox="0 0 420 300" fill="none" aria-hidden="true">
+            <circle cx="268" cy="150" r="46" fill="#D4F36A"/>
+            <circle cx="268" cy="150" r="46" stroke="#1F4D3A" stroke-width="1.2"/>
+            <rect x="200" y="176.6" width="140" height="80" fill="#FBFAF6"/>
+            <path d="M176 176 H404" stroke="#1F4D3A" stroke-width="1.2"/>
+            <path d="M180 176 C200 166 214 162 230 166 C246 170 262 176 276 176" stroke="#1F4D3A" stroke-width="1.2"/>
+            <path d="M250 176 C300 156 350 152 400 164" stroke="#1F4D3A" stroke-width="1.2"/>
+            <path d="M196 196 H366 M224 212 H340 M252 228 H310" stroke="#B9CEC2" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M196 92 q6 -6 12 0 q6 -6 12 0 M228 76 q4 -4 8 0 q4 -4 8 0" stroke="#4A4F4B" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+
+          <div class="q">Are we safe?</div>
+          <h1 class="headline">Yes. <span class="hl">Nothing</span> needs you today.</h1>
+          <p class="standfirst">All 3,847 pieces of software were checked this morning. The items still open are low risk and on Priya's weekly list. Nothing is being attacked in the wild.</p>
+          <p style="font:italic 400 15px/1.5 var(--serif);color:#646962;margin-top:16px">Next briefing on Thursday. Have a good week.</p>
+
+          <div class="facts">
+            <div><b><svg class="ico" style="color:#1F4D3A"><use href="#i-check"/></svg>3,847</b><span>checked, all of them</span></div>
+            <div><b>0</b><span>being attacked in the wild</span></div>
+            <div><b><svg class="ico" style="color:#1F4D3A"><use href="#i-doc"/></svg>Ready</b><span>audit report, last 12 months</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="state-notes">
+      <h3>A quiet day should feel quiet.</h3>
+      <p>No list, no empty table, no "0 results". The briefing says plainly that there is nothing to do and when the next one will arrive.</p>
+      <ul>
+        <li><b>a</b>The lime sun is the only colour on the page. It's restful, not celebratory.</li>
+        <li><b>b</b>The facts row still shows the evidence (all checked, nothing attacked, report ready), so Priya can trust it.</li>
+        <li><b>c</b>The "Things to look at" badge disappears from the sidebar. Nothing pulls for attention.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 5. PALETTE ============ -->
+  <div class="section-label"><span class="n">iv.</span><h2>Palette and type</h2><span class="note">All text pairs meet WCAG AA (4.5:1 or better)</span></div>
+  <div class="palette">
+    <div class="swatches">
+      <div class="sw-card"><div class="chip" style="background:#FBFAF6">Aa</div><b>paper</b><code>#FBFAF6</code><span>Canvas</span></div>
+      <div class="sw-card"><div class="chip" style="background:#F4F2EA">Aa</div><b>paper-2</b><code>#F4F2EA</code><span>List column</span></div>
+      <div class="sw-card"><div class="chip" style="background:#E4E1D6">Aa</div><b>rule</b><code>#E4E1D6</code><span>Hairlines, tracks</span></div>
+      <div class="sw-card"><div class="chip" style="background:#16181A;color:#FBFAF6">Aa</div><b>ink</b><code>#16181A</code><span>Text · 17:1</span></div>
+      <div class="sw-card"><div class="chip" style="background:#646962;color:#FBFAF6">Aa</div><b>ink-3</b><code>#646962</code><span>Meta · 5.4:1</span></div>
+      <div class="sw-card"><div class="chip" style="background:#0E0F0E;color:#D9DCD5">Aa</div><b>night</b><code>#0E0F0E</code><span>Sidebar</span></div>
+      <div class="sw-card"><div class="chip" style="background:#D4F36A">Aa</div><b>lime</b><code>#D4F36A</code><span>Highlighter only</span></div>
+      <div class="sw-card"><div class="chip" style="background:#1F4D3A;color:#FFFFFF">Aa</div><b>green</b><code>#1F4D3A</code><span>Links, charts · 9.2:1</span></div>
+      <div class="sw-card"><div class="chip" style="background:linear-gradient(90deg,#F6E8DF 50%,#F5EEDA 50%)"><span style="color:#8A3B1E">Aa</span>&nbsp;<span style="color:#7A5A12">Aa</span></div><b>rust · ochre</b><code>#8A3B1E · #7A5A12</code><span>Urgent · decision</span></div>
+    </div>
+    <div class="type-row">
+      <div><div class="lab">Headlines · system serif</div><div class="s1">Yes, mostly. <span class="hl">Three things</span> need a look.</div></div>
+      <div><div class="lab">Interface · system sans</div><div class="s2">Update log4j-core to 2.17.2. It's a small change, and we re-check automatically afterwards.</div></div>
+      <div><div class="lab">Detail · system mono, ink-3</div><div class="s2" style="font-family:var(--mono);font-size:13px;color:#646962">CVE-2026-23012 · KEV<br>sha256:9f2c41…<br>acme/payments-api</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
