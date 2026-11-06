@@ -43,6 +43,13 @@
         "artifact": "_bmad-output/planning-artifacts/briefs/brief-Armoury-2026-06-11/brief.md",
         "status": "final",
         "date": "2026-06-11"
+      },
+      "synced": {
+        "title": "Product brief",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:261992cf8fa17e54",
+        "at": "2026-11-06T03:10:27+00:00"
       }
     },
     {
@@ -67,6 +74,13 @@
       "evidence": {
         "artifact": "_bmad-output/planning-artifacts/research/market-software-supply-chain-security-research-2026-06-11.md",
         "date": "2026-06-11"
+      },
+      "synced": {
+        "title": "Market research",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:f304b5948d5f157b",
+        "at": "2026-11-06T03:10:27+00:00"
       }
     },
     {
@@ -108,7 +122,14 @@
           "publication": "published",
           "id": "2d41ee6a-74d9-49f7-99d8-5d690ea266a3"
         }
-      ]
+      ],
+      "synced": {
+        "title": "PRD",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:7375293d6dc6b3f5",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "planning:ux",
@@ -145,7 +166,14 @@
           "publication": "published",
           "id": "d26288cb-c431-4b94-9332-da6805fb8526"
         }
-      ]
+      ],
+      "synced": {
+        "title": "UX design (DESIGN.md + EXPERIENCE.md)",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:095d15247721a4a4",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "planning:architecture",
@@ -183,7 +211,14 @@
           "publication": "published",
           "id": "7d5adb26-c6b1-455b-b887-4ed80ae2ed51"
         }
-      ]
+      ],
+      "synced": {
+        "title": "Architecture",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:c2ec3b35fd461ae3",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "planning:epics",
@@ -222,7 +257,14 @@
           "publication": "published",
           "id": "aead29c8-98a1-40aa-8f6f-9c1bccb299c1"
         }
-      ]
+      ],
+      "synced": {
+        "title": "Epics and stories",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:b2909ae778bd9f4f",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "planning:sprint",
@@ -261,7 +303,14 @@
           "publication": "published",
           "id": "e650c513-ad14-48fd-b6c7-6e6b675459b6"
         }
-      ]
+      ],
+      "synced": {
+        "title": "Implementation readiness + sprint planning",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:40f5666e87119e5c",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "planning:ar",
@@ -296,6 +345,13 @@
         "status": "building",
         "date": "2026-11-06",
         "not_done_because": "phase 3 build, rehearsal and score are pending"
+      },
+      "synced": {
+        "title": "Agent readiness (AR)",
+        "parent_id": null,
+        "milestone_id": null,
+        "block_digest": "sha256:1418952761b8fc21",
+        "at": "2026-11-06T03:10:27+00:00"
       }
     },
     {
@@ -595,9 +651,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "23e6f6d7-e7d3-4121-a258-27340e1fe464"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.1:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "366fa330-0504-46fc-add3-77839c5e8e88"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "story:1:1.2",
@@ -629,9 +691,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "7bfdd330-d2e8-4bea-8a0d-9d96cf840fcd"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.2:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "ecef0b13-702d-4ab9-87cc-02ef689d730c"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "story:1:1.3",
@@ -1221,9 +1289,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "bd2b34e1-3b35-4f36-a313-be4f469a8b8a"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.12:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "92f449ec-5c73-4717-9991-80730842b0cb"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "story:2:2.13",
@@ -1318,9 +1392,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "e7400995-b6a0-4693-92b0-1e2a061b1b11"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:3:3.2:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "5721558d-5763-4c24-89fd-cb73deb83dc5"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "story:3:3.3",
@@ -2645,9 +2725,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "c3cfcfca-45ae-4652-9d8a-90867383e2dd"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.1:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "cf3123b8-4037-4e84-9e2b-9ab0a7cc1f41"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "story:10:10.2",
@@ -2744,9 +2830,15 @@
           "kind": "comment",
           "publication": "published",
           "id": "77cf173c-2ba8-4072-bc43-d9dfa8f7f72f"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:10:10.4:changed:scp-2026-11-06",
+          "kind": "comment",
+          "publication": "published",
+          "id": "46d7ebf8-3aad-4408-981b-5d11b7acb106"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
     },
     {
       "key": "epic:11",
@@ -2973,7 +3065,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T1: Pin the toolchain and ignore build output",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:1310c75413c8b99d",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t2",
@@ -2996,7 +3095,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T2: Cargo workspace and agent-proto codegen",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:c1d2c57293e0b8d4",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t3",
@@ -3019,7 +3125,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T3: Minimal control-plane and agent binaries with the AGE sqlx test",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:92655bbb9ac8bd5f",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t4",
@@ -3042,7 +3155,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T4: OpenAPI generation and drift check",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:84ce6c29b815f9c3",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t5",
@@ -3065,7 +3185,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T5: SvelteKit web app with lint, svelte-check and Vitest",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:c30b5660e7b0adec",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t6",
@@ -3088,7 +3215,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T6: Umbrella Helm chart with subcharts",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:2c86a70d886fe17c",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t7",
@@ -3111,7 +3245,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T7: Aggregate check task, pin check and defect demonstration",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:559b6e947ca52ae7",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t8",
@@ -3134,7 +3275,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T8: Digest-pinned multi-stage Dockerfiles",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:930455f63ad5a626",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t9",
@@ -3157,7 +3305,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T9: Skaffold kind dev loop and Playwright smoke test",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:15a331bbe2fe77ed",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t10",
@@ -3180,7 +3335,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T10: CI and image build workflows",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:38c5a4de90482457",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     },
     {
       "key": "task:story:1:1.1:t11",
@@ -3203,7 +3365,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [],
+      "synced": {
+        "title": "Task T11: AGENTS.md and README.md",
+        "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:e65c474cc17d2def",
+        "at": "2026-11-06T03:10:27+00:00"
+      }
     }
   ],
   "workspace": {

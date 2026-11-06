@@ -130,14 +130,14 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 **Delivery, CI, observability**
 
 - ARCH22: Helm umbrella chart with control-plane and agent subcharts, images referenced by digest; Postgres-AGE and SeaweedFS bundled by default, external DB/S3 opt-in; values cover the air-gap flag, OIDC, retention and connections. The SPA is served by the control plane.
-- ARCH23: CI/CD on GitHub Actions, installing mise (`jdx/mise-action`, pinned by commit) and running the same mise tasks as local — `ci.yml` (`mise run check`: rustfmt, `clippy -D warnings`, `cargo nextest`, web lint/tests, API drift), `build.yml` (build both images and package the chart on each push; push to GHCR by digest on `main`) and `release.yml` (reuse the built digests; release tags, SLSA provenance, keyless cosign signatures and SBOM attestations for images, charts and the CLI); a scheduled `bundles.yml` builds the Armoury-published feed bundles and signs them and their SLSA provenance with the KMS bundle key (Story 10.2).
+- ARCH23: CI/CD on GitHub Actions, installing mise (`jdx/mise-action`, pinned by commit) and running the same mise tasks as local; untrusted code (fork pull requests) runs only the fast tier on GitHub-hosted runners, and the full gate, end-to-end tests and image builds run on ARC self-hosted runners in the dev cluster — `ci.yml` (`mise run check`: rustfmt, `clippy -D warnings`, `cargo nextest`, web lint/tests, API drift), `build.yml` (build both images and package the chart on each push; push to GHCR by digest on `main`) and `release.yml` (reuse the built digests; release tags, SLSA provenance, keyless cosign signatures and SBOM attestations for images, charts and the CLI); a scheduled `bundles.yml` builds the Armoury-published feed bundles and signs them and their SLSA provenance with the KMS bundle key (Story 10.2).
 - ARCH24: Observability — Prometheus `/metrics`, pull-only; structured `tracing` JSON logs that never contain credentials or full SBOM payloads; no in-product notifications.
 
 **Code & test patterns (apply to every story)**
 
 - ARCH25: Locality of Behaviour — module-by-capability (`inventory`, `ciscan`, `feeds`, `scan`, `reeval`, `enrichment`, `ranking`, `triage`, `license`, `posture`, `blastradius`, `graph`, `evidence`, `packs`, `signing`, `metrics`, `auth`, `agentgw`, `tools`, `postgres`, `blob`, `httpapi`); max 3 layers; explicit dependencies wired only in `main.rs`; no globals/singletons; traits only at the third occurrence; one `thiserror` enum per capability; no `unwrap`/`expect` outside tests/startup; no `unsafe`; no `utils/`/`helpers/`/`common/`; files 100–400 lines.
 - ARCH26: Frontend — TanStack `svelte-query` for server state, Svelte 5 runes for local state, components co-located with their routes, shadcn-svelte primitives in `lib/components/ui`, and a table equivalent for every graph view.
-- ARCH27: Tests co-located — `cargo nextest` + `#[sqlx::test]` against `apache/age:release_PG18_1.8.0` (in `mise run check` and as a CI service container); agent tested against a mocked kube client plus a kind cluster in CI; Vitest + Playwright (`web/e2e/`, `mise run e2e` against the Skaffold deployment) for the SPA.
+- ARCH27: Tests co-located — `cargo nextest` + `#[sqlx::test]` against `apache/age:release_PG18_1.8.0`, pinned by digest, which runs as a Pod in the dev cluster (`mise run check` reaches it by port-forward locally and by Service DNS on ARC runners; no local database); agent tested against a mocked kube client plus an integration test in a temporary dev-cluster namespace in CI; Vitest + Playwright (`web/e2e/`, `mise run e2e` against the Skaffold deployment) for the SPA.
 
 **Validation & open decisions**
 
@@ -150,7 +150,7 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 - ARCH31: **All scanning on the server** (NFR12, governing principle). Syft, Grype, Grant, license policy, the CI policy and every other check run only in the control plane with the fleet tool versions and configuration. A CI runner, a cluster agent or any other client only identifies an artifact or supplies its bytes; the server never uses a client-computed SBOM, finding, license result or verdict. Overrides any conflicting statement.
 - ARCH32: **Evidence history tables.** Each evidence-bearing table has a current table and an insert-only history table (`valid_from`/`valid_to`), partitioned by month on `valid_to` (the ledger by entry time), filled only by a database trigger on update or delete; each version closes when the next starts, so versions cannot overlap (no `WITHOUT OVERLAPS`, which checks only inside one partition). Rule 1: a version is written only on content change; a re-evaluation writes one run entry instead of re-versioning unaffected rows. Rule 2: a coverage test requires every table in every application schema to have a history table or an explicit "not evidence" marker. Each change appends a ledger entry with the digest of the new version; events that are themselves the fact keep their full content in the entry; large content stays content-addressed in the object store. No credentials or secrets in ledger or history (tested). The AGE graph shows current state only.
 - ARCH33: **Long-operation API pattern, polling.** `POST /api/v1/<operations>` returns at once with `id`, `status` (`running`/`completed`/`failed`), `progress`, partial results, `provenance` and a result cursor; `GET /api/v1/<operations>/{id}` returns the same shape. The SPA polls with svelte-query (about 1 s for operations, about 10 s for the Posture summary while backlog exists), only while work is queued or running. No SSE in v1. `ponytail:` partial blast-radius results live in memory about 10 minutes (single instance); upgrade path PostgreSQL.
-- ARCH34: **Images, chart build and dev loop.** Multi-stage Dockerfiles (control plane with SPA; agent binary only, no scanner tools; base images pinned by digest); `build.yml` builds both images and the chart and pushes to GHCR by digest on `main`; `skaffold.yaml` (pinned Skaffold) with the Helm deployer (`setValueTemplates`, `repo:tag@digest`) and a `kind` profile with port-forwarding is the development loop (PROC3). Customers install the published chart with one `helm install`. `ponytail:` slow Rust rebuilds — debug dev profile and a cached dependency layer; upgrade path a remote build cache.
+- ARCH34: **Images, chart build and dev loop.** Multi-stage Dockerfiles (control plane with SPA; agent binary only, no scanner tools; base images pinned by digest); `build.yml` builds both images and the chart and pushes to GHCR by digest on `main`; `skaffold.yaml` (pinned Skaffold) with the Helm deployer (`setValueTemplates`, `repo:tag@digest`) is the development loop (PROC3): `mise run dev` builds both images on the in-cluster BuildKit (rootless, mTLS, through a pinned `buildx`), pushes them to the dev registry (`SKAFFOLD_DEFAULT_REPO`), deploys to the developer's namespace in the dev cluster with an explicit kube context, and port-forwards the UI and API to `localhost:8080`. A `ci` profile deploys to a temporary namespace from ARC runners. No local container runtime or local cluster is used (amended 2026-11-06). Customers install the published chart with one `helm install` (Helm 4). `ponytail:` slow Rust rebuilds — debug dev profile and a cached dependency layer; upgrade path a remote build cache.
 - ARCH35: **Connectors and renderers.** Registry access with the `oci-client` crate; discovery modes (PROC2): catalog (default), provider API (ECR, Artifact Registry, Docker Hub), repository list. Package archives are downloaded, checksum-checked against the feed, unpacked safely (no path traversal, no links outside the folder) and SBOM'd with `syft dir:<path>` (`syft file:<path>` for JAR files); an archive without a lock file gives the package itself, not exact dependency versions, shown as a caveat. PDFs are rendered by Typst, a pinned static binary run through `tools`, with the bundled fonts.
 - ARCH36: **CI scan path (FR31).** `armoury scan` is a subcommand of the `armoury` binary with no scanner inside. Digest mode (default): the CLI sends the image digest and build details declared by CI; the server pulls the image by digest from the connected registry. Upload mode: the CLI uploads the built image or package archive (never source); the server computes the digest itself. CI scans run through the same pipeline at a higher queue priority. The server decides the verdict with the versioned fleet CI policy (default: report only); the CLI cannot change it. Exit codes `0` pass, `1` policy failure, `2` no verdict. Artifact identity is the image digest, or package coordinates plus archive checksum; a known artifact gets a new source record, not a duplicate. A scoped CI token (not a user) authenticates the step. Accepted limit: a pipeline can skip the step; central discovery still scans connected registries.
 - ARCH37: **Optional Rekor anchoring of ledger checkpoints** (decided by Daniel, 2026-11-05). Setting `rekor.anchoring.mode`: `disabled` (default), `external` (a Rekor URL and its public key; the public `rekor.sigstore.dev` or a Rekor that another team runs) or `bundled` (the chart deploys `rekor-tiles` with the POSIX backend on its own volume; no witness is required, an optional witness policy is a value). Chart comments recommend `external`. After each signed checkpoint, `signing` submits only the checkpoint digest, its signature and the public key as a `hashedrekord` entry and appends the returned inclusion proof to the ledger. Known limit: Rekor v2 returns no signed timestamp, so detection of a full rebuild that is re-anchored depends on an earlier receipt (for example in an evidence pack) or on a monitor of the log; an RFC 3161 timestamp authority is a later option.
@@ -158,7 +158,7 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 **Process constraint (project workflow, not architecture)**
 
 - PROC2: **Offer options rather than forcing one approach, with smart defaults** (Daniel, 2026-11-04). Where more than one valid approach is available and supportable — scopes, formats, modes, sources, weights — make it a configurable option instead of picking one for the user. Every option has a smart default, so a default install needs no configuration at all; options are there for users who go looking for them, never a required setup step (protects NFR1). Stories record the default and the alternatives.
-- PROC3: **Skaffold runs during every development step** (Daniel, 2026-11-05). Every development step starts with `skaffold dev -p kind` running and deploying continuously. The story's changes are checked against that live deployment as well as by `mise run check`. If the loop is not running or the deployment is not healthy, fix that before you write code. Applies to every story after Story 1.1, which creates the loop; `AGENTS.md` states this rule.
+- PROC3: **Skaffold runs during every development step** (Daniel, 2026-11-05). Every development step starts with `mise run dev` (Skaffold `dev` on the dev cluster) running and deploying continuously (amended 2026-11-06). The story's changes are checked against that live deployment as well as by `mise run check`. If the loop is not running or the deployment is not healthy, fix that before you write code. Applies to every story after Story 1.1, which creates the loop; `AGENTS.md` states this rule.
 - PROC1: The scaffold story is readiness-enabling work. Agent Readiness (Linear INF-12) runs after it and must be ready before product stories start Build (the `bmad-build` / `bmad-code-review` readiness gate).
 
 ### UX Design Requirements
@@ -337,9 +337,10 @@ So that every later story — and Agent Readiness — has a real codebase, toolc
 **Then** multi-stage Dockerfiles build the control-plane image (`armoury` binary plus the SPA build) and the agent image (`armoury-agent` only, no scanner tools), with base images pinned by digest (ARCH34).
 **And** the dev loop uses a debug build profile and a cached dependency layer (for example `cargo-chef`), so a code change redeploys without a full dependency rebuild; a `ponytail:` comment records the ceiling (slow Rust rebuilds) and the upgrade path (a remote build cache).
 
-**Given** a developer workstation with mise installed
-**When** `skaffold dev -p kind` runs
-**Then** it builds both images, deploys the chart to a local kind cluster with the images as `repo:tag@digest`, port-forwards the UI and API, and redeploys after a code change (ARCH34, PROC3).
+**Given** a developer workstation with mise and access to the dev cluster (kube context, in-cluster BuildKit, dev registry)
+**When** `mise run dev` runs
+**Then** Skaffold builds both images on the in-cluster BuildKit, pushes them to the dev registry, deploys the chart to the developer's namespace with the images as `repo:tag@digest`, port-forwards the UI and API to `localhost:8080`, and redeploys after a code change (ARCH34, PROC3)
+**And** no image build, database or cluster runs on the workstation.
 
 **Given** the Skaffold deployment
 **When** `mise run e2e` runs
@@ -347,15 +348,15 @@ So that every later story — and Agent Readiness — has a real codebase, toolc
 
 **Given** a push or pull request
 **When** `.github/workflows/ci.yml` runs
-**Then** it installs mise with `jdx/mise-action` (pinned by commit), runs the same `mise run check` gate as local and fails on the same conditions.
+**Then** it installs mise with `jdx/mise-action` (pinned by commit), runs the fast tier on GitHub-hosted runners for every event, and runs the full `mise run check` gate and `mise run e2e` on ARC runners in the dev cluster for pushes and same-repository pull requests; a fork pull request never reaches an ARC runner, and a required gate job fails unless every tier passed (ARCH23).
 
 **Given** a push
 **When** `.github/workflows/build.yml` runs
-**Then** it builds both images and packages the chart; on `main` it pushes them to GHCR (`ghcr.io`) by digest (ARCH23, ARCH34).
+**Then** it builds both images on the in-cluster BuildKit from an ARC runner and packages the chart; on `main` it pushes them to GHCR (`ghcr.io`) by digest (ARCH23, ARCH34).
 
 **Given** the repository root
 **When** an agent or developer opens it
-**Then** a `CLAUDE.md`/`AGENTS.md` states the Locality of Behaviour rules and layout from the architecture (ARCH25) and PROC3 (keep `skaffold dev -p kind` running during every development step), and `README.md` documents the init, check, e2e and dev-loop commands.
+**Then** `AGENTS.md` (no `CLAUDE.md`) states the Locality of Behaviour rules and layout from the architecture (ARCH25) and PROC3 (keep `mise run dev` running during every development step), and `README.md` documents the init, check, e2e and dev-loop commands and the dev-cluster prerequisites.
 
 ### Story 1.2: Install the control plane with one Helm command, durable storage included
 
@@ -373,9 +374,9 @@ So that I get a running control plane without tickets to the platform team.
 **And** for the bundled database the chart creates both logins (`armoury_owner`, `armoury_app`) and the AGE extension, with passwords in two Secrets; the control-plane pod mounts only the `armoury_app` Secret
 **And** the bundled database is `apache/age:release_PG18_1.8.0`, pinned by digest (ARCH2).
 
-**Given** the Skaffold `kind` profile from Story 1.1
-**When** `skaffold run -p kind` deploys the chart
-**Then** the install, durability and same-origin checks in this story run against that deployment, so they exercise the built images, not placeholders (ARCH34).
+**Given** the Skaffold `ci` profile from Story 1.1
+**When** it deploys the chart into a fresh, uniquely named namespace of the dev cluster (from an ARC runner in CI, or with `mise run` locally)
+**Then** the install, durability and same-origin checks in this story run against that deployment, so they exercise the built images, not placeholders, and the namespace is deleted afterwards (ARCH34).
 
 **Given** the job queue (`riverqueue =0.5.0`, ARCH4)
 **When** a test enqueues a job inside a database transaction and commits
@@ -393,7 +394,7 @@ So that I get a running control plane without tickets to the platform team.
 
 **Given** the install with `airGapped: true`
 **When** the control plane runs
-**Then** it makes no outbound network connections (verified by a network-policy or egress-capture test), and the air-gap mode is exposed read-only via the API (NFR4, ARCH19).
+**Then** it makes no outbound network connections (verified by a network-policy or egress-capture test, in a namespace of the dev cluster whose CNI enforces NetworkPolicy egress rules), and the air-gap mode is exposed read-only via the API (NFR4, ARCH19).
 
 **Given** the control plane is running
 **When** a browser requests `/`
@@ -935,10 +936,11 @@ So that NFR1 is a checked product gate, not a claim.
 
 **Acceptance Criteria:**
 
-**Given** a kind cluster and a seeded test registry
-**When** the scripted run deploys the chart with the Skaffold `kind` profile (ARCH34), then times the customer steps — bootstrap sign-in and registry connection — with no other manual step
+**Given** a fresh, uniquely named namespace in the dev cluster and a seeded test registry
+**When** the scripted run deploys the chart into that namespace with Skaffold (ARCH34), then times the customer steps — bootstrap sign-in and registry connection — with no other manual step
 **Then** Posture is live and visibly populating (populating banner, coverage co-stat, coverage-gap rows) in under 30 minutes, with the elapsed time per step recorded (NFR1)
-**And** the script fails if any step needs input beyond the documented values and credentials.
+**And** the script fails if any step needs input beyond the documented values and credentials
+**And** the script deletes the namespace when it finishes, pass or fail.
 
 **Given** the run
 **When** it completes
@@ -1049,7 +1051,7 @@ So that I can install it in prod without asking for cluster-admin.
 
 **Given** the agent
 **When** it is tested
-**Then** unit tests run against a mocked kube client and an integration test runs against a kind cluster in CI (ARCH27).
+**Then** unit tests run against a mocked kube client and an integration test runs in a temporary namespace of the dev cluster on an ARC runner in CI, with the agent's own read-only ClusterRole, asserting only on workloads in its namespace (ARCH27).
 
 ### Story 3.3: Reconnect by stateless re-derive, without storms
 
@@ -2276,8 +2278,9 @@ So that I can verify what I install came from Armoury's own build.
 **Then** they give copyable `cosign verify` and `cosign verify-attestation` commands with the expected identity and issuer.
 
 **Given** Armoury's own images
-**When** the release workflow installs the release in a kind cluster, connects that instance to GHCR as a registry and lets it scan the release images
-**Then** the result is published with the release, so Armoury reports on itself the same way it reports on a customer fleet.
+**When** the release workflow installs the release in a temporary namespace of the dev cluster from an ARC runner, connects that instance to GHCR as a registry and lets it scan the release images
+**Then** the result is published with the release, so Armoury reports on itself the same way it reports on a customer fleet
+**And** the namespace is deleted when the run finishes.
 
 ### Story 10.2: Armoury-published signed feed bundles
 
@@ -2336,7 +2339,7 @@ So that "air-gapped is first-class" is a checked fact, not a claim.
 
 **Acceptance Criteria:**
 
-**Given** a kind cluster with all egress blocked except to an internal registry and an internal package feed
+**Given** a temporary namespace of the dev cluster with a default-deny egress NetworkPolicy that allows only an internal registry and an internal package feed (the cluster CNI enforces and logs egress policy)
 **When** the scripted run installs the control plane and agent from the mirror, signs in with the bootstrap admin, connects the registry and feed, and imports a bundle
 **Then** Posture populates with findings, enrichment and runtime coverage within the 30-minute gate, with each step timed (NFR1, NFR4, UJ-1)
 **And** the run records every attempted outbound connection and fails if any goes beyond the allowed internal endpoints.

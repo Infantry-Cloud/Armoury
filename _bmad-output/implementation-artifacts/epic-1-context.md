@@ -27,7 +27,7 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
 - **Accessibility:** WCAG 2.2 AA as a contractual floor. Full keyboard operation with visible focus rings and tab order that follows reading order. Polite `aria-live` announcements. Global `prefers-reduced-motion`. State is never shown by colour alone.
 - **Platform:** ≥1280px is the primary width. 1024–1279px degrades tolerantly. Below 1024px is best-effort read-only. Web only, last two versions of evergreen browsers.
 - **Configurable with smart defaults:** where several valid approaches exist, make the choice a setting with a default, so a default install needs no configuration. Record the default and the alternatives in the story.
-- **Dev loop rule:** after Story 1.1, `skaffold dev -p kind` must run and be healthy during every development step. Check changes against the live deployment and with `mise run check`. Story 1.1 is readiness-enabling: Agent Readiness must be ready before Stories 1.2+ start Build.
+- **Dev loop rule:** after Story 1.1, `mise run dev` (Skaffold on the dev cluster) must run and be healthy during every development step. Check changes against the live deployment and with `mise run check`. Story 1.1 is readiness-enabling: Agent Readiness must be ready before Stories 1.2+ start Build.
 
 ## Technical Decisions
 
@@ -38,9 +38,9 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
   - `mise.toml` pins every tool, and tasks are mise file tasks in `mise-tasks/`. All versions are pinned and lockfiles committed; nothing uses `latest`.
 - **Gate:**
   - `mise run check` runs rustfmt, `clippy -D warnings`, `cargo nextest`, web lint, `svelte-check`, Vitest and the API drift check.
-  - `#[sqlx::test]` runs against `apache/age:release_PG18_1.8.0`, pinned by digest.
+  - `#[sqlx::test]` runs against `apache/age:release_PG18_1.8.0`, pinned by digest, as a Pod in the dev cluster. No database, image build or cluster runs on the workstation.
   - `mise run e2e` runs Playwright against the Skaffold deployment.
-  - CI (`ci.yml`) installs mise with `jdx/mise-action`, pinned by commit, and runs the same tasks. `build.yml` builds the images and chart on every push and pushes them to GHCR by digest on `main`.
+  - CI (`ci.yml`) installs mise with `jdx/mise-action`, pinned by commit, and runs the same tasks. Fork pull requests run only the fast tier on GitHub-hosted runners; the full gate and e2e run on ARC runners in the dev cluster. `build.yml` builds the images and chart on every push and pushes them to GHCR by digest on `main`.
 - **Images:** multi-stage Dockerfiles with base images pinned by digest. The control-plane image holds `armoury` and the SPA. The agent image holds only `armoury-agent`, with no scanners. The dev profile uses a debug build and a cached dependency layer (e.g. `cargo-chef`), with a `ponytail:` note that a remote build cache is the upgrade path.
 - **OpenAPI-first:**
   - `api/openapi.yaml` is the contract. `mise run gen:api` generates the Rust server types with `openapi-generator` (rust-axum, run from its pinned container image so no local Java is needed) and the TS client with `openapi-typescript` + `openapi-fetch`.
@@ -74,7 +74,7 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
   - No globals or singletons, no `utils/`/`helpers/`/`common/`, and traits only at the third occurrence. One `thiserror` enum per capability, and `anyhow` only in `main`.
   - No `unwrap`/`expect` outside tests and startup, and no `unsafe`. Files are 100–400 lines, each opening with a one-line purpose comment.
   - Logs are structured `tracing` JSON and never contain credentials.
-  - `AGENTS.md`/`CLAUDE.md` states these rules and the dev-loop rule.
+  - `AGENTS.md` states these rules and the dev-loop rule. There is no `CLAUDE.md`.
 - **Frontend:**
   - Server state uses TanStack `svelte-query` over the generated client, and local state uses Svelte 5 runes.
   - Components live with their routes. Only shared shadcn-svelte primitives go in `lib/components/ui`.
@@ -138,7 +138,7 @@ Sketch of the API shapes (illustrative only; the field names are the ones above)
 ## Cross-Story Dependencies
 
 - **Story 1.1 comes first.** It provides the gate, the generated API client, Playwright, Dockerfiles and Skaffold. Agent Readiness (INF-12) must pass after it, before any other story starts Build.
-- **Story 1.2** needs the 1.1 images and kind profile. Its install, durability and same-origin tests run against `skaffold run -p kind`.
+- **Story 1.2** needs the 1.1 images and the Skaffold `ci` profile. Its install, durability and same-origin tests run in a fresh dev-cluster namespace.
 - **Stories 1.3 → 1.4:** 1.4 builds on the 1.3 sessions and the error envelope.
 - **Stories 1.5 → 1.6 → 1.8:**
   - 1.5 provides the preference API.

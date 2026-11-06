@@ -2,7 +2,7 @@
 title: 'Story 1.1: Monorepo scaffold with an aggregate local gate and CI'
 type: 'chore'
 created: '2026-11-06'
-status: 'ready-for-dev'
+status: 'draft'
 route: 'dispatch'
 review_loop_iteration: 0
 story_key: '1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci'
@@ -170,6 +170,8 @@ The repository has no code yet. Everything below is new, except where noted.
 ## Implementation Notes
 
 ## Spec Change Log
+
+- 2026-11-06 — Correct Course `_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md` (approved by Daniel): the dev loop and CI move from kind on local Podman to the dev cluster (in-cluster BuildKit, dev registry, AGE as a cluster Pod, ARC runners), Helm 4, and `mise run dev` replaces `skaffold dev -p kind`. The epics.md source for Story 1.1 changed (dev loop, ci.yml, build.yml, AGENTS.md ACs). Status set to `draft` so Build re-plans and repeats CHECKPOINT 1. Frozen-block edits still need Daniel's approval in that re-plan. Affected: OQ-1, Assumptions, AC-8, AC-10, AC-11, AC-12, VAL-9, VAL-11, Code Map. The contract was never approved, so it stays at Revision 1.
 
 ## Review Triage Log
 

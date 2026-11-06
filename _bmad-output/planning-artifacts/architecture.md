@@ -110,11 +110,11 @@ Guiding principle (from project memory): **API-first** — the UI, future MCP se
 - **Backend — Rust, no framework starter.** _Changed from Go on 2026-11-01 (Daniel: more confident with Rust for AI-driven development; the compiler catches more agent mistakes)._ `axum` on `tokio` — a thin router, not a heavyweight framework — producing a lean static (musl) binary for air-gapped Helm delivery. API-first via an OpenAPI contract with generated server types + typed TS client for the SPA. Consequence: the Go OSS substrate is no longer callable in-process — see **Substrate Integration**.
 - **Cluster agent — `kube-rs` (`kube` + `kube-runtime` watchers/reflectors), no CRDs.** NFR9 makes the agent a read-only watch/list reporter, not a CRD-owning operator, so no operator framework is needed.
 - **Monorepo tooling — Cargo workspace + a task runner.** Root `Cargo.toml` workspace spanning `control-plane`, `agent`, and a shared `agent-proto` crate (agent↔CP protocol types), the SPA under `web/`, charts under `charts/`, driven by **mise** — `mise.toml` pins every tool, and tasks are mise file tasks in `mise-tasks/` (`mise run check`, `mise run e2e`, `mise run gen:api`). Rejected Nx/Turborepo — JS-centric, poor Rust fit. _Taskfile replaced by mise on 2026-11-05 (Daniel)._
-- **Images, chart build and the dev loop (2026-11-05, Daniel).** Multi-stage Dockerfiles for `control-plane` and `agent` (base images pinned by digest). A GitHub Actions pipeline (`build.yml`) builds the official images and packages the chart on each push, and pushes them to GHCR by digest on `main`. **Skaffold** is the development loop: `skaffold dev -p kind` builds both images, deploys the chart to a local kind cluster with the Helm deployer (`setValueTemplates`, images as `repo:tag@digest`) and redeploys on each change (PROC3). Customers still install the published chart with one `helm install`. `ponytail:` Rust image rebuilds are slow; the dev profile uses a debug build and a cached dependency layer (for example `cargo-chef`). Upgrade path: a remote build cache.
+- **Images, chart build and the dev loop (2026-11-05, Daniel).** Multi-stage Dockerfiles for `control-plane` and `agent` (base images pinned by digest). A GitHub Actions pipeline (`build.yml`) builds the official images and packages the chart on each push, and pushes them to GHCR by digest on `main`. **Skaffold** is the development loop: `mise run dev` runs Skaffold, which builds both images on the in-cluster BuildKit (rootless, mTLS, pinned `buildx`), pushes them to the dev registry, deploys the chart to the developer's namespace in the dev cluster with the Helm deployer (`setValueTemplates`, images as `repo:tag@digest`) and redeploys on each change (PROC3). No local container runtime or cluster is used (amended 2026-11-06). Customers still install the published chart with one `helm install`. `ponytail:` Rust image rebuilds are slow; the dev profile uses a debug build and a cached dependency layer (for example `cargo-chef`). Upgrade path: a remote build cache.
 
 ### Selected Stack & Scaffold
 
-**Versions (current as of 2026-06 — pin at init, not hardcoded forever):** Rust stable (2024 edition) · Svelte 5 / SvelteKit 2 / Vite / Tailwind v4 · shadcn-svelte (latest, runes-native) · `@xyflow/svelte` v1.6.x · `kube-rs` · `tonic` · `sqlx` · Helm 3 · pinned Syft/Grype/Grant/cosign CLIs.
+**Versions (current as of 2026-06 — pin at init, not hardcoded forever):** Rust stable (2024 edition) · Svelte 5 / SvelteKit 2 / Vite / Tailwind v4 · shadcn-svelte (latest, runes-native) · `@xyflow/svelte` v1.6.x · `kube-rs` · `tonic` · `sqlx` · Helm 4 · pinned Syft/Grype/Grant/cosign CLIs.
 
 **Initialization commands (these become the first implementation story):**
 
@@ -146,9 +146,9 @@ cargo new agent-proto --lib
 helm create charts/armoury           # then strip to control-plane + agent subcharts
 
 # --- toolchain, tasks, images and dev loop (amended 2026-11-05) ---
-# mise.toml pins rust, node, helm, kind, skaffold and the other tools; tasks live in mise-tasks/
+# mise.toml pins rust, node, helm, buildx, kubectl, skaffold and the other tools; tasks live in mise-tasks/
 # control-plane/Dockerfile (armoury + SPA build), agent/Dockerfile (armoury-agent only)
-# skaffold.yaml: artifacts control-plane + agent, Helm deployer, profile `kind`, portForward UI + API
+# skaffold.yaml: artifacts control-plane + agent, Helm deployer, profiles `dev` and `ci`, portForward UI + API
 # .github/workflows/ci.yml (mise run check), build.yml (images + chart → ghcr.io by digest on main)
 # web: npm i openapi-fetch @tanstack/svelte-query && npm i -D openapi-typescript @playwright/test
 # mise run gen:api: openapi-generator (pinned container image, no local Java) + openapi-typescript
@@ -160,7 +160,7 @@ helm create charts/armoury           # then strip to control-plane + agent subch
 - **Styling:** Tailwind v4 + shadcn-svelte (owned components, copied in); design tokens map straight onto the DESIGN.md theme system (Forge/High-Signal/Gunmetal).
 - **Build tooling:** Vite (via SvelteKit) for the SPA; Cargo for binaries; mise tasks (`mise-tasks/`) orchestrate the monorepo; Skaffold builds and deploys for development; GitHub Actions builds the official images and chart.
 - **Code organization:** `web/` · `control-plane/` · `agent/` · `charts/` · shared crates via the Cargo workspace; OpenAPI spec as the API source of truth.
-- **Testing/Dev:** Vitest + Playwright (SPA); `cargo nextest` + `#[sqlx::test]` (per-test Postgres DB) for the control plane; `#[sqlx::test]` runs against `apache/age:release_PG18_1.8.0` (pinned by digest) in `mise run check` and as a CI service container; agent unit-tested against a mocked `kube` client and integration-tested against a kind cluster in CI; Playwright e2e (`mise run e2e`) runs against the Skaffold deployment. Development loop: `skaffold dev -p kind` runs and redeploys continuously while code is written (PROC3).
+- **Testing/Dev:** Vitest + Playwright (SPA); `cargo nextest` + `#[sqlx::test]` (per-test Postgres DB) for the control plane; `#[sqlx::test]` runs against `apache/age:release_PG18_1.8.0` (pinned by digest) as a Pod in the dev cluster, used by `mise run check` locally (port-forward) and on ARC runners; agent unit-tested against a mocked `kube` client and integration-tested in a temporary dev-cluster namespace in CI; Playwright e2e (`mise run e2e`) runs against the Skaffold deployment. Development loop: `mise run dev` runs and redeploys continuously while code is written (PROC3).
 
 **Note:** Repo + scaffold initialization (above) should be the first implementation story.
 
@@ -198,7 +198,7 @@ helm create charts/armoury           # then strip to control-plane + agent subch
 - **Delivery:** Helm **umbrella chart + subcharts** (control-plane, agent), bundling Postgres-AGE + SeaweedFS by default, **external DB/S3 opt-in**; `adapter-static` SPA served by the control plane.
 - **Air-gap:** instance-mode flag reshaping feed ingress, enrichment ingress, and signing paths (architectural axis, not a feature).
 - **CI client (FR31, decided 2026-11-05):** the `armoury` binary is also published as a standalone CLI for Linux and macOS (x86-64, arm64) as GitHub Release files, each with a checksum, a cosign signature and SLSA provenance. It contains no scanners (NFR12). The GitHub Action lives in `action/` in this repository and uses the same version tags; it downloads the CLI and verifies the checksum and signature before it runs `armoury scan`. A separate Marketplace repository can come later.
-- **CI/CD:** GitHub Actions, all jobs installing mise (`jdx/mise-action`, pinned by commit) and running the same mise tasks as local. `ci.yml` runs `mise run check`; `build.yml` builds the images and packages the chart on each push and pushes them to GHCR by digest on `main`; `release.yml` reuses those digests and adds release tags, **SLSA provenance + keyless cosign signatures** and SBOM attestations for images, charts and the CLI (NFR7). A scheduled `bundles.yml` builds, signs and attests the Armoury-published feed bundles (Story 10.2).
+- **CI/CD:** GitHub Actions, all jobs installing mise (`jdx/mise-action`, pinned by commit) and running the same mise tasks as local. Fork pull requests run only the fast tier on GitHub-hosted runners; the full gate, e2e and image builds run on ARC self-hosted runners in the dev cluster (amended 2026-11-06). `ci.yml` runs `mise run check`; `build.yml` builds the images and packages the chart on each push and pushes them to GHCR by digest on `main`; `release.yml` reuses those digests and adds release tags, **SLSA provenance + keyless cosign signatures** and SBOM attestations for images, charts and the CLI (NFR7). A scheduled `bundles.yml` builds, signs and attests the Armoury-published feed bundles (Story 10.2).
 - **Observability:** Prometheus `/metrics`, pull-only (FR20); no in-product notifications. _(Amended 2026-11-05.)_ Armoury does not define "new": the counter `armoury_findings_created_total{severity, kev}` increases when a finding appears or becomes KEV-listed, and the gauge `armoury_findings_open{severity, kev, triage_status}` gives open counts. Alerts compute "new" in Prometheus (for example `increase(...[1h]) > 0`). Labels stay bounded; never per artifact or per CVE.
 - **Vendor VEX matching (FR15, amended 2026-11-05):** exact identifiers only, in this order: image digest; purl with version; purl without version. No fuzzy name or CPE matching. A statement with no fleet match is stored and shown as "no fleet match". Each applied match records the rule that matched.
 
@@ -279,7 +279,7 @@ Syft, Grype, Grant and cosign are Go with no Rust bindings, so the control plane
 
 ## Implementation Patterns & Consistency Rules
 
-**Primary organizing principle: Locality of Behaviour** — everything that changes together lives together. Organize by capability/domain, never by technical layer. Shallow abstractions (max 3 layers), explicit dependencies, rule-of-three before extraction. (Mirrors the project CLAUDE.md to be generated.)
+**Primary organizing principle: Locality of Behaviour** — everything that changes together lives together. Organize by capability/domain, never by technical layer. Shallow abstractions (max 3 layers), explicit dependencies, rule-of-three before extraction. (Mirrors the project `AGENTS.md`; there is no `CLAUDE.md`.)
 
 ### Critical Conflict Points Identified
 
@@ -381,10 +381,10 @@ Wrapping every response in `{data}`; offset pagination on fleet tables; free-str
 ```
 armoury/
 ├── Cargo.toml                    # workspace: control-plane, agent, agent-proto
-├── mise.toml                     # pinned tool versions (Rust, Node, Helm, kind, Skaffold, …)
+├── mise.toml                     # pinned tool versions (Rust, Node, Helm, buildx, Skaffold, …)
 ├── mise-tasks/                   # mise file tasks: check, e2e, gen/api, image, … (`mise run <task>`)
-├── skaffold.yaml                 # dev loop: build both images, Helm deploy to kind (PROC3)
-├── CLAUDE.md                     # LoB rules (generated from Daniel's template)
+├── skaffold.yaml                 # dev loop: build both images, Helm deploy to the dev cluster (PROC3)
+├── AGENTS.md                     # LoB rules, layout, PROC3 (no CLAUDE.md)
 ├── README.md
 ├── .github/workflows/
 │   ├── ci.yml                    # mise run check (Rust fmt/clippy/nextest, web, API drift)
@@ -535,7 +535,7 @@ inventory (SBOM via blob)
 - ~~FR23 retention enforcement + SBOM compaction~~ — **closed 2026-11-04/05:** see Data Architecture → Evidence history and Retention.
 - Air-gapped _enrichment_ bundle format (R8 covers feeds; enrichment sources need the same offline path). _Open — Story 4.5 amendment._
 
-**Process rules** (project workflow, recorded in `epics.md`, not architecture): PROC1 (Agent Readiness after the scaffold), PROC2 (offer options with smart defaults), PROC3 (`skaffold dev -p kind` runs continuously during every development step).
+**Process rules** (project workflow, recorded in `epics.md`, not architecture): PROC1 (Agent Readiness after the scaffold), PROC2 (offer options with smart defaults), PROC3 (`mise run dev` runs continuously during every development step).
 
 ### Architecture Completeness Checklist
 
