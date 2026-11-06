@@ -278,14 +278,25 @@
         "story:1:1.1"
       ],
       "done_when": "docs/agent-readiness.md ready at agreed score with proven correction loops; contract validator wired into CI and shown to block invalid contracts. Runs after the scaffold story exists.",
-      "local_status": "todo",
+      "local_status": "in_progress",
       "publication": "published",
       "remote": {
         "id": "26bcccc9-ba66-44e4-8fdf-537e1afbbb62",
         "identifier": "INF-12",
         "url": "https://linear.app/infantry-cloud/issue/INF-12/agent-readiness-ar"
       },
-      "evidence": null
+      "evidence": null,
+      "started": {
+        "date": "2026-11-06",
+        "note": "AR phases 0-2 (design) start before Story 1.1 Build by Daniel's decision (Steward BG, 2026-11-06); phase 3 (build and prove) runs after Story 1.1. Done when is unchanged."
+      },
+      "progress": {
+        "phase": "2 of 3 (design) complete",
+        "artifact": "docs/agent-readiness.md",
+        "status": "building",
+        "date": "2026-11-06",
+        "not_done_because": "phase 3 build, rehearsal and score are pending"
+      }
     },
     {
       "key": "epic:1",
