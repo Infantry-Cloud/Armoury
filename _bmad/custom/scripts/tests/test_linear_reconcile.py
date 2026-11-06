@@ -354,6 +354,22 @@ class ReconcilePlanTests(unittest.TestCase):
         _, plan = self.fx.run("--check")
         self.assertFalse(plan["drift"], plan["steps"])
 
+    def test_markdown_escaped_source_line_is_current(self) -> None:
+        # Linear stores `_bmad-output` as `\_bmad-output`; that is not a stale source.
+        issue = self.fx.issue("story:1:1")
+        self.assertIn("BMAD-SOURCE: _bmad-output/", issue["description"])
+        issue["description"] = issue["description"].replace(
+            "BMAD-SOURCE: _bmad-output/", "BMAD-SOURCE: \\_bmad-output/"
+        )
+        self.fx.item("story:1:1").pop("synced")
+        _, plan = self.fx.run()
+        self.assertEqual(actions(plan, "story:1:1"), {"no-baseline"}, plan["steps"])
+        _, result = self.fx.run("--write", command="baseline")
+        self.assertIn("story:1:1", result["recorded"])
+        self.fx.manifest = json.loads(self.fx.manifest_path.read_text())
+        _, plan = self.fx.run()
+        self.assertEqual(actions(plan, "story:1:1"), set(), plan["steps"])
+
     def test_remote_identity_problems_need_user(self) -> None:
         self.fx.remote["issues"].remove(self.fx.issue("story:2:1"))
         duplicate = copy.deepcopy(self.fx.issue("story:1:1"))

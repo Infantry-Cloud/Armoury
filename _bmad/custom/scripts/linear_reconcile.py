@@ -50,6 +50,8 @@ SPRINT_STORY_RE = re.compile(r"^(\d+)-(\d+[a-z]?)-")
 SPRINT_EPIC_RE = re.compile(r"^epic-(\d+)$")
 MARKER_RE = re.compile(r"BMAD-ID:\s*([0-9A-Za-z-]+):(\S+)")
 SOURCE_LINE_RE = re.compile(r"BMAD-SOURCE:\s*(\S+)\s+(sha256:[0-9a-f]+)")
+# Linear stores markdown-escaped text (`_bmad-output` comes back as `\_bmad-output`).
+MARKDOWN_ESCAPE_RE = re.compile(r"\\([\\`*_{}\[\]()#+\-.!|~<>])")
 BLOCK_START = "BMAD-managed"
 
 LOCAL_RANK = {
@@ -519,6 +521,12 @@ def propose_key(local: Local, epic_key: str | None, taken: set[str]) -> str:
 # ------------------------------------------------------------------------- remote
 
 
+def source_line(block: str) -> str | None:
+    """The block's BMAD-SOURCE line with Linear's markdown escapes removed."""
+    found = SOURCE_LINE_RE.search(MARKDOWN_ESCAPE_RE.sub(r"\1", block))
+    return found.group(0) if found else None
+
+
 def managed_block(description: str | None) -> str | None:
     if not description:
         return None
@@ -966,8 +974,7 @@ class Planner:
                 source_line=line,
             )
             return
-        source = SOURCE_LINE_RE.search(block)
-        current = local is not None and source is not None and source.group(0) == line
+        current = local is not None and source_line(block) == line
         local_changed = local is not None and not current
         remote_edited = (
             "block_digest" in synced and digest(block) != synced["block_digest"]
@@ -1143,10 +1150,7 @@ def baseline(
             skipped.append(key)
             continue
         local = planner.matched.get(key)
-        source = SOURCE_LINE_RE.search(block)
-        if local is not None and (
-            source is None or source.group(0) != local.source_line
-        ):
+        if local is not None and source_line(block) != local.source_line:
             skipped.append(key)
             continue
         previous = copy.deepcopy(item.get("source") or {})

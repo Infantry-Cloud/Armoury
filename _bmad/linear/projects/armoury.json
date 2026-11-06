@@ -49,7 +49,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:261992cf8fa17e54",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -80,7 +80,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:f304b5948d5f157b",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -128,7 +128,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:7375293d6dc6b3f5",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -172,7 +172,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:095d15247721a4a4",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -217,7 +217,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:c2ec3b35fd461ae3",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -263,7 +263,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:b2909ae778bd9f4f",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -309,7 +309,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:40f5666e87119e5c",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -351,7 +351,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:1418952761b8fc21",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -383,7 +383,18 @@
           "id": "cf24e8f1-1cda-4471-8532-0e8be1fe1dd8"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Epic 1: Install, sign in, and the Armoury shell",
+        "parent_id": null,
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:db3a02d4f5d1a8ae",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1",
+        "source_title": "Install, sign in, and the Armoury shell",
+        "source_digest": "sha256:14a0b7a983ce0960",
+        "milestone_name": "Epic 1: Install, sign in, and the Armoury shell"
+      }
     },
     {
       "key": "epic:2",
@@ -416,7 +427,18 @@
           "id": "77dbdc62-d836-4d36-a680-e2613d9057d3"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view",
+        "parent_id": null,
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:2c0adb6158a6ac41",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2",
+        "source_title": "Fleet inventory and uniform scanning, shown as a populating posture view",
+        "source_digest": "sha256:e5c2908591e9fb16",
+        "milestone_name": "Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view"
+      }
     },
     {
       "key": "epic:3",
@@ -440,7 +462,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-15/epic-3-running-inventory-from-read-only-cluster-agents"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "synced": {
+        "title": "Epic 3: Running inventory from read-only cluster agents",
+        "parent_id": null,
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:6bc8378a6f8d16bd",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3",
+        "source_title": "Running inventory from read-only cluster agents",
+        "source_digest": "sha256:a4e096fc2f0f09b8",
+        "milestone_name": "Epic 3: Running inventory from read-only cluster agents"
+      }
     },
     {
       "key": "epic:4",
@@ -464,7 +497,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-16/epic-4-fresh-enriched-findings-connected-or-air-gapped"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "synced": {
+        "title": "Epic 4: Fresh, enriched findings, connected or air-gapped",
+        "parent_id": null,
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:fc32e08c865c4fed",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4",
+        "source_title": "Fresh, enriched findings, connected or air-gapped",
+        "source_digest": "sha256:e1b135ed48d9ea89",
+        "milestone_name": "Epic 4: Fresh, enriched findings, connected or air-gapped"
+      }
     },
     {
       "key": "epic:5",
@@ -489,7 +533,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-17/epic-5-prioritise-and-triage-findings"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Epic 5: Prioritise and triage findings",
+        "parent_id": null,
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:aa25d412cbe13143",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5",
+        "source_title": "Prioritise and triage findings",
+        "source_digest": "sha256:487f099edd374c6c",
+        "milestone_name": "Epic 5: Prioritise and triage findings"
+      }
     },
     {
       "key": "epic:6",
@@ -513,7 +568,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-18/epic-6-blast-radius-and-graph-exploration"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "synced": {
+        "title": "Epic 6: Blast radius and graph exploration",
+        "parent_id": null,
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:d8efca561e9c6c91",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6",
+        "source_title": "Blast radius and graph exploration",
+        "source_digest": "sha256:cb827d63d89b3fe9",
+        "milestone_name": "Epic 6: Blast radius and graph exploration"
+      }
     },
     {
       "key": "epic:7",
@@ -537,7 +603,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-19/epic-7-license-compliance"
       },
       "evidence": null,
-      "milestone_key": "epic:7"
+      "milestone_key": "epic:7",
+      "synced": {
+        "title": "Epic 7: License compliance",
+        "parent_id": null,
+        "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+        "block_digest": "sha256:f583ce5d29d9b7fc",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "7",
+        "source_title": "License compliance",
+        "source_digest": "sha256:dcff0df55acc9b30",
+        "milestone_name": "Epic 7: License compliance"
+      }
     },
     {
       "key": "epic:8",
@@ -561,7 +638,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-20/epic-8-fleet-signals-prometheus-metrics-and-data-quality"
       },
       "evidence": null,
-      "milestone_key": "epic:8"
+      "milestone_key": "epic:8",
+      "synced": {
+        "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
+        "parent_id": null,
+        "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+        "block_digest": "sha256:49868777b7293017",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "8",
+        "source_title": "Fleet signals — Prometheus metrics and data quality",
+        "source_digest": "sha256:304b0e4b8d7848ad",
+        "milestone_name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
+      }
     },
     {
       "key": "epic:9",
@@ -587,7 +675,18 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-21/epic-9-signed-cra-evidence-packs"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "synced": {
+        "title": "Epic 9: Signed CRA evidence packs",
+        "parent_id": null,
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:8b7d72fd8055999b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9",
+        "source_title": "Signed CRA evidence packs",
+        "source_digest": "sha256:7b09f09b124ee40d",
+        "milestone_name": "Epic 9: Signed CRA evidence packs"
+      }
     },
     {
       "key": "epic:10",
@@ -620,7 +719,18 @@
           "id": "b59429d5-cab6-4eed-af58-5f1f6c6fc4dc"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Epic 10: Verifiable, air-gapped delivery of Armoury itself",
+        "parent_id": null,
+        "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+        "block_digest": "sha256:88fb74aafaf7b729",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "10",
+        "source_title": "Verifiable, air-gapped delivery of Armoury itself",
+        "source_digest": "sha256:e6e39876a800767e",
+        "milestone_name": "Epic 10: Verifiable, air-gapped delivery of Armoury itself"
+      }
     },
     {
       "key": "story:1:1.1",
@@ -699,7 +809,17 @@
           "id": "ecef0b13-702d-4ab9-87cc-02ef689d730c"
         }
       ],
-      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
+      "synced": {
+        "title": "Story 1.2: Install the control plane with one Helm command, durable storage included",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:25e000d502a1de7f",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.2",
+        "source_title": "Install the control plane with one Helm command, durable storage included",
+        "source_digest": "sha256:77e4f7d2047c9d37"
+      }
     },
     {
       "key": "story:1:1.3",
@@ -732,7 +852,17 @@
           "id": "c31c7aed-500e-4b03-8b12-dabea709871d"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 1.3: Sign in with the bootstrap admin",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:7a02665d29f00971",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.3",
+        "source_title": "Sign in with the bootstrap admin",
+        "source_digest": "sha256:d16fdd3aab7f7576"
+      }
     },
     {
       "key": "story:1:1.4",
@@ -765,7 +895,17 @@
           "id": "b699d8c1-dc36-4e49-94b7-618d3962f3b2"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 1.4: Declarative OIDC sign-in and role-based access",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:87596784f5f0d9f2",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.4",
+        "source_title": "Declarative OIDC sign-in and role-based access",
+        "source_digest": "sha256:b5b69debec1a55d5"
+      }
     },
     {
       "key": "story:1:1.5",
@@ -798,7 +938,17 @@
           "id": "f2d558a1-0e54-4f28-8a42-13a5acff62df"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 1.5: Design tokens and the three themes",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:d92a9c54ea67e054",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.5",
+        "source_title": "Design tokens and the three themes",
+        "source_digest": "sha256:458697ea38f9eeb2"
+      }
     },
     {
       "key": "story:1:1.6",
@@ -831,7 +981,17 @@
           "id": "49bc4306-a7cd-4d85-a9a8-7b7242780faa"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 1.6: App shell, navigation and the empty Posture page",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:14f31efda5be3731",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.6",
+        "source_title": "App shell, navigation and the empty Posture page",
+        "source_digest": "sha256:4d2a238147346913"
+      }
     },
     {
       "key": "story:1:1.7",
@@ -864,7 +1024,17 @@
           "id": "e9afc27a-2298-45bf-aca0-bfc1a1e8148f"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 1.7: Accessibility, message catalogue and responsive baseline",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:7436370f29c4c12e",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.7",
+        "source_title": "Accessibility, message catalogue and responsive baseline",
+        "source_digest": "sha256:b6da89cc2f0f8b00"
+      }
     },
     {
       "key": "story:1:1.8",
@@ -888,7 +1058,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-30"
       },
       "evidence": null,
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "synced": {
+        "title": "Story 1.8: Command palette and keyboard map",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:39e512290001b9cb",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.8",
+        "source_title": "Command palette and keyboard map",
+        "source_digest": "sha256:fe1ca1d0478966a9"
+      }
     },
     {
       "key": "story:1:1.9",
@@ -915,7 +1095,17 @@
         "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
         "approved": "Daniel, 2026-11-05"
       },
-      "milestone_key": "epic:1"
+      "milestone_key": "epic:1",
+      "synced": {
+        "title": "Story 1.9: Banned-pattern guards",
+        "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
+        "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
+        "block_digest": "sha256:62d614af566d1fde",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "1.9",
+        "source_title": "Banned-pattern guards",
+        "source_digest": "sha256:5c7a3bd1e60b0e20"
+      }
     },
     {
       "key": "story:2:2.1",
@@ -946,7 +1136,17 @@
           "id": "38d7ddaa-b098-47bf-92ed-1ea57d678bcf"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.1: Tamper-evident evidence ledger",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:7dec54657da9b54a",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.1",
+        "source_title": "Tamper-evident evidence ledger",
+        "source_digest": "sha256:2b0666730e6c94a6"
+      }
     },
     {
       "key": "story:2:2.2",
@@ -979,7 +1179,17 @@
           "id": "6eda4c4b-796d-4805-a8f4-1022e5eb9a06"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.2: Connect a container registry and enumerate its images",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:7d1f17b174367f4b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.2",
+        "source_title": "Connect a container registry and enumerate its images",
+        "source_digest": "sha256:ce27f9e9d05cb98c"
+      }
     },
     {
       "key": "story:2:2.3",
@@ -1012,7 +1222,17 @@
           "id": "d1c49575-9da0-4d96-bab5-376bbbe5248f"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.3: Central SBOM generation with Syft",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:aed172ccd3bc249e",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.3",
+        "source_title": "Central SBOM generation with Syft",
+        "source_digest": "sha256:e2304afe0d59e886"
+      }
     },
     {
       "key": "story:2:2.4",
@@ -1045,7 +1265,17 @@
           "id": "5845da86-a41c-462f-96cd-2a9222549717"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.4: Uniform vulnerability scanning of stored SBOMs",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:f3cf1c8e353e8427",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.4",
+        "source_title": "Uniform vulnerability scanning of stored SBOMs",
+        "source_digest": "sha256:e99c321de6c5bc2b"
+      }
     },
     {
       "key": "story:2:2.5",
@@ -1078,7 +1308,17 @@
           "id": "95488935-2659-4f54-bd34-87300bbe6120"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.5: Continuous onboarding within one hour",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:dd25340a1390b321",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.5",
+        "source_title": "Continuous onboarding within one hour",
+        "source_digest": "sha256:51d10e530a1e7e4b"
+      }
     },
     {
       "key": "story:2:2.6",
@@ -1111,7 +1351,17 @@
           "id": "aec1d72b-4908-4c7e-924a-0aae66c3a521"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.6: Package feed connections — npm and PyPI",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:bd0075612d0643f9",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.6",
+        "source_title": "Package feed connections — npm and PyPI",
+        "source_digest": "sha256:9fe8e261c4a10ee7"
+      }
     },
     {
       "key": "story:2:2.7",
@@ -1144,7 +1394,17 @@
           "id": "5705ec38-fec2-4eed-ba04-00f9e3cc28aa"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:ae474f4662fe78b0",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.7",
+        "source_title": "Package feed connections — Maven, Cargo and Go modules",
+        "source_digest": "sha256:ab5be3062c817d5b"
+      }
     },
     {
       "key": "story:2:2.8",
@@ -1168,7 +1428,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-38"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "synced": {
+        "title": "Story 2.8: OCI artifacts beyond container images",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:8f40dd70408d7efb",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.8",
+        "source_title": "OCI artifacts beyond container images",
+        "source_digest": "sha256:09d7c3babc4a2ca5"
+      }
     },
     {
       "key": "story:2:2.9",
@@ -1201,7 +1471,17 @@
           "id": "01aa833d-f9c9-4c06-b750-15fb7caf554d"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.9: Posture summary — populating, coverage and freshness",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:8d8cb1bb3525d1fa",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.9",
+        "source_title": "Posture summary — populating, coverage and freshness",
+        "source_digest": "sha256:450a76b21072cb83"
+      }
     },
     {
       "key": "story:2:2.10",
@@ -1225,7 +1505,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-40"
       },
       "evidence": null,
-      "milestone_key": "epic:2"
+      "milestone_key": "epic:2",
+      "synced": {
+        "title": "Story 2.10: Posture findings — severity band and findings table",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:16ebccfc5d60d1d6",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.10",
+        "source_title": "Posture findings — severity band and findings table",
+        "source_digest": "sha256:369b07ae52e56d0b"
+      }
     },
     {
       "key": "story:2:2.11",
@@ -1258,7 +1548,17 @@
           "id": "9acceeee-b98a-422c-a40c-6e22c1ff18ee"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.11: Artifacts list and artifact detail",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:d8e67bbdea12a8c1",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.11",
+        "source_title": "Artifacts list and artifact detail",
+        "source_digest": "sha256:29dd75af9195dce1"
+      }
     },
     {
       "key": "story:2:2.12",
@@ -1297,7 +1597,17 @@
           "id": "92f449ec-5c73-4717-9991-80730842b0cb"
         }
       ],
-      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
+      "synced": {
+        "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:9ee87f7fc7784feb",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.12",
+        "source_title": "Prove minute 29 — scripted install-to-posture run",
+        "source_digest": "sha256:2e4482d2bcb5a6d6"
+      }
     },
     {
       "key": "story:2:2.13",
@@ -1330,7 +1640,17 @@
           "id": "5a019318-25bc-4ad3-a407-5b2160e41b6e"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
+        "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
+        "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
+        "block_digest": "sha256:21f205d28965b01e",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "2.13",
+        "source_title": "Prove the scale anchor — initial-evaluation load test",
+        "source_digest": "sha256:4bed46b73d87e445"
+      }
     },
     {
       "key": "story:3:3.1",
@@ -1361,7 +1681,17 @@
           "id": "364cdd46-9206-4ecf-a812-9b7dca646246"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 3.1: Agent enrollment and mTLS identity",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:15806b293dcb43be",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.1",
+        "source_title": "Agent enrollment and mTLS identity",
+        "source_digest": "sha256:6ddbbbd15c81c59a"
+      }
     },
     {
       "key": "story:3:3.2",
@@ -1400,7 +1730,17 @@
           "id": "5721558d-5763-4c24-89fd-cb73deb83dc5"
         }
       ],
-      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
+      "synced": {
+        "title": "Story 3.2: Read-only agent reports running workloads",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:2214b83a442f822b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.2",
+        "source_title": "Read-only agent reports running workloads",
+        "source_digest": "sha256:d8ac6d81ca99c0cf"
+      }
     },
     {
       "key": "story:3:3.3",
@@ -1433,7 +1773,17 @@
           "id": "c593424a-3ccc-41e4-819f-61fd453db618"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 3.3: Reconnect by stateless re-derive, without storms",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:c4e8e68931118070",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.3",
+        "source_title": "Reconnect by stateless re-derive, without storms",
+        "source_digest": "sha256:ab1d859cc8414f4b"
+      }
     },
     {
       "key": "story:3:3.4",
@@ -1466,7 +1816,17 @@
           "id": "2d339074-23be-4236-8b01-a4d9cee903ee"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 3.4: HTTPS long-poll fallback for locked-down networks",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:0b49717483090e72",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.4",
+        "source_title": "HTTPS long-poll fallback for locked-down networks",
+        "source_digest": "sha256:8f3b5bffe3f96056"
+      }
     },
     {
       "key": "story:3:3.5",
@@ -1490,7 +1850,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-48"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "synced": {
+        "title": "Story 3.5: Shipped-vs-running reconciliation",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:8c981f6b9fe6d3bb",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.5",
+        "source_title": "Shipped-vs-running reconciliation",
+        "source_digest": "sha256:ce18c720e92b4358"
+      }
     },
     {
       "key": "story:3:3.6",
@@ -1514,7 +1884,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-49"
       },
       "evidence": null,
-      "milestone_key": "epic:3"
+      "milestone_key": "epic:3",
+      "synced": {
+        "title": "Story 3.6: Runtime coverage on Posture, and minute 29 with the agent",
+        "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
+        "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
+        "block_digest": "sha256:945e08c4c60348b8",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "3.6",
+        "source_title": "Runtime coverage on Posture, and minute 29 with the agent",
+        "source_digest": "sha256:bf510a3854a4f8e9"
+      }
     },
     {
       "key": "story:4:4.1",
@@ -1545,7 +1925,17 @@
           "id": "09956a65-60eb-4c1e-a015-fe58e2433f35"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.1: Scheduled vulnerability database updates with versioned history",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:54aa5293731bedf1",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.1",
+        "source_title": "Scheduled vulnerability database updates with versioned history",
+        "source_digest": "sha256:ad80459c479b3b26"
+      }
     },
     {
       "key": "story:4:4.2",
@@ -1578,7 +1968,17 @@
           "id": "4aa0d269-2c1f-4840-a90d-bd12cf1f65b2"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.2: Feed-delta re-evaluation of stored SBOMs",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:988368e83cffd0b7",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.2",
+        "source_title": "Feed-delta re-evaluation of stored SBOMs",
+        "source_digest": "sha256:d7fadb7c22d02e8a"
+      }
     },
     {
       "key": "story:4:4.3",
@@ -1611,7 +2011,17 @@
           "id": "1f2beaed-a8ab-4aa0-8d2b-b7d16acfae0b"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.3: KEV and EPSS enrichment with source attribution",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:4cc5b5f99e767f2b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.3",
+        "source_title": "KEV and EPSS enrichment with source attribution",
+        "source_digest": "sha256:e54460a659fe4c45"
+      }
     },
     {
       "key": "story:4:4.4",
@@ -1644,7 +2054,17 @@
           "id": "efc63b15-a810-4129-8692-de153b66de15"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.4: OSV and CNA record enrichment",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:0878b00265ec90de",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.4",
+        "source_title": "OSV and CNA record enrichment",
+        "source_digest": "sha256:d46cff06e73a4f9e"
+      }
     },
     {
       "key": "story:4:4.5",
@@ -1677,7 +2097,17 @@
           "id": "81f5ef98-870c-4b5b-86fc-634866dfce9d"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.5: Offline feed bundle format and creation",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:bb89dcf6324cb06b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.5",
+        "source_title": "Offline feed bundle format and creation",
+        "source_digest": "sha256:ae3ee757ec92d0c9"
+      }
     },
     {
       "key": "story:4:4.6",
@@ -1701,7 +2131,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-55"
       },
       "evidence": null,
-      "milestone_key": "epic:4"
+      "milestone_key": "epic:4",
+      "synced": {
+        "title": "Story 4.6: Import an offline bundle into an air-gapped instance",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:3c8eea6231e8351d",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.6",
+        "source_title": "Import an offline bundle into an air-gapped instance",
+        "source_digest": "sha256:9ef65ba82112df93"
+      }
     },
     {
       "key": "story:4:4.7",
@@ -1734,7 +2174,17 @@
           "id": "03a0465a-86c0-47df-aace-0603951a63cf"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.7: Honest feed staleness across Posture and findings",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:21f4a3d1dcfccb2b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.7",
+        "source_title": "Honest feed staleness across Posture and findings",
+        "source_digest": "sha256:d164561c7e08ffe0"
+      }
     },
     {
       "key": "story:4:4.8",
@@ -1767,7 +2217,17 @@
           "id": "c5735927-861f-4443-8700-fa70f2356168"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 4.8: Prove one-hour re-evaluation at the scale anchor",
+        "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
+        "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
+        "block_digest": "sha256:79eadf0c6f88dc83",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "4.8",
+        "source_title": "Prove one-hour re-evaluation at the scale anchor",
+        "source_digest": "sha256:9a30706bb4a91a90"
+      }
     },
     {
       "key": "story:5:5.1",
@@ -1789,7 +2249,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-58"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Story 5.1: Deterministic, explainable ranking",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:4d2966d6f7eb92a5",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.1",
+        "source_title": "Deterministic, explainable ranking",
+        "source_digest": "sha256:1072d8ed83d569c4"
+      }
     },
     {
       "key": "story:5:5.2",
@@ -1813,7 +2283,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-59"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Story 5.2: Findings workbench and ranked Posture table",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:775683865886eae2",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.2",
+        "source_title": "Findings workbench and ranked Posture table",
+        "source_digest": "sha256:5b2033f010184e7c"
+      }
     },
     {
       "key": "story:5:5.3",
@@ -1846,7 +2326,17 @@
           "id": "cc70a2ff-d55b-4507-ba64-e2917bd2ad56"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 5.3: Record triage decisions as evidence",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:40fdbe010e0e7b08",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.3",
+        "source_title": "Record triage decisions as evidence",
+        "source_digest": "sha256:de835090ee67c115"
+      }
     },
     {
       "key": "story:5:5.4",
@@ -1870,7 +2360,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-61"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Story 5.4: Triage drawer",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:fa1bd17974473dba",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.4",
+        "source_title": "Triage drawer",
+        "source_digest": "sha256:21bae81b23080e7b"
+      }
     },
     {
       "key": "story:5:5.5",
@@ -1894,7 +2394,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-62"
       },
       "evidence": null,
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Story 5.5: Evidence trail surface",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:8e0c6bca7911cf44",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.5",
+        "source_title": "Evidence trail surface",
+        "source_digest": "sha256:b29bb589dc894010"
+      }
     },
     {
       "key": "story:5:5.6",
@@ -1927,7 +2437,17 @@
           "id": "19900330-212e-4240-9d47-65b7e99b5a7e"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 5.6: Emit VEX from triage decisions",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:1f42584ea7a88aec",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.6",
+        "source_title": "Emit VEX from triage decisions",
+        "source_digest": "sha256:1cb66d2b5d11c6dc"
+      }
     },
     {
       "key": "story:5:5.7",
@@ -1960,7 +2480,17 @@
           "id": "ede90712-ca62-4358-a56d-0964c485614e"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 5.7: Ingest vendor VEX",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:968c00443e181447",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.7",
+        "source_title": "Ingest vendor VEX",
+        "source_digest": "sha256:25c79555afdd0fef"
+      }
     },
     {
       "key": "story:5:5.8",
@@ -1987,7 +2517,17 @@
         "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
         "approved": "Daniel, 2026-11-05"
       },
-      "milestone_key": "epic:5"
+      "milestone_key": "epic:5",
+      "synced": {
+        "title": "Story 5.8: Fleet-wide triage decisions",
+        "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
+        "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
+        "block_digest": "sha256:f083317c0b202ff3",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "5.8",
+        "source_title": "Fleet-wide triage decisions",
+        "source_digest": "sha256:123efd2ef0f2a53c"
+      }
     },
     {
       "key": "story:6:6.1",
@@ -2018,7 +2558,17 @@
           "id": "7b027ee1-820f-4335-be86-6b319a4d1946"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.1: Graph projection of inventory and findings",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:89238e2f07143f9d",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.1",
+        "source_title": "Graph projection of inventory and findings",
+        "source_digest": "sha256:ecc308f8440b4c7a"
+      }
     },
     {
       "key": "story:6:6.2",
@@ -2051,7 +2601,17 @@
           "id": "42daa9cd-038c-41d4-9ad3-3376528e553d"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.2: Blast-radius query API",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:391261174c168c11",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.2",
+        "source_title": "Blast-radius query API",
+        "source_digest": "sha256:497fbf402787fcb1"
+      }
     },
     {
       "key": "story:6:6.3",
@@ -2084,7 +2644,17 @@
           "id": "fcc85d44-0433-409c-bf38-e706b36ffbb7"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.3: Blast-radius surface — answer and table, from ⌘K",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:b5664d852b6f5457",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.3",
+        "source_title": "Blast-radius surface — answer and table, from ⌘K",
+        "source_digest": "sha256:3d4a918958fa9687"
+      }
     },
     {
       "key": "story:6:6.4",
@@ -2117,7 +2687,17 @@
           "id": "87d6ea9c-947c-4205-adba-f8ffcedc1cf9"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.4: Blast-radius graph reading",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:60225dee501dc31c",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.4",
+        "source_title": "Blast-radius graph reading",
+        "source_digest": "sha256:102cb101ad2b4d93"
+      }
     },
     {
       "key": "story:6:6.5",
@@ -2150,7 +2730,17 @@
           "id": "2456ba4c-db24-4bb5-89ea-9a943e0509f9"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.5: Export blast-radius and posture answers",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:8b00678f3c271950",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.5",
+        "source_title": "Export blast-radius and posture answers",
+        "source_digest": "sha256:23a73e5d62285531"
+      }
     },
     {
       "key": "story:6:6.6",
@@ -2174,7 +2764,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-70"
       },
       "evidence": null,
-      "milestone_key": "epic:6"
+      "milestone_key": "epic:6",
+      "synced": {
+        "title": "Story 6.6: Graph explorer and node inspector",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:44120844255d181b",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.6",
+        "source_title": "Graph explorer and node inspector",
+        "source_digest": "sha256:6b347b8ce289efdc"
+      }
     },
     {
       "key": "story:6:6.7",
@@ -2207,7 +2807,17 @@
           "id": "63160fda-4d33-4a8e-b27b-a02e08e7a49b"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 6.7: Prove sub-minute blast radius at the scale anchor",
+        "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
+        "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
+        "block_digest": "sha256:8cdf20a079444660",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "6.7",
+        "source_title": "Prove sub-minute blast radius at the scale anchor",
+        "source_digest": "sha256:d84cb858ac599767"
+      }
     },
     {
       "key": "story:7:7.1",
@@ -2238,7 +2848,17 @@
           "id": "73f4e49e-61d5-48f7-8341-31059f9ea4d5"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 7.1: License evaluation of stored SBOMs with Grant",
+        "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
+        "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+        "block_digest": "sha256:b610df895c6a0370",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "7.1",
+        "source_title": "License evaluation of stored SBOMs with Grant",
+        "source_digest": "sha256:c70cc2dadd0484bb"
+      }
     },
     {
       "key": "story:7:7.2",
@@ -2262,7 +2882,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-73"
       },
       "evidence": null,
-      "milestone_key": "epic:7"
+      "milestone_key": "epic:7",
+      "synced": {
+        "title": "Story 7.2: License evaluation of images and filesystems directly",
+        "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
+        "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+        "block_digest": "sha256:f4310ab1aeab66ab",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "7.2",
+        "source_title": "License evaluation of images and filesystems directly",
+        "source_digest": "sha256:ea8416b4272664e1"
+      }
     },
     {
       "key": "story:7:7.3",
@@ -2295,7 +2925,17 @@
           "id": "23265b55-efb6-433d-a061-6b125c9ca7da"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 7.3: Fleet license policy",
+        "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
+        "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+        "block_digest": "sha256:312f25715839f10a",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "7.3",
+        "source_title": "Fleet license policy",
+        "source_digest": "sha256:758de1600cb6e0f9"
+      }
     },
     {
       "key": "story:7:7.4",
@@ -2319,7 +2959,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-75"
       },
       "evidence": null,
-      "milestone_key": "epic:7"
+      "milestone_key": "epic:7",
+      "synced": {
+        "title": "Story 7.4: License findings in Posture, Findings and triage",
+        "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
+        "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
+        "block_digest": "sha256:d8a29d88b990a6b8",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "7.4",
+        "source_title": "License findings in Posture, Findings and triage",
+        "source_digest": "sha256:d45f89e011529b1d"
+      }
     },
     {
       "key": "story:8:8.1",
@@ -2341,7 +2991,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-76"
       },
       "evidence": null,
-      "milestone_key": "epic:8"
+      "milestone_key": "epic:8",
+      "synced": {
+        "title": "Story 8.1: Data-quality scoring model and artifact score",
+        "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
+        "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+        "block_digest": "sha256:3de5b8cc1b1633a0",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "8.1",
+        "source_title": "Data-quality scoring model and artifact score",
+        "source_digest": "sha256:e2aaea188f6412f8"
+      }
     },
     {
       "key": "story:8:8.2",
@@ -2365,7 +3025,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-77"
       },
       "evidence": null,
-      "milestone_key": "epic:8"
+      "milestone_key": "epic:8",
+      "synced": {
+        "title": "Story 8.2: Fleet data quality on Posture and Artifacts",
+        "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
+        "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+        "block_digest": "sha256:8c32705f2c0ac175",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "8.2",
+        "source_title": "Fleet data quality on Posture and Artifacts",
+        "source_digest": "sha256:59c46ae9136f84cb"
+      }
     },
     {
       "key": "story:8:8.3",
@@ -2398,7 +3068,17 @@
           "id": "2cc12438-f2c2-428c-8fa5-4a870b137a31"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 8.3: Prometheus metrics endpoint",
+        "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
+        "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+        "block_digest": "sha256:5d25010f279790f2",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "8.3",
+        "source_title": "Prometheus metrics endpoint",
+        "source_digest": "sha256:119308b51efef684"
+      }
     },
     {
       "key": "story:8:8.4",
@@ -2422,7 +3102,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-79"
       },
       "evidence": null,
-      "milestone_key": "epic:8"
+      "milestone_key": "epic:8",
+      "synced": {
+        "title": "Story 8.4: Prometheus panel in Settings",
+        "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
+        "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
+        "block_digest": "sha256:fba040495c7bb366",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "8.4",
+        "source_title": "Prometheus panel in Settings",
+        "source_digest": "sha256:50c0aec198c3a6e3"
+      }
     },
     {
       "key": "story:9:9.1",
@@ -2453,7 +3143,17 @@
           "id": "01af08f8-9655-46e0-b12c-1587a663f1fb"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.1: Point-in-time evidence queries for any window",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:df05512ee9ad68ea",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.1",
+        "source_title": "Point-in-time evidence queries for any window",
+        "source_digest": "sha256:b83c513cb74b7541"
+      }
     },
     {
       "key": "story:9:9.2",
@@ -2477,7 +3177,17 @@
         "url": "https://linear.app/infantry-cloud/issue/INF-81"
       },
       "evidence": null,
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "synced": {
+        "title": "Story 9.2: Pack architecture and the CRA pack definition",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:ddfeeb9b0388d374",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.2",
+        "source_title": "Pack architecture and the CRA pack definition",
+        "source_digest": "sha256:c5c4e9234cba8852"
+      }
     },
     {
       "key": "story:9:9.3",
@@ -2510,7 +3220,17 @@
           "id": "06c93330-47e2-4131-aaeb-4eab508a2a9b"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.3: PDF report and machine-readable companions",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:b4c29c8d39792a85",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.3",
+        "source_title": "PDF report and machine-readable companions",
+        "source_digest": "sha256:9a6747fbd88b8bb8"
+      }
     },
     {
       "key": "story:9:9.4",
@@ -2543,7 +3263,17 @@
           "id": "631a9b62-5265-4669-8f3e-731f884f7cbe"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.4: Sign evidence packs",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:b522e5ae265f9cb9",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.4",
+        "source_title": "Sign evidence packs",
+        "source_digest": "sha256:34a5112d11856aa1"
+      }
     },
     {
       "key": "story:9:9.5",
@@ -2576,7 +3306,17 @@
           "id": "1c9fed31-0233-4808-b2da-36b3820e2575"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.5: Generate packs and verify signatures in the UI",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:5922f58d8312b463",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.5",
+        "source_title": "Generate packs and verify signatures in the UI",
+        "source_digest": "sha256:300704b4f337e158"
+      }
     },
     {
       "key": "story:9:9.6",
@@ -2609,7 +3349,17 @@
           "id": "00094d87-f585-40db-aa24-ca4aed1d388c"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.6: Signed ledger checkpoints",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:d41f1d30b77ca0a8",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.6",
+        "source_title": "Signed ledger checkpoints",
+        "source_digest": "sha256:30860de7831f169a"
+      }
     },
     {
       "key": "story:9:9.7",
@@ -2642,7 +3392,17 @@
           "id": "8e3f8432-920e-4c55-898d-4fdaa8dd1142"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 9.7: Retention with archiving to the object store",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:f5ee977f864e63ec",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.7",
+        "source_title": "Retention with archiving to the object store",
+        "source_digest": "sha256:822b490700eb9bdb"
+      }
     },
     {
       "key": "story:9:9.8",
@@ -2669,7 +3429,17 @@
         "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md",
         "approved": "Daniel, 2026-11-05"
       },
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "synced": {
+        "title": "Story 9.8: SBOM compaction and archive purge",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:6aa59c9190d0c9be",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.8",
+        "source_title": "SBOM compaction and archive purge",
+        "source_digest": "sha256:3ad859b4761d6e23"
+      }
     },
     {
       "key": "story:9:9.9",
@@ -2696,7 +3466,17 @@
         "added_by": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md (Decision R10)",
         "approved": "Daniel, 2026-11-05"
       },
-      "milestone_key": "epic:9"
+      "milestone_key": "epic:9",
+      "synced": {
+        "title": "Story 9.9: Anchor ledger checkpoints in a Rekor transparency log",
+        "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
+        "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
+        "block_digest": "sha256:aaedd2f35cc8be04",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "9.9",
+        "source_title": "Anchor ledger checkpoints in a Rekor transparency log",
+        "source_digest": "sha256:05e98ae9cedf2e5b"
+      }
     },
     {
       "key": "story:10:10.1",
@@ -2733,7 +3513,17 @@
           "id": "cf3123b8-4037-4e84-9e2b-9ab0a7cc1f41"
         }
       ],
-      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
+      "synced": {
+        "title": "Story 10.1: Signed, provenance-attested releases",
+        "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
+        "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+        "block_digest": "sha256:a17a9a2799ed8508",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "10.1",
+        "source_title": "Signed, provenance-attested releases",
+        "source_digest": "sha256:3bd45d62e15ec7e5"
+      }
     },
     {
       "key": "story:10:10.2",
@@ -2766,7 +3556,17 @@
           "id": "1dc75ed4-a81b-46b2-a5b0-15c6c84c0843"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 10.2: Armoury-published signed feed bundles",
+        "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
+        "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+        "block_digest": "sha256:68284552258b4213",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "10.2",
+        "source_title": "Armoury-published signed feed bundles",
+        "source_digest": "sha256:af7991aeb33ec307"
+      }
     },
     {
       "key": "story:10:10.3",
@@ -2799,7 +3599,17 @@
           "id": "2263a5b6-c2cf-4029-a86d-dfc6d2b08f94"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 10.3: Air-gapped installation from an internal mirror",
+        "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
+        "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+        "block_digest": "sha256:4f2a53a71a03344c",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "10.3",
+        "source_title": "Air-gapped installation from an internal mirror",
+        "source_digest": "sha256:4c76f8e245a04d33"
+      }
     },
     {
       "key": "story:10:10.4",
@@ -2838,7 +3648,17 @@
           "id": "46d7ebf8-3aad-4408-981b-5d11b7acb106"
         }
       ],
-      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
+      "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
+      "synced": {
+        "title": "Story 10.4: Prove the full air-gapped journey end to end",
+        "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
+        "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
+        "block_digest": "sha256:1a19bfb4145f70b6",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "10.4",
+        "source_title": "Prove the full air-gapped journey end to end",
+        "source_digest": "sha256:5ff047817253e89a"
+      }
     },
     {
       "key": "epic:11",
@@ -2879,7 +3699,18 @@
           "id": "4d4a1261-5584-4237-92fb-8a39a60b4118"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Epic 11: Scan in CI and see the result in Armoury",
+        "parent_id": null,
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:e4bfff61f3d50fa0",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11",
+        "source_title": "Scan in CI and see the result in Armoury",
+        "source_digest": "sha256:57686b6c11dd5825",
+        "milestone_name": "Epic 11: Scan in CI and see the result in Armoury"
+      }
     },
     {
       "key": "story:11:11.1",
@@ -2910,7 +3741,17 @@
           "id": "9c946a98-80ea-4f21-895f-89b5aa3d2281"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 11.1: Submit a pushed image from CI by digest",
+        "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:525535c4546a310a",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11.1",
+        "source_title": "Submit a pushed image from CI by digest",
+        "source_digest": "sha256:62a8169ee08db326"
+      }
     },
     {
       "key": "story:11:11.2",
@@ -2943,7 +3784,17 @@
           "id": "3b8ff058-00c7-4e1f-9caf-4b5c08523bce"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 11.2: Submit an artifact that is not in a connected registry",
+        "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:5207b306899ccdd2",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11.2",
+        "source_title": "Submit an artifact that is not in a connected registry",
+        "source_digest": "sha256:32352f2cfeef5dd0"
+      }
     },
     {
       "key": "story:11:11.3",
@@ -2976,7 +3827,17 @@
           "id": "d843236e-34b1-4a8b-81b5-7a6569597285"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 11.3: Artifact identity and duplicate linking",
+        "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:1ce3862c9ec47fd6",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11.3",
+        "source_title": "Artifact identity and duplicate linking",
+        "source_digest": "sha256:7b91b2dc0227b977"
+      }
     },
     {
       "key": "story:11:11.4",
@@ -3009,7 +3870,17 @@
           "id": "59148bd1-40d0-4b8b-9754-0fe91f5b1993"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 11.4: Fleet CI policy, server verdict and the CI report",
+        "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:35c2d7d885a2ca76",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11.4",
+        "source_title": "Fleet CI policy, server verdict and the CI report",
+        "source_digest": "sha256:15c5a64f6b91f413"
+      }
     },
     {
       "key": "story:11:11.5",
@@ -3042,7 +3913,17 @@
           "id": "fc998c4f-e41f-4bb2-9969-76cd3070d038"
         }
       ],
-      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)"
+      "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
+      "synced": {
+        "title": "Story 11.5: GitHub Action for CI scans",
+        "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
+        "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
+        "block_digest": "sha256:6742613c5e895a6a",
+        "at": "2026-11-06T03:14:15+00:00",
+        "source_id": "11.5",
+        "source_title": "GitHub Action for CI scans",
+        "source_digest": "sha256:1d14d785792cc4bc"
+      }
     },
     {
       "key": "task:story:1:1.1:t1",
@@ -3071,7 +3952,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:1310c75413c8b99d",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3101,7 +3982,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:c1d2c57293e0b8d4",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3131,7 +4012,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:92655bbb9ac8bd5f",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3161,7 +4042,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:84ce6c29b815f9c3",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3191,7 +4072,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:c30b5660e7b0adec",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3221,7 +4102,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:2c86a70d886fe17c",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3251,7 +4132,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:559b6e947ca52ae7",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3281,7 +4162,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:930455f63ad5a626",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3311,7 +4192,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:15a331bbe2fe77ed",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3341,7 +4222,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:38c5a4de90482457",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     },
     {
@@ -3371,7 +4252,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:e65c474cc17d2def",
-        "at": "2026-11-06T03:10:27+00:00"
+        "at": "2026-11-06T03:14:15+00:00"
       }
     }
   ],
@@ -3390,47 +4271,58 @@
   "milestones": {
     "epic:1": {
       "id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:1"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:1",
+      "name": "Epic 1: Install, sign in, and the Armoury shell"
     },
     "epic:2": {
       "id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:2"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:2",
+      "name": "Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view"
     },
     "epic:3": {
       "id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:3"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:3",
+      "name": "Epic 3: Running inventory from read-only cluster agents"
     },
     "epic:4": {
       "id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:4"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:4",
+      "name": "Epic 4: Fresh, enriched findings, connected or air-gapped"
     },
     "epic:5": {
       "id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:5"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:5",
+      "name": "Epic 5: Prioritise and triage findings"
     },
     "epic:6": {
       "id": "9dd3b863-6cad-43c6-8841-54e05324527d",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:6"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:6",
+      "name": "Epic 6: Blast radius and graph exploration"
     },
     "epic:7": {
       "id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:7"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:7",
+      "name": "Epic 7: License compliance"
     },
     "epic:8": {
       "id": "6b845ec6-d12a-41df-a767-da6532883c2a",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:8"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:8",
+      "name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
     },
     "epic:9": {
       "id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:9"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:9",
+      "name": "Epic 9: Signed CRA evidence packs"
     },
     "epic:10": {
       "id": "e4daec88-25cf-44c3-8369-8f690ada5948",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:10"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:10",
+      "name": "Epic 10: Verifiable, air-gapped delivery of Armoury itself"
     },
     "epic:11": {
       "id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
-      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:11"
+      "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:11",
+      "name": "Epic 11: Scan in CI and see the result in Armoury"
     }
   },
   "milestones_note": "One project milestone per epic (user request 2026-11-05), for ordering and progress only; no target dates. Each epic issue and its stories are assigned to it. Milestone progress is not delivery evidence."
