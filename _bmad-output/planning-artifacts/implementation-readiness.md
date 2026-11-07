@@ -7,6 +7,7 @@ history:
   - "2026-11-05/06 fixed by Correct Course (sprint-change-proposal-2026-11-05.md, decisions R1–R11); four independent gate reruns; final rerun: no blockers, two text concerns fixed and checked."
   - "2026-11-06 PASS — assessed against ux-Armoury-2026-06-12 (now superseded)."
   - "2026-11-07 FAIL — rerun after sprint-change-proposal-2026-11-07.md (Greenhouse UX, FR32, FR33): 8 blockers. Daniel chose: fix the blockers, then rerun."
+  - "2026-11-07 FAIL (narrow) — second rerun after sprint-change-proposal-2026-11-07-readiness.md: blockers 1–8 closed; 1 new blocker (vulnerability ID aliases). Daniel chose: fix it with the cheap concerns, then rerun."
 sprint_status: _bmad-output/implementation-artifacts/sprint-status.yaml (11 epics, 79 stories, in sync, validated)
 linear: INF-11 (planning:sprint)
 evidence: _bmad-output/planning-artifacts/readiness-2026-11-07/ (three independent read-only review lenses)
@@ -21,7 +22,28 @@ inputs:
 
 # Implementation Readiness — Armoury
 
-**Current verdict: FAIL (2026-11-07).** Rerun after the Correct Course
+## Second rerun — 2026-11-07: FAIL (narrow)
+
+Rerun after `sprint-change-proposal-2026-11-07-readiness.md`. Evidence:
+`readiness-2026-11-07/rerun-1-blocker-closure.md` and `rerun-2-fresh-gate.md`.
+
+- Blockers 1–8 below are **closed** in every artifact. `sprint_plan.py --dry-run`: `in_sync: true`.
+- **New blocker 9 — vulnerability ID aliases.** Issues are keyed on one vulnerability ID
+  (`architecture.md:257`; ARCH38). Story 2.4 stores the ID Grype reports (`epics.md:783`), and for
+  language packages Grype reports GHSA IDs by default (`--by-cve` is optional). KEV and Exposure
+  queries use CVE IDs (`epics.md:1254`, `:1258`, `:1738`). The Grype DB has the CVE record, so the
+  unknown rule does not apply, and a CVE query answers "No software has it": the CVE-day false zero.
+  Stories 2.4, 2.10, 4.3, 5.x, 6.2, 6.3. Epic 1 is not affected.
+- **Concerns:** readiness-record questions Q1, Q2, Q4, Q5 are not gated by their stories; vendor VEX
+  claims (Story 5.7) are outside the status rule; no lookup method is recorded for "the Grype DB has
+  a record"; the Needs attention count vs the type filter and search; Story 5.8 keeps a stale
+  [ASSUMPTION]; Story 1.1 CI "fast tier" and the Skaffold `ci` profile (for the Build re-plan).
+- **Decision (Daniel):** fix blocker 9 (CVE first, keep all aliases), gate and record the cheap
+  concerns, make vendor VEX claims display-only; then rerun.
+
+## First rerun — 2026-11-07: FAIL
+
+Rerun after the Correct Course
 `sprint-change-proposal-2026-11-07.md` (Greenhouse UX spines, FR32, FR33).
 
 Question: could a developer implement these epics without inventing decisions nothing records?
