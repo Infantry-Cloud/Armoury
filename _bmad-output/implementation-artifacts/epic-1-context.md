@@ -4,7 +4,7 @@
 
 ## Goal
 
-Make the start of the first-30-minutes journey real. A SecOps engineer installs the self-hosted control plane with one `helm install`, signs in with a bootstrap admin, and reaches a themed, accessible, keyboard-first shell with an honest empty Posture page. OIDC and the three roles are optional and set through Helm values. The epic also builds the monorepo, the local gate, CI, image builds and the Skaffold dev loop that every later epic depends on. It covers no functional requirements. It delivers the install, access-control, durability and air-gap platform, and sets the UX floor (tokens, shell, accessibility, banned patterns) that later surfaces inherit and must not drop below.
+Make the start of the first-30-minutes journey real. A SecOps engineer installs the self-hosted control plane with one `helm install`, signs in with a bootstrap admin, and reaches an accessible, keyboard-first shell — labelled black sidebar, Light (default) and Dark themes — with an honest empty Home page. OIDC and the three roles are optional and set through Helm values. The epic also builds the monorepo, the local gate, CI, image builds and the Skaffold dev loop that every later epic depends on. It covers no functional requirements. It delivers the install, access-control, durability and air-gap platform, and sets the UX floor (tokens, shell, accessibility, banned patterns) that later surfaces inherit and must not drop below.
 
 ## Stories
 
@@ -12,8 +12,8 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
 - Story 1.2: Install the control plane with one Helm command, durable storage included
 - Story 1.3: Sign in with the bootstrap admin
 - Story 1.4: Declarative OIDC sign-in and role-based access
-- Story 1.5: Design tokens and the three themes
-- Story 1.6: App shell, navigation and the empty Posture page
+- Story 1.5: Design tokens and the Light and Dark themes
+- Story 1.6: App shell, sidebar navigation and the empty Home page
 - Story 1.7: Accessibility, message catalogue and responsive baseline
 - Story 1.8: Command palette and keyboard map
 - Story 1.9: Banned-pattern guards
@@ -24,8 +24,8 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
 - **Self-hosted and air-gap capable:** no phone-home. With `airGapped: true` the control plane makes no outbound connections, which a test proves. The air-gap mode is exposed read-only through the API. Fonts and all other assets are bundled locally, with no CDN.
 - **Durability:** a single control-plane instance with no HA. Postgres and SeaweedFS use persistent volumes, so deleting the pod loses no data.
 - **Access control:** OIDC is configured only through env, Helm values or a config file, never a UI wizard. A bootstrap admin covers first sign-in and IdP outages. The roles are admin, analyst and read-only auditor. A user whose claims map to no role is denied and gets no default role. CI tokens are not a user role.
-- **Accessibility:** WCAG 2.2 AA as a contractual floor. Full keyboard operation with visible focus rings and tab order that follows reading order. Polite `aria-live` announcements. Global `prefers-reduced-motion`. State is never shown by colour alone.
-- **Platform:** ≥1280px is the primary width. 1024–1279px degrades tolerantly. Below 1024px is best-effort read-only. Web only, last two versions of evergreen browsers.
+- **Accessibility:** WCAG 2.2 AA as a contractual floor. Full keyboard operation with visible focus rings and tab order that follows reading order. Polite `aria-live` announcements. Global `prefers-reduced-motion`. State is never shown by colour alone. Single-key shortcuts can be turned off (2.1.4). Field edges are ≥3:1 at rest (1.4.11). Content reflows at 400% zoom and 200% text.
+- **Platform:** ≥1280px: full sidebar and three columns. 1024–1279px: icon rail, list and detail side by side. Below 1024px: icon rail, list and detail stacked with a Back link, fully operable. Web only, last two versions of evergreen browsers.
 - **Configurable with smart defaults:** where several valid approaches exist, make the choice a setting with a default, so a default install needs no configuration. Record the default and the alternatives in the story.
 - **Dev loop rule:** after Story 1.1, `mise run dev` (Skaffold on the dev cluster) must run and be healthy during every development step. Check changes against the live deployment and with `mise run check`. Story 1.1 is readiness-enabling: Agent Readiness must be ready before Stories 1.2+ start Build.
 
@@ -78,7 +78,7 @@ Make the start of the first-30-minutes journey real. A SecOps engineer installs 
 - **Frontend:**
   - Server state uses TanStack `svelte-query` over the generated client, and local state uses Svelte 5 runes.
   - Components live with their routes. Only shared shadcn-svelte primitives go in `lib/components/ui`.
-  - The palette lives in `lib/command/` and the token maps in `lib/theme/`.
+  - The palette lives in `lib/command/`, the token maps in `lib/theme/`, and the brand-layer components every surface shares (shell, list row, markers, status chip, inline error, code block) in `lib/design/`.
   - Component files are kebab-case.
 
 Sketch of the API shapes (illustrative only; the field names are the ones above):
@@ -91,49 +91,48 @@ Sketch of the API shapes (illustrative only; the field names are the ones above)
 ## UX & Interaction Patterns
 
 - **Tokens:**
-  - There are three dark themes: Forge (default), High Signal and Gunmetal. There is no light mode and no OS-preference detection.
-  - Semantic roles map onto shadcn CSS variables using the exact DESIGN.md values, including `rail-*`, `data-quality`, `data-quality-muted` and `node-inactive-border`. Components use roles only, never raw hex or theme-suffixed variables, and a lint enforces this.
-  - Elements that contain text are never shown with opacity below 1; use the muted tokens instead.
+  - Two themes over the same roles: Light (default, unsuffixed tokens) and Dark (`-dark`); new users get Light; no OS-preference detection.
+  - Roles map onto shadcn variables per the DESIGN.md "shadcn mapping" table, plus `--paper`, `--dq`, `--dq-muted` and `--dq-wash`; `print-*` tokens feed only Typst. Components use roles only, never raw hex or theme-suffixed variables, and a lint enforces this.
+  - No opacity below 1 on elements with text, except disabled controls at 0.45.
   - Contrast tests:
-    - AA (4.5:1) for all text roles in Forge and Gunmetal.
-    - AAA for High Signal primary text, and ≥7:1 for High Signal muted text.
-    - 4.5:1 for `data-quality-muted` and 3:1 for `node-inactive-border` in all three themes.
+    - AA 4.5:1 for every text pair in the DESIGN.md Contrast table, in both themes (lowest 4.9:1), including `dq` and `dq-muted`.
+    - ≥3:1 for `field-border` and the focus ring; markers below 3:1 only beside a word.
 - **Typography:**
-  - Inter Display for numerals and titles, Inter for all UI text, IBM Plex Mono for every identifier. Numerals use `tabular-nums`.
-  - Use the DESIGN.md sizes exactly, with no intermediate sizes.
-  - Radii: 5/8/9/12/11. Spacing: rail 58, gutter 52, zone gap 48–56, data row 30, stat gap 44.
-  - Depth comes from tonal layering and 1px borders. Shadows are used only on overlays.
+  - IBM Plex Sans for everything; Plex Sans Bold Italic for the wordmark only; Plex Mono only for IDs, fingerprints, commands and keys; all self-hosted (OFL). Numerals use `tabular-nums` in data.
+  - Nine sizes 12 · 13 · 14 · 15 · 17 · 20 · 24 · 30 · 40, plus the 22px wordmark; weights 400/500/600. Sentence case; uppercase only on button labels; no eyebrows.
+  - Radii 3 / 4 / 6 / 10, pill, full. Layout: sidebar 252, list column 376 / 500 / 420, gutter 32, detail cell 30 × 34, rows ≈78 / 72px; one density.
+  - Depth is tone + 1px rules; the only shadow is the ⌘K dialog.
 - **Shell:**
-  - A 58px icon rail holds 7 surfaces, with Settings pinned to the bottom. The active item gets a raised tint and a 2px accent indicator. Tooltips show on hover and focus. There is no top nav.
-  - Every surface has a page header row with a breadcrumb, the blast-radius search field (opens the palette) and a compact theme switcher (swatch + name).
-  - The heading block is left-aligned: eyebrow → title → subtitle (≤620px) → 46×2px accent rule.
-  - Empty surfaces show a calm line with no illustrations. The empty Posture page says that no sources are connected yet.
-- **Settings:** an in-page left list grouped as Connections, Feeds, Policy, Access, Signals and Personal, with each panel at `/settings/<panel>`. Epic 1 fills these panels: theme picker (live preview, instant apply without reload), read-only auth configuration, users/roles, and the shortcut list.
+  - A 252px black sidebar: wordmark, "Search or jump to… ⌘K" field, Home · Software · Issues · Exposure · Reports, a divider, Settings · Help, and the user menu (name, role, Personal settings, Sign out) at the foot; the active item is lime. The Issues badge (Needs-attention count) arrives in Story 2.10. Help opens a placeholder until its screen is designed.
+  - No top nav and no page header. Three-column master-detail; page title = sidebar label + one summary line.
+  - Below 1280px the sidebar becomes an icon rail; below 1024px list and detail stack with a Back link.
+  - Empty surfaces show a calm line with no illustrations. The empty Home says that no sources are connected yet.
+- **Settings:** a panel list in the list column, grouped as Connections, Sources, Policy, Access, Signals and Personal, with each panel at `/settings/<panel>`. Epic 1 fills Personal (the Light/Dark theme switch, instant apply; the shortcut list; the single-key shortcut switch) and Access (read-only auth configuration, users/roles).
 - **Auditor:** mutation controls are absent from the DOM, not disabled.
-- **Loading and errors:** use a layout-mirroring `Skeleton` and show the error envelope's `message`. Never show a bare spinner.
+- **Loading and errors:** use a layout-mirroring `Skeleton` and show the error envelope's `message`. Never show a bare spinner. A failed save or start shows an inline error line with Try again in the panel where it happened, never a toast.
 - **Palette:**
-  - `⌘K`/`Ctrl+K` opens a shadcn `Command` palette with groups Answers → Navigate → Actions → Recent. Results are announced through `aria-live`.
-  - It includes "Switch theme…" with live preview.
-  - The no-match copy is "No matches. Try a CVE ID, package@version, or digest."
+  - `⌘K`/`Ctrl+K` (and the sidebar search field) opens a 660px shadcn `Command` dialog with groups Issues · Software · Exposure · Actions (Recent is not drawn); it traps focus, dims the page and returns focus on `Esc`. Results are announced through polite `aria-live`.
+  - It includes "Switch theme…" (Light / Dark).
+  - The no-match copy is "No matches. Try a CVE ID, package@version or fingerprint."
   - Actions come from one shared action registry, and every shortcut must have a palette entry.
 - **Keys:** the bindings are fixed for v1:
-  - `g`+`p/b/g/a/f/e` navigates.
+  - `g` + a surface letter navigates (letters set by UX before Story 1.8 Build, EXPERIENCE Open item 13); `J`/`K` move, `/` focuses search, `⌘↵` saves and goes to the next, `x` exports.
   - `?` opens the shortcut map.
   - `Esc` closes the topmost layer.
-  - Shortcuts never fire while focus is in a text input.
+  - Single-key shortcuts never fire while focus is in a text field and can be turned off in Settings → Personal; `⌘K` and `⌘↵` stay on.
 - **Copy:**
   - Every string comes from an externalised catalogue, with no concatenation and no text in SVG. A lint enforces this.
-  - The locked glossary and the lowercase triage statuses are defined once.
+  - The plain-label glossary (plain label first, technical term small and grey) and the five review statuses (Not reviewed yet, Not impacted, Fix planned, Mitigated, Risk accepted) are defined once; British English; retired labels fail a lint.
   - The tone is calm, built on counts and verbs.
 - **Banned patterns, enforced by checks:**
-  - in-product notifications or toasts used as alerts; Toast may only confirm the user's own action
-  - new-finding badges and celebratory animation
+  - in-product notifications and toasts (as alerts or for save results)
+  - new-finding badges (the Needs-attention badge is allowed), celebratory animation, a Compact density toggle
   - an OIDC wizard
   - evidence edit or delete
   - infinite scroll
-  - overlays deeper than a drawer plus one dialog, through one shared overlay component
+  - any modal besides the ⌘K dialog, and any drawer (one shared overlay component)
   - hover-only affordances
-  - more than one primary button per surface
+  - more than one lime primary action per view; lime outside its agreed jobs; red anywhere
 
 ## Cross-Story Dependencies
 
@@ -142,12 +141,12 @@ Sketch of the API shapes (illustrative only; the field names are the ones above)
 - **Stories 1.3 → 1.4:** 1.4 builds on the 1.3 sessions and the error envelope.
 - **Stories 1.5 → 1.6 → 1.8:**
   - 1.5 provides the preference API.
-  - 1.6 adds the theme picker and the page header.
-  - 1.8 adds palette theme switching and makes the 1.6 header search open the palette.
+  - 1.6 adds the sidebar, the user menu and the Settings → Personal theme switch.
+  - 1.8 adds palette theme switching, makes the 1.6 sidebar search field open the palette, and adds the single-key shortcut switch.
 - **Story 1.7** builds on the 1.6 shell and the 1.1 Playwright setup. Its axe and viewport checks automatically include routes that later stories add.
 - **Hooks for later epics:**
-  - Posture setup actions and the empty state arrive in Stories 2.2 and 3.2.
-  - Blast-radius answers in the palette arrive in Story 6.3.
+  - Home setup actions and the empty state arrive in Stories 2.2 and 3.2; the Issues badge arrives in Story 2.10.
+  - Exposure answers in the palette arrive in Story 6.3.
   - The agent mTLS listener arrives in Story 3.1.
   - Real CI-token routes arrive in Story 11.1 and the pack role-setting route in Story 9.5. Both are covered by the 1.4 route test.
   - Monthly partitioning in the migration Job starts with Story 2.1.

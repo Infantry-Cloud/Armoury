@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-06-2026 00:18
-last_updated: 11-06-2026 00:18
+last_updated: 11-07-2026 02:02
 project: Armoury
 project_key: NOKEY
 tracking_system: file-system
@@ -40,8 +40,8 @@ development_status:
   1-2-install-the-control-plane-with-one-helm-command-durable-stor: backlog
   1-3-sign-in-with-the-bootstrap-admin: backlog
   1-4-declarative-oidc-sign-in-and-role-based-access: backlog
-  1-5-design-tokens-and-the-three-themes: backlog
-  1-6-app-shell-navigation-and-the-empty-posture-page: backlog
+  1-5-design-tokens-and-the-light-and-dark-themes: backlog
+  1-6-app-shell-sidebar-navigation-and-the-empty-home-page: backlog
   1-7-accessibility-message-catalogue-and-responsive-baseline: backlog
   1-8-command-palette-and-keyboard-map: backlog
   1-9-banned-pattern-guards: backlog
@@ -56,9 +56,9 @@ development_status:
   2-6-package-feed-connections-npm-and-pypi: backlog
   2-7-package-feed-connections-maven-cargo-and-go-modules: backlog
   2-8-oci-artifacts-beyond-container-images: backlog
-  2-9-posture-summary-populating-coverage-and-freshness: backlog
-  2-10-posture-findings-severity-band-and-findings-table: backlog
-  2-11-artifacts-list-and-artifact-detail: backlog
+  2-9-home-summary-checking-coverage-and-freshness: backlog
+  2-10-home-needs-attention-and-open-issues-by-severity: backlog
+  2-11-software-list-and-software-detail: backlog
   2-12-prove-minute-29-scripted-install-to-posture-run: backlog
   2-13-prove-the-scale-anchor-initial-evaluation-load-test: backlog
   epic-2-retrospective: optional
@@ -69,7 +69,7 @@ development_status:
   3-3-reconnect-by-stateless-re-derive-without-storms: backlog
   3-4-https-long-poll-fallback-for-locked-down-networks: backlog
   3-5-shipped-vs-running-reconciliation: backlog
-  3-6-runtime-coverage-on-posture-and-minute-29-with-the-agent: backlog
+  3-6-runtime-coverage-on-home-and-software-and-minute-29-with-the: backlog
   epic-3-retrospective: optional
 
   epic-4: backlog
@@ -79,28 +79,30 @@ development_status:
   4-4-osv-and-cna-record-enrichment: backlog
   4-5-offline-feed-bundle-format-and-creation: backlog
   4-6-import-an-offline-bundle-into-an-air-gapped-instance: backlog
-  4-7-honest-feed-staleness-across-posture-and-findings: backlog
+  4-7-honest-feed-staleness-across-home-and-issues: backlog
   4-8-prove-one-hour-re-evaluation-at-the-scale-anchor: backlog
+  4-9-end-of-life-data-for-packages: backlog
+  4-10-verify-artifact-signatures-against-trusted-signers: backlog
   epic-4-retrospective: optional
 
   epic-5: backlog
-  5-1-deterministic-explainable-ranking: backlog
-  5-2-findings-workbench-and-ranked-posture-table: backlog
+  5-1-deterministic-explainable-issue-order: backlog
+  5-2-issues-list-severity-groups-filters-and-the-home-summary: backlog
   5-3-record-triage-decisions-as-evidence: backlog
-  5-4-triage-drawer: backlog
-  5-5-evidence-trail-surface: backlog
-  5-6-emit-vex-from-triage-decisions: backlog
+  5-4-review-panel-in-the-issues-detail-column: backlog
+  5-5-audit-trail-in-reports-and-on-every-item: backlog
+  5-6-emit-vex-from-review-decisions: backlog
   5-7-ingest-vendor-vex: backlog
-  5-8-fleet-wide-triage-decisions: backlog
+  5-8-review-scope-all-places-or-only-this-software: backlog
   epic-5-retrospective: optional
 
   epic-6: backlog
   6-1-graph-projection-of-inventory-and-findings: backlog
   6-2-blast-radius-query-api: backlog
-  6-3-blast-radius-surface-answer-and-table-from-k: backlog
-  6-4-blast-radius-graph-reading: backlog
-  6-5-export-blast-radius-and-posture-answers: backlog
-  6-6-graph-explorer-and-node-inspector: backlog
+  6-3-exposure-surface-answer-and-table-from-k: backlog
+  6-4-exposure-map-reading: backlog
+  6-5-export-views-as-stored-evidence-and-the-answer-report: backlog
+  6-6-exposure-map-traversal-and-inspector: backlog
   6-7-prove-sub-minute-blast-radius-at-the-scale-anchor: backlog
   epic-6-retrospective: optional
 
@@ -108,14 +110,14 @@ development_status:
   7-1-license-evaluation-of-stored-sboms-with-grant: backlog
   7-2-license-evaluation-of-images-and-filesystems-directly: backlog
   7-3-fleet-license-policy: backlog
-  7-4-license-findings-in-posture-findings-and-triage: backlog
+  7-4-licence-issues-in-home-issues-and-review: backlog
   epic-7-retrospective: optional
 
   epic-8: backlog
   8-1-data-quality-scoring-model-and-artifact-score: backlog
-  8-2-fleet-data-quality-on-posture-and-artifacts: backlog
+  8-2-fleet-data-quality-score-and-the-software-detail-meter: backlog
   8-3-prometheus-metrics-endpoint: backlog
-  8-4-prometheus-panel-in-settings: backlog
+  8-4-prometheus-panel-in-settings-signals: backlog
   epic-8-retrospective: optional
 
   epic-9: backlog
@@ -123,7 +125,7 @@ development_status:
   9-2-pack-architecture-and-the-cra-pack-definition: backlog
   9-3-pdf-report-and-machine-readable-companions: backlog
   9-4-sign-evidence-packs: backlog
-  9-5-generate-packs-and-verify-signatures-in-the-ui: backlog
+  9-5-generate-audit-reports-and-verify-signatures-in-reports: backlog
   9-6-signed-ledger-checkpoints: backlog
   9-7-retention-with-archiving-to-the-object-store: backlog
   9-8-sbom-compaction-and-archive-purge: backlog

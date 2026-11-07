@@ -5,10 +5,12 @@ inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/addendum.md
   - _bmad-output/planning-artifacts/architecture.md
-  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/DESIGN.md
-  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/EXPERIENCE.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/DESIGN.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/EXPERIENCE.md
 amendments:
   - 2026-11-05 Correct Course — _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-05.md (readiness fixes; FR31 and NFR12; Epic 11)
+  - 2026-11-06 Correct Course — _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md (cluster-based dev loop and CI)
+  - 2026-11-07 Correct Course — _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-07.md (UX spines ux-Armoury-2026-11-06; FR32, FR33; Stories 4.9, 4.10)
 ---
 
 # Armoury - Epic Breakdown
@@ -21,7 +23,7 @@ This document provides the complete epic and story breakdown for Armoury, decomp
 
 ### Functional Requirements
 
-FR IDs are the PRD's stable IDs (FR29–FR30 were added at finalize and FR31 on 2026-11-05, so they sit out of numeric sequence).
+FR IDs are the PRD's stable IDs (FR29–FR30 were added at finalize, FR31 on 2026-11-05 and FR32–FR33 on 2026-11-07, so they sit out of numeric sequence).
 
 **Fleet Inventory**
 
@@ -31,6 +33,7 @@ FR IDs are the PRD's stable IDs (FR29–FR30 were added at finalize and FR31 on 
 - FR3: Live cluster inventory — a cluster agent watches the Kubernetes API and maintains a live record of running image digests (cluster/namespace/workload), reported to the control plane.
 - FR4: Shipped-vs-running reconciliation — registry artifacts and running workloads are linked in one inventory; "is this running anywhere?" is answerable per artifact.
 - FR31: Optional CI scan — a pipeline step submits a built artifact (image digest from a connected registry, or an uploaded image or package archive, never source); the server SBOMs, scans and license-checks it with the fleet toolchain, decides pass or fail with the fleet CI policy, links known artifacts instead of duplicating them, and the step always prints the verdict and the artifact URL. Central scanning stays the default.
+- FR32: Artifact signature verification — container images and other OCI artifacts in connected registries are checked against signers an admin trusts (public keys or keyless identities); the result, signer and check time are recorded as evidence and shown in artifact detail; verification runs only on the control plane and works air-gapped (key-based with no network, keyless with trust material supplied offline).
 - FR5: Coverage visibility — the inventory shows its own gaps: discovered-but-not-SBOM'd images, unreachable registries, disconnected agents.
 
 **Consistent Scanning & Lifecycle Freshness**
@@ -45,18 +48,19 @@ FR IDs are the PRD's stable IDs (FR29–FR30 were added at finalize and FR31 on 
 
 - FR11: Multi-source enrichment — findings enriched from CISA KEV, EPSS, CNA records and OSV.
 - FR12: Source attribution — every enrichment datum is labelled with its source and retrieval time.
-- FR13: Risk-based prioritization — deterministic, explainable ranking: KEV-listed first, then EPSS-weighted severity; the UI can always show why a finding ranks where it does.
-- FR14: Triage decisions as first-class data — status (not affected / mitigated / accepted / fix planned), justification, author and timestamp; decisions propagate to posture views, team consumption and evidence packs.
+- FR33: End-of-life data — for the packages in every stored SBOM, whether each package version has reached its end of life, from an attributed source refreshed like the enrichment feeds, re-joined without rescans and carried in the offline bundle; shown in artifact detail; uncovered packages are "unknown", never "supported".
+- FR13: Risk-based prioritization — deterministic, explainable ordering: licence findings as their own group first (hidden when empty), then severity groups Critical, High, Medium, Low; KEV-listed (actively exploited) first within each group, then by EPSS; EPSS is never presented as a rating; the UI states the order in words.
+- FR14: Triage decisions as first-class data — status (not affected / mitigated / accepted / fix planned; untriaged when none), justification (required except for fix planned, whose VEX action statement then comes from the planned fix), author, timestamp and scope (every artifact with the same vulnerability or licence in the same package version by default, or one artifact); decisions propagate to posture views, team consumption and evidence packs.
 - FR15: VEX support — triage decisions are expressible as standard VEX; vendor VEX documents are ingested and their not-affected claims applied (with attribution) to fleet findings.
 
 **Blast-Radius Query & Posture View**
 
-- FR16: Fleet posture view — landing state: fleet summary of artifacts, findings by priority, coverage gaps and feed freshness.
-- FR17: Blast-radius query — given a CVE ID or package+version, answer which artifacts (shipped and running) are affected and where deployed (cluster/namespace/workload), in seconds, with data provenance (sources, coverage, freshness).
-- FR18: Artifact detail — SBOM contents, findings (vulnerability and license) with triage status, evaluation provenance and running locations.
-- FR19: Shareable answers — blast-radius results and posture summaries export as report/CSV.
+- FR16: Fleet posture view — landing state (UI: Home): fleet summary of artifacts, the findings that need attention today, open findings by group (FR13), coverage gaps and feed freshness.
+- FR17: Blast-radius query (UI: Exposure) — given a CVE ID, package+version or image digest, answer which artifacts (shipped and running) are affected and where deployed (cluster/namespace/workload), in seconds, with data provenance (sources, coverage, freshness); an unknown CVE ID is answered as unknown with the data's age, never as zero; any node of the answer can be followed to its own connections.
+- FR18: Artifact detail (UI: Software detail) — SBOM contents, findings (vulnerability and license) with triage status, evaluation provenance, running locations, signature status (FR32), package end-of-life status (FR33) and the data-quality score (FR30); "check again" re-queues the SBOM and scan.
+- FR19: Shareable answers — the current view of a blast-radius answer, the findings list or the artifact list exports as CSV (JSON optional), with the screen's caveats and provenance, and a blast-radius answer also as a PDF report; every export is stored as evidence (file + ledger entry, evidence-pack retention) and listed with the packs; the posture summary is shared as an evidence pack.
 - FR20: Prometheus metrics — posture signals exposed as metrics (new critical/KEV findings, coverage gaps, feed freshness, agent health); pull-only, no notifications.
-- FR30: Data-quality score — a score grading the trustworthiness of the underlying data (SBOM depth/completeness, scan coverage, feed freshness, enrichment source coverage, CVE record quality), at artifact and fleet level, in posture views and evidence packs.
+- FR30: Data-quality score — a score grading the trustworthiness of the underlying data (SBOM depth/completeness, scan coverage, feed freshness, enrichment source coverage, CVE record quality), at artifact level in artifact detail and at fleet level in evidence packs (their in-product detail and printed cover page); never in list rows.
 
 **Compliance Evidence**
 
@@ -69,7 +73,7 @@ FR IDs are the PRD's stable IDs (FR29–FR30 were added at finalize and FR31 on 
 **License Compliance**
 
 - FR26: License evaluation — Grant across its full surface (SBOMs, container images, filesystems); defaults to Armoury-generated SBOMs without restricting Grant's capability.
-- FR27: License policy — fleet-wide allow/deny policy; violations surface as findings in the same posture/artifact views, triagable with the FR14 model.
+- FR27: License policy — fleet-wide allow/deny policy; violations surface as findings in the same posture/findings/artifact views (UI: a Licences group listed first and hidden when empty, and a Licences type filter), triagable with the FR14 model.
 - FR28: License evidence — the license section of evidence packs draws from this data; embedded, never headline.
 
 ### NonFunctional Requirements
@@ -116,15 +120,15 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 - ARCH12: OpenAPI-first — `api/openapi.yaml` is the contract; server types are generated (`openapi-generator` rust-axum, run from its pinned container image so no local Java is needed; fallback code-first `utoipa` with CI failing on spec diff), plus a generated TS client (`openapi-typescript` + `openapi-fetch`). `mise run gen:api` regenerates; `mise run check` fails if generated code differs from committed code. Generated code is never hand-edited. Every operation declares `x-armoury-role: admin | analyst | auditor` (and `x-armoury-role-setting` where a setting can open it to a lower role); the RBAC middleware reads it. A CI token is not a role: routes that CI may call also declare `x-armoury-ci-token: true`. CI tokens use `Authorization: Bearer <token>` (a session cookie never counts as a CI token); the middleware accepts a CI token only on marked routes and returns 403 on every other route.
 - ARCH13: API conventions — `/api/v1/<plural-noun>`, snake_case JSON and query params, resources returned unwrapped, lists as `{items, page}` with cursor pagination (no offset), uniform `{error:{code,message,details}}` envelope, UUIDv7 IDs, RFC 3339 UTC timestamps, durations in integer seconds, `X-Armoury-*` custom headers. Long-running work uses the long-operation pattern (ARCH33).
 - ARCH14: Mandatory `provenance` block (`sources[]`, `coverage`, `freshness`, `caveats[]` when partial) on every answer-bearing response (posture, blast radius, artifact, packs).
-- ARCH15: Locked domain vocabulary and triage status set (`not_affected` / `mitigated` / `accepted` / `fix_planned`, derived `untriaged`) as typed enums in Rust, OpenAPI and TS.
-- ARCH16: Auth — OIDC code flow (`openidconnect` crate), declarative config, bootstrap admin, httpOnly secure cookie session for the SPA; RBAC enforced in API middleware. Sessions live in a PostgreSQL `sessions` table (the cookie holds a random ID; the table stores its hash); idle and maximum lifetime are Helm values (defaults 8 h / 24 h). User preferences (theme) live in `user_preferences` (`GET`/`PUT /api/v1/me/preferences`). Both are "not evidence".
+- ARCH15: Locked domain vocabulary and triage status set (`not_affected` / `mitigated` / `accepted` / `fix_planned`, derived `untriaged`) as typed enums in Rust, OpenAPI and TS. UI labels come from the plain-language glossary (UX-DR33: Not reviewed yet · Not impacted · Fix planned · Mitigated · Risk accepted); enum values and API names do not change.
+- ARCH16: Auth — OIDC code flow (`openidconnect` crate), declarative config, bootstrap admin, httpOnly secure cookie session for the SPA; RBAC enforced in API middleware. Sessions live in a PostgreSQL `sessions` table (the cookie holds a random ID; the table stores its hash); idle and maximum lifetime are Helm values (defaults 8 h / 24 h). User preferences (theme Light/Dark, default Light; the single-key shortcut switch from Settings → Personal, default on) live in `user_preferences` (`GET`/`PUT /api/v1/me/preferences`). Both are "not evidence".
 - ARCH17: Registry/feed credentials are envelope-encrypted at rest, with key material from a k8s Secret / Helm value: AES-256-GCM via `aws-lc-rs`; one random data key per credential, wrapped by the master key; a key ID per record for rotation (add new master key, re-encrypt data keys, remove old key); the record ID as AAD. With no master key in the chart, the control plane generates one on first start and stores it in a Secret.
 - ARCH18: Signing via `cosign` — runtime setting `signing.mode` (PROC2): `key` (default; operator key from a Secret, generated on first start when none is supplied, public key shown in Settings and appended to the ledger) or `keyless` (opt-in; projected service-account token to public Fulcio for EKS/GKE/AKS issuers or a private Fulcio, with Rekor; an unaccepted issuer fails at startup). Air-gapped mode always uses `key`. Mode and signer identity recorded on each signature. Verification never requires internet (`sigstore` crate or cosign CLI). Build-time keyless signing of Armoury's own releases is unchanged. Exceptions: operator-built feed bundles (Story 4.5) are always signed with the operator key; Armoury-published feed bundles (Story 10.2) are signed with the KMS bundle key. `ponytail:` a Secret-held key is only as safe as the cluster; upgrade path a cosign KMS key reference.
 
 **Air gap**
 
-- ARCH19: Air-gap is an instance-mode flag that reshapes feed ingress, enrichment ingress and signing. Outbound calls fall in two classes: **admin-configured endpoints** (registries, package feeds, the OIDC issuer, a private Fulcio, a configured Rekor (ARCH37), proxies — called only by the module that owns the connection, at its configured URL; an accepted default public URL is stored in the connection and counts as admin-configured) and **built-in public endpoints** (Grype DB, KEV, EPSS, OSV, CVE List, public Fulcio, public Rekor — called only by `feeds`, `enrichment` and `signing`, and turned off completely in air-gapped mode).
-- ARCH20: Offline bundles cover both vulnerability feeds **and** enrichment sources (KEV/EPSS/OSV/CNA). Bundles are atomically validated and signature-checked before they can drive re-evaluation; a partial or failed import fails closed as stale (R8). The enrichment bundle format is an open minor gap.
+- ARCH19: Air-gap is an instance-mode flag that reshapes feed ingress, enrichment ingress and signing. Outbound calls fall in two classes: **admin-configured endpoints** (registries, package feeds, the OIDC issuer, a private Fulcio, a configured Rekor (ARCH37), proxies — called only by the module that owns the connection, at its configured URL; an accepted default public URL is stored in the connection and counts as admin-configured) and **built-in public endpoints** (Grype DB, KEV, EPSS, OSV, CVE List, the end-of-life data source (FR33), public Fulcio, public Rekor — called only by `feeds`, `enrichment` and `signing`, and turned off completely in air-gapped mode).
+- ARCH20: Offline bundles cover both vulnerability feeds **and** enrichment sources (KEV/EPSS/OSV/CNA, and end-of-life data from Story 4.9). Bundles are atomically validated and signature-checked before they can drive re-evaluation; a partial or failed import fails closed as stale (R8). The enrichment bundle format is an open minor gap.
 - ARCH21: Record enrichment/feed source versions on findings and pack covers, so later corrections are explainable rather than locked (R10).
 
 **Delivery, CI, observability**
@@ -135,25 +139,32 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 
 **Code & test patterns (apply to every story)**
 
-- ARCH25: Locality of Behaviour — module-by-capability (`inventory`, `ciscan`, `feeds`, `scan`, `reeval`, `enrichment`, `ranking`, `triage`, `license`, `posture`, `blastradius`, `graph`, `evidence`, `packs`, `signing`, `metrics`, `auth`, `agentgw`, `tools`, `postgres`, `blob`, `httpapi`); max 3 layers; explicit dependencies wired only in `main.rs`; no globals/singletons; traits only at the third occurrence; one `thiserror` enum per capability; no `unwrap`/`expect` outside tests/startup; no `unsafe`; no `utils/`/`helpers/`/`common/`; files 100–400 lines.
+- ARCH25: Locality of Behaviour — module-by-capability (`inventory`, `ciscan`, `feeds`, `scan`, `reeval`, `enrichment`, `ranking`, `triage`, `license`, `posture`, `blastradius`, `graph`, `exports`, `evidence`, `packs`, `signing`, `metrics`, `auth`, `agentgw`, `tools`, `postgres`, `blob`, `httpapi`); max 3 layers; explicit dependencies wired only in `main.rs`; no globals/singletons; traits only at the third occurrence; one `thiserror` enum per capability; no `unwrap`/`expect` outside tests/startup; no `unsafe`; no `utils/`/`helpers/`/`common/`; files 100–400 lines.
 - ARCH26: Frontend — TanStack `svelte-query` for server state, Svelte 5 runes for local state, components co-located with their routes, shadcn-svelte primitives in `lib/components/ui`, and a table equivalent for every graph view.
 - ARCH27: Tests co-located — `cargo nextest` + `#[sqlx::test]` against `apache/age:release_PG18_1.8.0`, pinned by digest, which runs as a Pod in the dev cluster (`mise run check` reaches it by port-forward locally and by Service DNS on ARC runners; no local database); agent tested against a mocked kube client plus an integration test in a temporary dev-cluster namespace in CI; Vitest + Playwright (`web/e2e/`, `mise run e2e` against the Skaffold deployment) for the SPA.
 
 **Validation & open decisions**
 
 - ARCH28: Performance validation — a load test at the NFR3 scale anchor for R1 (AGE blast-radius latency, NFR2), R2 (re-eval delta throughput, NFR5) and R11 (per-SBOM Grype subprocess cost), with the query-latency SLO surfaced through the NFR8 path from day one.
-- ARCH29: Decisions to close before their dependent slice — FR30 scoring model and grade banding; FR13 exact ranking formula; FR15 VEX formats (decided 2026-11-04: OpenVEX + CycloneDX VEX, CSAF deferred; now recorded in `architecture.md`) and the VEX status mapping (open — Story 5.6 amendment, user-approved before implementation); FR23 retention mechanism (decided 2026-11-04, see ARCH30; now recorded in `architecture.md`).
+- ARCH29: Decisions to close before their dependent slice — FR30 scoring model and grade banding (the UX bands are a placeholder — EXPERIENCE Open item 11); FR13 within-group order (actively exploited first, then raw EPSS, then a stable tie-breaker — EXPERIENCE Open item 1); FR15 VEX formats (decided 2026-11-04: OpenVEX + CycloneDX VEX, CSAF deferred; now recorded in `architecture.md`) and the VEX status mapping (open — Story 5.6 amendment, user-approved before implementation); FR23 retention mechanism (decided 2026-11-04, see ARCH30; now recorded in `architecture.md`).
 - ARCH30: **Evidence retention mechanism — signed checkpoints, then archive** (decided by Daniel, 2026-11-04). (1) The ledger table (by entry time) and the history tables (ARCH32, by `valid_to`) are partitioned by month from their first migration. (2) At a configurable interval (default: daily), a checkpoint entry records the chain head hash, entry count and covered time range, and is signed by the `signing` capability in the configured signing mode (ARCH18). Signed checkpoints also detect a full-chain recompute by a database superuser, which the hash chain alone cannot. (3) When a whole monthly partition is older than the retention period (default and minimum 24 months) and is covered by a signed checkpoint, the maintenance CronJob with the `armoury_owner` login exports it to the object store as an archive segment (compressed, with its digest referenced by a ledger entry), verifies the segment against the checkpoint, and only then drops the partition. The application role keeps no DELETE grant. (4) Chain verification starts from the oldest hot checkpoint; archived segments verify independently against their checkpoint. (5) Point-in-time queries and packs for archived windows read verified archive segments, so the window stays reportable. (6) Archive segments are kept forever by default; an admin can enable a purge after a further configurable period, recorded as a ledger entry and never silent (PROC2, NFR11 "never silently deleted"). History-table partitions follow the same archive path.
 
 **Amendments 2026-11-05 (Correct Course; also recorded in `architecture.md`)**
 
 - ARCH31: **All scanning on the server** (NFR12, governing principle). Syft, Grype, Grant, license policy, the CI policy and every other check run only in the control plane with the fleet tool versions and configuration. A CI runner, a cluster agent or any other client only identifies an artifact or supplies its bytes; the server never uses a client-computed SBOM, finding, license result or verdict. Overrides any conflicting statement.
 - ARCH32: **Evidence history tables.** Each evidence-bearing table has a current table and an insert-only history table (`valid_from`/`valid_to`), partitioned by month on `valid_to` (the ledger by entry time), filled only by a database trigger on update or delete; each version closes when the next starts, so versions cannot overlap (no `WITHOUT OVERLAPS`, which checks only inside one partition). Rule 1: a version is written only on content change; a re-evaluation writes one run entry instead of re-versioning unaffected rows. Rule 2: a coverage test requires every table in every application schema to have a history table or an explicit "not evidence" marker. Each change appends a ledger entry with the digest of the new version; events that are themselves the fact keep their full content in the entry; large content stays content-addressed in the object store. No credentials or secrets in ledger or history (tested). The AGE graph shows current state only.
-- ARCH33: **Long-operation API pattern, polling.** `POST /api/v1/<operations>` returns at once with `id`, `status` (`running`/`completed`/`failed`), `progress`, partial results, `provenance` and a result cursor; `GET /api/v1/<operations>/{id}` returns the same shape. The SPA polls with svelte-query (about 1 s for operations, about 10 s for the Posture summary while backlog exists), only while work is queued or running. No SSE in v1. `ponytail:` partial blast-radius results live in memory about 10 minutes (single instance); upgrade path PostgreSQL.
+- ARCH33: **Long-operation API pattern, polling.** `POST /api/v1/<operations>` returns at once with `id`, `status` (`running`/`completed`/`failed`), `progress`, partial results, `provenance` and a result cursor; `GET /api/v1/<operations>/{id}` returns the same shape. The SPA polls with svelte-query (about 1 s for operations, about 10 s for the Home summary (posture endpoint, including the Needs-attention count) while backlog exists), only while work is queued or running. No SSE in v1. `ponytail:` partial blast-radius results live in memory about 10 minutes (single instance); upgrade path PostgreSQL.
 - ARCH34: **Images, chart build and dev loop.** Multi-stage Dockerfiles (control plane with SPA; agent binary only, no scanner tools; base images pinned by digest); `build.yml` builds both images and the chart and pushes to GHCR by digest on `main`; `skaffold.yaml` (pinned Skaffold) with the Helm deployer (`setValueTemplates`, `repo:tag@digest`) is the development loop (PROC3): `mise run dev` builds both images on the in-cluster BuildKit (rootless, mTLS, through a pinned `buildx`), pushes them to the dev registry (`SKAFFOLD_DEFAULT_REPO`), deploys to the developer's namespace in the dev cluster with an explicit kube context, and port-forwards the UI and API to `localhost:8080`. A `ci` profile deploys to a temporary namespace from ARC runners. No local container runtime or local cluster is used (amended 2026-11-06). Customers install the published chart with one `helm install` (Helm 4). `ponytail:` slow Rust rebuilds — debug dev profile and a cached dependency layer; upgrade path a remote build cache.
-- ARCH35: **Connectors and renderers.** Registry access with the `oci-client` crate; discovery modes (PROC2): catalog (default), provider API (ECR, Artifact Registry, Docker Hub), repository list. Package archives are downloaded, checksum-checked against the feed, unpacked safely (no path traversal, no links outside the folder) and SBOM'd with `syft dir:<path>` (`syft file:<path>` for JAR files); an archive without a lock file gives the package itself, not exact dependency versions, shown as a caveat. PDFs are rendered by Typst, a pinned static binary run through `tools`, with the bundled fonts.
+- ARCH35: **Connectors and renderers.** Registry access with the `oci-client` crate; discovery modes (PROC2): catalog (default), provider API (ECR, Artifact Registry, Docker Hub), repository list. Package archives are downloaded, checksum-checked against the feed, unpacked safely (no path traversal, no links outside the folder) and SBOM'd with `syft dir:<path>` (`syft file:<path>` for JAR files); an archive without a lock file gives the package itself, not exact dependency versions, shown as a caveat. PDFs are rendered by Typst, a pinned static binary run through `tools`, with the bundled IBM Plex Sans and IBM Plex Mono fonts and the DESIGN.md `print-*` palette (Inter is no longer used).
 - ARCH36: **CI scan path (FR31).** `armoury scan` is a subcommand of the `armoury` binary with no scanner inside. Digest mode (default): the CLI sends the image digest and build details declared by CI; the server pulls the image by digest from the connected registry. Upload mode: the CLI uploads the built image or package archive (never source); the server computes the digest itself. CI scans run through the same pipeline at a higher queue priority. The server decides the verdict with the versioned fleet CI policy (default: report only); the CLI cannot change it. Exit codes `0` pass, `1` policy failure, `2` no verdict. Artifact identity is the image digest, or package coordinates plus archive checksum; a known artifact gets a new source record, not a duplicate. A scoped CI token (not a user) authenticates the step. Accepted limit: a pipeline can skip the step; central discovery still scans connected registries.
 - ARCH37: **Optional Rekor anchoring of ledger checkpoints** (decided by Daniel, 2026-11-05). Setting `rekor.anchoring.mode`: `disabled` (default), `external` (a Rekor URL and its public key; the public `rekor.sigstore.dev` or a Rekor that another team runs) or `bundled` (the chart deploys `rekor-tiles` with the POSIX backend on its own volume; no witness is required, an optional witness policy is a value). Chart comments recommend `external`. After each signed checkpoint, `signing` submits only the checkpoint digest, its signature and the public key as a `hashedrekord` entry and appends the returned inclusion proof to the ledger. Known limit: Rekor v2 returns no signed timestamp, so detection of a full rebuild that is re-anchored depends on an earlier receipt (for example in an evidence pack) or on a monitor of the log; an RFC 3161 timestamp authority is a later option.
+
+**Amendments 2026-11-07 (Correct Course; also recorded in `architecture.md`)**
+
+- ARCH38: **Issues read model and review scope** (D1, D6–D8). Findings stay per place (one match on one artifact). The API adds **finding groups** (UI "issue"), keyed by vulnerability ID + package purl@version, or licence + finding kind + package purl@version, with `group` (`licence`/`critical`/`high`/`medium`/`low`), `kev`, place count, issue-wide `triage_status`, derived `mixed` with the count of places that differ, and `needs_attention`; per-group and per-status counts and a pager total come from the server. Needs attention = any place `untriaged` AND (`kev` OR critical) for vulnerabilities; any place `untriaged` for `license_violation`; never for `license_warning`. Decisions carry scope `all_places` (default; covers artifacts found later) or `artifact`; per-artifact decisions override and survive a later `all_places` decision. `justification` is required except for `fix_planned`. Metrics keep counting findings (places).
+- ARCH39: **Stored exports** (D3, FR19). Export (CSV of the current view; JSON option) from Exposure, Issues and Software, and the Story 6.5 answer report, are stored: the file in the object store (content-addressed, via `blob`), an insert-only `exports` record and a ledger entry with the file digest (who, when, view, query or filters, format, row count, caveats). Evidence-pack retention (ARCH30); no edit or delete. Listed newest first in Reports → Exports. Owner module `exports` (recommended, O1).
+- ARCH40: **Artifact signature verification** (FR32). Control plane only: `inventory` runs `cosign verify` through `tools` against signatures read from the connected registry (credentials in per-invocation env), using admin-configured trust (public keys, keyless identities; default none). Results and trust-policy versions go to the ledger and the artifact API. Air-gapped: no network for key-based checks; keyless checks use an offline trusted root. The trust model, result states, formats, trusted-root delivery and artifact types are recorded as an amendment approved before Story 4.10.
+- ARCH41: **End-of-life data** (FR33). One more `enrichment` source (a built-in public endpoint with an offline-bundle equivalent), stored as versioned, attributed snapshots, re-joined to stored SBOM packages without re-matching; status past end of life / supported / unknown per package; carried in the offline bundle. The source, licence, coverage, matching rule and staleness threshold are recorded as an amendment approved before Story 4.9.
 
 **Process constraint (project workflow, not architecture)**
 
@@ -163,61 +174,73 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 
 ### UX Design Requirements
 
-From `DESIGN.md` + `EXPERIENCE.md` (ux-Armoury-2026-06-12, both final). Token names refer to DESIGN.md frontmatter.
+From `DESIGN.md` + `EXPERIENCE.md` (ux-Armoury-2026-11-06, both final, updated 2026-11-07; they supersede ux-Armoury-2026-06-12 — Correct Course 2026-11-07). Token names refer to DESIGN.md frontmatter. UX-DR numbers are stable: retired items stay as "Retired" so story references resolve; new items start at UX-DR37. Where a requirement is not yet drawn, the item cites the EXPERIENCE "Open items" number — do not invent it.
 
 **Design tokens & theming**
 
-- UX-DR1: Semantic colour token layer on shadcn-svelte CSS variables, with three dark themes shipped day 1 — Forge (default), High Signal, Gunmetal — using the exact DESIGN.md values (including `rail-*` and `data-quality`). Components reference semantic roles only and never theme-specific hexes. No light mode.
-- UX-DR2: Typography tokens — Inter Display (hero-numeral 76/200, co-stat 34/200, page-title 23/500, answer-headline 21/300), Inter (body 14, body-dense 12, micro-label/eyebrow 10/600 tracked), IBM Plex Mono (mono-identifier 11.5, mono-meta 10.5). Every technical identifier is mono; numerals are `tabular-nums`; no invented intermediate sizes.
-- UX-DR3: Shape, spacing and elevation tokens — rounded sm 5 / default 8 / md 9 / lg 12 / node 11; zone-gap 48–56, page-gutter 52, rail-width 58, data-row 30, stat-gap 44. Depth is tonal layering with 1px borders; shadows only on true overlays.
-- UX-DR4: Theme switcher in Settings, a compact header affordance (swatch + name) and a `⌘K` action. Live preview on focus, instant apply with no reload, persisted per user server-side (`user_preferences`), Forge fallback for new users, no OS-preference detection.
+- UX-DR1: Semantic colour token layer on shadcn-svelte CSS variables (DESIGN.md "shadcn mapping", plus `--paper`, `--dq`, `--dq-muted` and `--dq-wash`), with two themes shipped day 1 — **Light** (default; unsuffixed tokens) and **Dark** (`-dark` tokens) — sharing the same roles, layout and density, using the exact DESIGN.md values. Components reference semantic roles only, never a theme-specific hex. `lime` only for the active nav item and the one primary action per view, plus the agreed exceptions (the selected graph node and "Selected on the map", the Issues nav badge count, text selection); `forest` for selection, the active tab and the active segment, with the text colour switching with the fill (`on-forest`, `sage`, `sage-hi`, `sel-chip`); `dq` and `dq-muted` only for data quality. No red anywhere. `print-*` tokens feed the Typst template only and never follow the app theme. Both themes hold WCAG AA (lowest text pair 4.9:1); there is no separate high-contrast theme (confirm — EXPERIENCE Open item 25).
+- UX-DR2: Typography tokens — **IBM Plex Sans** (variable) for everything; IBM Plex Sans Bold Italic only for the 22px wordmark; **IBM Plex Mono** 400 only for IDs, fingerprints, commands and keys. All SIL OFL 1.1, self-hosted (no network at view time; air-gap safe). Nine sizes only — 12 · 13 · 14 · 15 · 17 · 20 · 24 · 30 · 40 — plus the 22px wordmark as the single exception; roles per DESIGN.md (page-title 30/600, headline-number 30/500, group-heading and detail-title 24/600, answer 24/400, inspector-title 20/600, cell-heading 17/600, body and row-title 15, secondary 14, meta, severity-label and mono-id 13, button-label and mono-small 12). Weights 400 / 500 / 600; `tabular-nums` in every data role; sentence case everywhere (uppercase only for button labels, the Graph/Table switch and zoom labels); no eyebrows, kickers or tracked-caps labels.
+- UX-DR3: Shape, spacing and elevation tokens — rounded xs 3 / sm (= DEFAULT) 4 / md 6 / lg 10 / pill 999 / full; layout tokens sidebar-width 252, list-width 376 (Issues 500, Reports 420), list-gutter 32, detail cell 30 × 34, row-y 17 (Issues 14, summary rows 12), nav-item-height 54, tab-height 64, button-height 42 (sm 32, wide 54), field-height 42, query-height 44, pager-button 32, table-cell-y 12. **One density only** (no Compact mode or toggle). Depth is flat and tonal (ink → paper → canvas → chip) with 1px `rule` lines, never nested cards; the only shadow is the ⌘K dialog over `scrim`. Disabled controls at 0.45 opacity — the only opacity on elements with text.
+- UX-DR4: Theme switch — a Light / Dark segmented control in Settings → Personal and a ⌘K action ("Switch theme…"); no header switcher (the header is gone). Applies instantly with no reload; persisted per user server-side (`user_preferences`, `GET`/`PUT /api/v1/me/preferences`); new users get **Light**. Whether to follow `prefers-color-scheme` is not decided (EXPERIENCE Open item 3) — do not detect OS preference until it is. The printed report never follows the theme.
 
 **App shell & navigation**
 
-- UX-DR5: App shell — 58px icon rail with 7 surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings pinned bottom), active state mirroring the route (raised tint + 2px accent indicator) and tooltips on hover/focus; no top nav; a quiet page header row on every surface (breadcrumb, the blast-radius search field opening the palette, the compact theme switcher) — not a top nav. Left-aligned heading block (eyebrow → title → subtitle ≤ 620px → 46×2px accent rule).
-- UX-DR6: Command palette (`⌘K`/`Ctrl+K`, shadcn `Command`) — every product action invocable; typing a CVE ID, `package@version` or digest routes to a blast-radius answer; result groups Answers → Navigate → Actions → Recent; `aria-live` results; no-match copy "No matches. Try a CVE ID, package@version, or digest."; the Posture header search is the same palette, pre-scoped.
-- UX-DR7: Keyboard map — `g`+`p/b/g/a/f/e` surface navigation, `t` triage drawer, `⌘Enter` record and advance, `Esc` close topmost layer, `e` explore in graph, `x` export, `?` shortcut map (also listed in Settings); graph: arrows/`Tab` traverse, `Enter` open, `+`/`−` zoom. These are the fixed v1 bindings; no custom key bindings in v1.
+- UX-DR5: App shell — black sidebar (`sidebar`, 252px): wordmark; a "Search or jump to… ⌘K" field that opens the palette; seven labelled items **Home · Software · Issues · Exposure · Reports**, a divider, **Settings · Help** (20px icon + label, 54px tall); the user menu at the foot (UX-DR43). The active item mirrors the route (`lime` fill, `ink` text, weight 600); hover `ink-2`. Issues carries the Needs-attention badge (UX-DR38). No top nav and no page header: every surface opens with a page title equal to its sidebar label plus one summary line with key numbers in bold ("Issues" + "3 need attention today. 312 not reviewed yet."). Routes `/`, `/software/<name>`, `/issues`, `/exposure?q=…[&view=table]`, `/reports/<id>`, `/settings/<panel>`. Below 1280px the sidebar becomes an icon rail (UX-DR35).
+- UX-DR6: Command palette (`⌘K`/`Ctrl+K`, shadcn `Command`) — every product action invocable; opened from anywhere, from the sidebar search field and from the Exposure query button; a 660px `Dialog` that traps focus, dims the page, never navigates on its own and returns focus on `Esc`; actions include Review, Export, Generate audit report and Switch theme; typing a CVE ID, `package@version` or fingerprint routes to an Exposure answer (a new question on Exposure starts a new trail); results grouped **Issues · Software · Exposure · Actions** with counts, best match first, matched text underlined; `↑`/`↓` move, `↵` open, `esc` close; results announced via polite `aria-live`; no-match copy "No matches. Try a CVE ID, package@version or fingerprint." plus common actions. The prior "Recent" group is not drawn (EXPERIENCE Open item 20).
+- UX-DR7: Keyboard map — `⌘K`/`Ctrl+K` search or jump; `g` + letter goes to a surface (letters show beside each nav item after pressing `g`; the letters for the renamed surfaces are not yet assigned — EXPERIENCE Open item 13); `J`/`K` next / previous list item; `/` focus the list search; `⌘↵` Save and next in the review panel; `Esc` closes the topmost layer (the palette) or unpins the graph selection; `x` exports the current view; `?` shortcut map (also listed in Settings → Personal); graph: arrows/`Tab` move between nodes, `↵` moves the map to the focused node (UX-DR24), `Backspace` goes back one step, `+`/`−` zoom, Fit; the node's detail opens from the inspector. The prior `t` (triage drawer) and `e` (explore in graph) bindings are retired until new meanings are agreed (Open item 13). Single-key shortcuts (`J`, `K`, `/`, `x`, `?`, `g`+letter, `Backspace` on the map) work only outside text fields and can be turned off in Settings → Personal (WCAG 2.1.4); modified shortcuts stay on. No custom key bindings in v1.
 
 **Components**
 
-- UX-DR8: Hero stat + co-stat band — at most one hero numeral per surface, co-stats in a hairline-divided band (never a KPI card grid), count-up on populate (stepped under reduced motion).
-- UX-DR9: Finding marks — severity chip (uppercase micro label on a 0.13–0.16-alpha tint); KEV tag (mono, dark on critical, always adjacent to the CVE ID, never truncated away); license chip (neutral, never severity-hued); triage pill (outlined, locked status set + untriaged, status-hued per DESIGN.md).
-- UX-DR10: DQ badge/score — always `data-quality` hue in every theme; 0–100 score with letter grade (grade-only in table rows); expandable to dimension breakdown; lower grades use the `data-quality-muted` token (never opacity) and keep the grade letter, never turning red; corrective action offered alongside.
-- UX-DR11: Findings table — 30px rows, hairline rules, mono identifiers; default KEV-first then EPSS-weighted sort with the header sentence "KEV first, then EPSS-weighted. Severity alone does not rank."; row click or `t` opens triage drawer; row hover/focus reveals "Explore in graph"; pagination, never infinite scroll.
-- UX-DR12: Coverage-gap row — inline at the position of the missing data; dashed warning styling; names counts and locations; not dismissible or collapsible; click-through to cause (unscanned artifacts, unreachable registry, disconnected agent, unmatched running digests).
-- UX-DR13: Populating banner — warning-tinted, under the heading block on Posture/Artifacts whenever first-scan or re-evaluation backlog exists; states queue count and estimate; live progress; never modal or blocking.
-- UX-DR14: Severity band — 30px stacked distribution with soft fills (0.6–0.85), 4px segment radius; segments click-filter the findings table; always scope-labelled ("scanned artifacts only").
-- UX-DR15: Freshness strip — on Posture, Blast radius and Artifact detail; each feed (Grype DB, KEV, EPSS, CNA, OSV, SBOM index, runtime observation) with version and age in mono, success/warning coloured by threshold; each entry clicks through to its Settings page.
-- UX-DR16: Triage drawer (shadcn `Sheet`, right) — ranking explanation, VEX context with vendor attribution, full provenance, the decision that applies now and its source, and a decision form (status + required justification + scope: this artifact by default, or fleet-wide with the count of artifacts it changes now). Submitting records author/timestamp, updates the row in place and keeps the user in the list; `⌘Enter` records and advances, `Esc` closes. Status never changes inline.
-- UX-DR17: Graph node/edge language — node-radius surface rect with mono identifier + meta line; severity hue only on the affected path; running = accent ring + pip + label; shipped-not-running = dashed `node-inactive-border`, `text-muted` text and the label "shipped, not running" (no opacity on text); soft bezier edges. Nodes focusable with `aria-label` (identifier + tier + state); hover highlights the direct path; selection pins.
-- UX-DR18: Node inspector — right side panel in Graph explorer showing identity, knowledge and provenance, with actions open detail / view evidence / blast radius from here; `Esc` unpins.
-- UX-DR19: Evidence pack card — in-UI "Verify signature" showing result + signer identity, plus a copyable offline verification command (cosign with the operator public key by default; the keyless command only when keyless signing is enabled).
-- UX-DR20: Evidence pack generator — one-click "Generate CRA pack" with smart defaults (last audit window, whole fleet), configuration (window, scope, framework) after the click and never a wizard before; async progress per section; fails closed naming the failing section; retry re-runs failed sections only.
-- UX-DR21: Export (report/CSV/evidence-pack report) from Blast radius and Posture always carries the same provenance footer and caveats as the on-screen answer.
+- UX-DR8: Retired 2026-11-07 — ux-Armoury-2026-11-06 has no hero numeral, co-stat band or count-up. Home's fleet readings are the summary line, Needs attention, Open issues and the "Across all software" band (UX-DR22).
+- UX-DR9: Issue marks — three separate axes, never combined. **Severity** as word + 4-step level marker (Critical 4 bars `clay`, High 3 `amber`, Medium 2 `slate`, Low 1 `forest-ink`), text colour only, no fills, no red. **Actively exploited** (KEV) as quiet clay text with a pulse icon in list rows and palette results, and a `clay-wash` pill in detail panels and the Exposure answer; never dropped when a row truncates; a small grey mono "KEV" tag beside the pill in detail views and technical details only. **Licence** as the neutral `text-2` scale icon + word plus a "Licence" kind tag, never severity-hued; a licence warning (policy treatment "warning") also carries the word "Warning" on line 2, a not-reviewed violation "Needs a decision" (D8). **Review status** as a neutral chip with a drawn icon and its word — Not reviewed yet (open circle), Not impacted (tick), Fix planned (arrow), Mitigated (half-filled circle), Risk accepted (flag) — plus Mixed (UX-DR39). On a selected row every mark switches to `sage-hi` (chips on `sel-chip`). EPSS is never shown as a rating, tag or column; the raw value appears only in the technical-details block.
+- UX-DR10: Data quality (FR30) — a small violet reading, never a threat. The value (`dq-value`): score + letter ("91 A−") in `dq`, `dq-muted` for low grades (D and below; the bands are a placeholder until the Story 8.1 model — EXPERIENCE Open item 11); never clay, amber or red, never opacity, never a big numeral in the app; accessible name in full ("Data quality 91 out of 100, grade A−"). The **quality meter** (`quality-meter`): five parts, each out of 100 — Package lists, Coverage, Freshness, Extra sources, Vulnerability records — with only the weakest part emphasised in `dq` and explained in one sentence, with a `forest-ink` link when there is something to do ("See them"); at a low grade the two weakest parts each get a sentence and a grey Check again appears; the technical terms sit on one grey line and in each name's `title` attribute. Placements: Software detail (the Info value and the Data quality cell, UX-DR25), the audit report detail in Reports (a full-width Data quality row with the fleet reading "when it was made", UX-DR27) and the printed cover page (UX-DR46). **Not on Home** (it may join the Home Details tab later — Open item 14) and **never in list rows**. What shows before a score exists is open (Open item 32).
+- UX-DR11: Issues list — grouped, not a single ranked table. A **Licences** group at the top (violations and warnings; hidden at 0, while the type filter still shows "Licences 0"), then **Critical · High · Medium · Low** with counts; within each group Actively exploited first, then by raw EPSS (never shown; EXPERIENCE Open item 1); the order stated in words above the list ("Actively exploited sorts first in each group"). One row per issue (UX-DR39) with the review-status chip (or "Mixed · N of M") as the one right column. Filters: the type segmented control All · Vulnerabilities · Licences with counts; the Review status filter listing the five statuses with counts, default Not reviewed yet, never mixed with the severity groups; the search "Find a package or vulnerability" (`/`). Long groups end in an "N more High" row; the pager reads "1–25 of 312 · page 1 of 13", 25 per page, never infinite scroll. Row click or `J`/`K` selects and fills the detail column (UX-DR26); the row-level "Explore in graph" is replaced by See exposure / See the map in the detail.
+- UX-DR12: Coverage-gap row ("Not checked yet") — sits in the list where the missing rows would be (Software, Exposure list and table, Home band); title + count in `text-3` and one plain sentence naming the count and where ("…including 212 in prod-eu-west. Their issues are unknown, not absent."); no tint, no dashes; not dismissible or collapsible; click-through to cause (unscanned artifacts, unreachable registry, disconnected agent, unmatched running digests).
+- UX-DR13: Checking band — an edge-to-edge `paper` band on Software and Home whenever first-check or re-evaluation backlog exists: title "Checking 671 more pieces of software…" with an estimate in words ("about 2 h left"), an 8px determinate bar (`forest-ink` on `forest-wash`) with "3,176 of 3,847 checked (82%)", and "You can keep working: numbers update as each one finishes." Names appear at once and counts fill in; rows show step text ("Reading packages · step 2 of 3", "Waiting its turn"); `chip` skeletons only where data is missing; progress is a polite `role="status"`. Never modal, blocking or a spinner.
+- UX-DR14: Retired 2026-11-07 — the stacked severity band is not in ux-Armoury-2026-11-06. Home's **Open issues** summary rows replace it: Licences first (hidden at 0), then Critical with "N actively exploited", High, Medium and Low, each with its count (UX-DR22). What a click on those rows does is not drawn (EXPERIENCE Open item 18).
+- UX-DR15: Freshness strip — one row on `paper` at the bottom of Home's detail column: each source in plain words with its age and the technical term small in `text-3` ("Vulnerability data 41 min ago · Exploited list KEV 6 Nov · Packages 38 min ago · 2 clusters reporting"; every attributed enrichment source per FR12 appears); a stale source turns `amber` with its age in words, an `amber-dot` and a clock; a "Sources" link opens Settings → Sources. Exposure and Software detail carry provenance inline ("Answered 38 min ago", "How we know: Syft v… · Grype DB v… · checked …", "Last checked"); whether the full strip also appears there is open (EXPERIENCE Open item 19), and so is whether end-of-life data (FR33) appears on the strip or only in Settings → Sources (O15).
+- UX-DR16: Review panel — in the Issues detail column (Review tab), replacing the slide-over triage drawer; the list stays visible. A scope segmented control comes first: **"All N places"** (default) or **"Only this software"**, which reveals a `Select` of the places and is pre-filled when Review was opened from a piece of software. Question 1, "Does this vulnerability impact us?": **No, not impacted** → Not impacted; **Yes** → question 2, "What will we do?": **Fix it** → Fix planned, **Reduce the risk** → Mitigated, **Accept the risk** → Risk accepted. Each option shows the status chip it produces. "Why? (shown in the audit report)" is required for Not impacted, Mitigated and Risk accepted, and optional for Fix planned (D7). Lime **Save and next ⌘↵** stays disabled until a question is answered; it records status, justification, author, timestamp and scope (FR14), updates the row chip in place ("Mixed" when places now differ) and moves to the next issue in the current filter. Grey **Decide later** moves on without recording. Hint: "Saved with your name in the audit trail." A later all-places decision does not overwrite places with their own status, and the panel says how many keep theirs ([ASSUMPTION], EXPERIENCE Open item 9). A failed save shows the inline error (UX-DR41) and does not advance. The panel ends with the technical-details block (CVE, KEV, CVSS, raw EPSS, source, check time). Status never changes inline. Review buttons on Home, the Exposure inspector and Software open the issue in Issues on its Review tab ([ASSUMPTION], Open item 4). Not yet drawn but still required: licence-review copy (Open item 16), and vendor VEX claims with attribution plus "the decision that applies now and its source" (FR15; Open item 17). Agree both with UX before the stories that build them.
+- UX-DR17: Exposure graph language — hairline, left to right, four sentence-case tiers with counts: Vulnerability · Package · Software · Where it runs. Circular nodes (`canvas` fill, `forest-ink` or `forest-2` ring); only the vulnerability node takes clay (`clay-wash` fill, `clay-dot` ring, pulse icon when actively exploited). Deployed edges solid `forest-2`; not-deployed edges dashed `slate-dot`, with not-deployed software below a dashed rule labelled "Not deployed" (never colour alone). The selected path is heavier `forest-ink`; the selected node is lime with "Selected on the map". Roll-up text nodes ("8 more", "5 more places") expand; edge labels read like "direct · in 12". Legend, zoom (+ / − / Fit) and the caveat line sit in a footer. Nodes are focusable with an `aria-label` (name + tier + state), and the map has an `aria-label` summarising the answer. Hover or focus highlights the direct path; `Esc` unpins. The moved-map (ego view) visuals are in UX-DR24.
+- UX-DR18: Inspector — under the Exposure map (not a side panel), two cells for the selected node: identity (title with version and "Selected on the map"; Name, Fingerprint in mono, Runs in, Copies, How it got it) and "What to do" (The fix, the review-status chip, lime Review, grey Open software); it ends with "How we know: Syft v… · Grype DB v… · checked 38 min ago". On a map centred on a piece of software the identity cell adds Issues ("2 open: 1 Critical, 1 Low"), the lime action is **Open software**, **Show only this** stays grey, and a hint reads "Click any node to move the map to it. Enter does the same from the keyboard." Selection carries across Graph and Table; `Esc` unpins.
+- UX-DR19: Signature status (Reports → audit report → Overview, beside Coverage) — **verified:** a `forest-wash` disc with a tick, "Signature verified" and the signer key, then a code block (UX-DR42) with the copyable offline `cosign verify-blob` command ("Auditors can run this themselves, without Armoury."; operator public key by default; the keyless command only when keyless signing is enabled, never when air-gapped). **Does not verify:** an error band in place of the disc, naming the file and the reason ("The signature on pack.pdf does not verify: the file has changed since it was signed.") and linking to the audit-trail entry for the signing; downloads stay available.
+- UX-DR20: Audit report generator — one click on lime **Generate audit report** (Reports, ⌘K) with smart defaults (last 12 months, whole fleet); window, scope and framework adjustable after the click, never a wizard before (FR22; how is not drawn — EXPERIENCE Open item 22); the user keeps working and the report appears in Reports → Audit reports when signed (PDF + package lists (SBOM) + review decisions (VEX)); a failure to start shows the inline error (UX-DR41); async progress per section; fails closed naming the failing section; retry re-runs failed sections only.
+- UX-DR21: Export — `Export` (and `x`) on Exposure, Issues and Software exports the current view as CSV by default, with JSON as an option (PROC2); on a moved Exposure map it exports the current centre. Every export carries the same caveats and provenance as the screen ("The 2 not checked yet travel with the CSV and the audit report") and is **stored as evidence**: it lands in Reports → Exports with an audit-trail entry (who, when, which view and query) and the same retention as audit reports (24 months, never below the floor); each row says what and where from ("Exposure: log4j-core 2.17.0 · CSV · 14 rows · from Exposure · 6 Nov"). Exposure also offers **"Audit report for this answer"**: the PDF answer report (Story 6.5, UX-DR46 print rules), stored and listed in Reports → Exports like any export. Home has no Export; the posture summary is shared as the audit report. Export is a read action, available to auditors. A failed export shows the inline error (UX-DR41).
 
 **Surfaces**
 
-- UX-DR22: Posture surface — heading block; hero + co-stats (including coverage and fleet DQ); severity band; findings table with inline coverage-gap rows; freshness strip; uniformity claim ("All N artifacts SBOM'd and scanned the same way — Syft vX · Grype vY"); zero states paired with coverage scope.
-- UX-DR23: Blast radius surface — answer headline ("14 affected artifacts · 9 running · 2 clusters"); 4-tier left-to-right graph (CVE → packages → artifacts → clusters/workloads) with Graph/Table toggle; roll-up "+ N more" with expand; caveat chip; provenance footer stating re-evaluation recency; progressive partial results (polled) with a scope line; coverage-scoped zero. A digest query uses the same surface centred on the artifact: headline "12 CVEs · 7 vulnerable packages · runs in 3 workloads", tiers CVEs → packages → artifact → clusters/workloads, and a ranked table of its findings.
-- UX-DR24: Graph explorer — search-first empty state ("Start from a CVE, package, or artifact"); "Explore in graph" from any artifact, finding or CVE opens pre-centred on that node; every node resolves to its detail surface and its evidence.
-- UX-DR25: Artifacts — list → detail with DQ header, SBOM contents, vulnerability and license findings with triage status, evaluation provenance, running locations and freshness strip.
-- UX-DR26: Findings surface — ranked triage workbench (UX-DR11 + UX-DR16) including license findings with the same triage flow.
-- UX-DR27: Evidence surface — append-only trail with no edit/delete affordances; corrections shown as superseding entries with both visible; pack list and generator.
-- UX-DR28: Settings — an in-page left list of panels, each with its own route `/settings/<panel>`, grouped as Connections, Feeds, Policy, Access, Signals and Personal. Panels — registry connections, package feeds, agent install (copy-paste one-liner, read-only trust posture and the exact RBAC shown before install), feed-bundle import, license policy authoring, evidence retention (UI never permits below the 24-month floor), Prometheus panel (read-only endpoint URL + metric list with copy), theme, users/roles, read-only display of the resolved auth configuration, shortcut list, CI tokens and CI policy (Epic 11), signing public key.
+- UX-DR22: Home surface (`/`; was Posture). List column: "Home" + a scoped summary ("You are in good shape. 3 things need attention today."; it gains a scoped caveat when a source is stale) + "Last checked 38 min ago"; **Needs attention N** (UX-DR38; right column = places); **Open issues N** summary rows (Licences first and hidden at 0, then Critical with "N actively exploited", High, Medium, Low); "312 not reviewed yet · 782 reviewed · See all" (opens Issues); lime **Review all N** (opens the Needs-attention issues in Issues one after another [ASSUMPTION, Open item 4]). Detail column for the selected issue: tabs Overview · Exposure · How to fix · Details (only Overview is drawn; the Exposure tab is a reduced summary of the Exposure page with a button that opens it — Open item 14). Overview holds the title, one plain sentence of what it means, severity, exploited pill + KEV tag, Vulnerability (CVE ID), Found in, The fix and Review status; grey Review and See exposure; and an Exposure cell (All / Deployed / Not deployed) with "See all N on the map". Below it, a separate "Across all software" `paper` band: Checked gauge ("671 are waiting their turn"), Open issues (30-day sparkline, delta chip) and Audit report (last 12 months, signed, coverage, Download / Preview). **No data-quality reading on Home** (D2). The freshness strip sits at the bottom (UX-DR15). The order within Needs attention is not decided (Open item 21). Every reassuring sentence is scoped to what was checked.
+- UX-DR23: Exposure surface (`/exposure?q=…[&view=table]`; was Blast radius and absorbs Graph explorer). A full-width header across list and map: "Exposure" + the question ("Where are we exposed to log4j-core?"), the query button showing the subject (opens ⌘K), the Graph · Table switch, grey Export and "Audit report for this answer". The answer comes first, in words ("14 pieces of software have it. 9 are deployed, 5 are not deployed."), then a meta line (exploited pill, KEV tag, severity, CVSS, "Answered 38 min ago") and deployed/not-deployed split bars. List column: Deployed N, Not deployed N, then the "Not checked yet" row. Graph (UX-DR17) with the inspector (UX-DR18). Table: the same answer in the same order (deployed first), with sortable sentence-case headers (Software, Version, Deployed? Yes/No, Where it runs, Copies, Severity, Review), selection carried across, and "2 not checked yet, not listed". Every partial answer carries its caveat line. Progressive partial results (polled) appear after 2 s with a scope line ("Checking — 1,204 of 3,000 pieces of software so far"). Queries accept a vulnerability ID, `package@version` or a fingerprint; a fingerprint query centres on that piece of software (the prior digest layout). Moving the map is UX-DR24; the no-query, unknown-vulnerability and coverage-scoped-zero states are UX-DR40.
+- UX-DR24: Moving around the Exposure map (the prior Graph explorer's traversal, kept inside Exposure; "Explore in graph" and the Graph explorer screen are retired). One rule for every node: **click or `Enter` moves the map to that node** (ego view): the centre sits in the true centre (`forest` disc, `forest-ink` ring, lime inner dot, 28px outer ring, name, version, "Centre of the map" and the fingerprint); what it contains is on the left, where it runs and its copies on the right; the node you came from carries the "Came from here" marker; packages with no known issues roll up ("212 more packages · No known issues") with a caveat line. An **Exposure trail** (`exposure-trail`) sits directly above the moved map: Back, the previous steps as link chips, the current step in bold, key hints "↵ Move the map · ⌫ Back"; Back, `Backspace` (outside text fields), any earlier step or the browser Back returns to that map with its selection. The question, query button, answer line, list column, Export, "Audit report for this answer" and the URL (`&from=` the previous step) follow the centre, so a trail can be shared and reloaded; ⌘K starts a new trail; the Table lists the centre's neighbours. One motion moment: the centre ring scales in once (0.62 → 1, 200 ms), none under reduced motion. The trail is a `nav` named "How you got here" with `aria-current="location"` on the current step; [ASSUMPTION] focus goes to the new centre and the new answer is announced politely (Open item 12). Only a software centre is drawn; package, vulnerability, place and roll-up centres follow the same rule but are not drawn, nor is a long trail or the Table of a moved map (Open item 19). Contextual entry: See exposure, See the map, See all N on the map and Exposure results in ⌘K open Exposure for that subject.
+- UX-DR25: Software surface (`/software/<name>`; was Artifacts). "Software" + "3,847 pieces of software. 1,126 deployed, 2,721 not deployed." The real fleet is grouped **Deployed N** (second line "prod-eu-west · 4 copies") and **Not deployed N** (second line "Last deployed 12 days ago" or "Never deployed"; the hint "Not seen running in any connected cluster." shows on hover and focus); the right column is the issue count; then the "Not checked yet" row (UX-DR12), the pager and lime **Add software** (destination not drawn — Open item 18). No data-quality grade in list rows. Detail tabs are Overview · Issues · Packages · Audit trail, with "Deployed" status at the end of the bar. Overview, in this order: (1) **Info** (left): Name, Fingerprint (mono, Copy), Runs in, Copies, **Built**, Last checked, **Data quality** (UX-DR10 value), **Signed** (FR32, D10); grey **Check again** (re-queues the SBOM and scan for this one piece of software) and Audit report; beside it **Packages** ("214 packages · SBOM", Direct / Indirect, a licence line and an **end-of-life** line — FR33, D10) over **Where it runs**; (2) **Issues** full width with Review; (3) the **Issues trend** chart; (4) **Data quality** ("How much you can trust these numbers": the quality meter, UX-DR10); (5) **Latest in the audit trail** ("Entries are never edited or removed"). The words for each signature state and for end-of-life lines other than "No package is past its end of life." are not written (O7, O14); what Data quality shows before a score exists is open (Open item 32).
+- UX-DR26: Issues surface (`/issues?review=not-reviewed`; was Findings) — "Issues" + "3 need attention today. 312 not reviewed yet."; the grouped list (UX-DR11) and review panel (UX-DR16) serve vulnerabilities and licences alike (no dedicated licence dashboard). Detail tabs: Review · Exposure · History (Exposure and History are not drawn — EXPERIENCE Open item 15). The Review tab holds the summary (title, severity, pill, KEV), the Exposure count with "See the map", What to do, Review status, the review panel and the technical details.
+- UX-DR27: Reports and the audit trail (was Evidence). Reports (`/reports/<id>`) holds exactly three groups — **Audit reports N**, **Exports N** and **Audit trail** (D9) — with lime Generate audit report; any other report type needs a Correct Course. **Audit reports** detail: tabs Overview · Files · Audit trail, with "Generated today, 08:31, by …" in the bar; Overview: title, lead, Download all / Preview; row 1 Coverage when it was made | Signature (UX-DR19); row 2 Data quality, full width ("Data quality 84 B+ when it was made", the fleet quality meter, UX-DR10 — the only place the fleet five-part breakdown appears in the product); then Files (pack.pdf; sboms.tar.gz "Package lists … SBOM"; vex.json "review decisions … VEX") and What it says. **Exports** (UX-DR21): newest first; the detail of a selected export is not drawn (EXPERIENCE Open item 15). **Audit trail** (fleet-wide, D9): ledger entries newest first (type, subject with its plain label and technical ID, actor, time, tool/feed versions), filters by type, subject and time window, the chain verification ("Chain intact — N entries, verified 4 min ago" or the first broken entry), the latest signed checkpoint and the anchoring status (mode, latest anchored checkpoint, pending anchors); the group is not yet drawn (U-edits, O16). The append-only trail also shows per item as tabs (a software's Audit trail, an issue's History, a report's Audit trail): no edit or delete affordances; a correction is a new entry superseding the old, and both stay visible; "Entries are never edited or removed."
+- UX-DR28: Settings — a panel list in the list column ([ASSUMPTION], EXPERIENCE Open item 6), one route per panel (`/settings/<panel>`) so links (the freshness strip's "Sources", "Open connection settings") open a panel directly. **Connections**: registry connections (FR1), package feeds (FR29), agent install (copy-paste one-liner in a code block, read-only trust posture and the exact RBAC shown before install). **Sources**: feed status and history, feed-bundle import (FR10), end-of-life data source (FR33). **Policy**: licence policy (FR27), signature policy — trusted keys and keyless identities (FR32), CI policy (Epic 11), evidence retention (the UI never permits below the 24-month floor, FR23). **Access**: users and roles, the read-only resolved auth configuration, CI tokens (Epic 11). **Signals**: Prometheus endpoint URL + metric list, read-only with copy (FR20); signing public key. **Personal**: theme, the keyboard shortcut list and the single-key shortcut switch. Edit controls are absent for roles without write access; OIDC is declarative only, never a UI wizard (NFR6); a save failure shows the inline error (UX-DR41). The panels for FR32 and FR33 are spine-only, like the rest of Settings (see U-edits).
 
 **States**
 
-- UX-DR29: Pre-setup empty Posture — heading block plus exactly two setup actions (connect registry, install agent) with mono copy-paste one-liners; no illustrations. Registry unreachable → error in Settings **and** a named coverage-gap row on Posture.
-- UX-DR30: Degraded states — stale feed flips age to warning and adds a scoped posture caveat (reflected in DQ); disconnected agent shows last heartbeat with runtime data marked stale-as-of, not removed; air-gapped mode always uses operator-key signing copy (keyless copy never appears), shows bundle age and "import bundle", and has no phone-home affordances.
-- UX-DR31: Read-only auditor — triage forms, pack-config edits, pack generation and Settings mutations are absent (not disabled); all read surfaces and pack viewing, download and verification remain available. Pack generation appears for auditors only when an admin enables `rbac.auditorCanGeneratePacks` (Helm value, default off).
-- UX-DR32: Loading/errors — cold load uses shadcn `Skeleton` mirroring the real layout; API errors render the typed envelope `message`; never a bare or unexplained spinner.
+- UX-DR29: Pre-setup empty Home — the page title plus exactly the two setup actions (connect a registry, install a cluster agent), each with a copy-paste one-liner in a code block (UX-DR42); no illustration. When a registry is unreachable, Software shows an edge-to-edge `clay-wash` error band ("We can't reach registry.acme.internal": since when, what it affects, what still works, likely cause). Its lime **Try again** is the view's one lime action (Add software turns grey), with grey **Open connection settings** → Settings → Connections. Affected rows read "As of 14:02 · registry" in amber with a clock; nothing is removed; Home carries a gap row naming the registry.
+- UX-DR30: Degraded states — **stale source:** its age turns `amber` with the age in words, an amber dot and a clock, and the Home summary gains a scoped caveat, so "good shape" is never claimed on old data (reflected in the Freshness part of data quality where it is shown). **Disconnected agent:** "N clusters reporting", and that cluster's runtime data is marked "as of", not removed (heartbeat 30 s, stale after 5 min, disconnected after 60 min, Helm values); air-gapped mode always uses operator-key signing copy (keyless copy never appears), shows bundle age and "import bundle", and has no phone-home affordances.
+- UX-DR31: Read-only auditor — Review (the review panel and Review actions), Add software, Generate audit report (and audit-report configuration) and Settings mutations are absent, not disabled; Check again follows its declared minimum role (O4); every read surface, Export, and viewing, downloading and verifying audit reports remain available; the same sidebar, words and numbers as the analyst. Pack generation appears for auditors only when an admin enables `rbac.auditorCanGeneratePacks` (Helm value, default off).
+- UX-DR32: Loading/errors — cold load uses shadcn `Skeleton` mirroring the real layout; a failed save or start shows the inline error (UX-DR41) where the action was taken; a failed connection or source shows the error band in the affected view; error copy names the problem in plain words (from the typed envelope `message`) and what still works; never a bare or unexplained spinner, never a toast.
 
 **Voice, accessibility, platform**
 
-- UX-DR33: Voice and vocabulary — calm, count-and-verb microcopy; definitive only when scoped to scanned data; locked glossary and lowercase triage statuses everywhere; identical words for auditor and analyst; all strings externalised from day 1 (no concatenation, no text in SVG).
-- UX-DR34: Accessibility floor — WCAG 2.2 AA; full keyboard operability with visible focus rings and reading-order tab order; surface and live-change announcements via polite `aria-live`; severity/triage/running state never colour-only; `prefers-reduced-motion` honoured globally; every graph fully readable as a table.
-- UX-DR35: Responsive/platform — ≥ 1280px primary; 1024–1279px tolerant degradation (tighter gutters, horizontal table scroll before columns drop, graph pans); < 1024px best-effort read-only; web only, last-2-versions evergreen browsers.
-- UX-DR36: Banned patterns (enforced across all surfaces) — no in-product notifications, toasts-as-alerts or new-finding badges; no OIDC wizard; no evidence edit/delete; no infinite scroll on fleet tables; modal depth ≤ drawer + dialog; no hover-only affordances; no celebratory animation; at most one primary button per surface.
+- UX-DR33: Voice and vocabulary — calm, plain, honest: counts and verbs, no exclamation marks, no fear, no jargon in primary labels; definitive only when scoped to what was checked; identical words and numbers for leader, analyst and auditor. The plain-language glossary (EXPERIENCE "Glossary: plain label → technical term") replaces the locked glossary: the plain label comes first, with the technical term small and grey beside it, never removed. Pairs: Home (posture), Software (artifact), Issues (findings), Exposure (blast radius), Reports / Audit report (evidence packs; "Audit report for this answer" is the PDF answer report, listed under Exports — D3), Audit trail / History (evidence trail), Vulnerability (CVE), Actively exploited (KEV), Licence, Packages (SBOM components), Direct / Indirect, Deployed / Not deployed (running / shipped, not running), Copies, Where it runs, Fingerprint (image digest), Checked / Not checked yet, Check again, Data quality (data-quality score), Review / Review status (triage). Statuses: Not reviewed yet · Not impacted · Fix planned · Mitigated · Risk accepted (untriaged / not affected / fix planned / mitigated / accepted); Why? (justification). Exports, audit reports and VEX companions keep the technical terms. UI copy is British English ("Licences"). Retired labels never appear in the UI (UX-DR47). Domain, data and API names (artifact, finding, triage, posture, blast radius, evidence pack, KEV, EPSS, VEX, SBOM, `untriaged`) stay unchanged in code, API and docs. All strings are externalised from day 1 (no concatenation, no text in static SVG).
+- UX-DR34: Accessibility floor — WCAG 2.2 AA in both themes (no separate high-contrast theme; confirm AA-only — EXPERIENCE Open item 25). (a) Full keyboard operability, with `Tab` order = reading order and a visible 2px focus ring on every interactive element (`focus`; lime on the sidebar and on forest selection); (b) field edges ≥ 3:1 at rest (`field-border`, 1.4.11); (c) reflow and resize (1.4.10, 1.4.4) through the icon rail and stacked layout (UX-DR35) — the Exposure map and wide tables may scroll in two directions while their header, answer and inspector reflow; (d) single-key shortcuts only outside text fields, with an off switch (2.1.4); (e) `aria-current` on selected rows, `aria-pressed` on segmented controls, `aria-current="location"` on the current trail step; (f) the surface is announced on navigation as title + summary; live changes via polite `aria-live` / `role="status"`, errors via `role="alert"`; (g) never colour alone — severity word + marker, exploited word + icon, status word + icon, deployed solid vs dashed plus a label, stale amber + clock + words, data quality always as printed score and letter with the weakest part named in words, and selection changes the text colour; (h) hover hints also available on focus; ⌘K is a real modal dialog (focus trapped, returned on `Esc`); (i) `prefers-reduced-motion` turns all motion off (0.16 s transitions, skeleton pulse, the map's centre-ring scale-in) and progress updates in steps; every graph is fully readable as a table.
+- UX-DR35: Responsive/platform — ≥ 1440px is the designed layout; at 1280–1439px the three columns stay and the detail column absorbs the loss; at 1024–1279px the sidebar becomes an **icon rail** (icons only, labels as tooltips on hover and focus and as accessible names, search as a ⌘K icon button, the user menu as the avatar) with list and detail side by side; below 1024px the icon rail stays and list and detail **stack in one column** with a **Back** link (`forest-ink`) that returns to the same place and selection, at the same URL, fully operable (this covers 400% zoom at 1280px and 200% text). No other breakpoints. Web only, last-2-versions evergreen browsers; fonts self-hosted.
+- UX-DR36: Banned patterns (enforced across all surfaces) — no in-product notifications or toasts (as alerts or for save results); no badge counts for *new* findings (the Issues Needs-attention badge, UX-DR38, counts what needs a decision and is allowed); no OIDC wizard; no evidence edit/delete (including stored exports); no infinite scroll; no modal deeper than one (the ⌘K dialog is the only modal; no drawers); no hover-only affordances; no celebratory animation; no second lime action in a view (one primary per view plus the active nav item and the agreed lime exceptions; while an error band shows, its recovery action is the one lime button); no red, red fills or severity-coloured backgrounds; no status-coloured chips; no combined risk or EPSS rating; no Compact density or density toggle; no eyebrows, kickers or tracked-caps labels; no nested cards or shadows on in-page elements; no type sizes outside the nine plus the wordmark; no opacity on elements with text except disabled controls at 0.45; no dedicated licence dashboard; no data-quality grade in list rows and no big data-quality numeral in the app; no separate graph-explorer screen.
+- UX-DR37: Three-column master-detail — sidebar · list column (`paper`: page title, summary line, filters, grouped list with counts in group headings, pager, then the view's one primary action) · tabbed detail column (`canvas`: 64px tabs with counts, the active tab a forest block, position and keys at the bar's end "1 of 3 · J K"; a grid of cells divided by 1px rules, never cards). **One list-row shape everywhere:** line 1 is name + version (version in `text-3`); line 2 is severity · actively exploited · where; one right column. Click or `J`/`K` selects and fills the detail, and the list keeps its place. Groups too long for the page end in an "N more …" row; 25 per page; never infinite scroll. Segmented controls use one style everywhere. Exposure is the exception: a full-width header spans the list and detail columns.
+- UX-DR38: Needs attention and the Issues badge — an issue needs attention when it is Not reviewed yet (in any place) AND it is Actively exploited OR Critical; every licence **violation** issue that is Not reviewed yet also needs attention; licence **warnings** never do (D8). A Mixed issue stays until none of its places is Not reviewed yet. The same number appears on Home ("Needs attention N"), in the Issues summary and as the Issues nav badge (`nav-badge`, lime count on `ink-2`); no badge at 0. The badge is a count of what needs a decision, not a new-findings notification. The order within Home's Needs attention is not decided (EXPERIENCE Open item 21).
+- UX-DR39: Issue unit and Mixed — one Issues row is one vulnerability (or one licence) in one package version across every place it affects ("14 places"). Counts on every surface (not reviewed yet, open, the badge) count issues, not places. When an issue's places have different statuses, its chip reads **Mixed · N of M** (layers icon, neutral; N = places that differ from the issue-wide status; accessible name "Mixed: 3 of 14 places have a different status"). The Review status filter matches an issue when any of its places has that status, so a Mixed issue can appear under more than one status ([ASSUMPTION], Open item 9). VEX states each product's own status. Chips reflect the latest recorded decision per place.
+- UX-DR40: Exposure query states — **no query** (`/exposure` from the sidebar): "Ask about a vulnerability, a package or a fingerprint." with examples ("CVE-2026-23012 · log4j-core@2.17.0 · sha256:…"), and the query button opens ⌘K. **Unknown vulnerability** (no data for the queried ID): "Armoury has no data for <ID> yet. Vulnerability data updated <age> ago." with lime **Check again** (re-asks against the latest vulnerability data; no rescan); no map, no zero, never "No software has it". **Known vulnerability, no matches:** the coverage-scoped zero ("No software has it — across the 3,176 pieces of software we've checked (82%)"), with the unchecked remainder one click away. Copy for an unknown `package@version` or fingerprint is not written (Open item 29).
+- UX-DR41: Inline error — a failed save or start (review panel, Export, Generate audit report, Check again, Settings panels) shows one line in that panel, full width: `clay-wash` fill, a `clay` alert icon, a message in plain words ("Your decision wasn't saved: Armoury can't reach its database."), optional detail in `text-2`, and a grey small **Try again**. Nothing advances or closes; every entered value (choices, scope, "Why?") stays. Announced with `role="alert"`; cleared on a successful retry; never a toast; no border, shadow or red.
+- UX-DR42: Code block — a copyable command or one-liner (setup `helm install`, agent install, `cosign verify-blob`, Prometheus endpoint, a CI token shown once, fingerprint): `paper` fill, Plex Mono 12px, and a grey small **Copy** that copies the whole command, never a truncated one. The label changes to "Copied" for 2 s and is announced politely; Copy is keyboard reachable and the text is selectable; long commands scroll horizontally and are never cut off.
+- UX-DR43: User menu — at the sidebar foot: a 40px round avatar (`forest-3` → `forest` gradient, `on-forest` initials), the name in `on-ink`, the role in `side-muted`. It opens a `DropdownMenu` with the name and role, **Personal settings** (Settings → Personal) and **Sign out**. `Enter`/`Space` opens it, arrows move, and `Esc` closes it and returns focus. On the icon rail only the avatar shows.
+- UX-DR44: Help — the Help item sits in the sidebar below the divider (UX-DR5). The Help screen is not designed and is deferred to a later UX update (EXPERIENCE Open item 24; the `?` shortcut map may belong there). No story invents Help content; until that update the item opens a placeholder that says Help is coming (copy to confirm with UX — O17).
+- UX-DR45: Zero and empty states — **All clear** (Home): "Nothing needs you today." with the scope sentence ("That covers the 3,176 pieces of software we've checked; 671 are still waiting their turn."), three stats (0 Need attention · N Open, all reviewed · N% Checked), the severity line, grey See open issues, lime Audit report, a `lime-wash` sprout disc, and no Issues badge. **Nothing to review** (Issues filter at 0): "No issues are waiting for review." plus the coverage scope and grey **Show all statuses**. **Search no match:** "No issues match “<text>” with these filters." with grey **Clear search**, keeping the filters. **Reports, nothing yet:** "No audit reports yet" with lime Generate audit report; Exports: "No exports yet. Make one from Exposure, Issues or Software with Export." **Licences 0:** the group is hidden, and the type filter still shows "Licences 0".
+- UX-DR46: Printed report (audit report PDF via Typst, the answer report and printed exports) — a print-only light palette (`print-*` tokens) independent of the app theme; IBM Plex Sans text ([ASSUMPTION], EXPERIENCE Open item 5) and IBM Plex Mono for every ID, fingerprint and command; body 9.5pt, tables 8.5pt; A4 by default with US Letter as an option. The audit report's cover sheet comes first and states coverage ("Covers 3,176 of 3,847 (82%)"), listing the not-checked software; then the **data-quality block** (`print-cover-dq`: "84 B+" at 30px with the letter at 20px in `print-dq` — the only big data-quality numeral anywhere; the five parts with plain names and the technical term beside each; "Lowest part: …"); then Signature (operator key and the `cosign verify-blob` line) and a sign-off line (name and role, date). Every page has a footer with report ID, time window, generation time and page number. Severity always shows as word + 4-step marker, with no red. Long tables repeat their header row. Plain labels carry the technical term beside them; the companions (SBOM, VEX) keep technical names. Preview is available in the product before download.
+- UX-DR47: Retired UI labels — these never appear in UI strings: Posture, Findings, Blast radius, Graph explorer, Artifacts, Evidence, triage, Things to look at, Where it's affected, Weakness, ingredients, What's inside, Chosen by your team, Came along with them, Running (as a group or status label; the hint "Not seen running…" is allowed — EXPERIENCE Open item 35), Shipped not running, Undeployed, Being attacked in the wild, chance of attack, Doesn't affect us, Fixed for now, Workaround in place, Mark reviewed, Plan the fix, Skip. They are checked against the externalised message catalogue; code, API and docs may keep the domain terms (UX-DR33).
+- UX-DR48: CI-scan landing (FR31) — the link the CI step prints opens that piece of software in Software. Not decided (EXPERIENCE Open item 28): how CI-submitted software that is in no connected registry is grouped (it fits neither Deployed nor Not deployed), the label that says where it came from, and where the CI verdict and its history show in Software detail. Resolve with a UX update before the Epic 11 UI work; CI policy and CI tokens live in Settings → Policy and Settings → Access (UX-DR28).
 
 ### FR Coverage Map
 
@@ -233,13 +256,13 @@ FR9: Epic 2 - Continuous onboarding within 1 hour
 FR10: Epic 4 - Signed offline feed bundles (air gap)
 FR11: Epic 4 - Multi-source enrichment (KEV, EPSS, CNA, OSV)
 FR12: Epic 4 - Enrichment source attribution
-FR13: Epic 5 - Deterministic, explainable KEV-first/EPSS ranking
+FR13: Epic 5 - Deterministic, explainable ordering: severity groups (Licences first), actively exploited (KEV) first in each, EPSS next, stated in words
 FR14: Epic 5 - Triage decisions as first-class data
 FR15: Epic 5 - VEX ingest and emit
-FR16: Epic 2 - Fleet posture view (extended by Epics 5, 8)
-FR17: Epic 6 - Blast-radius query with provenance
-FR18: Epic 2 - Artifact detail (extended by Epics 3, 5, 7, 8)
-FR19: Epic 6 - Shareable answers (report/CSV export)
+FR16: Epic 2 - Fleet posture view (UI: Home; extended by Epics 5, 8)
+FR17: Epic 6 - Blast-radius query with provenance (UI: Exposure, including moving the map)
+FR18: Epic 2 - Artifact detail (UI: Software detail; extended by Epics 3, 4, 5, 7, 8)
+FR19: Epic 6 - Shareable answers (CSV/JSON export from Exposure, Issues and Software, the PDF answer report; all stored as evidence in Reports → Exports)
 FR20: Epic 8 - Prometheus metrics (pull-only)
 FR21: Epic 9 - CRA compliance pack
 FR22: Epic 9 - Pack architecture (framework-extensible)
@@ -250,8 +273,10 @@ FR26: Epic 7 - Grant license evaluation
 FR27: Epic 7 - Fleet license policy as findings
 FR28: Epic 9 - License section in evidence packs
 FR29: Epic 2 - Package feed connection
-FR30: Epic 8 - Data-quality score
+FR30: Epic 8 (score, Software detail) + Epic 9 (audit report detail, cover page) - Data-quality score
 FR31: Epic 11 - Optional CI scan with server-side evaluation and result URL
+FR32: Epic 4 - Artifact signature verification against trusted signers (UI: Software detail "Signed")
+FR33: Epic 4 - End-of-life data for packages (UI: Software detail Packages)
 
 **NFR placement:** NFR1 E2 (gate checked again at E3) · NFR2 E6 · NFR3 load tests in E2/E4/E6 · NFR4 E1 (install), E4 (air-gapped feeds), E10 (end-to-end proof) · NFR5 E4 · NFR6 E1 · NFR7 E10 · NFR8 E2/E3/E4/E8 · NFR9 E3 · NFR10 E1 (durable volumes) · NFR11 E2 (ledger, history tables), E5 (superseding decisions), E9 (sealed packs) · NFR12 E2 (central pipeline), E3 (agent reports digests only), E7 (Grant on server), E11 (CI scan).
 
@@ -260,52 +285,52 @@ FR31: Epic 11 - Optional CI scan with server-side evaluation and result URL
 Order follows the user journeys: UJ-1 (Epics 1–3), UJ-2 (Epics 4–6), UJ-3 (Epic 9). Each epic builds only on earlier epics. Epic 1 Story 1 is the scaffold; Agent Readiness (Linear INF-12) runs after it and before any further story starts Build (PROC1).
 
 ### Epic 1: Install, sign in, and the Armoury shell
-A SecOps engineer installs the control plane with one `helm install`, signs in with the bootstrap admin (OIDC and the three roles optional via Helm values), and lands in the themed shell — rail, command palette, three themes — on an empty Posture page offering the two setup actions.
-**FRs covered:** none (NFR-only delivery epic for the UJ-1 install/sign-in path) — NFR4, NFR6, NFR10; ARCH1, ARCH4 (queue proof), ARCH12, ARCH13, ARCH16, ARCH22, ARCH23 (ci.yml, build.yml), ARCH34; PROC3; UX-DR1–7, UX-DR29, UX-DR31–36.
+A SecOps engineer installs the control plane with one `helm install`, signs in with the bootstrap admin (OIDC and the three roles optional via Helm values), and lands in the Armoury shell — labelled black sidebar, ⌘K command palette, Light (default) and Dark themes — on an empty Home page offering the two setup actions.
+**FRs covered:** none (NFR-only delivery epic for the UJ-1 install/sign-in path) — NFR4, NFR6, NFR10; ARCH1, ARCH4 (queue proof), ARCH12, ARCH13, ARCH16, ARCH22, ARCH23 (ci.yml, build.yml), ARCH34; PROC3; UX-DR1–7, UX-DR29, UX-DR31–37, UX-DR41–44, UX-DR47.
 
 ### Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view
-The engineer connects a registry or package feed and watches Armoury enumerate, SBOM and scan the fleet with one Grype config, every scan recorded as evidence, while Posture and Artifacts populate live with gaps shown openly (minute 29, registry-side).
-**FRs covered:** FR1, FR2, FR5 (registry/scan gaps), FR6, FR8 (scan time, tool versions), FR9, FR16, FR18, FR29 — NFR1, NFR3, NFR8, NFR11 (ledger, history), NFR12; ARCH2–5, ARCH7, ARCH14, ARCH15, ARCH17, ARCH28 (R11), ARCH31, ARCH32, ARCH35.
+The engineer connects a registry or package feed and watches Armoury enumerate, SBOM and scan the fleet with one Grype config, every scan recorded as evidence, while Home and Software fill in live under the Checking band, with gaps shown openly as "Not checked yet" rows (minute 29, registry-side).
+**FRs covered:** FR1, FR2, FR5 (registry/scan gaps), FR6, FR8 (scan time, tool versions), FR9, FR16, FR18, FR29 — NFR1, NFR3, NFR8, NFR11 (ledger, history), NFR12; ARCH2–5, ARCH7, ARCH14, ARCH15, ARCH17, ARCH28 (R11), ARCH31, ARCH32, ARCH35, ARCH38 (Needs attention count); UX-DR9, UX-DR12, UX-DR13, UX-DR15, UX-DR22, UX-DR25, UX-DR38.
 
 ### Epic 3: Running inventory from read-only cluster agents
-The engineer installs the agent with a second one-liner; running workloads appear linked to registry artifacts so "is this running anywhere?" is answerable; disconnected agents and unmatched running digests surface as gaps.
+The engineer installs the agent with a second one-liner; running workloads appear linked to registry artifacts, so Software splits into Deployed and Not deployed and "is this running anywhere?" is answerable; disconnected agents and unmatched running digests surface as gaps.
 **FRs covered:** FR3, FR4, FR5 (agent and unmatched-digest gaps) — NFR8, NFR9; ARCH8–11. First story closes the enrollment gap (ARCH10).
 
 ### Epic 4: Fresh, enriched findings, connected or air-gapped
-When vulnerability or enrichment feeds update — online or by signed offline bundle — stored SBOMs are re-evaluated within an hour without rescans, and every finding carries source-attributed KEV, EPSS, CNA and OSV data.
-**FRs covered:** FR7, FR8 (feed versions), FR10, FR11, FR12 — NFR4, NFR5; ARCH6, ARCH19–21, ARCH28 (R2).
+When vulnerability or enrichment feeds update — online or by signed offline bundle — stored SBOMs are re-evaluated within an hour without rescans, and every finding carries source-attributed KEV, EPSS, CNA and OSV data. Packages carry attributed end-of-life data, and registry artifacts are checked against trusted signers — both connected or air-gapped.
+**FRs covered:** FR7, FR8 (feed versions), FR10, FR11, FR12, FR32, FR33 — NFR4, NFR5, NFR12; ARCH6, ARCH19–21, ARCH28 (R2), ARCH40, ARCH41; UX-DR15, UX-DR25 (Signed, end-of-life lines), UX-DR28 (Sources, Policy).
 
 ### Epic 5: Prioritise and triage findings
-The analyst works a KEV-first, EPSS-weighted findings list that explains each ranking, records justified decisions that propagate everywhere, and ingests and emits VEX.
-**FRs covered:** FR13, FR14, FR15 — NFR11 (superseding decisions); UX-DR11, UX-DR16, UX-DR26, UX-DR27; ARCH29 (ranking formula, VEX formats).
+The analyst works the Issues list — Licences (hidden at 0), then Critical, High, Medium and Low, actively exploited first in each group, the order stated in words — and reviews each issue in the detail-column review panel (two questions; scope All N places or Only this software; a reason where required). Decisions are recorded with author and time, propagate everywhere and feed Home's Needs attention and the Issues badge; the fleet-wide audit trail is readable in Reports; Armoury ingests and emits VEX.
+**FRs covered:** FR13, FR14, FR15 — NFR11 (superseding decisions); UX-DR11, UX-DR16, UX-DR26, UX-DR27 (Audit trail group, per-item tabs), UX-DR38, UX-DR39, UX-DR45 (All clear, Nothing to review, Search no match); ARCH38; ARCH29 (ranking formula, VEX formats).
 
 ### Epic 6: Blast radius and graph exploration
-On CVE day the engineer types a CVE ID or `package@version` into ⌘K and within seconds sees affected artifacts, shipped and running, and where they run — as graph or table with a provenance footer — exports it, and explores further in the graph.
-**FRs covered:** FR17, FR19 — NFR2; UX-DR17, UX-DR18, UX-DR21, UX-DR23, UX-DR24; ARCH28 (R1).
+On CVE day the engineer types a CVE ID, `package@version` or fingerprint into ⌘K, and within seconds Exposure answers in words — which software has it, deployed and not deployed, and where it runs — then as a map or a table with its caveat line and "How we know". She exports it (stored as evidence in Reports → Exports) and moves the map to any node to follow it further. The Epic 6 title keeps its domain wording.
+**FRs covered:** FR17, FR19 — NFR2; UX-DR17, UX-DR18, UX-DR21, UX-DR23, UX-DR24, UX-DR40, UX-DR45 (Exports nothing yet), UX-DR46 (renderer); ARCH39; ARCH28 (R1).
 
 ### Epic 7: License compliance
-Grant evaluates every artifact against a fleet allow/deny policy; violations appear as neutral license findings in the same views and are triaged with the same decision model.
-**FRs covered:** FR26, FR27.
+Grant evaluates every artifact against a fleet allow/deny policy; violations and warnings appear as neutral Licence issues — the Licences group at the top of Issues and of Home's Open issues (hidden at 0), with a "Licence" kind tag (and the word "Warning" for warnings), and in a software's Packages and Issues — and are reviewed with the same decision model; only violations count toward Needs attention (licence review copy not yet drawn — EXPERIENCE Open item 16).
+**FRs covered:** FR26, FR27; UX-DR9 (licence marker, "Warning"), UX-DR11 (Licences group), UX-DR38 (violations only).
 
 ### Epic 8: Fleet signals — Prometheus metrics and data quality
-The team's own Grafana alerts on new KEV findings, coverage gaps, stale feeds and agent health; every answer carries an explainable data-quality score.
-**FRs covered:** FR20, FR30 — NFR8; UX-DR10; ARCH24; ARCH29 (DQ scoring model, first story).
+The team's own Grafana alerts on new KEV findings, coverage gaps, stale feeds and agent health; every piece of software and the fleet get an explainable data-quality score, shown in Software detail (Epic 8) and in audit reports (Epic 9); not on Home and not in list rows.
+**FRs covered:** FR20, FR30 — NFR8; UX-DR10, UX-DR28 (Signals panel), UX-DR42 (endpoint copy); ARCH24; ARCH29 (DQ scoring model, first story).
 
 ### Epic 9: Signed CRA evidence packs
-The compliance lead generates a CRA pack in one click for any past window — PDF plus SBOM/VEX companions, stating its own coverage and data quality, signed and verifiable offline — with retention never below 24 months.
-**FRs covered:** FR21, FR22, FR23, FR24, FR25, FR28 — NFR11; ARCH18, ARCH30 (signed checkpoints and archive), ARCH37 (optional Rekor anchoring); UX-DR19, UX-DR20.
+The compliance lead generates a CRA pack (an "audit report" in the UI) in one click from Reports for any past window — PDF plus package lists (SBOM) and review decisions (VEX), with its own coverage stated first and its data quality second, on screen and on the cover page, signed and verifiable offline — with retention never below 24 months.
+**FRs covered:** FR21, FR22, FR23, FR24, FR25, FR28 — NFR11; ARCH18, ARCH30 (signed checkpoints and archive), ARCH37 (optional Rekor anchoring); UX-DR10 (Reports row, cover), UX-DR19, UX-DR20, UX-DR27 (Audit reports; checkpoint and anchoring status in the Audit trail group), UX-DR42, UX-DR45 (Reports nothing yet), UX-DR46.
 
 ### Epic 10: Verifiable, air-gapped delivery of Armoury itself
 Buyers can verify Armoury's own images, charts and feed bundles (cosign + SLSA provenance) and run the whole product end to end with no internet access.
 **FRs covered:** none (NFR-only) — NFR4 (end-to-end proof), NFR7; ARCH19 (outbound boundary check), ARCH23 (release.yml).
 
 ### Epic 11: Scan in CI and see the result in Armoury
-A developer adds one optional step to a pipeline. The step submits the built artifact to Armoury; the server SBOMs, scans and license-checks it with the fleet toolchain, applies the fleet CI policy, and the step prints the verdict and a link to the artifact. Central scanning needs no CI change; this epic adds a faster, earlier path. Builds on Epics 2, 4, 5, 6, 7 and 10 (scan pipeline, KEV enrichment, triage decisions, the long-operation pattern from Story 6.2, license results, the release workflow from Story 10.1); numbered 11 so the published keys of Epics 3–10 stay stable.
-**FRs covered:** FR31 — NFR6 (CI tokens), NFR12; ARCH31, ARCH33, ARCH36.
+A developer adds one optional step to a pipeline. The step submits the built artifact to Armoury; the server SBOMs, scans and license-checks it with the fleet toolchain, applies the fleet CI policy, and the step prints the verdict and a link to the artifact (that piece of software in Software; its grouping and verdict display are open — UX-DR48). Central scanning needs no CI change; this epic adds a faster, earlier path. Builds on Epics 2, 4, 5, 6, 7 and 10 (scan pipeline, KEV enrichment, triage decisions, the long-operation pattern from Story 6.2, license results, the release workflow from Story 10.1); numbered 11 so the published keys of Epics 3–10 stay stable.
+**FRs covered:** FR31 — NFR6 (CI tokens), NFR12; ARCH31, ARCH33, ARCH36; UX-DR28 (CI policy, CI tokens), UX-DR42, UX-DR48.
 
 ## Epic 1: Install, sign in, and the Armoury shell
 
-A SecOps engineer installs the control plane with one `helm install`, signs in with the bootstrap admin (OIDC and the three roles optional via Helm values), and lands in the themed shell — rail, command palette, three themes — on an empty Posture page. Story 1.1 is readiness-enabling work: Agent Readiness (INF-12) runs after it and must be ready before Stories 1.2+ start Build (PROC1).
+A SecOps engineer installs the control plane with one `helm install`, signs in with the bootstrap admin (OIDC and the three roles optional via Helm values), and lands in the Armoury shell — labelled black sidebar, command palette, Light and Dark themes — on an empty Home page. Story 1.1 is readiness-enabling work: Agent Readiness (INF-12) runs after it and must be ready before Stories 1.2+ start Build (PROC1).
 
 ### Story 1.1: Monorepo scaffold with an aggregate local gate and CI
 
@@ -472,52 +497,52 @@ So that my team signs in with company identity and each person gets only the acc
 **When** `GET /api/v1/auth/config` is called
 **Then** it returns the resolved auth configuration with secrets redacted; there is no API to change it (no UI wizard).
 
-### Story 1.5: Design tokens and the three themes
+### Story 1.5: Design tokens and the Light and Dark themes
 
 As a SecOps engineer,
-I want the Forge, High Signal and Gunmetal themes with Armoury's typography,
-So that the product looks like itself from the first screen and I can pick a high-contrast option.
+I want the Light (default) and Dark themes with Armoury's typography (IBM Plex Sans and IBM Plex Mono),
+So that the product looks calm and like itself from the first screen, in either theme.
 
 **Acceptance Criteria:**
 
 **Given** the web app
 **When** it renders
-**Then** semantic colour tokens map onto shadcn-svelte CSS variables with the exact DESIGN.md values for all three themes, including `rail-*` and `data-quality` (UX-DR1)
+**Then** semantic colour tokens map onto shadcn-svelte CSS variables with the exact DESIGN.md values for Light (unsuffixed keys) and Dark (`-dark` keys), following the DESIGN.md "shadcn mapping" table — including the sidebar (`ink`, `ink-2`, `ink-line`, `side-text`, `side-muted`, `on-ink`), `lime*`, `forest*`, the severity roles (`clay`, `amber`, `slate`, `forest-ink`) and `field-border` — plus `--paper`, `--dq`, `--dq-muted` and `--dq-wash` as extra variables; the `print-*` tokens feed only the Typst template (UX-DR1)
 **And** a lint/test fails if any component references a raw hex or a theme-suffixed variable instead of a semantic role.
 
 **Given** typography, shape and spacing tokens
 **When** components use them
-**Then** Inter Display, Inter and IBM Plex Mono are bundled locally (no CDN; works air-gapped), sizes match DESIGN.md exactly, and numerals use `tabular-nums` (UX-DR2, UX-DR3, NFR4)
-**And** radii, zone gaps, rail width, data-row height and stat gap match DESIGN.md.
+**Then** IBM Plex Sans (variable 100–700), IBM Plex Sans Bold Italic (wordmark only) and IBM Plex Mono 400 (IDs, fingerprints, commands, keys only) are bundled locally (SIL OFL 1.1, no CDN; works air-gapped); only the nine sizes 12 · 13 · 14 · 15 · 17 · 20 · 24 · 30 · 40 are used, plus the 22px wordmark as the single exception; weights are 400 / 500 / 600; numerals use `tabular-nums` in every data role; a lint fails on any other size or a third family (UX-DR2, UX-DR3, NFR4)
+**And** radii (xs 3, sm 4, md 6, lg 10, pill, full) and the layout tokens (sidebar 252, list column 376 / 500 / 420, list gutter 32, detail cell 30 × 34, row padding 17 / 14 / 12, nav item 54, tab 64, button 42 / 32 / 54, field 42, query 44, pager 32) match DESIGN.md; there is one density only.
 
 **Given** a signed-in user
 **When** their theme preference is set through `PUT /api/v1/me/preferences`
-**Then** the web app applies it instantly without reload, it persists per user in the `user_preferences` table (keyed by OIDC issuer + `sub`, or the fixed bootstrap-admin ID) and follows them to another browser; every role can change its own preference; new users get Forge; no OS-preference detection (UX-DR4); the picker that sets it arrives in Story 1.6
-**And** an automated contrast check confirms AA (4.5:1) for all text roles in Forge and Gunmetal, including `data-quality-muted` and `text-muted`, 3:1 for `node-inactive-border`, the AAA target for High Signal primary text and ≥7:1 for High Signal `text-muted`; it also checks `data-quality-muted` at 4.5:1 and `node-inactive-border` at 3:1 in all three themes
-**And** a lint/test fails if a component applies opacity below 1 to an element that contains text; quieter states use the muted tokens (DESIGN.md).
+**Then** the web app applies it instantly without reload, it persists per user in the `user_preferences` table (keyed by OIDC issuer + `sub`, or the fixed bootstrap-admin ID) and follows them to another browser; every role can change its own preference; new users get Light; no OS-preference detection ([ASSUMPTION], EXPERIENCE Open item 3) (UX-DR4); the same preferences also hold the single-key shortcut switch (Story 1.8); the picker arrives in Story 1.6
+**And** an automated contrast check confirms AA (4.5:1) for every text pair in the DESIGN.md Contrast table in Light and Dark (lowest 4.9:1), including the selection pairs on `forest`, text on `lime`, and `dq` / `dq-muted` on canvas, paper, chip and `dq-wash`, and ≥3:1 for `field-border` against canvas, paper and chip and for the focus ring; markers below 3:1 (`amber-dot`, `slate-dot`, the dark `forest` fill) are allowed only beside a word
+**And** a lint/test fails if a component applies opacity below 1 to an element that contains text, except disabled controls at 0.45 (DESIGN.md); quieter states use `text-2` / `text-3`, and low data-quality grades use `dq-muted`.
 
-### Story 1.6: App shell, navigation and the empty Posture page
+### Story 1.6: App shell, sidebar navigation and the empty Home page
 
 As a SecOps engineer,
-I want a consistent shell with the icon rail and an honest empty Posture page,
+I want a consistent shell with a labelled sidebar and an honest empty Home page,
 So that I can move between surfaces and immediately see what Armoury is waiting for.
 
 **Acceptance Criteria:**
 
 **Given** a signed-in user
 **When** the app loads
-**Then** a 58px icon rail shows the seven surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings pinned bottom), with the active item mirroring the route, tooltips on hover and focus, and no top nav (UX-DR5)
-**And** surfaces without content yet render the left-aligned heading block (eyebrow → title → subtitle → accent rule) and a calm "nothing here yet" line — no illustrations
-**And** every surface has the page header row: breadcrumb, the search field ("Blast radius — CVE, package, or digest", `⌘K` hint) and the compact theme switcher (swatch + name) (UX-DR4, UX-DR5, DESIGN.md Page header).
+**Then** a 252px black sidebar shows the wordmark, the "Search or jump to… ⌘K" field, the nav Home · Software · Issues · Exposure · Reports, a divider, then Settings · Help (20px icon + label, 54px items), with the active item lime (ink text, weight 600) mirroring the route, and the user menu at the foot; there is no top nav and no page header (UX-DR5, UX-DR43)
+**And** every surface uses the three-column master-detail layout (sidebar · list column · tabbed detail column) with the page title equal to the sidebar label and one summary line under it (UX-DR37); surfaces without content yet show a calm "nothing here yet" line — no eyebrow, heading block, accent rule or illustration
+**And** the user menu shows the signed-in name and role and opens Personal settings (Settings → Personal) and Sign out (Story 1.3); `Enter`/`Space` opens it, arrows move, and `Esc` closes it and returns focus; Help opens a placeholder until its screen is designed (EXPERIENCE Open item 24, O17) (UX-DR4, UX-DR5, UX-DR43, UX-DR44).
 
 **Given** nothing is connected
-**When** Posture loads
-**Then** it shows the pre-setup heading block and states that no sources are connected yet (UX-DR29 base; setup actions arrive with Stories 2.2 and 3.2).
+**When** Home loads
+**Then** it shows the title "Home" and states that no sources are connected yet (UX-DR29 base; setup actions arrive with Stories 2.2 and 3.2).
 
 **Given** Settings
 **When** it opens
-**Then** it shows an in-page left list of panels, grouped as Connections, Feeds, Policy, Access, Signals and Personal, each panel on its own route `/settings/<panel>` (UX-DR28)
-**And** this story fills the theme picker (choosing a theme applies it instantly and persists it, Story 1.5), the read-only resolved auth configuration, the users/roles view and the keyboard shortcut list placeholder; later stories add their panels to the same list.
+**Then** it shows a panel list in the list column, grouped as Connections, Sources, Policy, Access, Signals and Personal, each panel on its own route `/settings/<panel>` (UX-DR28)
+**And** this story fills Settings → Personal (the Light / Dark theme switch, which applies instantly and persists, Story 1.5; the keyboard shortcut list and the switch that turns single-key shortcuts off, wired in Story 1.8) and Settings → Access (the read-only resolved auth configuration and the users/roles view); later stories add their panels to the same list.
 
 **Given** an auditor session
 **When** any surface renders
@@ -546,25 +571,25 @@ So that every later surface inherits a floor it cannot silently drop below.
 
 **Given** keyboard-only use
 **When** the user tabs through the shell
-**Then** every control is reachable with a visible focus ring, tab order follows reading order, and no affordance is hover-only (UX-DR34, UX-DR36).
+**Then** every control is reachable with a visible focus ring, tab order follows reading order, and no affordance is hover-only; selected rows use `aria-current`, segmented controls use `aria-pressed`, and field edges meet 3:1 at rest (UX-DR34, UX-DR36).
 
 **Given** navigation between surfaces
 **When** the route changes
-**Then** a polite `aria-live` region announces the surface name.
+**Then** a polite `aria-live` region announces the surface by title and summary ("Issues — 3 need attention today").
 
 **Given** `prefers-reduced-motion: reduce`
 **When** any transition would run
-**Then** it is suppressed or reduced globally, via one shared motion setting rather than per-component checks.
+**Then** it is suppressed or reduced globally, via one shared motion setting rather than per-component checks; normal motion is quiet (0.16 s colour and background transitions, skeleton pulse) and progress updates in steps when reduced.
 
 **Given** UI copy
 **When** a component renders text
 **Then** the string comes from an externalised message catalogue, with no concatenated sentences and no text baked into SVG; a lint/test fails on hard-coded user-facing strings in components (UX-DR33)
-**And** locked glossary terms and the lowercase triage status labels are defined once in the catalogue.
+**And** the plain-label glossary (EXPERIENCE Glossary) and the five review-status labels — Not reviewed yet, Not impacted, Fix planned, Mitigated, Risk accepted — are defined once in the catalogue; UI copy is British English ("Licences"); a lint/test fails on any retired label from UX-DR47, with "Running" banned only as a group or status label (EXPERIENCE Open item 35).
 
 **Given** viewport widths ≥ 1280px, 1024–1279px and < 1024px
 **When** the shell renders
-**Then** it shows the full layout, the tolerant layout (tighter gutters, horizontal scroll before columns drop), and a best-effort read-only layout respectively (UX-DR35)
-**And** a Playwright test checks every shell route at 1440, 1100 and 900 px wide: the page has no horizontal scroll (only tables and graphs scroll inside their own area), and every control is visible and reachable by keyboard.
+**Then** it shows respectively: the full sidebar with three columns; the icon rail (icons only, labels as tooltips on hover and focus and as accessible names, the search field as a ⌘K icon button, the user menu as the avatar) with list and detail side by side; and the icon rail with list and detail stacked in one column, where opening an item shows its detail with a Back link that returns to the list at the same place and selection, at the same URL — every layout fully operable (UX-DR35)
+**And** a Playwright test checks every shell route at 1440, 1100 and 900 px wide, at 320 CSS px (400% zoom at 1280) and with 200% text: there is no horizontal page scroll (only the Exposure map and wide tables scroll inside their own area), and every control is visible and reachable by keyboard.
 
 ### Story 1.8: Command palette and keyboard map
 
@@ -576,9 +601,9 @@ So that I never hunt through menus.
 
 **Given** any surface
 **When** the user presses `⌘K` / `Ctrl+K`
-**Then** the shadcn `Command` palette opens with groups Answers → Navigate → Actions → Recent, `Enter` fires, `Esc` closes, and results announce via `aria-live` (UX-DR6)
-**And** it offers navigation to every surface and "Switch theme…" with live preview
-**And** the page-header search field (Story 1.6) opens the same palette, pre-scoped to blast radius; until Story 6.3 adds answers, it shows the normal palette.
+**Then** the shadcn `Command` palette opens as a 660px dialog with results grouped Issues · Software · Exposure · Actions (first result = best match); `↵` opens, `Esc` closes and returns focus; it traps focus, dims the page and never navigates on its own; results announce via polite `aria-live` (UX-DR6); a Recent group is not drawn (EXPERIENCE Open item 20)
+**And** it offers navigation to every surface and "Switch theme…" (Light / Dark)
+**And** the sidebar "Search or jump to…" field (Story 1.6) opens the same palette; typing a CVE ID, `package@version` or fingerprint routes to an Exposure answer once Story 6.3 lands; until then it shows the normal palette.
 
 **Given** palette actions
 **When** a later story adds an action
@@ -586,12 +611,13 @@ So that I never hunt through menus.
 
 **Given** no match
 **When** the user types an unknown term
-**Then** the palette shows "No matches. Try a CVE ID, package@version, or digest." plus common actions.
+**Then** the palette shows "No matches. Try a CVE ID, package@version or fingerprint." plus common actions.
 
 **Given** the keyboard map
-**When** the user presses `g`+`p/b/g/a/f/e`, `?` or `Esc`
-**Then** they navigate, open the shortcut map, or close the topmost layer respectively, and the same map is listed in Settings (UX-DR7)
-**And** shortcuts never fire while focus is in a text input.
+**When** the user presses `g` + a surface letter, `J`/`K`, `/`, `⌘↵`, `x`, `?` or `Esc`
+**Then** they navigate (letters show beside each nav item after `G`), move through the list, focus the list search, save and go to the next issue, export, open the shortcut map, or close the topmost layer, and the same map is listed in Settings → Personal (UX-DR7)
+**And** the `g` letters for the renamed surfaces and any new meanings for `t` and `e` are set in EXPERIENCE.md before this story starts Build (EXPERIENCE Open item 13)
+**And** single-key shortcuts never fire while focus is in a text field, and a switch in Settings → Personal turns them off (persisted in `user_preferences`, WCAG 2.1.4); `⌘K` and `⌘↵` stay on.
 **And** the bindings are fixed for v1; there is no custom key-binding setting (UX-DR7).
 
 ### Story 1.9: Banned-pattern guards
@@ -604,19 +630,19 @@ So that later surfaces cannot drift into alerts, noise or nested overlays.
 
 **Given** the banned UI patterns (UX-DR36)
 **When** the frontend guide and shared components are set up
-**Then** the guide lists every banned pattern, and one shared overlay component allows at most a drawer plus one dialog, proven by a component test.
+**Then** the guide lists every banned pattern, and one shared overlay component allows one modal — the ⌘K dialog — and no drawer or stacked modal, proven by a component test.
 
 **Given** the shadcn `Toast`
 **When** a component uses it
-**Then** it confirms only a user's own action, never an alert for new findings, and a lint/test enforces this.
+**Then** it is never used — not as an alert, not for new findings and not for a failed save or start (failures use the inline error in the panel where the action was taken, UX-DR41) — and a lint/test enforces this.
 
 **Given** any surface
 **When** `mise run check` runs
-**Then** a lint/test fails on more than one primary button per surface or on celebratory animation classes.
+**Then** a lint/test fails on more than one lime primary action per view (besides the active nav item; while an error band shows, its Try again is the one lime action and the list column's primary turns grey), on lime used outside its agreed jobs (active nav, the one primary action, selected map node, Issues badge, text selection), on a Compact density toggle, on a data-quality grade in a list row, or on celebratory animation classes.
 
 ## Epic 2: Fleet inventory and uniform scanning, shown as a populating posture view
 
-The engineer connects a registry or package feed and watches Armoury enumerate, SBOM and scan the fleet with one Grype config, every scan recorded as tamper-evident evidence, while Posture and Artifacts populate live with gaps shown openly. Ranking here is severity-only and labelled as such; Epic 5 replaces it with KEV-first/EPSS ranking.
+The engineer connects a registry or package feed and watches Armoury enumerate, SBOM and scan the fleet with one Grype config, every scan recorded as tamper-evident evidence, while Home and Software fill in live with gaps shown openly. Issues are grouped by severity from the start; Epic 5 settles the order within each group (D1).
 
 ### Story 2.1: Tamper-evident evidence ledger
 
@@ -683,7 +709,7 @@ So that the fleet inventory fills without any CI changes or dev-team help.
 
 **Acceptance Criteria:**
 
-**Given** the empty Posture page or Settings → Registry connections
+**Given** the empty Home page or Settings → Connections (registries)
 **When** an admin adds a registry (URL, auth type, read-only credentials) and runs "Test connection"
 **Then** the connection is validated before saving, and credentials are envelope-encrypted at rest with key material from the k8s Secret (FR1, ARCH17)
 **And** credentials never appear in API responses, logs or subprocess argv
@@ -704,7 +730,7 @@ So that the fleet inventory fills without any CI changes or dev-team help.
 **Then** the connection status shows the error and last success time in Settings, and the state is queryable for coverage reporting (FR5, NFR8); the job retries with exponential backoff (1 min first wait, doubled after each failure, at most 1 h, no retry limit), Settings shows the next retry time, and the job never silently drops the registry.
 
 **Given** an analyst or auditor
-**When** they view Settings → Registry connections
+**When** they view Settings → Connections (registries)
 **Then** they see connection status read-only; add/edit/delete controls are absent.
 
 ### Story 2.3: Central SBOM generation with Syft
@@ -793,7 +819,7 @@ So that packages we ship are inventoried and scanned the same uniform way as ima
 
 **Acceptance Criteria:**
 
-**Given** Settings → Package feeds
+**Given** Settings → Connections (package feeds)
 **When** an admin adds an npm or PyPI feed (endpoint URL, scope/namespace filter, read-only credentials) and tests it
 **Then** it is saved with the same validation, envelope encryption and status handling as registry connections (FR29, ARCH17).
 
@@ -853,12 +879,12 @@ So that everything we ship through the registry is under management, not just im
 
 **Given** an OCI artifact type Syft cannot catalogue
 **When** it is discovered
-**Then** it appears as a coverage gap ("N OCI artifacts of unsupported type `<media type>`") rather than being skipped or shown as clean (FR5, NFR8).
+**Then** it appears as a coverage gap ("N pieces of software of a type we can't check yet", with `<media type>` small as the technical term — copy to confirm with UX) rather than being skipped or shown as clean (FR5, NFR8).
 
-### Story 2.9: Posture summary — populating, coverage and freshness
+### Story 2.9: Home summary — checking, coverage and freshness
 
 As a SecOps engineer at minute 29,
-I want Posture to show what is known, what isn't yet, and how fresh it is,
+I want Home to show what is known, what isn't yet, and how fresh it is,
 So that I can trust the view before the first full scan has finished.
 
 **Acceptance Criteria:**
@@ -869,64 +895,78 @@ So that I can trust the view before the first full scan has finished.
 **And** a contract test asserts every answer-bearing endpoint in `openapi.yaml` declares `provenance`.
 
 **Given** sources are connected and work is queued
-**When** Posture renders
-**Then** it shows the heading block, one hero numeral with a co-stat band (artifacts, scanned coverage, findings), and a populating banner stating queue count and estimate, refreshed by polling the Posture summary about every 10 s while backlog exists, without blocking (UX-DR8, UX-DR13, NFR1, ARCH33)
-**And** numerals count up on populate, stepped under reduced motion.
+**When** Home renders
+**Then** it shows the title "Home" with one plain summary line and "Last checked N min ago", and the Checking band — determinate progress ("3,176 of 3,847 checked (82%)"), an estimate in words ("about 2 h left") and "You can keep working: numbers update as each one finishes." — refreshed by polling the Home summary about every 10 s while backlog exists; it never blocks and is never a spinner or a modal (UX-DR13, NFR1, ARCH33)
+**And** the "Across all software" band shows Checked as a gauge with "N are waiting their turn"; skeletons appear only where data is missing; progress is a polite `role="status"` and updates in steps under reduced motion.
 
 **Given** coverage gaps (unscanned artifacts, failed SBOMs, unreachable registry or feed, no vulnerability DB)
-**When** Posture renders
-**Then** each appears as a named, non-dismissible coverage-gap row with counts and locations, linking to its cause (FR5, UX-DR12, NFR8).
+**When** Home and Software render
+**Then** each appears as a plain gap row where the missing data would be ("Not checked yet N"), naming the count and where ("including 212 in prod-eu-west") and saying "Their issues are unknown, not absent."; it is not dismissible or collapsible and links to its cause (FR5, UX-DR12, NFR8).
 
 **Given** the freshness strip
-**When** Posture renders
-**Then** it lists the Grype DB and SBOM index with version and age in mono, coloured by threshold, each linking to Settings (UX-DR15)
-**And** the uniformity claim reads "All N artifacts SBOM'd and scanned the same way — Syft vX · Grype vY", where N is the scanned count, not the discovered count.
+**When** Home renders
+**Then** it lists each source in plain words with its age ("Vulnerability data 41 min ago · Packages 38 min ago"), with the technical term (Grype DB, SBOM index) small in `text-3`; a source past its threshold turns amber with its age in words and an amber dot; a "Sources" link at the end opens Settings → Sources (UX-DR15)
+**And** the uniformity claim keeps its meaning in plain labels — "All N pieces of software checked the same way — Syft vX · Grype vY", where N is the checked count, not the discovered count; where it sits on Home is set by UX before Build (O18).
 
 **Given** no sources are connected
-**When** Posture renders
-**Then** the empty state offers "Connect registry" with its Settings link (UX-DR29).
+**When** Home renders
+**Then** it shows the title and the setup action "Connect a registry" with its copy-paste one-liner in a code block with Copy; no illustration (UX-DR29, UX-DR42; Story 3.2 adds the second action).
 
-### Story 2.10: Posture findings — severity band and findings table
+### Story 2.10: Home — Needs attention and open issues by severity
 
 As a SecOps engineer,
-I want to see the fleet's findings distributed by severity and listed densely,
-So that I can see where the problems are across everything scanned.
+I want to see what needs attention today and the open issues by severity,
+So that I can see where the problems are across everything checked.
 
 **Acceptance Criteria:**
 
 **Given** scanned findings
-**When** Posture renders
-**Then** a 30px soft severity band shows the distribution, labelled "scanned artifacts only", and clicking a segment filters the table below (UX-DR14).
+**When** Home renders
+**Then** the list column shows **Needs attention N** — issues (one vulnerability or licence in one package version, across all its places; UX-DR39) that are Not reviewed yet in any place AND Actively exploited or Critical, plus every Not-reviewed-yet licence violation (never a licence warning, D8) — as standard rows (name + version · severity · Actively exploited · where; right column places, "14 places"), then **Open issues N** as summary rows: Licences first (hidden at 0), then Critical (with "N actively exploited"), High, Medium and Low with counts, then "N not reviewed yet · N reviewed · See all" (UX-DR22, UX-DR38)
+**And** until Epic 4 loads the exploited list and Epic 5 records reviews, every issue is Not reviewed yet and none is marked Actively exploited; the rule is applied unchanged and computed on the server (ARCH38)
+**And** the sidebar Issues item shows a badge with the Needs-attention count, and no badge at 0; it counts decisions due, never new findings.
 
-**Given** the findings table
-**When** it renders
-**Then** it has 30px rows, mono identifiers (CVE, `package@version`, digest), severity chips with text, cursor pagination (no offset, no infinite scroll) and coverage-gap rows inline (UX-DR9 severity chip, UX-DR11 base, ARCH13)
-**And** the header honestly states the current order: "Sorted by severity — KEV/EPSS ranking arrives with enrichment."
+**Given** the selected issue
+**When** the detail column renders
+**Then** it shows tabs Overview · Exposure · How to fix · Details; Overview holds the title, one plain sentence of what it means, severity as a word + 4-step marker (UX-DR9), Vulnerability (CVE ID in mono), Found in, The fix and Review status (Not reviewed yet until Epic 5); the Exposure tab arrives with Story 6.3, and How to fix and Details wait for UX (EXPERIENCE Open item 14)
+**And** the findings API returns finding groups (ARCH38) with place counts and per-group counts, cursor-paginated with a total (ARCH13)
+**And** the "Across all software" band adds Open issues (last 30 days, sparkline, delta chip such as "247 fewer") computed from history (ARCH32).
 
-**Given** zero findings over partial coverage
-**When** Posture renders
-**Then** the zero is scoped: "0 critical findings across the N% of the fleet that is scanned."
+**Given** nothing that needs attention, over partial coverage
+**When** Home renders
+**Then** it reads "Nothing needs you today." with the scope sentence ("That covers the N pieces of software we've checked; M are still waiting their turn."), shows no Issues badge, and the view's one lime action follows EXPERIENCE (Review all N from Story 5.4; Audit report from Story 9.5) (UX-DR45).
 
-### Story 2.11: Artifacts list and artifact detail
+### Story 2.11: Software list and software detail
 
 As a SecOps engineer,
-I want to open any artifact and see its SBOM, findings and how it was evaluated,
-So that I can answer "what's in this and how do we know?" for a single artifact.
+I want to open any piece of software and see its packages, issues and how it was checked,
+So that I can answer "what's in this and how do we know?" for one piece of software.
 
 **Acceptance Criteria:**
 
-**Given** the Artifacts surface
+**Given** the Software surface
 **When** it loads
-**Then** a paginated list shows each artifact's identifier (mono), type (`image`, `package`, `oci_artifact` or `filesystem`), source (registry, package feed, CI scan or CI upload), SBOM/scan status and finding counts, with coverage-gap rows inline and a populating banner while backlog exists.
+**Then** the list column shows "Software" and a summary line ("3,847 pieces of software."), standard rows (name + version; line 2 where it runs; right column the issue count "2 issues"; no data-quality grade), the "Not checked yet N" gap row in place, the pager "1–25 of N · page 1 of M" (25 per page, never infinite scroll) and the lime Add software (its destination is set by UX before Build, EXPERIENCE Open item 18); while backlog exists the Checking band shows, with per-row step text ("Reading packages · step 2 of 3", "Waiting its turn")
+**And** until a cluster agent reports (Epic 3) the list is not split into Deployed / Not deployed; Story 3.5 adds the groups
+**And** each piece of software keeps its type (`image`, `package`, `oci_artifact`, `filesystem`) and source (registry, package feed, CI scan, CI upload) in its detail; how CI-submitted software is grouped and labelled is EXPERIENCE Open item 28.
 
 **Given** an artifact
 **When** its detail opens via `GET /api/v1/artifacts/{id}` (with `provenance`)
-**Then** it shows SBOM contents (packages and versions), vulnerability findings, evaluation provenance (last evaluated, Syft/Grype/DB versions) and a freshness strip (FR18, FR8, UX-DR25)
-**And** the running-locations section honestly reads "No cluster agent connected — running locations unknown" until Epic 3 provides data.
+**Then** it shows tabs Overview · Issues · Packages · Audit trail; Overview, in the order of UX-DR25, holds **Info** — Name, Fingerprint (mono, Copy), Runs in, Copies, **Built** (the creation time the artifact records — for an image, the `created` time in its image config — or "Unknown"; copy to confirm), Last checked, Data quality (filled by Story 8.2; what it shows before a score exists is EXPERIENCE Open item 32) and **Signed** (filled by Story 4.10; until then it says the signature is not checked yet) — beside the Packages cell ("214 packages · SBOM", Direct / Indirect; the licence line arrives with Epic 7 and the end-of-life line with Story 4.9) over Where it runs; then Issues, the Issues trend and "Latest in the audit trail" ("Entries are never edited or removed"); provenance is inline ("Last checked", "How we know: Syft v… · Grype DB v…") instead of a freshness strip (FR18, FR8, UX-DR25)
+**And** the Where it runs cell reads "No cluster agent connected — where it runs is unknown" until Epic 3 provides data.
 
 **Given** an artifact whose SBOM or scan failed
 **When** its detail opens
-**Then** the failure reason and retry status are shown instead of an empty findings list.
+**Then** the failure reason and retry status are shown in place of the Issues cell, never as zero issues.
+
+**Given** a connected registry that is unreachable
+**When** Software renders
+**Then** an edge-to-edge error band names it ("We can't reach registry.acme.internal") with since when, what it affects, what still works and the likely cause; the lime **Try again** is the view's one lime action and Add software turns grey; the grey **Open connection settings** opens Settings → Connections; affected rows say "As of 14:02 · registry" in amber with a clock; nothing is removed (FR5, NFR8, UX-DR29).
+
+**Given** Software detail
+**When** a user presses the grey **Check again**
+**Then** the SBOM and the scan of that one piece of software are queued again at once, through the same pipeline and fleet toolchain (NFR12); the row and the detail show step text until done ("Reading packages · step 2 of 3"); the request is appended to the evidence ledger with who and when; and a failure to start shows the inline error with Try again (FR18, UX-DR41, D10)
+**And** the operation declares its minimum role with `x-armoury-role` in `openapi.yaml` (the role is chosen when the story is planned — O4), and Check again is absent for roles below it (UX-DR31).
 
 ### Story 2.12: Prove minute 29 — scripted install-to-posture run
 
@@ -938,7 +978,7 @@ So that NFR1 is a checked product gate, not a claim.
 
 **Given** a fresh, uniquely named namespace in the dev cluster and a seeded test registry
 **When** the scripted run deploys the chart into that namespace with Skaffold (ARCH34), then times the customer steps — bootstrap sign-in and registry connection — with no other manual step
-**Then** Posture is live and visibly populating (populating banner, coverage co-stat, coverage-gap rows) in under 30 minutes, with the elapsed time per step recorded (NFR1)
+**Then** Home and Software are live and visibly checking (Checking band, Checked gauge, "Not checked yet" rows) in under 30 minutes, with the elapsed time per step recorded (NFR1)
 **And** the script fails if any step needs input beyond the documented values and credentials
 **And** the script deletes the namespace when it finishes, pass or fail.
 
@@ -965,7 +1005,7 @@ So that NFR3 and the 24-hour initial-scan bound hold before more features are la
 **Given** that load
 **When** posture, findings-table pages and artifact list endpoints are called
 **Then** the posture, findings page (50 rows) and artifact list endpoints each have p95 ≤ 500 ms while the initial evaluation runs
-**And** when 10 % of the backlog is done, the populating banner's estimate is within ±25 % of the actual completion time.
+**And** when 10 % of the backlog is done, the Checking band's estimate is within ±25 % of the actual completion time.
 
 **Given** the results
 **When** the story completes
@@ -977,7 +1017,7 @@ So that NFR3 and the 24-hour initial-scan bound hold before more features are la
 
 ## Epic 3: Running inventory from read-only cluster agents
 
-The engineer installs the agent with a second one-liner; running workloads appear linked to registry artifacts so "is this running anywhere?" is answerable; disconnected agents and unmatched running digests surface as gaps. Story 3.1 closes the open enrollment gap (ARCH10) before any agent code depends on it.
+The engineer installs the agent with a second one-liner; running workloads appear linked to registry artifacts, so Software splits into Deployed and Not deployed and "is this running anywhere?" is answerable; disconnected agents and unmatched running digests surface as gaps. Story 3.1 closes the open enrollment gap (ARCH10) before any agent code depends on it.
 
 ### Story 3.1: Agent enrollment and mTLS identity
 
@@ -996,7 +1036,7 @@ So that it gets a trusted identity without me running a PKI or opening inbound p
 **When** this story lands
 **Then** the control plane serves enrollment, certificate renewal and the revocation check on that port and ends TLS itself with `rustls` (ARCH8); a connection with a revoked or invalid client certificate is refused, proven by a test.
 
-**Given** Settings → Agent install (admin only)
+**Given** Settings → Connections (agent install, admin only)
 **When** the admin creates an enrollment for a named cluster
 **Then** a single-use, time-limited enrollment token is issued and shown once, and only its hash is stored.
 
@@ -1044,10 +1084,11 @@ So that I can install it in prod without asking for cluster-admin.
 **When** it reports
 **Then** it sends only running digests and workload locations; it never generates SBOMs or findings (ARCH31, NFR12).
 
-**Given** Settings → Agent install
+**Given** Settings → Connections (agent install)
 **When** an admin opens it
 **Then** it shows the copy-paste `helm install` one-liner with the control-plane address and token filled in, states the trust posture ("read-only — watch/list only, never cluster-admin") and shows the exact RBAC rules before install (UX-DR28)
-**And** the empty Posture page now offers "Install agent" alongside "Connect registry" (UX-DR29).
+**And** the one-liner sits in a code block with Copy ("Copied" for 2 s, announced politely) (UX-DR42)
+**And** the empty Home now offers exactly two setup actions — connect a registry and install a cluster agent — each with its one-liner in a code block (UX-DR29).
 
 **Given** the agent
 **When** it is tested
@@ -1091,7 +1132,7 @@ So that runtime inventory works where our most security-conscious environments l
 
 **Given** either transport
 **When** the agent reports
-**Then** the control plane records which transport is in use, visible in Settings for that cluster.
+**Then** the control plane records which transport is in use, visible in Settings → Connections for that cluster.
 
 ### Story 3.5: Shipped-vs-running reconciliation
 
@@ -1110,38 +1151,38 @@ So that "is this running anywhere?" has an answer — and running images we can'
 **When** reconciliation runs
 **Then** it is recorded as `unmatched` with its image reference and location, and counted for coverage reporting (ARCH11, R7).
 
-**Given** Artifact detail
-**When** an artifact runs somewhere
-**Then** the running-locations section lists clusters, namespaces and workloads in mono, replacing the "no cluster agent connected" message from Story 2.11; shipped-but-not-running artifacts say so explicitly (FR18).
+**Given** Software detail
+**When** a piece of software runs somewhere
+**Then** the Where it runs cell lists each copy as a path ("prod-eu-west/payments"), replacing the "No cluster agent connected" message from Story 2.11, and the Software list splits into **Deployed N** (line 2 "prod-eu-west · 4 copies") and **Not deployed N** (line 2 "Last deployed 12 days ago" or "Never deployed"; hint "Not seen running in any connected cluster.", also on focus), with the summary "N deployed, M not deployed" (FR18, UX-DR25).
 
 **Given** an artifact no longer running anywhere
 **When** reconciliation runs
 **Then** its past running locations remain queryable with their end times.
 
-### Story 3.6: Runtime coverage on Posture, and minute 29 with the agent
+### Story 3.6: Runtime coverage on Home and Software, and minute 29 with the agent
 
 As a SecOps engineer,
-I want Posture to show what is running, where agents are missing or stale, and what we can't match,
+I want Home and Software to show what is deployed, where agents are missing or stale, and what we can't match,
 So that the fleet view never needs a caveat the UI doesn't already show.
 
 **Acceptance Criteria:**
 
 **Given** connected agents
-**When** Posture renders
-**Then** the co-stat band includes running artifacts and connected clusters, and the freshness strip includes a runtime-observation entry per cluster with last heartbeat (FR16, UX-DR15).
+**When** Home and Software render
+**Then** the Software summary line counts deployed and not-deployed software, and the freshness strip shows "N clusters reporting" (each cluster's last heartbeat is in Settings → Connections) (FR16, UX-DR15).
 
 **Given** a stale or disconnected agent, or unmatched running digests
-**When** Posture and Artifacts render
-**Then** each appears as a named coverage-gap row ("Cluster `prod-eu-west` disconnected — runtime data as of 14:02", "37 running digests not matched to any connected source") linking to its cause (FR5, UX-DR12, UX-DR30, NFR8)
+**When** Home and Software render
+**Then** a disconnected cluster's runtime data is marked "as of 14:02", not removed, and each gap appears as a plain gap row ("37 running fingerprints we can't match to any connected source" — copy to confirm with UX) linking to its cause (FR5, UX-DR12, UX-DR30, NFR8)
 **And** the posture API's `provenance.coverage` includes these counts and a caveat when runtime data is partial (ARCH14).
 
 **Given** the Story 2.12 install-to-posture script
 **When** it is extended with the agent `helm install` step
-**Then** Posture shows running workloads and runtime coverage within the 30-minute gate, and the timing is recorded (NFR1).
+**Then** Home and Software show deployed software and runtime coverage within the 30-minute gate, and the timing is recorded (NFR1).
 
 ## Epic 4: Fresh, enriched findings, connected or air-gapped
 
-When vulnerability or enrichment feeds update — online or by signed offline bundle — stored SBOMs are re-evaluated within an hour without rescans, and every finding carries source-attributed KEV, EPSS, CNA and OSV data. Ranking stays severity-only until Epic 5, but enrichment is visible on findings from this epic on.
+When vulnerability or enrichment feeds update — online or by signed offline bundle — stored SBOMs are re-evaluated within an hour without rescans, and every finding carries source-attributed KEV, EPSS, CNA and OSV data. Issues stay grouped by severity; Epic 5 settles the order within each group, and enrichment is visible on issues (the Actively exploited marker, technical details) from this epic on. The epic ends with two more external sources of knowledge, both connected or air-gapped: end-of-life data for packages (Story 4.9, FR33) and signature checks against trusted signers (Story 4.10, FR32).
 
 ### Story 4.1: Scheduled vulnerability database updates with versioned history
 
@@ -1193,11 +1234,11 @@ So that findings are already current on CVE day — no rebuilds, no rescans.
 
 **Given** a re-evaluation still running when the next database version activates
 **When** the new version lands
-**Then** work is coalesced to the newest version and the backlog is surfaced (populating banner and pipeline state), never hidden (R2, NFR8).
+**Then** work is coalesced to the newest version and the backlog is surfaced (Checking band and pipeline state), never hidden (R2, NFR8).
 
-**Given** Artifact detail and the posture `provenance`
+**Given** Software detail, Exposure answers and the posture `provenance`
 **When** they render after a re-evaluation
-**Then** they state "Re-evaluated against Grype DB vX, N min ago — no rescan needed" (UX-DR15, UX-DR23 footer wording).
+**Then** they show the evaluation inline — "Last checked", "How we know: Syft v… · Grype DB vX · checked N min ago" and, on Exposure, "Answered N min ago" — and no rescan is needed (UX-DR15, UX-DR23).
 
 ### Story 4.3: KEV and EPSS enrichment with source attribution
 
@@ -1215,9 +1256,9 @@ So that I can see which findings are exploited or likely to be.
 **When** it is applied
 **Then** findings are re-joined to the new enrichment without re-matching SBOMs, and each enrichment datum on a finding carries its source and retrieval time.
 
-**Given** a finding in the UI (Posture table, Artifact detail)
+**Given** an issue in the UI (Home, Issues, Software detail)
 **When** it is KEV-listed
-**Then** the KEV tag renders adjacent to the CVE ID and survives every compact view; EPSS score and percentile show with source and retrieval time on hover/focus (UX-DR9, FR12).
+**Then** list rows show "Actively exploited" as clay text with a pulse icon (never dropped when a row truncates), detail views show the Actively exploited pill with a grey "KEV" tag, and the technical-details block lists KEV, CVSS and the raw EPSS value with source and retrieval time; EPSS is never shown as a rating, tag, column or hover score (UX-DR9, FR12).
 
 **Given** a fetch or validation failure
 **When** enrichment runs
@@ -1244,9 +1285,9 @@ So that severity, affected ranges and descriptions don't depend on NVD alone.
 **When** a finding is displayed
 **Then** each value is shown with its own source label; no source is silently overwritten by another.
 
-**Given** Artifact detail and the findings table
-**When** a finding renders
-**Then** its enrichment panel lists every source used with retrieval time, and the freshness strip gains KEV, EPSS, CNA and OSV entries (UX-DR15).
+**Given** Software detail and the Issues detail
+**When** an issue renders
+**Then** its technical-details block lists every source used with retrieval time (CVE, KEV, CVSS, EPSS, source, check time), and the freshness strip gains an entry per enrichment source in plain words with the technical term small ("Exploited list KEV 6 Nov"; the labels for CNA, OSV and EPSS are not drawn in the spine — copy to confirm with UX) (UX-DR15).
 
 **Given** a later enrichment correction
 **When** it changes data already used by a finding
@@ -1290,7 +1331,7 @@ So that air-gapped posture is as current as connected posture.
 
 **Acceptance Criteria:**
 
-**Given** Settings → Feed-bundle import (admin only) or the import API
+**Given** Settings → Sources (bundle import, admin only) or the import API
 **When** an admin uploads a bundle
 **Then** the signature is verified against the trusted public keys listed in chart values (operator keys; an operator can remove any key) — every component checksum and schema is validated, and only then are all components activated together in one step (FR10, ARCH20 R8)
 **And** a partial, corrupt, unsigned or untrusted bundle is rejected as a whole, the previous feeds stay active and are reported stale, and the reason is shown.
@@ -1307,25 +1348,25 @@ So that air-gapped posture is as current as connected posture.
 **When** the freshness strip renders
 **Then** it shows the bundle age alongside feed ages, and offers an "Import bundle" action to admins (UX-DR30).
 
-### Story 4.7: Honest feed staleness across Posture and findings
+### Story 4.7: Honest feed staleness across Home and Issues
 
 As a SecOps engineer,
-I want stale or failing feeds to change what Posture says,
+I want stale or failing feeds to change what Home says,
 So that I never read a confident answer resting on old intel.
 
 **Acceptance Criteria:**
 
 **Given** per-feed freshness thresholds, configurable via Helm values (PROC2) — defaults: in connected mode each daily feed (Grype DB, KEV, EPSS, CVE List, OSV) is stale after 48 h; in air-gapped mode the active bundle is stale after 7 days
 **When** a feed exceeds its threshold or its last update failed
-**Then** its freshness-strip age turns warning, the posture headline gains a scoped caveat ("KEV catalogue 3 days old — exploited-status may be out of date"), and the posture API `provenance.caveats[]` carries the same text (NFR8, UX-DR30, ARCH14).
+**Then** its freshness-strip age turns amber with the age in words and an amber dot, the Home summary line gains a scoped caveat (for example "The exploited list (KEV) is 3 days old, so Actively exploited may be out of date." — copy to confirm with UX), "good shape" is never claimed on old data, and the posture API `provenance.caveats[]` carries the same text (NFR8, UX-DR30, ARCH14).
 
 **Given** a feed that has never been loaded
-**When** Posture renders
+**When** Home renders
 **Then** it appears as a coverage-gap row naming the missing feed, not as an empty enrichment column.
 
-**Given** every freshness-strip entry
+**Given** the "Sources" link on the freshness strip
 **When** it is clicked
-**Then** it opens the feed's Settings page, showing version history, last success, last failure and reason (UX-DR15).
+**Then** it opens Settings → Sources, showing each feed's version history, last success, last failure and reason (UX-DR15).
 
 ### Story 4.8: Prove one-hour re-evaluation at the scale anchor
 
@@ -1356,30 +1397,111 @@ So that NFR5 and the CVE-day "already re-evaluated" promise are known to hold.
 **When** it is invoked
 **Then** it runs as its own mise task outside `mise run check`.
 
+### Story 4.9: End-of-life data for packages
+
+As a SecOps engineer,
+I want to see which packages in a piece of software have reached their end of life,
+So that I can plan upgrades before a package stops getting security fixes.
+
+**Acceptance Criteria:**
+
+**Given** the open end-of-life data decision (FR33, ARCH41)
+**When** this story is planned
+**Then** the end-of-life data source and its licence, what it covers (package ecosystems; whether runtimes and OS releases are included), how packages are matched to it (exact identifiers only), and its staleness threshold (PROC2 default) are recorded as an amendment to `architecture.md` and approved by the user before implementation.
+
+**Given** connected mode
+**When** the enrichment schedule fires (default every 6 h, Helm value, PROC2)
+**Then** the `enrichment` module fetches the end-of-life dataset, validates it and stores it as a versioned, source-attributed snapshot (source, version or date, retrieved_at), appended to the evidence ledger (FR33, FR12, ARCH21)
+**And** a fetch or validation failure keeps the previous snapshot active and reports the source stale; nothing is ever partially applied (ARCH20 R8).
+
+**Given** a new snapshot
+**When** it is applied
+**Then** every package in every stored SBOM is re-joined to it through the package index without re-matching SBOMs, and each package records its end-of-life date and status — past end of life, supported or unknown — with source and retrieval time (FR33, FR7)
+**And** a package the data does not cover is "unknown", never "supported", proven by a test.
+
+**Given** air-gapped mode
+**When** the schedule would fire
+**Then** no outbound request is made; the dataset arrives only as one more component of the offline bundle — this story extends the Story 4.5 manifest and the Story 4.6 import, so it is verified and activated together with the other components (FR10, NFR4, ARCH19, ARCH20).
+
+**Given** Software detail
+**When** the Packages cell and the Packages tab render
+**Then** the cell carries one end-of-life line scoped to the data ("No package is past its end of life." only when every package is covered and none is past; otherwise the count past end of life and the count with no end-of-life data, in plain words — copy to confirm with UX, O14), and each package in the Packages tab shows its end-of-life date or that there is no end-of-life data, with the source small (UX-DR25)
+**And** end-of-life status is stated in words, has no severity colour, creates no issue and does not count toward Needs attention (O13).
+
+**Given** `GET /api/v1/artifacts/{id}`
+**When** it responds
+**Then** each package carries its end-of-life status, date and source, and the source's version and age are in `provenance.sources` (ARCH14).
+
+**Given** Settings → Sources and the Story 4.7 freshness rules
+**When** the source is past its threshold or its last update failed
+**Then** Settings → Sources lists it with version history, last success, last failure and reason, and the Software detail end-of-life line carries a scoped caveat; whether the source also appears on the Home freshness strip is set by UX before Build (O15) (UX-DR15, UX-DR28).
+
+**Given** the Story 4.8 scale-anchor fixtures
+**When** an end-of-life re-join runs
+**Then** it completes within the one-hour enrichment re-join bound, and the result is appended to the committed performance record.
+
+### Story 4.10: Verify artifact signatures against trusted signers
+
+As a SecOps engineer,
+I want Armoury to check whether each image is signed by someone we trust,
+So that I can tell software someone vouched for from software nobody did.
+
+**Acceptance Criteria:**
+
+**Given** the open signature-verification decision (FR32, ARCH40)
+**When** this story is planned
+**Then** the trust configuration (public keys and keyless signer identities; fleet-wide or per registry connection), the result states and their names, the signature formats read from the registry, the artifact types in scope, and how the Sigstore trusted root reaches air-gapped instances are recorded as an amendment to `architecture.md` and approved by the user before implementation.
+
+**Given** Settings → Policy (signature policy, admin only) or Helm values
+**When** an admin adds or removes trusted signers
+**Then** they can add public keys and keyless signer identities (OIDC issuer and subject); the default is none (PROC2), so a default install verifies nothing and says so; each change is a new policy version appended to the evidence ledger; analysts and auditors see the policy read-only with edit controls absent (UX-DR28, UX-DR31).
+
+**Given** a container image or other OCI artifact in a connected registry
+**When** it is discovered, or the signature policy changes
+**Then** the control plane runs the pinned cosign CLI (added in Story 4.5) through `tools` to verify its signatures, read from the same registry with the connection's read-only credentials in per-invocation env (never argv), and records the result with the signer, the trust-policy version, the cosign version and the check time, appended to the evidence ledger (FR32, NFR12, ARCH7, ARCH40)
+**And** a policy change re-checks signatures without rescanning SBOMs.
+
+**Given** air-gapped mode
+**When** a signature is verified
+**Then** key-based verification makes no network call, and keyless verification uses only the offline trusted root from the approved amendment; no call is made to public Fulcio, Rekor or the Sigstore TUF repository, proven by the Story 1.2 air-gap test (NFR4, ARCH19).
+
+**Given** Software detail
+**When** the Info list renders
+**Then** "Signed" reads "Yes" when a signature from a trusted signer verifies, and plain words for every other state (copy to confirm with UX, O7), with the signer and check time in the technical details; a missing or failed signature is never hidden and never shown in a severity colour (FR32, NFR8, UX-DR25)
+**And** an artifact type this story does not check says that it is not checked, never "No" (O10).
+
+**Given** a tampered image, a signature by a removed key or a keyless identity that does not match
+**When** verification runs
+**Then** the result is not "verified", proven by tests.
+
+**Given** `GET /api/v1/artifacts/{id}`
+**When** it responds
+**Then** it includes the signature result (state, signer, trust-policy version, cosign version, check time) (ARCH14).
+
 ## Epic 5: Prioritise and triage findings
 
-The analyst works a KEV-first, EPSS-weighted findings list that explains each ranking, records justified decisions that propagate everywhere the finding appears, and ingests and emits VEX. Decisions are append-only evidence: corrections supersede, never overwrite.
+The analyst works the Issues list — grouped by severity, Actively exploited first in each group, the order stated in words — and records decisions with their reason in the review panel, which propagate everywhere the issue appears, and ingests and emits VEX. Decisions are append-only evidence: corrections supersede, never overwrite.
 
-### Story 5.1: Deterministic, explainable ranking
+### Story 5.1: Deterministic, explainable issue order
 
 As a SecOps engineer on a small team,
-I want findings ranked KEV first, then by EPSS-weighted severity, with the reason shown,
+I want issues grouped by severity with Actively exploited first in each group, in an order I can read in words,
 So that I work the findings that matter instead of ten thousand rows.
 
 **Acceptance Criteria:**
 
 **Given** the open ranking-formula decision (ARCH29)
 **When** this story is planned
-**Then** the exact formula (KEV tier, EPSS weighting, severity source precedence, tie-breakers) is recorded as an amendment to `architecture.md` and approved by the user before implementation.
+**Then** the exact order (severity groups and severity-source precedence, Actively exploited first within a group, the raw EPSS value as the next key, the stable tie-breaker, licences in their own group) is recorded as an amendment to `architecture.md` and approved by the user before implementation.
 
 **Given** findings with enrichment
 **When** `ranking` computes order
-**Then** every KEV-listed finding ranks above every non-KEV finding, the rest are ordered by the approved EPSS-weighted severity, and ties break on a stable key so the same inputs always give the same order (FR13)
-**And** a property test asserts determinism and the KEV-first invariant over generated findings.
+**Then** each issue falls into the Licences group or the Critical / High / Medium / Low group of its severity; every Actively exploited issue sorts above every other issue in its group, and the rest follow the approved within-group order, and ties break on a stable key so the same inputs always give the same order (FR13)
+**And** a property test asserts determinism and the exploited-first-within-group invariant over generated issues.
 
 **Given** any finding
 **When** `GET /api/v1/findings/{id}` is called
-**Then** it returns a ranking explanation — each input (KEV status, EPSS score/percentile, severity and its source) with its source and retrieval time, and the resulting rank tier — in words a human can read.
+**Then** it returns an order explanation — each input (severity and its source, KEV status, the raw EPSS value) with its source and retrieval time, and the resulting group and position — in words a human can read; the UI shows it only in the technical-details block, never as a rating.
 
 **Given** new enrichment or a re-evaluation
 **When** it is applied
@@ -1387,32 +1509,33 @@ So that I work the findings that matter instead of ten thousand rows.
 
 **Given** license findings (Epic 7) or findings without enrichment
 **When** they are ranked
-**Then** the formula defines their place explicitly (documented in the amendment), never by accident of nulls.
+**Then** licence issues sit in the Licences group (no severity; hidden at 0) and issues without enrichment take an explicit place in their severity group (documented in the amendment), never by accident of nulls.
 
-### Story 5.2: Findings workbench and ranked Posture table
+### Story 5.2: Issues list — severity groups, filters and the Home summary
 
 As a SecOps engineer,
-I want a Findings surface that lists every finding in ranked order,
-So that I have one place to work through the fleet's findings.
+I want an Issues surface that lists every open issue grouped by severity,
+So that I have one place to review the fleet's issues.
 
 **Acceptance Criteria:**
 
-**Given** the Findings surface
+**Given** the Issues surface
 **When** it loads
-**Then** it lists findings across the fleet in ranked order with 30px rows, mono identifiers, KEV tag beside the CVE ID, severity chip, EPSS, artifact, a triage pill (`untriaged` until decided), cursor pagination and inline coverage-gap rows (UX-DR9, UX-DR11, UX-DR26)
-**And** the header reads "KEV first, then EPSS-weighted. Severity alone does not rank."
+**Then** the list column shows "Issues" and a summary line ("3 need attention today. 312 not reviewed yet."); issues (one vulnerability or licence in one package version, across its places — UX-DR39) grouped Licences (hidden at 0), Critical, High, Medium and Low, each with its count; standard rows (name + version · severity · Actively exploited · where; right column the review-status chip or "Mixed · N of M"); "N more High" rows for long groups; the pager "1–25 of 312 · page 1 of 13" (25 per page, never infinite scroll); and coverage-gap rows in place (UX-DR9, UX-DR11, UX-DR26, ARCH38)
+**And** the order is stated above the list in words: "Actively exploited sorts first in each group"; EPSS is never shown.
 
-**Given** filters (severity, KEV, triage status, artifact, ecosystem)
+**Given** the filters — the type segmented control All · Vulnerabilities · Licences with counts ("Licences 0" stays visible), the Review status filter listing the five statuses with counts (default Not reviewed yet) and the search field ("Find a package or vulnerability", `/`)
 **When** applied
-**Then** they narrow the list server-side with the order preserved, and the active scope is stated above the table.
+**Then** they narrow the list server-side with the grouping and order preserved, and the active scope is stated above the list; a Mixed issue matches every status any of its places has ([ASSUMPTION], EXPERIENCE Open item 9); counts count issues, not places
+**And** at 0 it reads "No issues are waiting for review." with the coverage scope and the grey Show all statuses; a search with no match reads "No issues match "<text>" with these filters." with the grey Clear search (UX-DR45).
 
-**Given** Posture's findings table from Story 2.10
+**Given** Home's Open issues summary and Needs attention from Story 2.10
 **When** this story lands
-**Then** it uses the same ranked order and header sentence, replacing the interim "sorted by severity" header.
+**Then** they use the same groups, order and counts, and the Needs-attention count is the same number on Home, in the Issues summary and on the sidebar badge (UX-DR38).
 
 **Given** the keyboard
-**When** the user moves through rows with arrow keys
-**Then** the highlighted row is announced, and the row actions are reachable without a pointer.
+**When** the user presses `J`/`K` or clicks a row
+**Then** the next or previous issue is selected (`aria-current`), announced, and fills the detail column (tabs Review · Exposure · History, "1 of 3 · J K" at the bar's end) while the list keeps its place; every row action is reachable without a pointer; the Exposure and History tabs are not drawn (EXPERIENCE Open item 15).
 
 ### Story 5.3: Record triage decisions as evidence
 
@@ -1423,78 +1546,84 @@ So that handling is documented once and shows up everywhere it matters.
 **Acceptance Criteria:**
 
 **Given** an analyst or admin, using the decision API (the form arrives in Story 5.4)
-**When** they `POST` a decision with status (`not_affected` / `mitigated` / `accepted` / `fix_planned`) and a non-empty justification
+**When** they `POST` a decision with status (`not_affected` / `mitigated` / `accepted` / `fix_planned`) and a justification — required for `not_affected`, `mitigated` and `accepted`, optional for `fix_planned` (D7)
 **Then** it is stored with author, UTC timestamp and UUIDv7, and appended to the evidence ledger in the same transaction (FR14, NFR11, ARCH15)
-**And** a missing justification or a status outside the locked enum is rejected with 422.
+**And** a missing required justification or a status outside the locked enum is rejected with 422
+**And** the UI shows the statuses as Not impacted, Mitigated, Risk accepted and Fix planned, and the derived `untriaged` as Not reviewed yet; the API enums, exports and VEX keep the technical terms (ARCH15).
 
 **Given** an existing decision
 **When** a new decision is recorded for the same finding
 **Then** it supersedes the old one; both remain in history, and there is no update or delete endpoint
-**And** each decision in this story applies to one finding on one artifact; the fleet-wide scope arrives in Story 5.8.
+**And** each decision in this story applies to one finding on one piece of software (one place); the "All N places" scope arrives in Story 5.8.
 
 **Given** an auditor
 **When** they attempt to record a decision
-**Then** the API returns 403 (Story 5.4 keeps the form absent for auditors).
+**Then** the API returns 403 (Story 5.4 keeps the review panel absent for auditors).
 
 **Given** a recorded decision
-**When** Posture, Findings, Artifact detail and the posture API render
-**Then** they show the current status and use it in counts (for example "untriaged critical"), consistently across every surface (FR14 propagation)
+**When** Home, Issues, Software detail and the posture API render
+**Then** they show the current status and use it in counts, counting issues, not places (for example "2 Critical not reviewed yet"), consistently across every surface (FR14 propagation)
 **And** the findings API returns the current decision on every finding, so other teams can consume it (FR14 team consumption; VEX export follows in Story 5.6, the `triage_status` metric label in Story 8.3).
 
 **Given** a finding that is resolved by a feed update and later reappears
 **When** it reappears
 **Then** its previous decisions are still attached and visible.
 
-### Story 5.4: Triage drawer
+### Story 5.4: Review panel in the Issues detail column
 
 As an analyst working through a list,
-I want a drawer that shows why a finding ranks where it does and lets me decide without leaving the list,
-So that triage is fast and every decision has its context.
+I want to review an issue in the detail column without leaving the list,
+So that review is fast and every decision has its reason.
 
 **Acceptance Criteria:**
 
-**Given** any findings list
-**When** the user clicks a row or presses `t`
-**Then** a right-side `Sheet` opens showing the ranking explanation, full provenance (evaluation time, tool/DB versions, enrichment sources with retrieval times) and decision history (FR8, FR12, FR13, UX-DR16).
+**Given** the Issues list
+**When** an issue is selected
+**Then** its Review tab shows the summary (title, severity, Actively exploited pill + KEV tag), the places count with "See the map", What to do, the review status, the review panel and the technical-details block (CVE, KEV, CVSS, EPSS, source and check time, plus the order explanation from Story 5.1); decision history is on the History tab (not drawn, EXPERIENCE Open item 15) (FR8, FR12, FR13, UX-DR16).
 
-**Given** the decision form
-**When** the analyst picks a status, writes a justification and submits (or presses `⌘Enter`)
-**Then** the decision is recorded, the row updates in place, and on `⌘Enter` the drawer advances to the next finding; `Esc` closes it
-**And** status can never be changed inline in a table — only through the drawer.
+**Given** the review panel
+**When** the analyst answers "Does this vulnerability impact us?" (No, not impacted → Not impacted; Yes → "What will we do?": Fix it → Fix planned; Reduce the risk → Mitigated; Accept the risk → Risk accepted), each option showing the status chip it produces, and fills "Why? (shown in the audit report)" where required (every status except Fix planned)
+**Then** Save and next ⌘↵ (lime, disabled at 0.45 until a question is answered) records the decision, updates the row's chip in place and selects the next issue in the current filter; Decide later moves on without recording; the hint reads "Saved with your name in the audit trail."
+**And** status can never be changed inline in a list — only in the review panel.
 
-**Given** "Record triage decision" and "Open triage drawer"
-**When** the palette is opened on a highlighted finding
-**Then** both are available as palette actions (UX-DR6).
+**Given** a save that fails
+**When** the API returns an error
+**Then** an inline error line in the panel names the problem ("Your decision wasn't saved: Armoury can't reach its database.") with Try again, announced with `role="alert"`; Save and next does not advance; the chosen options, scope and "Why?" text stay filled in; no toast appears (UX-DR41).
+
+**Given** the "Review" palette action and the Review buttons on Home, the Exposure inspector and Software
+**When** used
+**Then** they open the issue in Issues on its Review tab ([ASSUMPTION], EXPERIENCE Open item 4), and Home's lime "Review all N" opens the Needs-attention issues one after another (UX-DR6, UX-DR22).
 
 **Given** an auditor
-**When** they open the drawer
-**Then** it shows explanation, provenance and history, with the form absent (UX-DR31).
+**When** they open an issue
+**Then** the summary, technical details and history show, and the review panel is absent (UX-DR31).
 
-### Story 5.5: Evidence trail surface
+### Story 5.5: Audit trail in Reports and on every item
 
 As a compliance lead,
-I want to browse the append-only evidence trail,
+I want to read the append-only audit trail of the whole fleet in Reports, and of any piece of software, issue or audit report,
 So that I can see every scan, feed version and decision, and how corrections were made.
 
 **Acceptance Criteria:**
 
-**Given** the Evidence surface
-**When** it loads
-**Then** it lists ledger entries newest first with type, subject (mono identifier), actor, time and tool/feed versions, with cursor pagination and filters by type, subject and time window (UX-DR27).
+**Given** Reports (`/reports`), whose first group this story adds
+**When** the user opens **Audit trail**
+**Then** it lists the whole fleet's ledger entries newest first with type, subject (plain label with its technical ID small in mono), actor, time and tool/feed versions, 25 per page with cursor pagination and a pager total, and filters by type, subject and time window (D9, UX-DR27)
+**And** Reports shows only the groups that exist so far — Audit trail now; Exports arrive in Story 6.5 and Audit reports in Story 9.5 — and auditors see all of it.
 
 **Given** a superseded entry
 **When** it renders
 **Then** both the original and the superseding entry are visible and linked; no edit or delete affordance exists anywhere (NFR11, UX-DR36).
 
 **Given** the chain verification from Story 2.1
-**When** the surface renders
-**Then** it shows the current verification result ("Chain intact — N entries, verified 4 min ago") or the first broken entry.
+**When** Reports → Audit trail renders
+**Then** it shows the current verification result ("Chain intact — N entries, verified 4 min ago") or the first broken entry, named in plain words with a link to it; the layout and wording of the broken-chain state are set by UX before Build (O16); Stories 9.6 and 9.9 add the checkpoint and anchoring status to the same group.
 
-**Given** a finding, artifact or decision elsewhere in the UI
-**When** the user chooses "View evidence"
-**Then** the Evidence surface opens filtered to that subject.
+**Given** a piece of software, an issue or (from Story 9.5) an audit report
+**When** the user opens its Audit trail tab (Software, Reports) or History tab (Issues; not drawn — EXPERIENCE Open item 15)
+**Then** it lists that subject's entries newest first under "Entries are never edited or removed.", with a link that opens Reports → Audit trail filtered to that subject.
 
-### Story 5.6: Emit VEX from triage decisions
+### Story 5.6: Emit VEX from review decisions
 
 As a SecOps engineer,
 I want our triage decisions exported as standard VEX,
@@ -1508,11 +1637,11 @@ So that downstream consumers and auditors get machine-readable handling statemen
 
 **Given** the open VEX status-mapping decision (ARCH29)
 **When** this story is planned
-**Then** the mapping of the locked statuses to each format's states and justifications — including `accepted` and `fix_planned` — is recorded as an amendment to `architecture.md` and approved by the user before implementation.
+**Then** the mapping of the locked statuses to each format's states and justifications — including `accepted` and `fix_planned`, and a `fix_planned` decision with no justification, whose action statement comes from the planned fix ("Update log4j-core to 2.17.2") (D7) — is recorded as an amendment to `architecture.md` and approved by the user before implementation.
 
 **Given** decisions on an artifact or across the fleet
 **When** VEX export is requested for a scope
-**Then** a valid document in each agreed format is produced, mapping the locked statuses to the format's states and justifications, with author and timestamp (FR15)
+**Then** a valid document in each agreed format is produced, mapping the locked statuses to the format's states and justifications, with author and timestamp (FR15); when an issue is Mixed, each product's statement carries its own status; in the UI the file is listed as "review decisions (VEX)"
 **And** emitted documents validate against the format's published schema in tests.
 
 **Given** an `accepted` or `fix_planned` decision
@@ -1538,42 +1667,42 @@ So that upstream knowledge reduces noise — with credit to who said it.
 
 **Given** a vendor `not_affected` statement matching a fleet finding (product and vulnerability)
 **When** it is applied
-**Then** the finding shows a vendor-attributed status ("not affected — per <vendor> VEX, <date>") distinct from the team's own decisions, and the team can still record their own decision, which takes precedence and is shown alongside.
+**Then** the finding shows a vendor-attributed status ("Not impacted — per <vendor> VEX, <date>") distinct from the team's own decisions, and the team can still record their own decision, which takes precedence and is shown alongside.
 
-**Given** the triage drawer
-**When** a finding has vendor VEX
-**Then** the VEX context panel shows the vendor, statement, justification, document and the matching rule (UX-DR16).
+**Given** the Issues Review tab
+**When** an issue has vendor VEX
+**Then** it shows the vendor, statement, justification, document and the matching rule (UX-DR16); the presentation is not drawn (EXPERIENCE Open item 17) and is designed before this story starts Build.
 
 **Given** a later vendor document that withdraws or changes a claim
 **When** it is ingested
 **Then** the change supersedes the earlier claim, and affected findings return to their prior status with history kept.
 
-### Story 5.8: Fleet-wide triage decisions
+### Story 5.8: Review scope — all places or only this software
 
 As an analyst,
-I want to record one decision for a vulnerability in a package across the whole fleet,
-So that I do not repeat the same justified decision on every artifact.
+I want one decision to cover every place an issue affects, or only one piece of software,
+So that I do not repeat the same decision on every piece of software.
 
 **Acceptance Criteria:**
 
 **Given** the decision API from Story 5.3
 **When** an analyst records a decision
-**Then** they choose its scope — **this artifact** (default, PROC2) or **fleet-wide** (this vulnerability + package across every artifact, including artifacts discovered later)
+**Then** they choose its scope — **All N places** (default, D6: this vulnerability or licence in this package version, across every piece of software that has it, including software found later) or **Only this software** (one piece of software, pre-filled when Review was opened from it)
 **And** the decision is stored and appended to the ledger exactly as in Story 5.3.
 
 **Given** a fleet-wide decision and a per-artifact decision on the same finding
 **When** the current status is computed
-**Then** the per-artifact decision overrides the fleet-wide one for that artifact, and superseding a fleet-wide decision leaves per-artifact overrides in place.
+**Then** the per-artifact decision overrides the fleet-wide one for that artifact, and superseding an All-places decision leaves per-software decisions in place, and the panel says how many keep theirs ("2 places keep their own status"; [ASSUMPTION], EXPERIENCE Open item 9).
 
-**Given** the triage drawer from Story 5.4
-**When** it opens on a finding
-**Then** it shows the decision that applies now and its source (for example "fleet-wide decision by Priya, 3 Nov" or "this artifact — overrides the fleet-wide decision") (UX-DR16)
-**And** the decision form offers the two scopes, "This artifact" (default) and "Fleet-wide — every artifact with `CVE-x` in `package`", with the count of artifacts the fleet-wide choice changes now
-**And** the findings API and VEX export (Story 5.6) use the resulting current status, and table triage pills show it the same way for both scopes.
+**Given** the review panel from Story 5.4
+**When** it opens on an issue
+**Then** it shows the decision that applies now and its source in plain words (for example "All places — Priya, 3 Nov" or "Only this software — differs from the other places"; copy to confirm with UX) (UX-DR16)
+**And** the scope segmented control above the questions offers "All N places" (default) and "Only this software" (which reveals a select of the places), with the number of places the choice changes now
+**And** the findings API and VEX export (Story 5.6) use the resulting current status per place; the row's chip shows that status, or "Mixed · N of M" (N = places that differ from the issue-wide status; accessible name "Mixed: 3 of 14 places have a different status"); an issue stays Not reviewed yet and in Needs attention while any place is Not reviewed yet (UX-DR38, UX-DR39, ARCH38).
 
 ## Epic 6: Blast radius and graph exploration
 
-On CVE day the engineer types a CVE ID or `package@version` into ⌘K and within seconds sees affected artifacts, shipped and running, and where they run — as graph or table, with a provenance footer — exports it, and explores further in the graph.
+On CVE day the engineer types a CVE ID or `package@version` into ⌘K and within seconds sees on Exposure which software has it, deployed and not deployed, and where it runs — answered in words first, then as a map or a table, with "Answered N min ago" and "How we know" — exports it (stored as evidence in Reports → Exports), and moves the map to any node to explore further.
 
 ### Story 6.1: Graph projection of inventory and findings
 
@@ -1612,26 +1741,26 @@ So that I can tell the CTO the exposure before he's read the news.
 
 **Given** any answer
 **When** it is returned
-**Then** it carries the `provenance` block: sources (registry-derived SBOMs, live inventory) with versions and freshness, coverage (artifacts in scope, scanned, unscanned, unmatched running digests, disconnected clusters) and `caveats[]` scoping the claim ("2 artifacts in scope have no SBOM yet and are not represented") (FR17, ARCH14, NFR8).
+**Then** it carries the `provenance` block: sources (registry-derived SBOMs, live inventory) with versions and freshness, coverage (artifacts in scope, scanned, unscanned, unmatched running digests, disconnected clusters) and `caveats[]` scoping the claim ("2 pieces of software haven't been checked yet and aren't on the map. This answer covers the 3,176 we have checked.") (FR17, ARCH14, NFR8).
 
 **Given** no affected artifacts
 **When** the answer returns
-**Then** it is a coverage-scoped zero ("No artifacts affected — across the N% of the fleet that is scanned"), never a bare empty list.
+**Then** it is a coverage-scoped zero ("No software has it — across the N pieces of software we've checked (82%)"), only for a vulnerability Armoury has data for, never a bare empty list.
 
 **Given** an image digest as the query (PROC2)
 **When** it runs
-**Then** it answers from that artifact outward: the CVEs that affect it (ranked, with triage status), its vulnerable packages, and where it runs — with the same `provenance` block
+**Then** it answers from that artifact outward: the vulnerabilities that affect it (in Issues order, with review status), its vulnerable packages, and where it runs — with the same `provenance` block
 **And** a digest that matches no artifact returns a coverage-scoped answer that says whether the digest runs somewhere unmatched (R7).
 
 **Given** an unknown CVE ID or malformed query
 **When** it runs
-**Then** the API returns a 422 envelope distinguishing "not a valid identifier" from "CVE not in any loaded feed" (with feed versions).
+**Then** the API returns a 422 envelope distinguishing "not a valid identifier" from "CVE not in any loaded feed" (with feed versions and their age); the UI never turns the second into "No software has it" (Story 6.3).
 
 **Given** a CVE that matches no fleet package
 **When** it runs
 **Then** the answer still includes the CVE's metadata from the Grype DB and CNA record (Story 4.4).
 
-### Story 6.3: Blast-radius surface — answer and table, from ⌘K
+### Story 6.3: Exposure surface — answer and table, from ⌘K
 
 As a SecOps engineer,
 I want to type a CVE or package into ⌘K and land on the answer,
@@ -1641,101 +1770,136 @@ So that the log4shell moment takes seconds from anywhere in the product.
 
 **Given** the palette
 **When** the user types a CVE ID or `package@version`
-**Then** an "Answers" result routes to the Blast radius surface with that query; a digest gives two results — the digest blast-radius answer (Story 6.2) and the artifact detail (UX-DR6).
+**Then** an Exposure result ("Where are we exposed to log4j-core?") routes to Exposure with that query; a fingerprint gives two results — its Exposure answer (Story 6.2) and its Software detail (UX-DR6).
 
 **Given** an answer
 **When** the surface renders
-**Then** it shows the answer headline ("14 affected artifacts · 9 running · 2 clusters"), a caveat chip when partial, the table reading (artifact, package@version, running locations, triage status — mono identifiers, KEV tag), and the provenance footer stating re-evaluation recency ("Re-evaluated against Grype DB vX, 41 min ago — no rescan needed") (UX-DR23, UX-DR15)
-**And** the page-header search field (Story 1.6) now routes blast-radius answers from the palette, pre-scoped to blast radius.
+**Then** a full-width header shows "Exposure", the question, the query button showing the subject (it opens ⌘K), the Graph · Table switch, grey Export and "Audit report for this answer" (both Story 6.5), and the answer in words first ("14 pieces of software have it. 9 are deployed, 5 are not deployed.") with its meta line (Actively exploited pill, KEV tag, severity, CVSS, "Answered 38 min ago") and the deployed / not-deployed split; the list column holds Deployed N, Not deployed N and the "Not checked yet" gap row; the Table reading lists Software, Version, Deployed? (Yes/No), Where it runs, Copies, Severity and Review, deployed first, with sortable sentence-case headers and "N not checked yet, not listed"; a caveat line scopes the answer (UX-DR23, UX-DR15)
+**And** Home's Exposure tab (a reduced summary with a button to the full page), See exposure, See the map and "See all 14 on the map" open Exposure for that query.
 
-**Given** a digest query
+**Given** Exposure with a CVE ID Armoury has no data for (the Story 6.2 "not in any loaded feed" error)
+**When** it renders
+**Then** the answer reads "Armoury has no data for <ID> yet. Vulnerability data updated <age> ago." with the lime Check again (re-asks against the latest data; no rescan), with no map and no zero (UX-DR40).
+
+**Given** a known vulnerability with no matches
+**When** it renders
+**Then** the coverage-scoped zero from Story 6.2 shows, with the unchecked remainder one click away (UX-DR40).
+
+**Given** a fingerprint query
 **When** the answer renders
-**Then** the same surface is centred on the artifact: headline "12 CVEs · 7 vulnerable packages · runs in 3 workloads", and the table has one row per finding in ranked order (KEV first) with triage status (UX-DR23).
+**Then** the same surface centres on that piece of software: the answer in plain words names its open issues, the packages they come from and where it runs (as drawn for a moved map: "payments-api 3.4.1 has 2 open issues. It runs in 1 place, with 4 copies."), and the table lists its issues grouped by severity, Actively exploited first, with review status (UX-DR23); the copy for an unknown package or fingerprint is set by UX before Build (EXPERIENCE Open item 29).
 
 **Given** a row in the answer
-**When** the user presses `t`
-**Then** the triage drawer opens for that finding (Story 5.4).
+**When** the user chooses Review in the inspector
+**Then** the issue opens in Issues on its Review tab (Story 5.4); the meaning of `t` is open (EXPERIENCE Open item 13).
 
 **Given** a query whose operation is still `running` after 2 seconds
 **When** the surface polls it (about every 1 s, ARCH33)
-**Then** partial results appear from each poll with an explicit scope line built from `progress` ("searching — 1,204 of 3,000 artifacts evaluated"); never an unexplained spinner (UX-DR23, UX-DR32).
+**Then** partial results appear from each poll with an explicit scope line built from `progress` ("Checking — 1,204 of 3,000 pieces of software so far"); never an unexplained spinner (UX-DR23, UX-DR32).
 
-### Story 6.4: Blast-radius graph reading
+### Story 6.4: Exposure map reading
 
 As a SecOps engineer,
 I want the same answer as a four-tier graph,
-So that I can see the path from CVE to running workload at a glance.
+So that I can see the path from the vulnerability to where it runs at a glance.
 
 **Acceptance Criteria:**
 
 **Given** an answer
 **When** the user toggles to Graph
-**Then** Svelte Flow renders CVE → vulnerable packages → affected artifacts → clusters/workloads left to right, with severity hue only on the affected path, running nodes with accent ring + pip + label, shipped-not-running nodes with a dashed `node-inactive-border`, `text-muted` text and the label "shipped, not running" (no opacity on text), and soft bezier edges (UX-DR17, UX-DR23).
+**Then** Svelte Flow renders a hairline map, left to right, with four tiers labelled in sentence case with counts — Vulnerability · Package · Software · Where it runs; circular nodes; deployed edges solid (`forest-2`); not-deployed edges dashed (`slate-dot`), with not-deployed software below a dashed rule labelled "Not deployed"; the selected path heavier (`forest-ink`) and the selected node lime with "Selected on the map"; only the vulnerability node takes clay (`clay-wash` fill, `clay-dot` ring, a pulse icon when actively exploited); edge labels ("direct · in 12"); soft bezier edges; the legend, zoom (+ / − / Fit) and the caveat line in a footer; no opacity on text (UX-DR17, UX-DR23).
 
 **Given** a digest answer
 **When** the user toggles to Graph
-**Then** the tiers run CVEs → packages → artifact → clusters/workloads, left to right, centred on the artifact (UX-DR23).
+**Then** the map is centred on that piece of software with the same layout as a moved map (Story 6.6: its contents on the left, where it runs and its copies on the right) (UX-DR23, UX-DR24).
 
 **Given** large result sets
 **When** a tier exceeds the display limit (25 nodes per tier)
-**Then** it rolls up ("+ 9 more artifacts") with expand-to-enumerate.
+**Then** it rolls up as text nodes ("8 more", "5 more places") with expand-to-enumerate.
 
 **Given** keyboard or screen-reader use
 **When** the graph is focused
-**Then** arrows/`Tab` traverse nodes, `Enter` opens node detail, `+`/`−` zoom, each node's `aria-label` carries identifier, tier and state, and the Graph/Table toggle preserves the answer (UX-DR7, UX-DR34)
+**Then** arrows/`Tab` move between nodes and show the focused node in the inspector, `+`/`−` zoom, each node's `aria-label` carries name, tier and state, the map has an `aria-label` summarising the answer, and the Graph/Table switch keeps the answer and the selection (UX-DR7, UX-DR34); `Enter` on a node moves the map (Story 6.6) and the node's detail opens from the inspector
 **And** entrance/layout motion is disabled under reduced motion.
 
-### Story 6.5: Export blast-radius and posture answers
+### Story 6.5: Export views as stored evidence, and the answer report
 
 As a SecOps engineer,
-I want to export an answer exactly as I see it,
-So that I can hand the CTO something he can trust without me annotating it.
+I want to export what I see and have the export kept as evidence,
+So that I can hand the CTO something he can trust without me annotating it, and anyone can later see exactly what was sent.
 
 **Acceptance Criteria:**
 
-**Given** a blast-radius answer or the posture summary
+**Given** an Exposure answer (on a moved map, its current centre), the Issues list or the Software list
 **When** the user chooses Export (or presses `x`)
-**Then** they can pick CSV, JSON or a PDF report (PROC2), each carrying the same provenance footer, coverage and caveats as the on-screen answer (FR19, UX-DR21)
+**Then** they get a CSV of the current view by default, with JSON as an option (PROC2), each carrying the same caveats and provenance as the screen ("The 2 not checked yet travel with the CSV and the audit report") (FR19, UX-DR21)
 **And** a test asserts the export's caveats equal the API response's caveats.
+
+**Given** an export
+**When** it is made
+**Then** the file is stored in the object store through `blob` (content-addressed), an insert-only export record and a ledger entry record who, when, the view and the query or filters, the format, the row count, the caveats and the file digest, and the export is listed in Reports → Exports, newest first ("Exposure: log4j-core 2.17.0 · CSV · 14 rows · from Exposure · 6 Nov") (FR19, ARCH39)
+**And** stored exports have no edit or delete endpoint and follow the evidence-pack retention (default and minimum 24 months, ARCH30); the owning module is settled when the story is planned (O1).
+
+**Given** Exposure
+**When** the user chooses "Audit report for this answer"
+**Then** the PDF answer report below is produced for the current answer (or the current centre of a moved map) and stored and listed in Reports → Exports like any export (D3).
+
+**Given** an export that fails to start or to store
+**When** it fails
+**Then** the inline error with Try again appears in the Export row, nothing partial is stored or listed, and no toast appears (UX-DR41).
+
+**Given** Reports with no exports yet
+**When** the Exports group renders
+**Then** it reads "No exports yet. Make one from Exposure, Issues or Software with Export." (UX-DR45).
 
 **Given** the PDF report
 **When** it is generated
-**Then** it uses the locked glossary, mono identifiers and the generation time, and is rendered by Typst — a pinned static binary run through `tools`, with no network access and the bundled Inter and IBM Plex Mono fonts — from a template in a named home reusable by evidence packs (Epic 9) (ARCH35)
+**Then** it uses plain labels with the technical term beside them (machine-readable companions keep SBOM and VEX names), IBM Plex Mono for every ID, fingerprint and command, and the generation time, and is rendered by Typst — a pinned static binary run through `tools`, with no network access and the bundled IBM Plex Sans and IBM Plex Mono fonts ([ASSUMPTION] print face, EXPERIENCE Open item 5) — from a template in a named home reusable by evidence packs (Epic 9) (ARCH35)
 **And** the pinned Typst binary is added to the control-plane image and verified against its published checksum
-**And** the report follows DESIGN.md "Printed report": print palette, A4 by default with US Letter as an option (PROC2), a footer with report ID, generation time and page number on each page, severity as a text label and a colour, and table headers repeated on each page.
+**And** the report follows DESIGN.md "Printed report": the print-only light palette (`print-*` tokens, independent of the app theme), A4 by default with US Letter as an option (PROC2), a footer with report ID, time window, generation time and page number on each page, severity as its word plus the 4-step marker and a colour (no red), body 9.5pt and tables 8.5pt, and table headers repeated on each page (UX-DR46).
 
 **Given** an auditor
 **When** they export
-**Then** export is available (it is a read action).
+**Then** export is available (it is a read action), and their exports are stored and attributed like anyone else's.
 
-### Story 6.6: Graph explorer and node inspector
+### Story 6.6: Exposure map traversal and inspector
 
 As a SecOps engineer,
-I want to start from any CVE, package or artifact and explore its connections,
-So that I can answer questions the blast-radius query doesn't ask directly.
+I want to move the Exposure map to any vulnerability, package or piece of software and follow its connections,
+So that I can answer questions the first answer doesn't ask directly.
 
 **Acceptance Criteria:**
 
-**Given** the Graph explorer surface with no start node
+**Given** Exposure with no query (opened from the sidebar)
 **When** it opens
-**Then** it shows the search-first empty state "Start from a CVE, package, or artifact" (UX-DR24).
+**Then** the answer slot reads "Ask about a vulnerability, a package or a fingerprint." with examples ("CVE-2026-23012 · log4j-core@2.17.0 · sha256:…"), and the query button opens ⌘K (UX-DR40).
 
-**Given** a start node
-**When** the user expands neighbours
-**Then** `GET /api/v1/graph/neighbours` returns bounded, paginated neighbours with provenance, and the graph uses the Story 6.4 visual language (FR17, FR18).
+**Given** a node on the Exposure map
+**When** the user clicks it or presses `Enter` on it
+**Then** the map moves to that node: `GET /api/v1/graph/neighbours` returns bounded, paginated neighbours with provenance; the centre sits in the true centre, its contents on the left and where it runs and its copies on the right; the node you came from carries "Came from here"; packages with no known issues roll up ("212 more packages · No known issues") with a caveat line; and the map uses the Story 6.4 visual language with the centre-ring scale-in once (none under reduced motion) (FR17, FR18, UX-DR24)
+**And** the question, query button, answer line, list column, Export, "Audit report for this answer" and the URL (`&from=` the previous step) follow the centre, so reloading or sharing the URL restores that map.
+
+**Given** a moved map
+**When** it renders
+**Then** the trail above the map shows Back, the previous steps as link chips, the current step in bold and the hints "↵ Move the map · ⌫ Back"; Back, `Backspace` (outside text fields), any earlier step or the browser Back returns to that map with its selection; asking a new question with ⌘K starts a new trail (UX-DR24)
+**And** the trail is a `nav` named "How you got here" with `aria-current="location"` on the current step; focus goes to the new centre and the new answer is announced politely ([ASSUMPTION], EXPERIENCE Open item 12).
+
+**Given** a centre that is a package, a vulnerability other than the query, a place or a roll-up node, or a long trail
+**When** this story is planned
+**Then** their layouts follow the drawn software-centre rule and are confirmed with UX before Build (EXPERIENCE Open items 12 and 19).
 
 **Given** a selected node
 **When** it is selected
-**Then** the node inspector pins it and shows identity, knowledge and provenance, with actions open detail / view evidence / blast radius from here; `Esc` unpins (UX-DR18)
-**And** hovering a node highlights its direct path.
+**Then** the inspector under the map pins it and shows identity (title with version and "Selected on the map"; Name, Fingerprint, Runs in, Copies, How it got it), What to do (the fix, the review-status chip, lime Review, grey Open software) and "How we know: Syft v… · Grype DB v… · checked N min ago"; on a map centred on a piece of software it adds Issues ("2 open: 1 Critical, 1 Low"), the lime action is Open software, Show only this stays grey and a hint reads "Click any node to move the map to it. Enter does the same from the keyboard."; `Esc` unpins (UX-DR18)
+**And** hovering or focusing a node highlights its direct path.
 
-**Given** any artifact, finding or CVE elsewhere in the UI
-**When** the user chooses "Explore in graph" (row hover/focus, or `e`)
-**Then** the explorer opens pre-centred on that node (UX-DR11, UX-DR24).
+**Given** an issue or piece of software elsewhere in the UI
+**When** the user chooses See exposure, See the map or "See all N on the map"
+**Then** Exposure opens for that subject (UX-DR11, UX-DR24); "Explore in graph" is retired, and the new meaning of `e` is open (EXPERIENCE Open item 13).
 
-**Given** the explorer
-**When** the Table reading is chosen
-**Then** the current neighbourhood is fully readable as a table (UX-DR34).
+**Given** the Exposure map, moved or not
+**When** Table is chosen
+**Then** the current answer — on a moved map, the centre's neighbours: its issues, the packages they come from and where it runs — is fully readable as the Exposure table, keeping the selection (UX-DR34); the Table of a moved map is not drawn (EXPERIENCE Open item 19).
 
 ### Story 6.7: Prove sub-minute blast radius at the scale anchor
 
@@ -1759,7 +1923,7 @@ So that NFR2 is known to hold before CVE day tests it for us.
 
 ## Epic 7: License compliance
 
-Grant evaluates every artifact against a fleet allow/deny policy. Violations appear as neutral license findings in the same views, and the team triages them with the same decision model as vulnerability findings. License data stays embedded, never headline: there is no license dashboard.
+Grant evaluates every artifact against a fleet allow/deny policy. Violations and warnings appear as licence issues — no severity, a scale icon and a "Licence" tag (and the word "Warning" for warnings) — in the Licences group at the top of Issues and Home, and the team reviews them with the same decision model as vulnerabilities; only violations count toward Needs attention (D8). License data stays embedded, never headline: there is no license dashboard.
 
 ### Story 7.1: License evaluation of stored SBOMs with Grant
 
@@ -1777,7 +1941,7 @@ So that I know what licenses we ship without a second pipeline.
 
 **Given** SBOMs stored before this story was deployed
 **When** it is deployed
-**Then** a one-time job evaluates every stored SBOM, and its backlog shows in the populating banner until it completes.
+**Then** a one-time job evaluates every stored SBOM, and its backlog shows in the Checking band until it completes.
 
 **Given** a new SBOM from Epic 2 onboarding
 **When** it is stored
@@ -1785,11 +1949,11 @@ So that I know what licenses we ship without a second pipeline.
 
 **Given** Grant fails on an SBOM
 **When** the job ends
-**Then** the artifact shows a license-evaluation failure with the reason and a retry, and counts as a coverage gap; it never shows as "no license issues" (NFR8).
+**Then** the artifact shows a license-evaluation failure with the reason and a retry, and counts as a coverage gap; it never shows as "no licence issues" (NFR8).
 
-**Given** Artifact detail
-**When** it renders
-**Then** the SBOM package list shows each package's license as a neutral license chip in mono (UX-DR9).
+**Given** Software detail
+**When** its Packages cell and Packages tab render
+**Then** each package's licence shows as the licence marker (scale icon + SPDX ID in `text-2`), never in a severity colour, and the Packages cell carries one licence line ("All licences are fine to use." when nothing violates or warns) (UX-DR9, UX-DR25).
 
 ### Story 7.2: License evaluation of images and filesystems directly
 
@@ -1820,7 +1984,7 @@ So that license violations are judged the same way for every artifact.
 
 **Acceptance Criteria:**
 
-**Given** Settings → License policy (admin only)
+**Given** Settings → Policy (licence policy, admin only)
 **When** an admin edits the policy
 **Then** they can set an allow list, a deny list, and the treatment of licenses on neither list and of unknown licenses — each **violation**, **warning** or **ignore** (PROC2) (FR27)
 **And** the default policy is unopinionated: an empty allow list and an empty deny list, licenses on neither list are `ignore`, and unknown licenses are `warning`, so a default install shows no violations until the admin sets a policy
@@ -1832,16 +1996,16 @@ So that license violations are judged the same way for every artifact.
 
 **Given** a new policy version
 **When** it activates
-**Then** license findings for the whole fleet are recomputed from stored license data without re-running Grant, and the backlog shows in the populating banner while it runs.
+**Then** license findings for the whole fleet are recomputed from stored license data without re-running Grant, and the backlog shows in the Checking band while it runs.
 
 **Given** an analyst or auditor
 **When** they open the policy page
 **Then** they see the current policy and its history read-only; edit controls are absent (UX-DR31).
 
-### Story 7.4: License findings in Posture, Findings and triage
+### Story 7.4: Licence issues in Home, Issues and review
 
 As a SecOps engineer,
-I want license violations listed with vulnerability findings and triaged the same way,
+I want licence violations listed with vulnerability issues and reviewed the same way,
 So that I can act on them before audit day.
 
 **Acceptance Criteria:**
@@ -1854,16 +2018,17 @@ So that I can act on them before audit day.
 **Given** the "triage license warnings" setting (PROC2)
 **When** it is on (default)
 **Then** license warnings are triageable exactly like violations
-**And** when an admin turns it off, warnings stay visible but have no decision form, and existing decisions on warnings stay in history.
+**And** when an admin turns it off, warnings stay visible but have no review panel, and existing decisions on warnings stay in history
+**And** whether or not warnings are reviewable, only `license_violation` issues that are Not reviewed yet count toward Needs attention and the Issues badge; `license_warning` issues never do (D8, UX-DR38, ARCH38).
 
-**Given** Posture, Findings and Artifact detail
-**When** they render license findings
-**Then** each shows the neutral license chip, never a severity hue or a KEV tag, placed in rank order by the documented rule from Story 5.1, and filterable by kind (vulnerability / license) (UX-DR9, UX-DR26).
+**Given** Home, Issues and Software detail
+**When** they render licence issues
+**Then** each sits in the Licences group at the top (violations and warnings together; hidden at 0), with the SPDX ID as the name, a "Licence" kind tag and the scale-icon licence marker, never a severity or an Actively exploited marker; line 2 of a Not-reviewed-yet violation reads "Licence · Needs a decision · <where>", and line 2 of a warning reads "Licence · Warning · <where>" (D8; styling per U19, O19); the Issues type filter All · Vulnerabilities · Licences keeps "Licences 0" visible (UX-DR9, UX-DR11, UX-DR26).
 
 **Given** a license finding
-**When** the analyst opens the triage drawer
-**Then** the same drawer, statuses, justification rule, scope choice (this artifact or fleet-wide) and evidence recording apply as for vulnerability findings (FR14, FR27, Story 5.3, Story 5.4)
-**And** the drawer shows the policy rule that produced the violation instead of a ranking explanation.
+**When** the analyst opens its Review tab
+**Then** the same review panel, statuses, "Why?" rule, scope choice (All N places or Only this software) and evidence recording apply as for vulnerabilities (FR14, FR27, Story 5.3, Story 5.4, Story 5.8); the licence wording of the two questions is set by UX before Build (EXPERIENCE Open item 16)
+**And** the technical-details block shows the policy rule that produced the issue instead of an order explanation.
 
 **Given** the posture API
 **When** it responds
@@ -1871,7 +2036,7 @@ So that I can act on them before audit day.
 
 ## Epic 8: Fleet signals — Prometheus metrics and data quality
 
-The team's own Grafana alerts on new KEV findings, coverage gaps, stale feeds and agent health. Every answer carries a data-quality (DQ) score that the user can expand to see how it was calculated. Armoury sends no notifications itself: signals leave by Prometheus pull only.
+The team's own Grafana alerts on new KEV findings, coverage gaps, stale feeds and agent health. Every piece of software and the fleet get a data-quality (DQ) score that is explained by its five parts, shown in Software detail (this epic) and in the audit report detail and its printed cover page (Epic 9); not on Home and never in list rows (D2). Armoury sends no notifications itself: signals leave by Prometheus pull only.
 
 ### Story 8.1: Data-quality scoring model and artifact score
 
@@ -1883,7 +2048,7 @@ So that I know how much to trust an answer, not only what the answer is.
 
 **Given** the open DQ scoring decision (ARCH29)
 **When** this story is planned
-**Then** the scoring model (dimensions, inputs, weights, 0–100 scale and letter-grade bands) is recorded as an amendment to `architecture.md` and approved by the user before implementation.
+**Then** the scoring model (dimensions, inputs, weights, 0–100 scale and letter-grade bands, including which grades count as low — the UX shows D and below in `dq-muted` as a placeholder, EXPERIENCE Open item 11 — and what is shown before a score exists, Open item 32) is recorded as an amendment to `architecture.md` and approved by the user before implementation; the five dimensions keep the plain UI names Package lists, Coverage, Freshness, Extra sources and Vulnerability records.
 
 **Given** an artifact
 **When** the `posture` capability computes its DQ score
@@ -1903,11 +2068,11 @@ So that I know how much to trust an answer, not only what the answer is.
 **Then** the scores use those weights, and the approved defaults apply when no value is set
 **And** every score response states the weight set that produced it.
 
-### Story 8.2: Fleet data quality on Posture and Artifacts
+### Story 8.2: Fleet data-quality score and the Software detail meter
 
 As a SecOps engineer,
-I want data quality shown next to risk on every surface that gives an answer,
-So that a low-quality answer is visible before someone acts on it.
+I want each piece of software and each audit report to say how much I can trust its numbers,
+So that low-quality data is visible before someone acts on it.
 
 **Acceptance Criteria:**
 
@@ -1915,22 +2080,22 @@ So that a low-quality answer is visible before someone acts on it.
 **When** the fleet score is computed
 **Then** it aggregates the artifact scores by the rule in the approved model, and the posture API returns it in `provenance` with its dimension breakdown (FR30, ARCH14).
 
-**Given** Posture
+**Given** Home
 **When** it renders
-**Then** the co-stat band includes the fleet DQ score and grade in the `data-quality` colour, never a severity colour (UX-DR10, UX-DR22).
+**Then** it shows no data-quality reading (D2; it may join the Home Details tab in a later UX update — EXPERIENCE Open item 14), while the posture API still returns the fleet score for evidence packs (UX-DR10, UX-DR22).
 
-**Given** Artifact detail and artifact or finding table rows
-**When** they render
-**Then** the detail header shows the score and grade, and table rows show a grade-only DQ badge (UX-DR10, UX-DR25).
+**Given** Software detail
+**When** it renders
+**Then** the Info list shows the data-quality value ("91 A−" in `dq`, accessible name in full), and the Data quality cell ("How much you can trust these numbers") shows the quality meter with the five parts, only the weakest emphasised and explained in one sentence with a link when there is something to do ("See them"), and the technical terms on one grey line and in `title` attributes (UX-DR10, UX-DR25)
+**And** Software and Issues list rows carry no grade.
 
-**Given** any DQ score or badge
-**When** the user clicks or focuses it
-**Then** it expands to the dimension breakdown, and each low dimension offers its corrective action (for example "connect feed", "rescan", "import bundle")
-**And** lower grades use the `data-quality-muted` token (never opacity), keep their grade letter and never turn red (DESIGN.md).
+**Given** a low grade (bands from the approved Story 8.1 model)
+**When** Software detail renders
+**Then** the value and meter use `dq-muted`, keep their number and letter, never use opacity and never turn clay, amber or red; the two weakest parts each get one sentence of what it means; and a grey Check again (Story 2.11) is offered — a low grade takes no lime (UX-DR10, DESIGN.md).
 
 **Given** blast-radius answers
-**When** they render
-**Then** the provenance footer includes the DQ score of the artifacts in the answer.
+**When** the API returns them
+**Then** `provenance` includes the DQ scores of the software in the answer; Exposure shows no grade (D2 lists the surfaces).
 
 ### Story 8.3: Prometheus metrics endpoint
 
@@ -1964,9 +2129,9 @@ So that my own Grafana alerts me with the observability stack I already run.
 
 **Given** Armoury
 **When** any of these conditions happen
-**Then** Armoury sends no email, webhook, toast or badge; the signal leaves only through `/metrics` (FR20, UX-DR36).
+**Then** Armoury sends no email, webhook, toast or new-finding badge (the Issues nav badge counts Needs attention — decisions due — not new findings); the signal leaves only through `/metrics` (FR20, UX-DR36).
 
-### Story 8.4: Prometheus panel in Settings
+### Story 8.4: Prometheus panel in Settings → Signals
 
 As an operator,
 I want to see the metrics endpoint and the metric list in Settings,
@@ -1974,9 +2139,9 @@ So that I can wire Grafana without reading the source code.
 
 **Acceptance Criteria:**
 
-**Given** Settings → Metrics
+**Given** Settings → Signals
 **When** it opens
-**Then** it shows the endpoint URL, the configured access mode, and the list of exported metrics with their type, labels and help text, each with a copy action (UX-DR28)
+**Then** it shows the endpoint URL, the configured access mode, and the list of exported metrics with their type, labels and help text, the endpoint URL in a code block with Copy and each metric with a Copy action (UX-DR28, UX-DR42)
 **And** the panel is read-only for every role; configuration stays in Helm values.
 
 **Given** the metric list
@@ -1989,7 +2154,7 @@ So that I can wire Grafana without reading the source code.
 
 ## Epic 9: Signed CRA evidence packs
 
-The compliance lead generates a CRA pack in one click for any past window. The pack is a PDF plus SBOM and VEX companions, states its own coverage and data quality, and is signed so an auditor can verify it offline. Packs draw only on evidence that Armoury already recorded. Retention is configurable but never below 24 months.
+The compliance lead generates a CRA pack (an "audit report" in the UI) in one click from Reports for any past window. The pack is a PDF plus SBOM and VEX companions, states its own coverage and data quality, and is signed so an auditor can verify it offline. Packs draw only on evidence that Armoury already recorded. Retention is configurable but never below 24 months.
 
 ### Story 9.1: Point-in-time evidence queries for any window
 
@@ -2048,7 +2213,7 @@ So that I can read the pack and also check the data with my own tools.
 
 **Given** a generated pack
 **When** its outputs are produced
-**Then** the PDF uses the renderer from Story 6.5 and the DESIGN.md "Printed report" rules, with the locked glossary, mono identifiers and the cover sheet first, carrying the coverage and data-quality statement (FR24)
+**Then** the PDF uses the renderer from Story 6.5 and the DESIGN.md "Printed report" rules (print-only light palette, IBM Plex Sans text and Plex Mono for IDs — [ASSUMPTION] print face, EXPERIENCE Open item 5 — severity as word + 4-step marker, no red), with plain labels and the technical term beside them, and the cover sheet first: coverage ("Covers 3,176 of 3,847 (82%)", with the not-checked software listed), then the data-quality block ("84 B+", the five parts with plain names and the technical term beside each, and the lowest part named with its reason), then Signature and a sign-off line (FR24, FR30, UX-DR46)
 **And** the story produces one sample CRA pack PDF from fixture data for user review before it is done.
 
 **Given** the companions
@@ -2075,7 +2240,7 @@ So that I can verify nothing was changed after it was generated.
 **Given** the `signing` module from Story 4.5
 **When** a pack is generated
 **Then** this story extends it to sign the pack manifest in the configured signing mode — `key` by default, with the operator key from the configured Secret, or a key the control plane generated on first start and stored in a named Secret when none was supplied (FR25, ARCH18)
-**And** Settings shows the public key in use, and each public key is appended to the ledger so older packs stay verifiable after rotation.
+**And** Settings → Signals shows the signing public key in use, and each public key is appended to the ledger so older packs stay verifiable after rotation.
 
 **Given** an admin sets `signing.mode: keyless` (opt-in, PROC2)
 **When** the control plane starts
@@ -2099,41 +2264,53 @@ So that I can verify nothing was changed after it was generated.
 **Then** it does not need internet access for operator-key packs, and keyless packs include the bundle needed for offline verification
 **And** the signing mode and signer identity are recorded on each signature.
 
-### Story 9.5: Generate packs and verify signatures in the UI
+### Story 9.5: Generate audit reports and verify signatures in Reports
 
 As a compliance lead,
-I want one click to generate a pack and one click to verify it,
+I want one click to generate an audit report, with its signature checked for me,
 So that the audit moment passes without a scramble.
 
 **Acceptance Criteria:**
 
-**Given** the Evidence surface or `⌘K`
-**When** the user clicks "Generate CRA pack"
+**Given** Reports or `⌘K`
+**When** the user clicks the lime "Generate audit report"
 **Then** generation starts at once as a long operation (ARCH33) with smart defaults (last 12 months as the window, the whole fleet as scope, CRA as the framework), with no wizard first (UX-DR20)
 **And** the user can change the window, scope and framework after the click, which regenerates the pack.
 
 **Given** generation in progress
 **When** the user keeps browsing
-**Then** progress shows per section from the operation's `progress`, polled about every 1 s; a failed section fails the pack closed and names the section, and retry re-runs only failed sections (UX-DR20).
+**Then** progress shows per section from the operation's `progress`, polled about every 1 s; a failed section fails the pack closed and names the section, and retry re-runs only failed sections; the report appears in Reports → Audit reports when signed; a failure to start shows the inline error with Try again in the Generate row (UX-DR20, UX-DR41).
 
-**Given** a pack card
-**When** the user clicks "Verify signature"
-**Then** the UI shows the result and signer identity, and gives a copyable offline verification command (cosign with the operator public key by default; the keyless command when keyless signing is enabled) (UX-DR19).
+**Given** Reports with no audit reports
+**When** it renders
+**Then** the Audit reports group reads "No audit reports yet" with the lime Generate audit report (UX-DR45).
+
+**Given** an audit report in Reports
+**When** its Overview opens
+**Then** row 1 shows Coverage when it was made beside Signature, and row 2 shows Data quality full width ("Data quality 84 B+ when it was made", the fleet quality meter with the weakest part and its reason, and the technical terms on one grey line) — the only place in the product the fleet five-part breakdown appears (FR30, UX-DR10, UX-DR27).
+
+**Given** Home's "Across all software" band
+**When** an audit report exists
+**Then** its Audit report cell shows the latest report (last 12 months, signed, coverage) with Download and Preview, and on an all-clear Home the lime action is Audit report (UX-DR22, UX-DR45).
+
+**Given** an audit report in Reports (detail tabs Overview · Files · Audit trail; files pack.pdf, sboms.tar.gz "Package lists … SBOM", vex.json "review decisions … VEX")
+**When** its Overview opens
+**Then** the Signature cell shows "Signature verified" with the signer key, and the offline command (cosign with the operator public key by default; the keyless command when keyless signing is enabled) in a code block with Copy — "Auditors can run this themselves, without Armoury."; when the signature does not verify, an error band names the file and the reason, links to the audit-trail entry for the signing, and hides no download (UX-DR19).
 
 **Given** the auditor role and the default `rbac.auditorCanGeneratePacks: false` (Helm value, PROC2, PRD NFR6)
-**When** an auditor opens Evidence
+**When** an auditor opens Reports
 **Then** they can view, download and verify packs, and the generate controls are absent (UX-DR31)
 **And** the pack-generation API returns 403 for auditors.
 
 **Given** an admin sets `rbac.auditorCanGeneratePacks: true`
-**When** an auditor opens Evidence
+**When** an auditor opens Reports
 **Then** they can also generate packs, and the resolved auth configuration in Settings shows the setting read-only
 **And** the Story 1.4 route-role test covers the pack-generation route for auditors with both values
 **And** auditors can never change triage, policy or Settings.
 
-**Given** a blast-radius answer
-**When** the user chooses "Export evidence pack"
-**Then** a pack scoped to that answer is generated with the same pipeline, caveats and signing (UX-DR21).
+**Given** an Exposure answer
+**When** the user chooses "Audit report for this answer"
+**Then** the Story 6.5 PDF answer report is produced and stored in Reports → Exports (D3); no evidence pack is scoped to a single answer (UX-DR21; O3 confirmed by Daniel 2026-11-07).
 
 ### Story 9.6: Signed ledger checkpoints
 
@@ -2157,7 +2334,7 @@ So that even a database administrator cannot rewrite history without detection.
 **Then** it also verifies every checkpoint signature and that each checkpoint matches the chain at its position
 **And** a test that rewrites and fully recomputes the chain as a superuser makes verification fail at the first checkpoint after the change.
 
-**Given** the Evidence surface
+**Given** Reports → Audit trail (Story 5.5)
 **When** it renders the verification result
 **Then** it shows the latest signed checkpoint and its time, and gives a copyable offline verification command for checkpoints.
 
@@ -2171,7 +2348,7 @@ So that the database does not grow without limit and no past window becomes unre
 
 **Given** the retention setting
 **When** no value is set
-**Then** retention is 24 months; an admin can set a longer value in Helm values or Settings, and any value below 24 months is rejected by the API and is not offered in the UI (FR23, UX-DR28, PROC2).
+**Then** retention is 24 months; an admin can set a longer value in Helm values or Settings → Policy (retention), and any value below 24 months is rejected by the API and is not offered in the UI (FR23, UX-DR28, PROC2).
 
 **Given** a monthly ledger or history-table partition (ARCH32) that is wholly older than retention and covered by a signed checkpoint
 **When** the archive job runs as the maintenance CronJob with the `armoury_owner` login (the control-plane pod never holds that login)
@@ -2243,8 +2420,8 @@ So that an administrator who controls the cluster, the database and the signing 
 **Then** the public Rekor is refused at startup (a built-in public endpoint, ARCH19); `bundled`, or `external` with an admin-configured internal URL, works.
 
 **Given** an anchored checkpoint
-**When** verification runs in the Evidence surface or with the offline command
-**Then** it checks the inclusion proof against the configured Rekor public key with no network access, and the Evidence surface shows the anchoring mode, the latest anchored checkpoint and any pending anchors
+**When** verification runs in Reports → Audit trail or with the offline command
+**Then** it checks the inclusion proof against the configured Rekor public key with no network access, and Reports → Audit trail shows the anchoring mode, the latest anchored checkpoint and any pending anchors
 **And** a test that changes an anchored checkpoint makes verification fail, because the changed checkpoint no longer matches its Rekor entry
 **And** evidence packs (Story 9.2) include the latest anchored checkpoint and its inclusion proof, so an auditor who keeps an earlier pack can detect a later rewrite.
 
@@ -2341,7 +2518,7 @@ So that "air-gapped is first-class" is a checked fact, not a claim.
 
 **Given** a temporary namespace of the dev cluster with a default-deny egress NetworkPolicy that allows only an internal registry and an internal package feed (the cluster CNI enforces and logs egress policy)
 **When** the scripted run installs the control plane and agent from the mirror, signs in with the bootstrap admin, connects the registry and feed, and imports a bundle
-**Then** Posture populates with findings, enrichment and runtime coverage within the 30-minute gate, with each step timed (NFR1, NFR4, UJ-1)
+**Then** Home and Software populate with issues, enrichment and runtime coverage within the 30-minute gate, with each step timed (NFR1, NFR4, UJ-1)
 **And** the run records every attempted outbound connection and fails if any goes beyond the allowed internal endpoints.
 
 **Given** the same instance
@@ -2354,7 +2531,7 @@ So that "air-gapped is first-class" is a checked fact, not a claim.
 
 ## Epic 11: Scan in CI and see the result in Armoury
 
-A developer adds one optional step to a pipeline. The step submits the built artifact to Armoury. The server SBOMs, scans and license-checks it with the fleet toolchain, applies the fleet CI policy, and the step prints the verdict and a link to the artifact. The CI runner never scans: it only identifies the artifact or supplies its bytes (NFR12, ARCH31). Central scanning stays the default and needs no CI change (FR1). This epic builds on Epics 2, 4, 5, 6, 7 and 10: the verdict uses KEV status, triage decisions and license results; the CLI polls with the Story 6.2 long-operation pattern; Story 11.5 extends the Story 10.1 release workflow.
+A developer adds one optional step to a pipeline. The step submits the built artifact to Armoury. The server SBOMs, scans and license-checks it with the fleet toolchain, applies the fleet CI policy, and the step prints the verdict and a link to the artifact (that piece of software in Software; its grouping and verdict display are open — UX-DR48). The CI runner never scans: it only identifies the artifact or supplies its bytes (NFR12, ARCH31). Central scanning stays the default and needs no CI change (FR1). This epic builds on Epics 2, 4, 5, 6, 7 and 10: the verdict uses KEV status, triage decisions and license results; the CLI polls with the Story 6.2 long-operation pattern; Story 11.5 extends the Story 10.1 release workflow.
 
 ### Story 11.1: Submit a pushed image from CI by digest
 
@@ -2364,7 +2541,7 @@ So that Armoury scans it now with the fleet toolchain and gives me a link to the
 
 **Acceptance Criteria:**
 
-**Given** Settings → CI tokens (admin only)
+**Given** Settings → Access (CI tokens, admin only)
 **When** an admin creates a token with a name and an optional expiry
 **Then** the token is shown once and only its hash is stored; it can only submit CI scans and read their results, it is not a user and has no UI role, and it can be revoked (NFR6, FR31)
 **And** creation and revocation are appended to the evidence ledger without the secret.
@@ -2414,7 +2591,7 @@ So that it gets the same server-side scan.
 
 **Given** an uploaded artifact
 **When** it is stored
-**Then** it appears in Artifacts with source "CI upload", and its stored bytes follow the evidence retention period.
+**Then** it appears in Software with source "CI upload" (grouping and label set by UX before Build, EXPERIENCE Open item 28), and its stored bytes follow the evidence retention period.
 
 ### Story 11.3: Artifact identity and duplicate linking
 
@@ -2441,8 +2618,8 @@ So that the inventory never shows one image twice.
 **When** it is submitted again
 **Then** the server reuses the existing SBOM and findings rather than scanning the same content twice.
 
-**Given** Artifact detail
-**When** an artifact has several sources
+**Given** Software detail
+**When** a piece of software has several sources
 **Then** it lists each source record (registry, CI runs with their declared build details and times).
 
 ### Story 11.4: Fleet CI policy, server verdict and the CI report
@@ -2453,7 +2630,7 @@ So that every pipeline is judged the same way and nobody can tune the result in 
 
 **Acceptance Criteria:**
 
-**Given** Settings → CI policy (admin only)
+**Given** Settings → Policy (CI policy, admin only)
 **When** an admin edits it
 **Then** they can set rules such as "fail on severity at or above <level>", "fail on KEV" and "fail on license violation"; the default policy is report only, so a new install fails no pipeline (PROC2)
 **And** each saved policy is a new version appended to the evidence ledger (author, time, diff); analysts and auditors see it read-only.
@@ -2467,7 +2644,7 @@ So that every pipeline is judged the same way and nobody can tune the result in 
 **Given** a submitted scan
 **When** the CLI waits for it
 **Then** it polls the CI-scan operation (long-operation pattern, ARCH33) and prints a short report: artifact, findings by severity, KEV findings, license violations, duplicate status, verdict, policy version and the Armoury URL of the artifact
-**And** it always prints the URL, including on failure or timeout.
+**And** it always prints the URL, which lands on the piece of software in Software, including on failure or timeout; where the verdict and its history show in Software detail is set by UX before Build (EXPERIENCE Open item 28, UX-DR48).
 
 **Given** the outcome
 **When** the CLI exits

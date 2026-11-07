@@ -19,7 +19,7 @@ Market research named multi-scanner neutrality/normalization as whitespace and a
 
 ## Data-quality score genesis (FR30)
 
-Born from the adversarial finding on blast-radius false confidence. Daniel's enhancement: "if we have like the cve scores and stuff perhaps make another score for the ops/security team which scores the quality of the data and sboms and cve reports etc." Scoring inputs (SBOM depth, scan coverage, feed freshness, enrichment coverage, CVE record quality) and the scoring model itself are architecture/UX decisions.
+Born from the adversarial finding on blast-radius false confidence. Daniel's enhancement: "if we have like the cve scores and stuff perhaps make another score for the ops/security team which scores the quality of the data and sboms and cve reports etc." Scoring inputs (SBOM depth, scan coverage, feed freshness, enrichment coverage, CVE record quality) and the scoring model itself are architecture/UX decisions. Placement (Correct Course 2026-11-07, D2): the UX spine ux-Armoury-2026-11-06 shows the score in Software detail (a score and letter plus a five-part quality meter), in the audit report detail in Reports and on the printed cover page; not on Home (it may join the Home Details tab later) and never in list rows. Grade bands are a UX placeholder until the scoring model (Story 8.1) exists.
 
 ## Grant capability note (→ architecture)
 
@@ -28,3 +28,11 @@ Grant natively evaluates licenses in SBOMs, container images, and filesystems. F
 ## Commercial model (parked — do not import into PRD)
 
 Deliberately undecided; open-core (OSS chassis, paid compliance packs) is the natural candidate. Details live in the product brief addendum (`_bmad-output/planning-artifacts/briefs/brief-Armoury-2026-06-11/addendum.md`). "The tool earns its place first."
+
+## UX spine change (2026-11-06/07) (→ UX, architecture)
+
+The UX spine ux-Armoury-2026-11-06 supersedes ux-Armoury-2026-06-12: a light default plus one calm dark theme, a labelled sidebar (Home · Software · Issues · Exposure · Reports · Settings · Help), three-column master-detail, plain-language UI labels over this PRD's domain terms (Glossary → UI labels), severity groups instead of one ranked list (FR13), a review panel with per-issue scope (FR14), stored exports (FR19) and the Monday check for the engineering leader (UJ-4). PRD terms stay the domain and API vocabulary. Open UX gaps against PRD requirements: vendor VEX claims with attribution (FR15) have no surface; the CI-scan landing in Software (FR31) is undecided; licence review copy is not drawn (FR27).
+
+## Signature verification and end-of-life data (FR32, FR33) (→ architecture, UX)
+
+Daniel's call (2026-11-07, Correct Course D10): the approved UX shows "Signed" and end-of-life lines in Software detail, so both enter v1 by PRD change rather than being dropped from the design. Left to architecture (amendments approved before Stories 4.9 and 4.10): the trust configuration for signatures (keys, keyless identities, per registry or fleet-wide), how the Sigstore trusted root reaches air-gapped instances, which signature formats and artifact types are checked; the end-of-life data source and its licence, what it covers, how packages are matched and its staleness threshold. Left to UX: the words for each signature state and the end-of-life lines. Decided for v1 (2026-11-07, O13): signature and end-of-life results are shown only; they create no issues and do not change counts. The "Build-time integration" roadmap item is unchanged: it captures Armoury-side build provenance; FR32 verifies signatures that already exist.

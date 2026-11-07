@@ -48,14 +48,14 @@ One layout and one density serve both. Plain words lead; the technical term stay
 | Software | `/software/<name>` | The real fleet, grouped Deployed / Not deployed, with what we haven't checked said plainly (FR18). | Add software |
 | Issues | `/issues?review=not-reviewed` | Every open issue — vulnerabilities and licences — grouped by severity; review without leaving the list (FR13, FR14, FR27). | Save and next |
 | Exposure | `/exposure?q=log4j-core@2.17.0[&view=table]`; after a move `/exposure?q=software:acme/payments-api@sha256:9f2c41…&from=log4j-core@2.17.0` | Ask about a vulnerability, a package or a fingerprint; one answer as a map or a table (FR17, FR19). Absorbs the prior Blast radius and Graph explorer, including moving the map to any node. | Review (in the inspector); Open software when the map is centred on a piece of software |
-| Reports | `/reports/<id>` | Audit reports and exports, both kept as evidence, nothing else (FR19, FR21–25). | Generate audit report |
+| Reports | `/reports/<id>` | Audit reports, exports (both kept as evidence) and the fleet-wide audit trail, nothing else (FR19, FR21–25, NFR11). | Generate audit report |
 | Settings | `/settings/<panel>` | Connections, sources, policy, access, signals, personal. | — |
 | Help | — | Not designed (see Open items). | — |
 
 ### Home
 
 - **List column:** "Home" + "You are in good shape. 3 things need attention today." + "Last checked 38 min ago".
-  - **Needs attention N** — the issues that need someone today. Rule: *An issue needs attention when it is Not reviewed yet (in any place) AND it is Actively exploited OR Critical. Every licence issue that is Not reviewed yet also needs attention.* Rows use the standard row shape; right column is places ("14 places").
+  - **Needs attention N** — the issues that need someone today. Rule: *An issue needs attention when it is Not reviewed yet (in any place) AND it is Actively exploited OR Critical. Every licence violation that is Not reviewed yet also needs attention; licence warnings never do.* Rows use the standard row shape; right column is places ("14 places").
   - **Open issues N** — summary rows: **Licences** first (hidden at 0), then Critical (with "1 actively exploited"), High, Medium, Low, each with its count.
   - "312 not reviewed yet · 782 reviewed · See all" (See all opens Issues), then the lime **Review all 3**.
 - **Detail column** (the selected issue): tabs **Overview · Exposure · How to fix · Details**.
@@ -68,7 +68,7 @@ One layout and one density serve both. Plain words lead; the technical term stay
 ### Issues
 
 - **Filters:** a type segmented control **All · Vulnerabilities · Licences** with counts (licence problems are not vulnerabilities; "Licences 0" stays visible in the filter); a **Review status** filter listing all five statuses with counts, **default Not reviewed yet**; a search field ("Find a package or vulnerability", `/`); the ordering stated in words: "Actively exploited sorts first in each group".
-- **Grouping:** **Licences** at the top (hidden when 0 — licence issues are rare and each needs a decision), then **Critical · High · Medium · Low**. Within each group, Actively exploited items first; [ASSUMPTION] then ordered by the raw EPSS value, which is never shown as a rating. Long groups end with an "N more High" row.
+- **Grouping:** **Licences** at the top (hidden when 0 — licence issues are rare and each needs a decision); the group holds licence violations and licence warnings, and a warning row says "Warning" on line 2 ("Licence · Warning · <where>") and never needs attention; then **Critical · High · Medium · Low**. Within each group, Actively exploited items first; [ASSUMPTION] then ordered by the raw EPSS value, which is never shown as a rating. Long groups end with an "N more High" row.
 - **Rows:** standard row shape, one row per issue (see The issue unit); right column is the review-status chip, or **Mixed · N of M** when places differ.
 - [ASSUMPTION] The **Review status** filter matches an issue when any of its places has that status, so a Mixed issue can appear under more than one status; counts are issues.
 - **Pager:** "1–25 of 312 · page 1 of 13". Never infinite scroll.
@@ -111,15 +111,16 @@ One layout and one density serve both. Plain words lead; the technical term stay
 
 ### Reports
 
-- **Audit reports N** and **Exports N**, nothing else. New report types (for example a management summary) are new scope and need Correct Course first.
+- **Audit reports N**, **Exports N** and **Audit trail**, nothing else (Audit trail added 2026-11-07, Correct Course D9). New report types (for example a management summary) are new scope and need Correct Course first.
 - **Exports are stored as evidence** (decided 2026-11-07): every CSV made with Export in **Exposure, Issues or Software** is stored in Reports with an **audit-trail entry** (who, when, from which view and query) and the **same retention as audit reports** (24 months, never below the floor, FR23). They are listed under **Reports → Exports**, newest first. Export rows say what and where from ("Exposure: log4j-core 2.17.0 · CSV · 14 rows · from Exposure · 6 Nov"). "Exports are kept for 24 months, like audit reports. Make a new one from Exposure, Issues or Software with Export." Like audit reports, stored exports are never edited or removed by hand.
+- **Audit trail** (fleet-wide, decided 2026-11-07): every ledger entry, newest first — type, subject (plain label with its technical ID small), actor, time, tool and feed versions — with filters by type, subject and time window and the pager. Its detail column shows the chain verification ("Chain intact — N entries, verified 4 min ago", or the first broken entry), the latest signed checkpoint, and the anchoring status (mode, latest anchored checkpoint, pending anchors). Per-item trails stay as tabs (a software's Audit trail, an issue's History, a report's Audit trail), each linking to this group filtered to that subject. Not drawn yet (Open item 36).
 - Lime **Generate audit report**.
 - **Detail tabs: Overview · Files · Audit trail**, with "Generated today, 08:31, by …" at the bar's end. Overview: title, lead and Download all / Preview; **row 1: Coverage when it was made | Signature** ({components.signature-status}: verified in product, plus the copyable `cosign verify-blob` command in a {components.code-block}: "Auditors can run this themselves, without Armoury."; when it does not verify, see State Patterns); **row 2: Data quality, full width** ("Data quality 84 B+ when it was made": the fleet-wide {components.quality-meter}, the weakest part with its reason — "Extra sources 78 — one of three extra sources had no answer for 412 packages; those use the main vulnerability data only." — and the technical terms on one grey line); then Files (pack.pdf, sboms.tar.gz "Package lists … SBOM", vex.json "review decisions … VEX") and What it says. This is the only place the fleet-wide five-part breakdown appears in the product.
 - The **printed cover page** carries the same reading (see Printed report).
 
 ### Settings
 
-Spine-only (no mock), carried from the prior spine. An in-page panel list (in the list column) with one route per panel, `/settings/<panel>`, so links (for example "Sources" on the freshness strip, "Open connection settings" on an error) open a panel directly. Panels: **Connections** (registries FR1, package feeds FR29, agent install) · **Sources** (feed status and history, bundle import FR10) · **Policy** (licence policy FR27, CI policy, retention — never below the 24-month floor, FR23) · **Access** (users and roles, resolved auth configuration read-only, CI tokens) · **Signals** (Prometheus endpoint, read-only with copy, FR20; signing key) · **Personal** (theme, keyboard shortcuts including the switch that turns single-key shortcuts off). Edit controls are absent for roles without write access. OIDC is declarative (env vars / Helm values), never a UI wizard (NFR6).
+Spine-only (no mock), carried from the prior spine. An in-page panel list (in the list column) with one route per panel, `/settings/<panel>`, so links (for example "Sources" on the freshness strip, "Open connection settings" on an error) open a panel directly. Panels: **Connections** (registries FR1, package feeds FR29, agent install) · **Sources** (feed status and history, bundle import FR10, end-of-life data FR33) · **Policy** (licence policy FR27, signature policy — trusted keys and keyless signer identities FR32, CI policy, retention — never below the 24-month floor, FR23) · **Access** (users and roles, resolved auth configuration read-only, CI tokens) · **Signals** (Prometheus endpoint, read-only with copy, FR20; signing key) · **Personal** (theme, keyboard shortcuts including the switch that turns single-key shortcuts off). Edit controls are absent for roles without write access. OIDC is declarative (env vars / Helm values), never a UI wizard (NFR6).
 
 ### Help
 
@@ -157,8 +158,8 @@ This **replaces the prior "locked glossary"**. Rule: **plain label first; the te
 | Actively exploited | KEV (CISA Known Exploited Vulnerabilities) | Grey "KEV" tag in detail views and the Exposure answer; technical details; freshness strip ("Exploited list KEV") |
 | Licence | Licence-policy violation (SPDX ID as the name, e.g. AGPL-3.0) | Kind tag "Licence"; audit report licence section |
 | Exposure | Blast radius | Docs only |
-| Reports | Evidence packs and exports | Docs; file names (`pack.pdf`) |
-| Audit report | Evidence pack (CRA pack) | File names and the verification command |
+| Reports | Evidence packs, exports and the evidence trail | Docs; file names (`pack.pdf`) |
+| Audit report | Evidence pack (CRA pack) | File names and the verification command. Exception: "Audit report for this answer" (Exposure) is the PDF answer report, not an evidence pack; it is stored under Reports → Exports (Correct Course D3) |
 | Audit trail / History | Evidence trail (append-only) | Docs |
 | Software / piece of software | Artifact | Docs and API |
 | Places | Affected software | — (the detail says "Found in 14 pieces of software") |
@@ -180,6 +181,7 @@ This **replaces the prior "locked glossary"**. Rule: **plain label first; the te
 | Review / Review status | Triage / triage status | Docs |
 | Not reviewed yet | untriaged | Exports, audit report, VEX |
 | Needs a decision | Licence-policy violation, untriaged | Second line of a licence row that is Not reviewed yet ("AGPL-3.0 — Licence · Needs a decision · report-render") |
+| Warning | Licence-policy warning (`license_warning`; the policy marks the licence "warning", including unknown licences by default) | Second line of a licence warning row ("<licence> — Licence · Warning · <where>"); never counts toward Needs attention |
 | Mixed · N of M | Per-product triage status differs | Status chip on an issue whose places have different statuses; VEX states each product's own status |
 | Not impacted | not affected | VEX (vex.json), audit report |
 | Fix planned | fix planned | VEX, audit report |
@@ -199,7 +201,7 @@ Behavioural. Visual specs live in `DESIGN.md` Components.
 |---|---|---|
 | Sidebar | Global | One item per surface; active state mirrors the route. The search field opens ⌘K. Issues badge = Needs-attention count; no badge at 0. It is a count of what needs a decision, not a new-findings notification. |
 | Grouped list (List row, Group heading, Pager) | Home, Issues, Software, Exposure, Reports | {components.list-row} under {components.group-heading}; {components.pager}. Groups with counts; one row shape (name + version · severity · actively exploited · where · one right column). Click or `J`/`K` selects and fills the detail column; the list keeps its place. Groups too long for the page end in an "N more …" row. Pagination at 25 per page, never infinite scroll (NFR3 scale). |
-| Needs attention | Home, Issues summary, sidebar badge | An issue needs attention when it is Not reviewed yet (in any place) AND it is Actively exploited OR Critical. Every licence issue that is Not reviewed yet also needs attention. A Mixed issue stays in Needs attention until none of its places is Not reviewed yet. The same number everywhere it appears. |
+| Needs attention | Home, Issues summary, sidebar badge | An issue needs attention when it is Not reviewed yet (in any place) AND it is Actively exploited OR Critical. Every licence violation that is Not reviewed yet also needs attention; licence warnings never do. A Mixed issue stays in Needs attention until none of its places is Not reviewed yet. The same number everywhere it appears. |
 | Severity groups | Issues, Home "Open issues" | Licences group first and hidden at 0; then Critical, High, Medium, Low; Actively exploited first within each. The sort is stated in words above the list (explainable ordering, FR13). |
 | Actively exploited marker | Rows, detail, Exposure, palette | **Text in lists, pill in detail**: quiet clay text with icon ({components.exploited-text}) in list rows and palette results; filled pill ({components.exploited-pill}) in detail panels and the Exposure answer; {components.kev-tag} only in detail views. Never dropped when a row truncates. |
 | Review status filter | Issues | Five statuses with counts; default Not reviewed yet. Never mixed with the severity groups. |
@@ -395,7 +397,7 @@ Failure: the CVE is in the news before the vulnerability data has it → "Armour
 
 1. Marta signs in with the read-only auditor role. Same sidebar, same words, same numbers; Review, Add software and Generate actions are simply absent.
 2. Priya opens **Reports** and presses **Generate audit report**. Smart defaults take the last 12 months and the whole fleet; window, scope and framework stay adjustable afterwards (FR22). If an admin has enabled auditor generation, Marta can press it herself.
-3. Generation runs in the background with progress. Marta reads the audit trail meanwhile (a software's Audit trail tab, an issue's History): every decision from CVE day is there, attributed, timestamped, never edited.
+3. Generation runs in the background with progress. Marta reads the audit trail meanwhile (Reports → Audit trail for the whole fleet, or a software's Audit trail tab, an issue's History): every decision from CVE day is there, attributed, timestamped, never edited.
 4. The report lands under **Audit reports**: "Production fleet · 12 Nov 2025 → 6 Nov 2026 · Signed". Overview shows "Signature verified", the signer key, and the `cosign verify-blob` command with Copy — "Auditors can run this themselves, without Armoury." Files: pack.pdf, package lists (SBOM), review decisions (VEX).
 5. **Climax:** the report's first fact is its own coverage — "3,176 of 3,847 checked (82%)", with the 671 not checked listed, not left out — and its second is how much to trust it: "Data quality 84 B+", five parts, the lowest one explained, on the screen and on the printed cover page alike. Three weeks of spreadsheet archaeology is now a signed document she downloads and hands over without a single hand-assembled appendix.
 
@@ -421,7 +423,7 @@ Failure: a source is stale → its age turns amber on the strip and the summary 
 | Software | Flow 1 (steps 4–5), Flow 2 (step 4), Flow 3 (step 3) |
 | Issues | Flow 2 (step 7), Flow 3 (step 3), Flow 4 (step 6) |
 | Exposure | Flow 2 (moving the map: step 5), Flow 4 (step 4) |
-| Reports | Flow 2 (step 6, Exports), Flow 3 (data quality: step 5) |
+| Reports | Flow 2 (step 6, Exports), Flow 3 (step 3, Audit trail; data quality: step 5) |
 | Settings | Flow 1 failure (Connections) |
 | Help | None — no source defines Help (Open items) |
 
@@ -435,6 +437,8 @@ Failure: a source is stale → its age turns amber on the strip and the summary 
 | Signed audit pack, verifiable (UJ-3, FR21–25) | Reports |
 | Artifact detail: SBOM, findings, provenance, running locations (FR18) | Software detail |
 | Licence policy and findings (FR26–28) | Settings → Policy, Issues Licences group |
+| Artifact signature verification (FR32) | Software detail Info "Signed"; Settings → Policy (signature policy). Words for each signature state not written (Open item 38) |
+| End-of-life data for packages (FR33) | Software detail Packages cell and tab; Settings → Sources. End-of-life lines other than "No package is past its end of life." not written (Open item 38) |
 | Prometheus endpoint (FR20) | Settings → Signals |
 | Optional CI scan: a pipeline submits a built artifact; the server scans it and decides pass or fail with the fleet CI policy; the step prints the verdict and a link to the artifact in Armoury; a known artifact is linked, not duplicated (FR31, NFR12) | Settings → Policy (CI policy), Settings → Access (CI tokens); the printed link lands on the piece of software in **Software**. How CI-submitted software is grouped and labelled, and where the verdict shows, is **open** (Open items) |
 | VEX ingestion with vendor attribution (FR15) | **Gap** — no drawn surface (Open items) |
@@ -449,7 +453,7 @@ For the downstream Correct Course.
 - **Theme:** three dark-only themes (Forge default, High Signal, Gunmetal; "no light mode planned") → **Light default + one calm Dark theme** with the same roles, layout and density. High Signal's role as the built-in high-contrast option is gone (both themes hold AA). The header theme switcher is gone with the header; switching stays in Settings → Personal and ⌘K. Persistence in `user_preferences` is unchanged; the default for new users becomes Light.
 - **Visual identity:** warm graphite + ember "workshop" → Greenhouse: black sidebar, light canvas, lime for the active nav item and the one primary action, forest for selection and charts. The ember accent and success/warning roles are replaced by the token set in `DESIGN.md`; the data-quality hue becomes the blue-violet {colors.dq} with {colors.dq-muted} for low grades and {colors.print-dq} in print.
 - **Typography:** Inter Display + Inter + IBM Plex Mono for every identifier (76px hero numeral, 10px tracked micro-labels, eyebrows) → **IBM Plex Sans** for everything, Plex Mono only for IDs, fingerprints, commands and keys; nine sizes (12–40); no hero numeral, eyebrows or tracked-caps labels; sentence-case table headers; fonts embedded/self-hosted (OFL).
-- **Navigation:** 58px icon rail with seven surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings) plus a page header (breadcrumb, search, theme switcher) → a 252px labelled black **sidebar**: Home, Software, Issues, Exposure, Reports, Settings, **Help** (new). Graph explorer merges into Exposure, with its traversal kept (moving the map to any node); Evidence becomes Reports (audit reports + exports only); the page header becomes the sidebar search field. Page title equals the sidebar label plus a friendly summary line.
+- **Navigation:** 58px icon rail with seven surfaces (Posture, Blast radius, Graph explorer, Artifacts, Findings, Evidence, Settings) plus a page header (breadcrumb, search, theme switcher) → a 252px labelled black **sidebar**: Home, Software, Issues, Exposure, Reports, Settings, **Help** (new). Graph explorer merges into Exposure, with its traversal kept (moving the map to any node); Evidence becomes Reports (audit reports, exports and, from 2026-11-07, the fleet-wide audit trail); the page header becomes the sidebar search field. Page title equals the sidebar label plus a friendly summary line.
 - **Layout:** rail + single full-width main column with full-width tables → **three-column master-detail** (sidebar · grouped list · tabbed detail).
 - **Terminology:** the "locked glossary" (Artifact, Finding, Posture, Evidence pack, blast radius, triage; lowercase statuses; "never 'issue' or 'report'") → **plain labels first with the technical term small and grey** (glossary above). Statuses: **Not reviewed yet · Not impacted · Fix planned · Mitigated · Risk accepted**. KEV is shown as **"Actively exploited"**. Exports and audit reports keep the technical (VEX) terms. "Evidence pack" → "Audit report" in the UI. UI copy in British English ("Licences").
 - **Ranking:** a single KEV-first, EPSS-weighted ranked list with the logic stated in the header (FR13) → **severity groups** Critical / High / Medium / Low with Actively exploited first in each group, and a **Licences group at the top, hidden at 0**. EPSS is **not shown as a rating** anywhere (raw value only in technical details). The PRD's FR13 wording ("KEV first, then EPSS-weighted severity") needs reconciling.
@@ -468,6 +472,7 @@ For the downstream Correct Course.
 - **Exports (FR19):** exports are **stored in Reports as evidence** — CSV from Exposure, Issues and Software, each with an audit-trail entry and the same retention as audit reports. FR19 needs rewording to match.
 - **Software detail:** Overview reordered: Info beside Packages over Where it runs; Issues full width; Issues trend; Data quality; Latest in the audit trail last. **Reports detail:** Coverage beside Signature, then Data quality full width.
 - **Primary users:** Priya and Marta, plus **Tom Reid, Head of Engineering** (Admin role), as an equal-weight non-technical protagonist.
+- **Correct Course 2026-11-07 (sprint-change-proposal-2026-11-07.md):** licence warnings show in the Licences group with the word "Warning" and never count toward Needs attention (D8); Reports gains the fleet-wide Audit trail group (D9); "Signed" and end-of-life data are v1 scope as PRD FR32 and FR33, with their settings in Policy and Sources (D10); "Audit report for this answer" is the PDF answer report, stored under Exports (D3).
 
 ## Open items
 
@@ -482,7 +487,7 @@ Remaining assumptions:
 7. [ASSUMPTION, inherited] Air-gapped mode is an instance-level flag; audit report generation is minutes-scale with section progress; UJ-1 has a single primary registry (PRD).
 8. [ASSUMPTION, from the decision log] Surfaces for new scope (servers, live estate, K8s policy) are deferred and need Correct Course.
 9. [ASSUMPTION] **Review scope details:** a later "All places" decision does not overwrite places that have their own status; the **Review status** filter matches an issue when any of its places has that status.
-10. [ASSUMPTION] **Admin includes the analyst's actions** (review, audit report generation), which is why Tom Reid (Admin, decided 2026-11-07) sees Review and Review all 3.
+10. **Resolved 2026-11-07:** admin includes the analyst's actions (PRD NFR6, roles are ordered; architecture: each operation declares a minimum role), which is why Tom Reid (Admin) sees Review and Review all 3.
 11. [ASSUMPTION] **Data-quality grade bands** (which score earns which letter, and that D and below counts as a low grade shown in {colors.dq-muted}) are a placeholder until the scoring model exists. The five parts and their plain names are fixed; their weights are not.
 12. [ASSUMPTION] **Moving the Exposure map:** focus goes to the new centre and the new answer is announced politely; the ego layout for a package, vulnerability or place centre follows the drawn software rule (contents left, where it is used and runs right).
 
@@ -504,7 +509,7 @@ Unresolved product questions and gaps:
 
 24. **Help:** stays in the sidebar; the Help screen is deferred to a later UX update (decided 2026-11-06). The `?` shortcut map may belong there.
 25. **High-contrast option:** with High Signal gone, confirm AA-only is acceptable.
-26. **PRD FR13** wording (KEV first, then EPSS-weighted) vs severity grouping; PRD glossary terms vs plain labels. **PRD FR19** wording must say exports are stored in Reports as evidence (audit-trail entry, audit-report retention).
+26. **Resolved 2026-11-07** (Correct Course): PRD FR13 now describes the severity groups; the PRD glossary gains UI labels; FR19 says exports are stored as evidence with evidence-pack retention.
 27. **Mock housekeeping:** the stale header notes and the High 40 count were fixed in the mock on 2026-11-06. A few stylesheet contrast ratios differ slightly from computed values; the spine values win. The mock's lime avatar initials are not carried (DESIGN.md user menu). The mock's graph labels use 11.5, 12.5 and 13.5px SVG text; product graph labels use the nine sizes.
 28. **Optional CI scan (FR31) landing:** the PRD fixes only that the CI step prints the verdict and a link to the artifact in Armoury, and that a known artifact is linked, not duplicated. Not decided: how CI-submitted software that is in no connected registry (an uploaded image or package archive) is grouped in Software (it fits neither "Deployed" nor "Not deployed · Last deployed …"), the label that says where it came from, and where the CI verdict and its history show in Software detail.
 29. **Unknown package or fingerprint:** the "no data yet" state covers vulnerability IDs; the copy for a `package@version` or fingerprint Armoury has never seen is not written.
@@ -514,3 +519,7 @@ Unresolved product questions and gaps:
 33. **Token hygiene for code generation:** several component tokens are composite strings (for example `'1px {colors.rule}'`) rather than atomic keys; some dimensions are untokenised (26px tab padding, 128px term column, 120px gauge, 56px sparkline, 84px disc, 660px palette, the icon-rail width, the 164px meter name column); `button-label`, `mono-id` and `display-reserved` have no line height; `display-reserved`, `rounded.DEFAULT` and `colors.dq-wash` are unreferenced by any component.
 34. **Printed report** content (cover sheet, footer, plain labels) is restated in both spines; visual rules should live in `DESIGN.md` and the content contract here, cross-linked.
 35. **Retired label "Running":** the ban should read "Running as a group or status label", since the hint "Not seen running…" and the glossary's "Running replicas" use the word.
+36. **Reports → Audit trail** (D9) is not drawn: the list rows, the filters, the verification cell, the checkpoint and anchoring cells, and the broken-chain state.
+37. **Licence warning row** (D8): the "Warning" word's exact placement and style (proposed: line 2 in {colors.text-2}, never amber or clay); and the review-panel copy for warnings (with Open item 16).
+38. **Signed and end-of-life words** (FR32, FR33): the words for each signature state other than "Yes" (not signed, signed by an untrusted signer, check failed, not checked for this type, no signature policy); end-of-life lines other than "No package is past its end of life."; the Signature policy panel and the end-of-life source in Settings.
+39. **"Audit report for this answer"** (D3): confirm the label, since "Audit report" otherwise means an evidence pack.

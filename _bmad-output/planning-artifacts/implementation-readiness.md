@@ -5,6 +5,7 @@ date: 2026-11-06
 history:
   - "2026-11-05 CONCERNS — Daniel chose: fix first, then rerun."
   - "2026-11-05/06 fixed by Correct Course (sprint-change-proposal-2026-11-05.md, decisions R1–R11); four independent gate reruns; final rerun: no blockers, two text concerns fixed and checked."
+  - "2026-11-07 UX spines replaced by ux-Armoury-2026-11-06 (supersedes ux-Armoury-2026-06-12) and FR32/FR33 added (sprint-change-proposal-2026-11-07.md); this verdict predates them (the plan is now 11 epics, 79 stories) — rerun readiness after the Correct Course is applied."
 sprint_status: _bmad-output/implementation-artifacts/sprint-status.yaml (11 epics, 77 stories, validated)
 linear: INF-11 (planning:sprint)
 inputs:
@@ -17,7 +18,7 @@ inputs:
 
 # Implementation Readiness — Armoury
 
-**Current verdict: PASS (2026-11-06).** The findings below are the first run (CONCERNS). The
+**Current verdict: PASS (2026-11-06) — stale: assessed against ux-Armoury-2026-06-12, which ux-Armoury-2026-11-06 superseded; rerun after the 2026-11-07 Correct Course.** The findings below are the first run (CONCERNS). The
 Correct Course change record `sprint-change-proposal-2026-11-05.md` resolved them; see its
 gate-rerun sections for later findings and fixes.
 
@@ -70,7 +71,7 @@ manifest. The gaps below are story-local, not plan-wide. Fix them with `bmad-cor
 - Smaller: session store location; `openapi-typescript` vs orval; `openapi-generator` needs Java in CI; how OpenAPI marks a route's role (1.4 test); Grype DB publishes checksums, not signatures (4.1); envelope-encryption cipher.
 - Vendor VEX product matching (purl / CPE / digest → artifact) unspecified (5.7, `epics.md:1382`).
 
-### UX
+### UX (historical — refers to ux-Armoury-2026-06-12: Forge/Gunmetal, page header, DQ badge opacity; superseded)
 - Opacity dimming fails the 1.7 WCAG AA gate: DQ badge at 0.65 (~3.9:1 Forge, ~3.5:1 Gunmetal) and "not running" node at 0.5 (~2.4:1) (`DESIGN.md:205-206, 293, 300`; `epics.md:470-473, 1488, 1732`).
 - Theme persistence store/endpoint undefined; UX marks it [ASSUMPTION] handed to architecture, never closed (`EXPERIENCE.md:76`; `.decision-log.md:66`; `epics.md:426`).
 - Page header (search + compact theme switcher) owned by no story; only `mockups/hybrid-posture-v2.html:128, 371-376` defines it; 6.3 assumes it exists (`epics.md:1468`).
