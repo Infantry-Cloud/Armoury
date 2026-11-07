@@ -1,22 +1,96 @@
 ---
-status: pass
-gate: PASS
-date: 2026-11-06
+status: fail
+gate: FAIL
+date: 2026-11-07
 history:
   - "2026-11-05 CONCERNS — Daniel chose: fix first, then rerun."
   - "2026-11-05/06 fixed by Correct Course (sprint-change-proposal-2026-11-05.md, decisions R1–R11); four independent gate reruns; final rerun: no blockers, two text concerns fixed and checked."
-  - "2026-11-07 UX spines replaced by ux-Armoury-2026-11-06 (supersedes ux-Armoury-2026-06-12) and FR32/FR33 added (sprint-change-proposal-2026-11-07.md); this verdict predates them (the plan is now 11 epics, 79 stories) — rerun readiness after the Correct Course is applied."
-sprint_status: _bmad-output/implementation-artifacts/sprint-status.yaml (11 epics, 77 stories, validated)
+  - "2026-11-06 PASS — assessed against ux-Armoury-2026-06-12 (now superseded)."
+  - "2026-11-07 FAIL — rerun after sprint-change-proposal-2026-11-07.md (Greenhouse UX, FR32, FR33): 8 blockers. Daniel chose: fix the blockers, then rerun."
+sprint_status: _bmad-output/implementation-artifacts/sprint-status.yaml (11 epics, 79 stories, in sync, validated)
 linear: INF-11 (planning:sprint)
+evidence: _bmad-output/planning-artifacts/readiness-2026-11-07/ (three independent read-only review lenses)
 inputs:
   - _bmad-output/planning-artifacts/prds/prd-Armoury-2026-06-11/prd.md
   - _bmad-output/planning-artifacts/architecture.md
-  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/DESIGN.md
-  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-06-12/EXPERIENCE.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/DESIGN.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Armoury-2026-11-06/EXPERIENCE.md
   - _bmad-output/planning-artifacts/epics.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-07.md
 ---
 
 # Implementation Readiness — Armoury
+
+**Current verdict: FAIL (2026-11-07).** Rerun after the Correct Course
+`sprint-change-proposal-2026-11-07.md` (Greenhouse UX spines, FR32, FR33).
+
+Question: could a developer implement these epics without inventing decisions nothing records?
+
+Traceability holds. Every FR1–FR33 and NFR1–NFR12 is cited in story acceptance criteria.
+UX-DR1–UX-DR48 are covered (UX-DR8 and UX-DR14 are retired) and ARCH1–ARCH41 are cited.
+The `sprint_plan.py generate --dry-run` reports `in_sync: true`: 11 epics, 79 stories, 0 orphans.
+But the Correct Course left 8 gaps. In each gap, a developer must invent behaviour, or two
+artifacts disagree. Full evidence with file:line quotes is in `readiness-2026-11-07/`
+(lens A: traceability and structure; lens B: UX, stories and architecture; lens C: open
+decisions and the next stories).
+
+Story 1.1 is not blocked. Blockers 7 and 8 block Stories 1.8 and 1.9. The other blockers
+block Epics 2, 5 and 6.
+
+## Blockers — fix before the affected story starts
+
+| # | Gap | Stories | Evidence | Owner skill |
+|---|---|---|---|---|
+| 1 | Story 5.4 saves a review from an issue that covers many places, but Story 5.3 limits a decision to one place and the scope control arrives in Story 5.8 (forward dependency). | 5.3, 5.4, 5.8 | `epics.md:1557`, `:1592`; `prd.md:95`; lens A 1, lens B 3 | bmad-correct-course |
+| 2 | "Issue-wide status" is not defined, so the row chip, "Mixed · N of M", the review-status filter counts and VEX output cannot be computed. | 2.10, 5.2, 5.6, 5.8 | `architecture.md:257`; `epics.md:1701`; `DESIGN.md:710`; lens B 2 | bmad-architecture + bmad-correct-course |
+| 3 | Grype also reports Negligible and Unknown severities. The issue groups are a closed list (licence, critical, high, medium, low) and have no place for them. | 2.10, 5.1, 5.2 | `architecture.md:257`; lens A 2, lens B 7 | bmad-ux + bmad-architecture |
+| 4 | UX shows "Armoury has no data for <ID> yet" when the vulnerability data lacks the ID. The architecture and Story 6.2 check "any loaded feed", including the CVE List. A published CVE without package data then gets "No software has it": the CVE-day false zero. | 6.2, 6.3 | `EXPERIENCE.md:110`, `:180`, `:394`; `architecture.md:336`; `epics.md:1757`; lens B 1 | bmad-architecture |
+| 5 | Nothing records the source of the "one plain sentence of what it means" for an issue. | 2.10, Home, UJ-4 | `epics.md:931`; `EXPERIENCE.md:62`; `prd.md:61`; lens A 3, lens B 8 | bmad-architecture + bmad-ux |
+| 6 | "Review all N" has no mechanism. Issues has no Needs-attention filter, and Save and next walks the current filter (312 issues), not the 3 that need attention. | 5.4 | `epics.md:1595`; `EXPERIENCE.md:243`; lens B 4 | bmad-correct-course |
+| 7 | The `?` shortcut map has nowhere to open. The only allowed modal is ⌘K, and Help is deferred. | 1.8 | `epics.md:190`, `:618`, `:633`; `EXPERIENCE.md:510`; lens C 1 | bmad-ux |
+| 8 | The Story 1.9 lime lint forbids lime that DESIGN.md requires: the focus ring on the sidebar, on selection and in dark, the centre dot of the moved Exposure map, and the all-clear tints. | 1.9, 1.7 | `epics.md:641`; `DESIGN.md:26-27`, `:113`, `:466`, `:568`, `:594`; lens C 2 | bmad-ux + bmad-correct-course |
+
+## Concerns — fix when the affected story is planned
+
+Grouped. Each item is numbered in the lens files.
+
+- **API contracts missing in architecture:** the Reports → Audit trail listing and the
+  verification schedule ("verified 4 min ago"); issue IDs and deep links; issue list and
+  detail, review-decision, export create and download, packs and neighbours endpoints
+  (lens B 5, 6).
+- **Open items built without a gate:** order inside Needs attention (Open item 21);
+  "You are in good shape" rule; Open-issues row clicks and "N more" rows (Open item 18);
+  undrawn detail tabs (Open items 14, 15); Data quality before a score exists (Open item 32);
+  regenerating an audit report (Open item 22); concurrent reviews (Open item 30); session
+  expiry and other global states (Open item 31); export placement on Issues and Software;
+  the moved-map Table; the Exposure query grammar (lens A 7–13, 16; lens B 9–18, 23, 24;
+  lens C 5, 14, 15, 17–19).
+- **Change-record open questions not gated:** O2 and O20 (Story 6.5, 6.3, 9.5); O14, O16,
+  O17 and O19 are only partly gated. Success criterion 9 of the change record is therefore
+  not met (lens A 14, 20; lens C 7, 10–13, 20).
+- **FR32 and FR33 follow-through:** Stories 10.2 and 10.3 leave out end-of-life data and the
+  Sigstore trusted root; the Story 4.10 gate does not cover connected-mode refresh and the
+  Rekor/TUF calls against the ARCH19 outbound rule; Story 4.10 does not restate the O13
+  answer (lens A 15; lens C 9, 21).
+- **Undecided rules:** GHSA/OSV-to-CVE alias mapping; direct vs indirect package
+  classification; the "Connect a registry" one-liner (lens A 5, 6, 17; lens B 20).
+- **Epic 1 details:** the sign-in page is not designed; the users/roles view in Settings →
+  Access has no data source; the icon-rail width is not a token; the Story 1.1 spec still
+  describes the kind/Podman loop and needs the planned Build re-plan (lens C 3, 4, 6, 8).
+- **Other:** forward dependencies inside Epic 6 (6.3 and 6.4 need parts of 6.6); the Software
+  detail "Audit report" button has no story; the "triage licence warnings = off" setting is
+  not in the spines (lens A 4; lens B 21, 22).
+
+## Next step
+
+Daniel chose (2026-11-07): fix the 8 blockers with one Correct Course, then rerun this gate.
+INF-11 stays In Progress until the gate passes.
+
+---
+
+# History
+
+## Earlier runs (2026-11-05 and 2026-11-06)
 
 **Current verdict: PASS (2026-11-06) — stale: assessed against ux-Armoury-2026-06-12, which ux-Armoury-2026-11-06 superseded; rerun after the 2026-11-07 Correct Course.** The findings below are the first run (CONCERNS). The
 Correct Course change record `sprint-change-proposal-2026-11-05.md` resolved them; see its
@@ -29,7 +103,7 @@ all ACs are Given/When/Then; the parser dry run finds 10 epics / 68 stories, mat
 manifest. The gaps below are story-local, not plan-wide. Fix them with `bmad-correct-course`
 (cross-cutting) or the owning plan skill, then rerun `bmad-sprint-planning`.
 
-## Fix before the affected story starts
+### Fix before the affected story starts
 
 | # | Gap | Stories | Evidence | Owner skill |
 |---|-----|---------|----------|-------------|
@@ -41,7 +115,7 @@ manifest. The gaps below are story-local, not plan-wide. Fix them with `bmad-cor
 | 6 | Story 9.5 lets auditors generate packs by default; PRD makes auditor read-only and gives pack generation to analyst. Pack generation writes ledger entries. | 9.5 | `prd.md:48, 113`; `epics.md:1917`; `EXPERIENCE.md:142` | bmad-correct-course |
 | 7 | `architecture.md` still lists VEX formats and retention as open; ARCH29, ARCH30 and PROC2 exist only in `epics.md`. Its data boundary omits the partition-dropping maintenance role. Story 5.6 cites a VEX mapping amendment that does not exist. | 2.1, 5.6, 9.6, 9.7 | `architecture.md:399, 462-464`; `epics.md:139-142, 1364` | bmad-architecture (update) |
 
-## Concerns
+### Concerns
 
 ### Story 1.1 (next story) gaps
 - OpenAPI server/TS generation with a CI diff check (ARCH12) is assigned to no story; Story 1.6 assumes a generated TS client (`epics.md:302, 456`).
@@ -87,14 +161,14 @@ manifest. The gaps below are story-local, not plan-wide. Fix them with `bmad-cor
 - 3.1, 4.5, 5.1, 8.1 combine a user-approved architecture amendment with the build; consider a spike per decision and split 3.1 (enrol vs renew/revoke). They are correctly gated, not invented.
 - ACs without numbers: "latency budget recorded… stated tolerance" (`832`), "within budget" (`921`), "a few seconds" (`1474`), "p50 answers in seconds" (`1559`), "nothing broken" (`494`), "sensible defaults" (`1171`), "documented defaults" (`1629`, conflicts with PROC2), heartbeat thresholds (`923`), "lower" DQ grade (`1732`).
 
-## Minor
+### Minor
 - Artifact types `oci_artifact` (2.8) and `filesystem` (7.2) are absent from the PRD glossary (`prd.md:157`) and the Artifacts list "image/package" (`epics.md:786`).
 - No PRD basis recorded for 10.2 daily Armoury-published bundles with key rotation, and the 10.1 self-scan publication.
 - NFR1 24-hour initial scan is projected, not measured (`epics.md:828`); 4.8 bounds only the Grype DB delta, not enrichment-only re-joins.
 - FR14 "team consumption" has no explicit AC.
 - Architecture Go leftovers: `control-plane/internal` (`architecture.md:397`), "packages" for Rust modules (`400, 404`).
 
-## Next
+### Next
 1. Run `bmad-correct-course` with this file for items 1, 2, 6 and the epics-side concerns.
 2. Run `bmad-architecture` (update) for items 3, 4, 5, 7 and the undecided technical details.
 3. Rerun `bmad-sprint-planning`; on PASS (or accepted CONCERNS) it generates `sprint-status.yaml` and closes INF-11.
