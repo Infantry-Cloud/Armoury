@@ -117,7 +117,7 @@ Sketch of the API shapes (illustrative only; the field names are the ones above)
   - Actions come from one shared action registry, and every shortcut must have a palette entry.
 - **Keys:** the bindings are fixed for v1:
   - `g` + a surface letter navigates (letters set by UX before Story 1.8 Build, EXPERIENCE Open item 13); `J`/`K` move, `/` focuses search, `⌘↵` saves and goes to the next, `x` exports.
-  - `?` opens the shortcut map.
+  - `?` opens the ⌘K palette on its Keyboard shortcuts view (no new modal); Settings → Personal lists the same map.
   - `Esc` closes the topmost layer.
   - Single-key shortcuts never fire while focus is in a text field and can be turned off in Settings → Personal; `⌘K` and `⌘↵` stay on.
 - **Copy:**
@@ -132,7 +132,7 @@ Sketch of the API shapes (illustrative only; the field names are the ones above)
   - infinite scroll
   - any modal besides the ⌘K dialog, and any drawer (one shared overlay component)
   - hover-only affordances
-  - more than one lime primary action per view; lime outside its agreed jobs; red anywhere
+  - more than one lime primary action per view; lime outside its agreed jobs (active nav, the one primary action, the selected map node including a moved map's centre dot, the Issues badge, text selection, the focus ring on the sidebar, on forest selection and in dark, and the all-clear tints `lime-wash` and `lime-ring`); red anywhere
 
 ## Cross-Story Dependencies
 
