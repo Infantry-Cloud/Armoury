@@ -49,7 +49,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:261992cf8fa17e54",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -80,7 +80,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:f304b5948d5f157b",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -115,7 +115,8 @@
         "amended": "2026-11-01 no-deadlines (user-directed)",
         "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled",
         "amended_2026_11_07": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07.md), approved by Daniel; Linear reconciled",
-        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled"
+        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled",
+        "amended_2026_11_07_aliases": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-aliases.md), approved by Daniel; Linear reconciled"
       },
       "notes": [
         {
@@ -135,6 +136,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "2e7ec5e7-7421-40bc-a4db-c40bb7bf415d"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:prd:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "9b42c5d2-4ccd-464f-955a-3457f9c82664"
         }
       ],
       "synced": {
@@ -142,7 +149,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:7375293d6dc6b3f5",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -180,7 +187,8 @@
           "jj_change": "tuszwtnr"
         },
         "amended_2026_11_07": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07.md), approved by Daniel; Linear reconciled",
-        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled"
+        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled",
+        "amended_2026_11_07_aliases": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-aliases.md), approved by Daniel; Linear reconciled"
       },
       "notes": [
         {
@@ -206,6 +214,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "112773e9-f929-420b-b1e3-282d7b4af834"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:ux:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "6d26666c-ebc9-4c9a-b74a-28d0a8565939"
         }
       ],
       "synced": {
@@ -213,7 +227,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:aafb1aa4be8d3a8c",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       },
       "source_history": [
         {
@@ -251,7 +265,8 @@
         "revised": "2026-11-01 backend Go->Rust, River via riverqueue (user-directed)",
         "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled",
         "amended_2026_11_07": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07.md), approved by Daniel; Linear reconciled",
-        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled"
+        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled",
+        "amended_2026_11_07_aliases": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-aliases.md), approved by Daniel; Linear reconciled"
       },
       "notes": [
         {
@@ -271,6 +286,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "1505482c-3ebb-4316-a96d-36389a8f4168"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:architecture:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b27fadc5-a211-4653-b1a2-62012fe04b07"
         }
       ],
       "synced": {
@@ -278,7 +299,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:c2ec3b35fd461ae3",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -311,7 +332,8 @@
         "revision": "uncommitted in jj change vxztzqsp (undescribed, mixed with earlier work)",
         "amended_2026_11_05": "2026-11-05 Correct Course (sprint-change-proposal-2026-11-05.md), approved by Daniel; Linear reconciled",
         "amended_2026_11_07": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07.md), approved by Daniel; Linear reconciled",
-        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled"
+        "amended_2026_11_07_readiness": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-readiness.md), approved by Daniel; Linear reconciled",
+        "amended_2026_11_07_aliases": "2026-11-07 Correct Course (sprint-change-proposal-2026-11-07-aliases.md), approved by Daniel; Linear reconciled"
       },
       "notes": [
         {
@@ -331,6 +353,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "e2264277-020f-4a83-b2ff-211529b233a2"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:planning:epics:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "3f529c10-37af-4b7e-9f7b-2f3a18d42e7b"
         }
       ],
       "synced": {
@@ -338,7 +366,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:b2909ae778bd9f4f",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -391,7 +419,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:40f5666e87119e5c",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -433,7 +461,7 @@
         "parent_id": null,
         "milestone_id": null,
         "block_digest": "sha256:1418952761b8fc21",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -477,7 +505,7 @@
         "parent_id": null,
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:4b8d5b231772fb2b",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1",
         "source_title": "Install, sign in, and the Armoury shell",
         "source_digest": "sha256:865c47e6b498c9f5",
@@ -527,7 +555,7 @@
         "parent_id": null,
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:7369a57ae4b9b3a6",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2",
         "source_title": "Fleet inventory and uniform scanning, shown as a populating posture view",
         "source_digest": "sha256:fc3b1934649d020e",
@@ -562,7 +590,7 @@
         "parent_id": null,
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:9203f60c4eac82c1",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3",
         "source_title": "Running inventory from read-only cluster agents",
         "source_digest": "sha256:803c1423deafddc5",
@@ -605,7 +633,7 @@
         "parent_id": null,
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:45b399fd75524410",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4",
         "source_title": "Fresh, enriched findings, connected or air-gapped",
         "source_digest": "sha256:f61fc7411eaf4c61",
@@ -649,7 +677,7 @@
         "parent_id": null,
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:dc221e819f49d138",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5",
         "source_title": "Prioritise and triage findings",
         "source_digest": "sha256:68e589198486d8b0",
@@ -698,7 +726,7 @@
         "parent_id": null,
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:ed73022979f97bdb",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6",
         "source_title": "Blast radius and graph exploration",
         "source_digest": "sha256:c392e2074e2c74d3",
@@ -741,7 +769,7 @@
         "parent_id": null,
         "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
         "block_digest": "sha256:3f9b711e317e1790",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "7",
         "source_title": "License compliance",
         "source_digest": "sha256:57211ecd492cafcc",
@@ -784,7 +812,7 @@
         "parent_id": null,
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:dd4c134fce8bf3a4",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "8",
         "source_title": "Fleet signals — Prometheus metrics and data quality",
         "source_digest": "sha256:a9554f6296e36c8b",
@@ -829,7 +857,7 @@
         "parent_id": null,
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:da21a80f92fb30a1",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9",
         "source_title": "Signed CRA evidence packs",
         "source_digest": "sha256:882cf5c037e0f281",
@@ -881,7 +909,7 @@
         "parent_id": null,
         "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
         "block_digest": "sha256:88fb74aafaf7b729",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "10",
         "source_title": "Verifiable, air-gapped delivery of Armoury itself",
         "source_digest": "sha256:e6e39876a800767e",
@@ -971,7 +999,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:25e000d502a1de7f",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.2",
         "source_title": "Install the control plane with one Helm command, durable storage included",
         "source_digest": "sha256:77e4f7d2047c9d37"
@@ -1014,7 +1042,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:7a02665d29f00971",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.3",
         "source_title": "Sign in with the bootstrap admin",
         "source_digest": "sha256:d16fdd3aab7f7576"
@@ -1057,7 +1085,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:87596784f5f0d9f2",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.4",
         "source_title": "Declarative OIDC sign-in and role-based access",
         "source_digest": "sha256:b5b69debec1a55d5"
@@ -1108,7 +1136,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:6795749d11c30011",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.5",
         "source_title": "Design tokens and the Light and Dark themes",
         "source_digest": "sha256:d268c2dd15e4fdcb"
@@ -1159,7 +1187,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:d4e6801bab1a8ec5",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.6",
         "source_title": "App shell, sidebar navigation and the empty Home page",
         "source_digest": "sha256:6796bb67b4fc8285"
@@ -1208,7 +1236,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:1770fe11f7cffc9e",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.7",
         "source_title": "Accessibility, message catalogue and responsive baseline",
         "source_digest": "sha256:d20e2b7263d27606"
@@ -1242,7 +1270,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:c2a41c4acab1418a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.8",
         "source_title": "Command palette and keyboard map",
         "source_digest": "sha256:8781f1d77b41399e"
@@ -1293,7 +1321,7 @@
         "parent_id": "d40a66a9-2671-44be-984a-b9622e02168e",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:3fcddbeff5131404",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "1.9",
         "source_title": "Banned-pattern guards",
         "source_digest": "sha256:6e6129ccf8cc3a10"
@@ -1348,7 +1376,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:7dec54657da9b54a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.1",
         "source_title": "Tamper-evident evidence ledger",
         "source_digest": "sha256:2b0666730e6c94a6"
@@ -1397,7 +1425,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:2a9c3ca122670231",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.2",
         "source_title": "Connect a container registry and enumerate its images",
         "source_digest": "sha256:b9f5f4b988ed049e"
@@ -1440,7 +1468,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:aed172ccd3bc249e",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.3",
         "source_title": "Central SBOM generation with Syft",
         "source_digest": "sha256:e2304afe0d59e886"
@@ -1481,6 +1509,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "084c3370-da84-4e24-ba38-5d79eae1903d"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.4:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "baa600e0-9bbf-4ff0-9063-a5f3431d070d"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -1488,11 +1522,11 @@
         "title": "Story 2.4: Uniform vulnerability scanning of stored SBOMs",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
-        "block_digest": "sha256:14b73d2d4ddafe17",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:e913e53de693d493",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.4",
         "source_title": "Uniform vulnerability scanning of stored SBOMs",
-        "source_digest": "sha256:72dcca0ffc70c53b"
+        "source_digest": "sha256:54f29c743368e6cc"
       }
     },
     {
@@ -1532,7 +1566,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:dd25340a1390b321",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.5",
         "source_title": "Continuous onboarding within one hour",
         "source_digest": "sha256:51d10e530a1e7e4b"
@@ -1581,7 +1615,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:557aa1f189094a47",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.6",
         "source_title": "Package feed connections — npm and PyPI",
         "source_digest": "sha256:7347258083de0ea1"
@@ -1624,7 +1658,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:ae474f4662fe78b0",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.7",
         "source_title": "Package feed connections — Maven, Cargo and Go modules",
         "source_digest": "sha256:ab5be3062c817d5b"
@@ -1658,7 +1692,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:0586c9c974ddc49f",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.8",
         "source_title": "OCI artifacts beyond container images",
         "source_digest": "sha256:e843a1f85f3fd531"
@@ -1717,7 +1751,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:eefdb6065ae7edc8",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.9",
         "source_title": "Home summary — checking, coverage and freshness",
         "source_digest": "sha256:df8b57d0a8d32f22"
@@ -1752,11 +1786,11 @@
         "title": "Story 2.10: Home — Needs attention and open issues by severity",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
-        "block_digest": "sha256:c59adbf8a0246b1a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:14ca069b395cb306",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.10",
         "source_title": "Home — Needs attention and open issues by severity",
-        "source_digest": "sha256:bd846d8f33841675"
+        "source_digest": "sha256:29ba0f61075b7217"
       },
       "notes": [
         {
@@ -1770,6 +1804,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "37bd571b-119e-42d3-be7a-422c2232fdcb"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:2:2.10:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "099fa3cb-78ae-4249-9c1f-54092f2f2bb5"
         }
       ]
     },
@@ -1818,7 +1858,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:d63a67da6c6a8577",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.11",
         "source_title": "Software list and software detail",
         "source_digest": "sha256:2d2f43a15691fb54"
@@ -1873,7 +1913,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:84ff3c79d1fce6c0",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.12",
         "source_title": "Prove minute 29 — scripted install-to-posture run",
         "source_digest": "sha256:4a72c6028ca7ba49"
@@ -1922,7 +1962,7 @@
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:82c44f3fbdef5c3f",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "2.13",
         "source_title": "Prove the scale anchor — initial-evaluation load test",
         "source_digest": "sha256:77fd6dace1574a2d"
@@ -1969,7 +2009,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:25da09ca16ab3aa8",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.1",
         "source_title": "Agent enrollment and mTLS identity",
         "source_digest": "sha256:ccb6a550eff48742"
@@ -2024,7 +2064,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:b98c634dc14d46b4",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.2",
         "source_title": "Read-only agent reports running workloads",
         "source_digest": "sha256:ee02c9f545bdb03d"
@@ -2067,7 +2107,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:c4e8e68931118070",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.3",
         "source_title": "Reconnect by stateless re-derive, without storms",
         "source_digest": "sha256:ab1d859cc8414f4b"
@@ -2116,7 +2156,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:7bca1621030467b7",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.4",
         "source_title": "HTTPS long-poll fallback for locked-down networks",
         "source_digest": "sha256:20455e64503f2d99"
@@ -2150,7 +2190,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:25cc0906014b859a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.5",
         "source_title": "Shipped-vs-running reconciliation",
         "source_digest": "sha256:3e5f912950fc1a48"
@@ -2194,7 +2234,7 @@
         "parent_id": "6fecc98c-5ba5-43cd-aabc-15d3d090180c",
         "milestone_id": "2d7361dd-345d-4653-bdf2-c072ab496e98",
         "block_digest": "sha256:7f78ea411e39a773",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "3.6",
         "source_title": "Runtime coverage on Home and Software, and minute 29 with the agent",
         "source_digest": "sha256:2977a0df9672c6aa"
@@ -2243,7 +2283,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:54aa5293731bedf1",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.1",
         "source_title": "Scheduled vulnerability database updates with versioned history",
         "source_digest": "sha256:ad80459c479b3b26"
@@ -2292,7 +2332,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:50fd19ea4cf9a2d9",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.2",
         "source_title": "Feed-delta re-evaluation of stored SBOMs",
         "source_digest": "sha256:8cabfa7deb23eadf"
@@ -2333,6 +2373,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "52a49555-b9f0-4134-b90b-de0336a72781"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.3:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "6e917672-a821-48e2-af42-0d60507cd268"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -2340,11 +2386,11 @@
         "title": "Story 4.3: KEV and EPSS enrichment with source attribution",
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
-        "block_digest": "sha256:9654567d6af696b6",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:b1ad444136b89f49",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.3",
         "source_title": "KEV and EPSS enrichment with source attribution",
-        "source_digest": "sha256:f04de7b7fe391dc0"
+        "source_digest": "sha256:3a0dd7aeaf21fb06"
       }
     },
     {
@@ -2382,6 +2428,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "92dbd33f-f963-4c00-863c-55f7ea273ba2"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:4:4.4:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "eb48c340-fc6b-451b-b0fc-5c174b796981"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -2389,11 +2441,11 @@
         "title": "Story 4.4: OSV and CNA record enrichment",
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
-        "block_digest": "sha256:46aa498532fee15a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:772fb4b8a3745b3e",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.4",
         "source_title": "OSV and CNA record enrichment",
-        "source_digest": "sha256:9bc220de6c4693ce"
+        "source_digest": "sha256:f63b53871d6b4260"
       }
     },
     {
@@ -2433,7 +2485,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:bb89dcf6324cb06b",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.5",
         "source_title": "Offline feed bundle format and creation",
         "source_digest": "sha256:ae3ee757ec92d0c9"
@@ -2467,7 +2519,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:90d5612c7fdac241",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.6",
         "source_title": "Import an offline bundle into an air-gapped instance",
         "source_digest": "sha256:b1643d725059f61d"
@@ -2526,7 +2578,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:bdf5c6c07dab3697",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.7",
         "source_title": "Honest feed staleness across Home and Issues",
         "source_digest": "sha256:55487260fd8b5e4c"
@@ -2569,7 +2621,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:79eadf0c6f88dc83",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.8",
         "source_title": "Prove one-hour re-evaluation at the scale anchor",
         "source_digest": "sha256:9a30706bb4a91a90"
@@ -2603,7 +2655,7 @@
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:2b2ba0a10b41adb5",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.1",
         "source_title": "Deterministic, explainable issue order",
         "source_digest": "sha256:75c2a4a398d1f138"
@@ -2652,11 +2704,11 @@
         "title": "Story 5.2: Issues list — severity groups, filters and the Home summary",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
-        "block_digest": "sha256:60c707f7f4ee21c6",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:21cba66e6bd89c41",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.2",
         "source_title": "Issues list — severity groups, filters and the Home summary",
-        "source_digest": "sha256:2c586fb9880fecf9"
+        "source_digest": "sha256:f5fe7fda4bd0373c"
       },
       "notes": [
         {
@@ -2670,6 +2722,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "86bcb1bf-2e74-4c28-9af5-35918cc2195f"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.2:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b6d3d7c2-155b-4cde-98bd-7878f33a649c"
         }
       ]
     },
@@ -2722,7 +2780,7 @@
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:3c83981ef68d91bd",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.3",
         "source_title": "Record triage decisions as evidence",
         "source_digest": "sha256:770c8015dfda7ba5"
@@ -2757,11 +2815,11 @@
         "title": "Story 5.4: Review panel in the Issues detail column",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
-        "block_digest": "sha256:584f060633365750",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:ff1afd5998302280",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.4",
         "source_title": "Review panel in the Issues detail column",
-        "source_digest": "sha256:6c3f8c2eee10c115"
+        "source_digest": "sha256:e67972cecea2ee0a"
       },
       "notes": [
         {
@@ -2775,6 +2833,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "38720698-3b69-4f79-8fbe-f93a0ccb52d0"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.4:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "d2535eef-efbe-4282-9c03-f0844d76a12c"
         }
       ]
     },
@@ -2808,7 +2872,7 @@
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:a30e2f8927604e40",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.5",
         "source_title": "Audit trail in Reports and on every item",
         "source_digest": "sha256:028995f5798386b1"
@@ -2873,7 +2937,7 @@
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:4aff0f647aa67a36",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.6",
         "source_title": "Emit VEX from review decisions",
         "source_digest": "sha256:6feda0e3e512f3c6"
@@ -2914,6 +2978,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "b5c82731-9c1b-4018-b79f-6fb728a20edf"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.7:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "777bfac9-b46f-4ff5-9665-9eeb6a884d7f"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -2921,11 +2991,11 @@
         "title": "Story 5.7: Ingest vendor VEX",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
-        "block_digest": "sha256:d8cdd80a3215b2fe",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:c58989494526d8c8",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.7",
         "source_title": "Ingest vendor VEX",
-        "source_digest": "sha256:739da265a1dd836a"
+        "source_digest": "sha256:8546b7315d4965c9"
       }
     },
     {
@@ -2960,11 +3030,11 @@
         "title": "Story 5.8: Review scope — all places or only this software",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
-        "block_digest": "sha256:3210fa062a6eab5c",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:d0fad5fa99c8fcd2",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "5.8",
         "source_title": "Review scope — all places or only this software",
-        "source_digest": "sha256:2d83970f11d2fe2e"
+        "source_digest": "sha256:80c261e4803274be"
       },
       "notes": [
         {
@@ -2978,6 +3048,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "05ef37a5-7cf8-4c4c-8a70-bf2cdda0ff7d"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:5:5.8:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "3118c2d0-ccd3-4170-b15b-402dac0d3b47"
         }
       ]
     },
@@ -3016,7 +3092,7 @@
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:89238e2f07143f9d",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.1",
         "source_title": "Graph projection of inventory and findings",
         "source_digest": "sha256:ecc308f8440b4c7a"
@@ -3063,6 +3139,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "a1d2ba2b-2d67-46de-9827-3b05afbfc35c"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.2:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "6e12aa89-12ef-4f39-8984-50c48f5d1647"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -3070,11 +3152,11 @@
         "title": "Story 6.2: Blast-radius query API",
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
-        "block_digest": "sha256:051c677844b065b7",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:947b18f27af0c667",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.2",
         "source_title": "Blast-radius query API",
-        "source_digest": "sha256:9bc3e6c587af1fbc"
+        "source_digest": "sha256:adb8645e0b6964da"
       }
     },
     {
@@ -3120,6 +3202,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "ae4cd769-53dc-4e67-8ea9-52f46337fae8"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:6:6.3:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "88a7331b-6071-476c-9f1c-97ddb19839e6"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -3127,11 +3215,11 @@
         "title": "Story 6.3: Exposure surface — answer and table, from ⌘K",
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
-        "block_digest": "sha256:5b17e297da36e2b9",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:87cf3abafac47bcf",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.3",
         "source_title": "Exposure surface — answer and table, from ⌘K",
-        "source_digest": "sha256:157eb4e1bbcbcbbd"
+        "source_digest": "sha256:f88157c597da0144"
       }
     },
     {
@@ -3179,7 +3267,7 @@
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:4bebe076c2899c13",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.4",
         "source_title": "Exposure map reading",
         "source_digest": "sha256:7cf126ea40fb1ccb"
@@ -3230,7 +3318,7 @@
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:d8113cba7b2bb8fa",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.5",
         "source_title": "Export views as stored evidence, and the answer report",
         "source_digest": "sha256:55209b2589868738"
@@ -3266,7 +3354,7 @@
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:e961f454872bc0e6",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.6",
         "source_title": "Exposure map traversal and inspector",
         "source_digest": "sha256:c692c9f913ab6671"
@@ -3317,7 +3405,7 @@
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:8cdf20a079444660",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "6.7",
         "source_title": "Prove sub-minute blast radius at the scale anchor",
         "source_digest": "sha256:d84cb858ac599767"
@@ -3364,7 +3452,7 @@
         "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
         "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
         "block_digest": "sha256:32e5df7b034f2b65",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "7.1",
         "source_title": "License evaluation of stored SBOMs with Grant",
         "source_digest": "sha256:1438bc576742efe7"
@@ -3398,7 +3486,7 @@
         "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
         "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
         "block_digest": "sha256:f4310ab1aeab66ab",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "7.2",
         "source_title": "License evaluation of images and filesystems directly",
         "source_digest": "sha256:ea8416b4272664e1"
@@ -3447,7 +3535,7 @@
         "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
         "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
         "block_digest": "sha256:770f20ce4a9ed8ab",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "7.3",
         "source_title": "Fleet license policy",
         "source_digest": "sha256:449d3b8854e9f6f1"
@@ -3483,7 +3571,7 @@
         "parent_id": "9ad9a4b1-4f93-4aa7-b988-83115935fa40",
         "milestone_id": "7ee79a87-18e4-498f-a7b1-3a49db3d3368",
         "block_digest": "sha256:d4a60314235f0158",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "7.4",
         "source_title": "Licence issues in Home, Issues and review",
         "source_digest": "sha256:792f997a5762305a"
@@ -3523,7 +3611,7 @@
         "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:8a47688b6d4cfe9c",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "8.1",
         "source_title": "Data-quality scoring model and artifact score",
         "source_digest": "sha256:6ab876e09b2b9948"
@@ -3567,7 +3655,7 @@
         "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:0eaee3c035f55722",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "8.2",
         "source_title": "Fleet data-quality score and the Software detail meter",
         "source_digest": "sha256:ad1f0e684ee51c06"
@@ -3624,7 +3712,7 @@
         "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:03efcd3ff712350e",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "8.3",
         "source_title": "Prometheus metrics endpoint",
         "source_digest": "sha256:722c1b3b5ab9d5f7"
@@ -3660,7 +3748,7 @@
         "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:a366be7ad54deca2",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "8.4",
         "source_title": "Prometheus panel in Settings → Signals",
         "source_digest": "sha256:15f08dc682662ba6"
@@ -3709,7 +3797,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:df05512ee9ad68ea",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.1",
         "source_title": "Point-in-time evidence queries for any window",
         "source_digest": "sha256:b83c513cb74b7541"
@@ -3743,7 +3831,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:ddfeeb9b0388d374",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.2",
         "source_title": "Pack architecture and the CRA pack definition",
         "source_digest": "sha256:c5c4e9234cba8852"
@@ -3792,7 +3880,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:1c813003a5241c93",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.3",
         "source_title": "PDF report and machine-readable companions",
         "source_digest": "sha256:656a429b29dbc32f"
@@ -3841,7 +3929,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:a6863169fbf90f6d",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.4",
         "source_title": "Sign evidence packs",
         "source_digest": "sha256:dca157757ed1235f"
@@ -3892,7 +3980,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:4f53b182fda2bb0a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.5",
         "source_title": "Generate audit reports and verify signatures in Reports",
         "source_digest": "sha256:aec2b8bfc99eb9f7"
@@ -3941,7 +4029,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:ed6d5a51eb18f0d9",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.6",
         "source_title": "Signed ledger checkpoints",
         "source_digest": "sha256:832d2d99511ec701"
@@ -3990,7 +4078,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:c3fe948bf27d6a87",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.7",
         "source_title": "Retention with archiving to the object store",
         "source_digest": "sha256:5b0296dd88493ca3"
@@ -4027,7 +4115,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:6aa59c9190d0c9be",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.8",
         "source_title": "SBOM compaction and archive purge",
         "source_digest": "sha256:3ad859b4761d6e23"
@@ -4064,7 +4152,7 @@
         "parent_id": "51e30d71-6db0-4efd-951b-37f54c60e131",
         "milestone_id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
         "block_digest": "sha256:013cd88195f3e144",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "9.9",
         "source_title": "Anchor ledger checkpoints in a Rekor transparency log",
         "source_digest": "sha256:ed0eb20ce3813888"
@@ -4119,7 +4207,7 @@
         "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
         "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
         "block_digest": "sha256:a17a9a2799ed8508",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "10.1",
         "source_title": "Signed, provenance-attested releases",
         "source_digest": "sha256:3bd45d62e15ec7e5"
@@ -4162,7 +4250,7 @@
         "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
         "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
         "block_digest": "sha256:68284552258b4213",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "10.2",
         "source_title": "Armoury-published signed feed bundles",
         "source_digest": "sha256:af7991aeb33ec307"
@@ -4205,7 +4293,7 @@
         "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
         "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
         "block_digest": "sha256:4f2a53a71a03344c",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "10.3",
         "source_title": "Air-gapped installation from an internal mirror",
         "source_digest": "sha256:4c76f8e245a04d33"
@@ -4260,7 +4348,7 @@
         "parent_id": "bcf9bc4f-5600-4158-a053-f3e310d60b1b",
         "milestone_id": "e4daec88-25cf-44c3-8369-8f690ada5948",
         "block_digest": "sha256:a8a3b72c32b95129",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "10.4",
         "source_title": "Prove the full air-gapped journey end to end",
         "source_digest": "sha256:aaa3afd5f1dbac24"
@@ -4317,7 +4405,7 @@
         "parent_id": null,
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
         "block_digest": "sha256:741f4e87f4952647",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11",
         "source_title": "Scan in CI and see the result in Armoury",
         "source_digest": "sha256:40d15af457748947",
@@ -4365,7 +4453,7 @@
         "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
         "block_digest": "sha256:4f38f9a500817400",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11.1",
         "source_title": "Submit a pushed image from CI by digest",
         "source_digest": "sha256:a1b32ab77993bf10"
@@ -4414,7 +4502,7 @@
         "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
         "block_digest": "sha256:ff4e9548a7492e9f",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11.2",
         "source_title": "Submit an artifact that is not in a connected registry",
         "source_digest": "sha256:7c51adf216be46d8"
@@ -4463,7 +4551,7 @@
         "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
         "block_digest": "sha256:52553a19294885b8",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11.3",
         "source_title": "Artifact identity and duplicate linking",
         "source_digest": "sha256:f3d2d49baaf0c762"
@@ -4504,6 +4592,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "92a0a333-00f5-4ef0-b02d-1c4e76515e4f"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:11:11.4:changed:scp-2026-11-07-aliases",
+          "kind": "comment",
+          "publication": "published",
+          "id": "051ce124-0cb4-41b9-aac8-386bcbfc7fda"
         }
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
@@ -4511,11 +4605,11 @@
         "title": "Story 11.4: Fleet CI policy, server verdict and the CI report",
         "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
-        "block_digest": "sha256:59facf014d7651ca",
-        "at": "2026-11-07T23:53:07+00:00",
+        "block_digest": "sha256:e51aaaa7107805c0",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11.4",
         "source_title": "Fleet CI policy, server verdict and the CI report",
-        "source_digest": "sha256:2f122612bf939b9c"
+        "source_digest": "sha256:2da3fcb96bb24051"
       }
     },
     {
@@ -4555,7 +4649,7 @@
         "parent_id": "46849581-ebc0-4a67-9f9a-4b0a95a8920f",
         "milestone_id": "1cb953b3-f4e1-425d-9067-72484f7698f0",
         "block_digest": "sha256:6742613c5e895a6a",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "11.5",
         "source_title": "GitHub Action for CI scans",
         "source_digest": "sha256:1d14d785792cc4bc"
@@ -4588,7 +4682,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:1310c75413c8b99d",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4618,7 +4712,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:c1d2c57293e0b8d4",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4648,7 +4742,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:92655bbb9ac8bd5f",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4678,7 +4772,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:84ce6c29b815f9c3",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4708,7 +4802,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:c30b5660e7b0adec",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4738,7 +4832,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:2c86a70d886fe17c",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4768,7 +4862,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:559b6e947ca52ae7",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4798,7 +4892,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:930455f63ad5a626",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4828,7 +4922,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:15a331bbe2fe77ed",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4858,7 +4952,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:38c5a4de90482457",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4888,7 +4982,7 @@
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
         "milestone_id": "8faf4c49-aa5d-4e40-a5cf-840efd5df39f",
         "block_digest": "sha256:e65c474cc17d2def",
-        "at": "2026-11-07T23:53:07+00:00"
+        "at": "2026-11-08T00:31:14+00:00"
       }
     },
     {
@@ -4925,7 +5019,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:35df6dc2684fab8b",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.9",
         "source_title": "End-of-life data for packages",
         "source_digest": "sha256:a6d522842156e605"
@@ -4965,7 +5059,7 @@
         "parent_id": "d72bf549-6ada-4a5d-931b-d5a8306d1527",
         "milestone_id": "4ad6c8bc-fa07-442c-b9fd-0e8638a5cad7",
         "block_digest": "sha256:4617a97cd31783b1",
-        "at": "2026-11-07T23:53:07+00:00",
+        "at": "2026-11-08T00:31:14+00:00",
         "source_id": "4.10",
         "source_title": "Verify artifact signatures against trusted signers",
         "source_digest": "sha256:fa073b950ef95919"
