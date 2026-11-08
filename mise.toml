@@ -1,4 +1,4 @@
 [tools]
-act = "0.2.97"
+codeql = { version = "2.27.4", bin_path = "codeql", platforms = { linux-x64 = { asset_pattern = "codeql-linux64.zip" }, macos-arm64 = { asset_pattern = "codeql-osx64.zip" }, macos-x64 = { asset_pattern = "codeql-osx64.zip" }, windows-x64 = { asset_pattern = "codeql-win64.zip" } } }
 jj = "0.46.0"
 skaffold = "2.25.0"

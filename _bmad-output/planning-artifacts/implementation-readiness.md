@@ -1,6 +1,7 @@
 ---
-status: fail
-gate: FAIL
+status: concerns-accepted
+accepted: 2026-11-07 — Daniel explicitly accepted the CONCERNS verdict (third rerun); story-local concerns go to each story's Build planning
+gate: CONCERNS
 date: 2026-11-07
 history:
   - "2026-11-05 CONCERNS — Daniel chose: fix first, then rerun."
@@ -8,6 +9,7 @@ history:
   - "2026-11-06 PASS — assessed against ux-Armoury-2026-06-12 (now superseded)."
   - "2026-11-07 FAIL — rerun after sprint-change-proposal-2026-11-07.md (Greenhouse UX, FR32, FR33): 8 blockers. Daniel chose: fix the blockers, then rerun."
   - "2026-11-07 FAIL (narrow) — second rerun after sprint-change-proposal-2026-11-07-readiness.md: blockers 1–8 closed; 1 new blocker (vulnerability ID aliases). Daniel chose: fix it with the cheap concerns, then rerun."
+  - "2026-11-07 CONCERNS — third rerun after sprint-change-proposal-2026-11-07-aliases.md: blockers 1–9 closed; missing story gates (N1–N6, N9, N10, O2, O20) added as follow-up-2; story-local concerns remain."
 sprint_status: _bmad-output/implementation-artifacts/sprint-status.yaml (11 epics, 79 stories, in sync, validated)
 linear: INF-11 (planning:sprint)
 evidence: _bmad-output/planning-artifacts/readiness-2026-11-07/ (three independent read-only review lenses)
@@ -21,6 +23,41 @@ inputs:
 ---
 
 # Implementation Readiness — Armoury
+
+**Current verdict: CONCERNS, accepted by Daniel (2026-11-07, third rerun).** No blockers. Story 1.1 can start after its
+planned Build re-plan.
+
+## Third rerun — 2026-11-07: CONCERNS
+
+Rerun after `sprint-change-proposal-2026-11-07-aliases.md`. Evidence:
+`readiness-2026-11-07/rerun-3-blocker-9-closure.md` and `rerun-3-fresh-gate.md`.
+
+- **Blocker 9 is closed.** `--by-cve`, the CVE-first issue key, stored aliases and matching on any
+  alias are consistent in every artifact. An ID is known only when `grype db search --vuln <ID>`
+  returns affected packages. Vendor VEX is display-only, also for the CI policy (Story 11.4).
+- **Blockers 1–8 are still closed.** `sprint_plan.py --dry-run`: `in_sync: true` (11 epics, 79 stories).
+- **One reviewer raised a blocker:** the open questions N1–N6 and N9 of the aliases change record had
+  no story gate, so a changed issue key (N3) could drop recorded decisions. The record's own success
+  criterion 8 required those gates. They were added (follow-up-2): Stories 2.4 (N1, N2, N3, new N10),
+  5.3 (N3 test), 6.1 (N2), 6.2 (N5), 6.3 (N4), 5.2 (N4, N9), 5.6 and 5.7 (N6), and 6.5 (O2, O20 of
+  `sprint-change-proposal-2026-11-07.md`). A mechanical check finds a gate AC for every open question.
+- **Concerns that remain** (story-local; each is resolved by its story's Build planning or by an
+  existing gate):
+  - **Story 1.1:** the spec still describes the kind/Podman loop; the Skaffold `ci` profile is not in
+    its acceptance criteria. The planned Build re-plan covers both.
+  - **Epic 1:** the sign-in page is not designed; global states (session expired, control plane
+    unreachable) are open (EXPERIENCE Open item 31); the Settings → Access users view has no data
+    source; the icon-rail width is not a token.
+  - **Epic 2:** the order inside Needs attention (Open item 21); Open-issues row clicks and "N more"
+    rows (Open item 18); Data quality before a score exists (Open item 32); the "Connect a registry"
+    one-liner; direct vs indirect package classification.
+  - **Epics 5, 6, 9:** API contracts not yet named (issue list and detail, review decisions, exports,
+    neighbours, the Reports → Audit trail listing and verification schedule); undrawn detail tabs
+    (Open items 14, 15); concurrent reviews (Open item 30); regenerating an audit report (Open item 22);
+    the Exposure query grammar; forward links from 6.3 and 6.4 to parts of 6.6.
+  - **Epic 10:** Stories 10.2 and 10.3 do not include FR33 end-of-life data or the FR32 trusted root.
+  - **Wording:** FR15 and the Story 5.7 statement still say vendor claims are "applied" (N8).
+
 
 ## Second rerun — 2026-11-07: FAIL (narrow)
 

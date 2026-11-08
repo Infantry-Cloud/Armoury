@@ -770,6 +770,22 @@ So that the same artifact always produces the same findings and no team has a sn
 
 **Acceptance Criteria:**
 
+**Given** the open question N1 (where a finding's aliases come from — Grype's related vulnerabilities only, or also OSV `aliases` and CVE List data — and whether a feed or enrichment update refreshes them; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
+
+**Given** the open question N2 (how aliases are stored and indexed for alias lookups; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
+
+**Given** the open question N3 (the key ID can change, for example a GHSA-keyed finding gets a CVE after a DB update, or one original ID relates to more than one CVE: which key wins; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation; the design keeps every decision and its history attached to the issue when its key ID changes, as Story 5.3 requires, and a test proves it.
+
+**Given** the open question N10 (under `--by-cve`, which record's severity and description an issue shows (the CVE record or the original advisory), so that a new CVE without a score does not drop from its severity to Not rated yet; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
+
 **Given** connected mode
 **When** the control plane starts with no vulnerability DB
 **Then** the `feeds` module fetches the Grype DB into its own version directory (`<feeds-dir>/grype/<db-version>/`) and records its version; Grype runs with `GRYPE_DB_AUTO_UPDATE=false` (ARCH7, ARCH19)
@@ -1535,6 +1551,14 @@ So that I have one place to review the fleet's issues.
 
 **Acceptance Criteria:**
 
+**Given** the open question N4 (whether the Issues search field also matches any alias, and which story builds vulnerability-ID results in the ⌘K Issues group; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `EXPERIENCE.md` (Issues) and `epics.md` and approved by the user before implementation.
+
+**Given** the open question N9 (whether the other review-status counts and the group counts follow the type filter and search (the Needs attention count is fleet-wide); sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `EXPERIENCE.md` (Issues) and `architecture.md` (ARCH38) and approved by the user before implementation.
+
 **Given** the open question Q5 (the URL value of the Needs attention filter option, and whether Review all N clears the type filter and search; the walk order is already decided — `needs_attention=true` keeps the Issues order, architecture.md → Issues and review; sprint-change-proposal-2026-11-07-readiness.md)
 **When** this story is planned
 **Then** the decision is recorded in EXPERIENCE.md (Issues → Filters) and approved by the user before implementation.
@@ -1564,6 +1588,10 @@ I want to record a status and justification on a finding,
 So that handling is documented once and shows up everywhere it matters.
 
 **Acceptance Criteria:**
+
+**Given** the N3 decision recorded in Story 2.4 planning (key ID changes)
+**When** a finding's key ID changes after a DB update
+**Then** its recorded decisions and history stay attached to the issue and it does not return to Not reviewed yet, proven by a test.
 
 **Given** an analyst or admin, using the decision API (the form arrives in Story 5.4)
 **When** they `POST` a decision with status (`not_affected` / `mitigated` / `accepted` / `fix_planned`) and a justification — required for `not_affected`, `mitigated` and `accepted`, optional for `fix_planned` (D7)
@@ -1656,6 +1684,10 @@ So that downstream consumers and auditors get machine-readable handling statemen
 
 **Acceptance Criteria:**
 
+**Given** the open question N6 (which ID and aliases Armoury's emitted VEX states, for example OpenVEX `aliases`; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` (ARCH29) and approved by the user before implementation.
+
 **Given** the VEX-format decision (ARCH29, agreed 2026-11-04, recorded in `architecture.md`)
 **When** this story lands
 **Then** OpenVEX and CycloneDX VEX are both supported and the user picks the format per export; CSAF VEX is deferred until a customer needs it.
@@ -1680,6 +1712,10 @@ I want to import vendors' VEX documents and apply their not-affected claims,
 So that upstream knowledge reduces noise — with credit to who said it.
 
 **Acceptance Criteria:**
+
+**Given** the open question N6 (whether vendor VEX statements match a finding on any alias; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` (ARCH29) and approved by the user before implementation.
 
 **Given** an admin or analyst
 **When** they upload a VEX document in an agreed format (Story 5.6) through the UI or the API (this also serves air-gapped instances)
@@ -1738,6 +1774,10 @@ So that blast-radius and exploration queries are traversals, not ad hoc joins.
 
 **Acceptance Criteria:**
 
+**Given** the open question N2 (how the AGE `Cve` vertex holds aliases: the key ID with alias properties, or one vertex per alias; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
+
 **Given** relational inventory, SBOM packages, findings and running records
 **When** they change
 **Then** the AGE graph is created and updated from the relational tables in the same transaction or by a transactionally enqueued job — vertices `Cve`, `Package`, `Artifact`, `Workload`, `Cluster`; edges `AFFECTS`, `CONTAINS`/`DEPENDS_ON`, `RUNS_IN` (ARCH2 naming)
@@ -1758,6 +1798,10 @@ I want to ask "who is affected by this CVE or package version?" and get a comple
 So that I can tell the CTO the exposure before he's read the news.
 
 **Acceptance Criteria:**
+
+**Given** the open question N5 (the rest of the lookup: whether `grype db search --vuln` resolves aliases itself, its output format (`-o json`), its cost per query under NFR2, how a query for an alias that no fleet finding carries is resolved, and whether the same call supplies the metadata for a CVE that matches no fleet package; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
 
 **Given** `POST /api/v1/blast-radius-queries` with a vulnerability ID (a CVE ID or any other alias, such as a GHSA ID; it matches every finding whose key ID or any alias equals it, ARCH38), a `package@version`, or a package with a version range (for example `log4j-core@2.x`), and `GET /api/v1/blast-radius-queries/{id}` to read it (long-operation pattern, ARCH33)
 **When** it runs
@@ -1795,6 +1839,10 @@ I want to type a CVE or package into ⌘K and land on the answer,
 So that the log4shell moment takes seconds from anywhere in the product.
 
 **Acceptance Criteria:**
+
+**Given** the open question N4 (the Exposure header and query button when the query is an alias that is not the key ID: show the typed ID, the key ID, or both; sprint-change-proposal-2026-11-07-aliases.md)
+**When** this story is planned
+**Then** the decision is recorded in `EXPERIENCE.md` (Exposure) and approved by the user before implementation.
 
 **Given** the open question Q1 (whether the unknown-vulnerability state adds "Published <date>; package data is not available yet." when the CVE List knows the ID, with a reworded first sentence; sprint-change-proposal-2026-11-07-readiness.md)
 **When** this story is planned
@@ -1861,6 +1909,14 @@ I want to export what I see and have the export kept as evidence,
 So that I can hand the CTO something he can trust without me annotating it, and anyone can later see exactly what was sent.
 
 **Acceptance Criteria:**
+
+**Given** the open question O2 (are stored export files also cosign-signed, or is the ledger digest enough; sprint-change-proposal-2026-11-07.md)
+**When** this story is planned
+**Then** the decision is recorded in `architecture.md` and approved by the user before implementation.
+
+**Given** the open question O20 (confirm the label "Audit report for this answer" for the PDF answer report, because "Audit report" otherwise means an evidence pack; sprint-change-proposal-2026-11-07.md, EXPERIENCE Open item 39)
+**When** this story is planned
+**Then** the label is confirmed in `EXPERIENCE.md` and approved by the user before implementation.
 
 **Given** an Exposure answer (on a moved map, its current centre), the Issues list or the Software list
 **When** the user chooses Export (or presses `x`)

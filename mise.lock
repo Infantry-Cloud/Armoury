@@ -2,51 +2,76 @@
 
 lockfile_version = 3
 
-[[tools.act]]
-version = "0.2.97"
-backend = "aqua:nektos/act"
-specifiers = ["0.2.97"]
+[[tools.codeql]]
+version = "2.27.4"
+backend = "github:github/codeql-cli-binaries"
+specifiers = ["2.27.4"]
 
-[tools.act."platforms.linux-arm64"]
-checksum = "sha256:44d48e3d4a6409053fdec6fc6518322467d79a2d5be8f72c021b0421e2ac113d"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157495"
+[tools.codeql."platforms.linux-arm64"]
+checksum = "sha256:168093d6650ca00e43c880885317e6c5745af7057da7ba7dc27d4a8f8e3e25af"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-linux-arm64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228331"
+provenance = "github-attestations"
 
-[tools.act."platforms.linux-arm64-musl"]
-checksum = "sha256:44d48e3d4a6409053fdec6fc6518322467d79a2d5be8f72c021b0421e2ac113d"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157495"
+[tools.codeql."platforms.linux-arm64-musl"]
+checksum = "sha256:168093d6650ca00e43c880885317e6c5745af7057da7ba7dc27d4a8f8e3e25af"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-linux-arm64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228331"
+provenance = "github-attestations"
 
-[tools.act."platforms.linux-x64"]
-checksum = "sha256:67b4976a56f33ea7870b798912e738ec44eef38e7578ae7b532f2def1c73a5ad"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Linux_x86_64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157441"
+[[tools.codeql]]
+version = "2.27.4"
+backend = "github:github/codeql-cli-binaries"
+specifiers = ["2.27.4"]
 
-[tools.act."platforms.linux-x64-musl"]
-checksum = "sha256:67b4976a56f33ea7870b798912e738ec44eef38e7578ae7b532f2def1c73a5ad"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Linux_x86_64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157441"
+[tools.codeql.options]
+asset_pattern = "codeql-linux64.zip"
 
-[tools.act."platforms.macos-arm64"]
-checksum = "sha256:6dbb1ef34a7e34bb1ee0db188d1682ea35b82d9d9012626497f6c659e55a7cb5"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157431"
+[tools.codeql."platforms.linux-x64"]
+checksum = "sha256:393bf92b66596141ec93baf9b483f4a350f3749916c922fed0dd63c67706047d"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-linux64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228339"
+provenance = "github-attestations"
 
-[tools.act."platforms.macos-x64"]
-checksum = "sha256:cba9cf071f69c47b2fef60a4c735002b6cbd416533920406f72eac0cf7ffec3a"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Darwin_x86_64.tar.gz"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157430"
+[tools.codeql."platforms.linux-x64-musl"]
+checksum = "sha256:393bf92b66596141ec93baf9b483f4a350f3749916c922fed0dd63c67706047d"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-linux64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228339"
+provenance = "github-attestations"
 
-[tools.act."platforms.windows-x64"]
-checksum = "sha256:07cb9bbecc5604452dc50e2a485e17e02e38c3735c47ce8adc8ac550ab968a8a"
-checksum_source = "mise-versions"
-url = "https://github.com/nektos/act/releases/download/v0.2.97/act_Windows_x86_64.zip"
-url_api = "https://api.github.com/repos/nektos/act/releases/assets/710157515"
+[[tools.codeql]]
+version = "2.27.4"
+backend = "github:github/codeql-cli-binaries"
+specifiers = ["2.27.4"]
+
+[tools.codeql.options]
+asset_pattern = "codeql-osx64.zip"
+
+[tools.codeql."platforms.macos-arm64"]
+checksum = "sha256:7da72a7a758ef272985cce665ddb22bccc0b0a212f09f175d943eb5ff5fc57e4"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-osx64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228334"
+provenance = "github-attestations"
+
+[tools.codeql."platforms.macos-x64"]
+checksum = "sha256:7da72a7a758ef272985cce665ddb22bccc0b0a212f09f175d943eb5ff5fc57e4"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-osx64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228334"
+provenance = "github-attestations"
+
+[[tools.codeql]]
+version = "2.27.4"
+backend = "github:github/codeql-cli-binaries"
+specifiers = ["2.27.4"]
+
+[tools.codeql.options]
+asset_pattern = "codeql-win64.zip"
+
+[tools.codeql."platforms.windows-x64"]
+checksum = "sha256:a7ab5f73a8f440c3269f6660deb1d34f76005e756ccdf58c84c5ff88355453db"
+url = "https://github.com/github/codeql-cli-binaries/releases/download/v2.27.4/codeql-win64.zip"
+url_api = "https://api.github.com/repos/github/codeql-cli-binaries/releases/assets/692228337"
+provenance = "github-attestations"
 
 [[tools.jj]]
 version = "0.46.0"

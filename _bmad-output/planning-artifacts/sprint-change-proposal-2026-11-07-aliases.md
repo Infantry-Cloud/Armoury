@@ -3,6 +3,7 @@ status: approved
 approved: 2026-11-07 — Daniel approved the whole proposal ("Yes, apply it"); N5 and N7 answered
 applied: 2026-11-07 — all 60 section-4 edits (P1, R1–R8, E1–E13, S1–S24, U1–U14) plus N5-a..e and N7-a..d applied; 0 failed; dry run in sync (11 epics, 79 stories)
 follow-up: 2026-11-07 — three lines aligned with the N5 answer by hand (Story 6.2 zero AC, UX-DR40, EXPERIENCE "Empty answer (known vulnerability)").
+follow-up-2: 2026-11-07 — readiness rerun 3 found that N1–N6 and N9 had no story gate (success criterion 8 unmet). Gate ACs added to Stories 2.4 (N1, N2, N3, N10), 5.3 (N3 test), 6.1 (N2), 6.2 (N5), 6.3 (N4), 5.2 (N4, N9), 5.6 and 5.7 (N6). N10 is new (severity and description under --by-cve). Story 6.5 also gained gate ACs for O2 and O20 from sprint-change-proposal-2026-11-07.md, which named Story 6.5 as their gate.
 date: 2026-11-07
 workflow: bmad-correct-course (batch)
 trigger: implementation-readiness.md second rerun 2026-11-07 FAIL (narrow) — 1 new blocker (blocker 9, vulnerability ID aliases) plus cheap concerns; evidence in readiness-2026-11-07/rerun-1-blocker-closure.md (concerns 1–5) and rerun-2-fresh-gate.md (finding 1 blocker; findings 14, 18, 20, 29)
@@ -665,6 +666,7 @@ Q6 (Story 1.8) is already gated; Q3 and Q7 were answered.
 | N7 | A2 | Story 11.4 (`epics.md:2643`) lets a matching vendor VEX `not_affected` statement keep a finding from failing the CI policy by default (`ciPolicy.trustVendorVex`). A2 covers status, counts, filters and Needs attention, not the CI verdict. Keep, or make vendor claims display-only there too? | Daniel + Architect | Story 11.4 planning |
 | N8 | A2 | Wording only: FR15 ("applying their not-affected claims") and Story 5.7's story statement ("apply their not-affected claims", "reduces noise") read as if claims change findings. Reword to match display-only? | PM | None (wording only) |
 | N9 | A5 | Whether the other Review status counts and the group counts follow the type filter and search (A5 fixes only the Needs attention count). | UX + Architect | Story 5.2 planning |
+| N10 | A1 | Under `--by-cve`, which record's severity and description an issue shows (the CVE record or the original advisory), so that a new CVE without a score does not drop to Not rated yet (readiness rerun 3). | Architect | Story 2.4 planning |
 
 Other readiness concerns are unchanged and stay with the owners in `implementation-readiness.md`.
 
