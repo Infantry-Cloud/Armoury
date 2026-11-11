@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "skills": {
+    "okteto": {
+      "source": "okteto/okteto-agent-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/okteto/skills/okteto/SKILL.md",
+      "computedHash": "929cdde3ed3c88c34db98ae942ece2642709843227272d55736b727763cbff09",
+      "installMode": "copy"
+    },
+    "okteto-debugging": {
+      "source": "okteto/okteto-agent-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/okteto/skills/okteto-debugging/SKILL.md",
+      "computedHash": "88c211be1442e3a6ad22ecf563c2d2db69d16acb6f3522fbbf75cb4c833e9e62",
+      "installMode": "copy"
+    },
+    "okteto-manifest-optimizer": {
+      "source": "okteto/okteto-agent-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/okteto/skills/okteto-manifest-optimizer/SKILL.md",
+      "computedHash": "0fcdc20179290fe85ad576bb33f3a1d4bbe1b09b299a2062ace6119579aa453e",
+      "installMode": "copy"
+    },
+    "okteto-onboarding": {
+      "source": "okteto/okteto-agent-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/okteto/skills/okteto-onboarding/SKILL.md",
+      "computedHash": "da324ae2e0763ea41b90db211cd2c3a114a4b7c2c5eb33e103a4b1f90dc91897",
+      "installMode": "copy"
+    },
+    "okteto-preview": {
+      "source": "okteto/okteto-agent-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/okteto/skills/preview/SKILL.md",
+      "computedHash": "ad54e26570db12b83a78095899ac8bd4e79b45d13c7640d5f8e62c083676d825",
+      "installMode": "copy"
+    }
+  }
+}
