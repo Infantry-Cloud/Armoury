@@ -62,7 +62,7 @@ Inputs read (Phase 0):
   private, empty, GitHub Free plan.
 
 Inherited decisions (facts): mise pins and `mise-tasks/`; `mise run check` as the aggregate gate;
-GitHub Actions running the same tasks; Skaffold dev loop (PROC3); jj with story contracts and
+GitHub Actions running the same tasks; Okteto dev loop (PROC3, amended 2026-11-12; was Skaffold); jj with story contracts and
 locked ATDD tests; `AGENTS.md` only (no `CLAUDE.md`).
 
 Inferences (not observed): the likely agent failure modes in the register below. No historical
@@ -84,16 +84,17 @@ Conflicts and stale planning text, resolved with Daniel:
 | D1 | mise pins Helm 4.x. The "Helm 3" text in architecture.md is out of date. Customer docs state supported Helm versions. | 2026-11-06 |
 | D2 | The classic `GITHUB_TOKEN` in agent sessions is an accepted residual risk (see threat model). Expires 2027-02-06. | 2026-11-06 |
 | D3 | Daniel owns the dev cluster. Every cluster command names its kube context explicitly; no task relies on the current context. | 2026-11-06 |
-| D4 | Images build on a rootless, mTLS `buildkitd` in the cluster. mise pins a standalone `buildx`; Skaffold calls it explicitly. | 2026-11-06 |
-| D5 | Dev images go to Harbor or Artifact Keeper (OI-2), set through `SKAFFOLD_DEFAULT_REPO`. Registry layer cache lives there too. | 2026-11-06 |
-| D6 | The AGE test database is a digest-pinned Pod in the cluster. `mise run check` reaches it (port-forward locally, Service DNS on ARC). No local database. | 2026-11-06 |
-| D7 | `openapi-generator` runs as a digest-pinned BuildKit stage with `--output type=local`. No local Java, no local container. | 2026-11-06 |
-| D8 | CI runs on GitHub-hosted runners (fast tier) and ARC self-hosted runners in the cluster (cluster tier, e2e). kind and Podman leave the project. | 2026-11-06 |
-| D9 | `mise run check` stays the one parity command. Dagger is rejected. `act` (0.2.97, pinned) is available if local workflow runs become necessary. | 2026-11-06 |
+| D4 | Superseded 2026-11-12: Okteto builds the images on its BuildKit (external to this repository). Was: rootless mTLS `buildkitd` through a pinned `buildx`. | 2026-11-06 |
+| D5 | Superseded 2026-11-12: dev images go to the Okteto Registry (external). Official images still go to GHCR (`mise run ci:publish`). | 2026-11-06 |
+| D6 | The AGE test database is a digest-pinned Pod in the developer's (or the CI run's) Okteto namespace. `mise run check` reaches it by port-forward, from the workstation and from ARC. No local database. Amended 2026-11-12. | 2026-11-06 |
+| D7 | `openapi-generator` runs from its digest-pinned image as an `okteto test` container whose `artifacts` return the generated files. No local Java, no local container. Amended 2026-11-12. | 2026-11-06 |
+| D8 | CI runs `ci:fast` on GitHub-hosted runners, and `ci:cluster`, `ci:e2e` and `ci:build` on ARC self-hosted runners in a separate runner cluster that reaches the dev cluster through Okteto (external identity). kind and Podman leave the project. Amended 2026-11-12. | 2026-11-06 |
+| D9 | `mise run check` is the handoff gate and `mise run ci` runs the whole CI pipeline locally. Dagger and `act` are not used. Amended 2026-11-12. | 2026-11-06 |
 | D10 | Edit-time feedback: pi-lens plus the project readiness extension. | 2026-11-06 |
 | D11 | Security set: CodeQL (CI), gitleaks, cargo-deny, `npm audit signatures`, Renovate. | 2026-11-06 |
 | D12 | CI feedback for the agent: official GitHub MCP server, `actions` toolset, read-only. | 2026-11-06 |
 | D13 | Fork PRs: split CI tiers plus "require approval for all outside collaborators". `pull_request_target` is banned. | 2026-11-06 |
+| D14 | Every CI step (checks, CodeQL, gitleaks, image builds, publish, Renovate) is a mise task. Workflows only install mise and call `mise run ci:<tier>`. Okteto is installed and operated outside this repository; the repository assumes a working Okteto context. | 2026-11-12 |
 
 ## Environment threat model
 
@@ -104,15 +105,14 @@ of that user's permissions. Nothing here is sandboxed. A devcontainer was offere
 | --- | --- | --- |
 | Classic `GITHUB_TOKEN` (env) with `repo`, `workflow`, `write:packages`, `delete_repo`, `admin:org`, `admin:enterprise` | Agent can delete repos, change org settings, publish packages | **Accepted residual risk (D2), expires 2027-02-06.** jj rules forbid pushes; agents run only `jj new`/`jj describe`. Revisit: replace with a fine-grained repo token before expiry. |
 | Kubeconfig (all contexts) | Agent can act on any context, including non-dev clusters | D3: tasks pass an explicit context from `ARMOURY_KUBE_CONTEXT` (set in untracked `mise.local.toml`); no task uses the current context. Daniel owns cluster RBAC. |
-| BuildKit mTLS client certificate | Agent can build and push images | Stored outside the repo (for example `~/.config/armoury/buildkit/`); never committed. |
-| Dev registry credentials | Push to dev repositories | Host Docker config only; never in the repo or image layers. |
+| Okteto token or context | Agent can build, deploy and run previews in the dev cluster | Stored outside the repository (Okteto CLI config or CI secret); never committed. |
 | `~/.ssh`, `gh` keyring, Linear OAuth | Inherited by Pi | Not mounted anywhere new; no task reads them. |
 | Production credentials | None on this host | Must stay absent from dev sessions (project-context.md). |
 
 - Network egress: unrestricted host network. No proxy is claimed.
 - CI boundary: hosted runners for untrusted code (fork PRs); ARC runners only for `push` and
-  same-repo PRs, ephemeral, in a runner group limited to this repository, with a ServiceAccount
-  scoped to the CI namespace.
+  same-repo PRs, ephemeral, in a runner group limited to this repository, in a separate runner
+  cluster that reaches the dev cluster through an Okteto identity (external).
 - Merge protection: a ruleset on `main` requires the CI gate job (phase 3, applied by Daniel).
 - Validation evidence: pending (phase 3): fresh-clone `mise install && mise run check`, explicit
   context use, absence of production credentials, Pi discovery of the agent surface.
@@ -132,12 +132,20 @@ and prints the failing step name. Story 1.1 builds the product steps; phase 3 ad
 | fast | `test-rust` | `cargo nextest run` without the database group |
 | fast | `web` | `npm ci`, `npm audit signatures`, ESLint, Prettier, `svelte-check`, Vitest |
 | fast | `chart` | `helm lint` |
-| fast | `api` | `gen:api` into a temporary directory, then `diff -r` with committed output (no VCS) |
+| cluster | `api` | `gen:api` into a temporary directory, then `diff -r` with committed output (no VCS); needs Okteto (D7) |
 | cluster | `test-db` | `cargo nextest run` database group against the AGE Pod |
+| cluster | `codeql` | CodeQL CLI database create and analyze for Rust, JS/TS and Actions; runs on the local codebase |
 | both | `contracts` | Contract validator `ci --require-jj` with this run's JUnit reports |
 
 `mise run check:fast` runs only the fast tier. It is for iteration and the fork-PR CI tier,
-never for handoff. `mise run e2e` runs Playwright against the Skaffold deployment.
+never for handoff. `mise run e2e` runs Playwright against an Okteto deployment.
+`mise run renovate` is a task, not a gate step: it runs in dry-run mode unless
+`RENOVATE_DRY_RUN=false` (set only by the scheduled workflow).
+
+`mise run ci` runs the CI tiers in CI order on the workstation: `ci:fast`, `ci:cluster`, `ci:e2e`.
+`ci:e2e` deploys an Okteto preview (`okteto preview deploy pr-<n>`) for a pull request in CI, or
+runs `okteto deploy` from the working tree into a fresh namespace locally, then runs the same
+`okteto test`. A closed pull request destroys its preview.
 
 ## Feedback Loop Register
 
@@ -159,10 +167,10 @@ Budgets are initial targets; phase 3 records the first measurements without clai
 | L11 | Secret, vulnerable crate, bad npm signature | `check/secrets`, `cargo deny`, `npm audit signatures` | Tool output | Remove secret / bump dep | < 1 min | L, H | deferred: phase 3 |
 | L12 | Unsafe workflow change | `check/workflows` | actionlint / rule output | Fix workflow | < 5 s | L, H | deferred: phase 3 |
 | L13 | Weakened, skipped or missing acceptance test; contract drift | `check/contracts` (validator `ci --require-jj` + JUnit) | Validator errors with `Read:` links | Activate or fix test; Correct Course | < 10 s | L, A | deferred: phase 3 |
-| L14 | Change breaks the running system | `skaffold dev` on dev cluster (PROC3) | Skaffold build/deploy output, pod logs | Fix, wait for redeploy | < 2 min redeploy | E | deferred: Story 1.1 T9 |
+| L14 | Change breaks the running system | `mise run dev` (`okteto up` dev container) on the dev cluster (PROC3) | `cargo watch` output in the dev container, pod logs | Fix, wait for the incremental rebuild | < 2 min rebuild | E | deferred: Story 1.1 T9 |
 | L15 | UI does not load | `mise run e2e` (VAL-10) | Playwright report | Fix code | < 5 min | L, A | deferred: Story 1.1 T9 |
 | L16 | CI-only failure | GitHub MCP `actions` (read-only) | Failed job logs in agent | Reproduce locally, fix | < 1 min to read | A, H | deferred: phase 3 |
-| L17 | SAST finding | CodeQL on hosted runners | Code scanning alert (MCP/UI) | Fix or dismiss with reason | per push | H | deferred: repo public (OI-5) |
+| L17 | SAST finding | `check/codeql` (CodeQL CLI) in the local gate and `ci:cluster` | CodeQL results in the gate output | Fix or dismiss with reason | per push | L, A | deferred: phase 3 |
 | L18 | Stale pins | Renovate PRs (weekly) | PR with CI result | Review and merge | weekly | H, A | deferred: phase 3 |
 | L19 | Readiness coverage drift | Scorer in CI, non-blocking | CI annotation | Investigate gap | per push | H | deferred: phase 3 |
 
@@ -186,7 +194,7 @@ Enforcement levels: hard, warning, context, manual. "Trigger" lists the agent-fa
 | R9 | P2 | Exact pins (mise, Cargo `=`, npm exact, image `@sha256`, action SHA); lockfiles committed | hard | `check/pins` (VAL-5) | gate | H | deferred 1.1 |
 | R10 | P2 | No secrets in repo or history | hard | `check/secrets` (gitleaks dir); CI gitleaks full history; GitHub secret scanning + push protection once public | gate; CI | H | deferred phase 3 |
 | R11 | P2 | No known-vulnerable or disallowed dependency | hard | `cargo deny check` (`deny.toml`); `npm audit signatures`; Renovate; Dependabot alerts once public | gate; weekly | H | deferred phase 3 |
-| R12 | P2 | SAST clean or reasoned dismissal | hard | CodeQL (Rust, JS/TS, Actions) required check | CI | H | deferred OI-5 |
+| R12 | P2 | SAST clean or reasoned dismissal | hard | `check/codeql` (Rust, JS/TS, Actions) in `ci:cluster` | gate; CI | A | deferred phase 3 |
 | R13 | P2 | Workflows least privilege; no `pull_request_target`; fork code never on ARC | hard | `check/workflows`; job `if:` conditions; `ci-gate` job fails when the ARC tier was skipped | gate; CI | H | deferred phase 3 |
 | R14 | P2 | Agent image has no scanners (NFR12) | manual now | VAL-8 (STORY-1.1); mechanical in Story 10.1 (release SBOM) | review | - | active 1.1 |
 | R15 | P2 | Outbound only from owning modules; off in air-gap (NFR4) | hard later | Story 10.3 check | gate | H | deferred: Story 10.3 |
@@ -202,7 +210,7 @@ Enforcement levels: hard, warning, context, manual. "Trigger" lists the agent-fa
 | R25 | P5 | Feedback within budget | warning | Budgets in register; phase 3 measures; slow steps get routed, not removed | phase 3 | - | deferred phase 3 |
 | R26 | P6 | `AGENTS.md` states LoB rules, layout, PROC3; README commands work | manual | VAL-13 (STORY-1.1); M7 | review | - | active 1.1 |
 | R27 | P6 | `LICENSE`, `SECURITY.md`, `CODEOWNERS` present | context | Files at repo root | - | - | deferred: LICENSE OI-1; SECURITY.md + CODEOWNERS phase 3 |
-| R28 | process | `skaffold dev` runs during development (PROC3) | context + manual | `AGENTS.md`; review asks for redeploy evidence (M5) | - | - | deferred 1.1 |
+| R28 | process | `mise run dev` (`okteto up`) runs during development (PROC3) | context + manual | `AGENTS.md`; review asks for redeploy evidence (M5) | - | - | deferred 1.1 |
 
 ### Enforcement coverage
 
@@ -247,16 +255,16 @@ a reporter tag. JUnit reports go outside the workspace (`$RUNNER_TEMP` in CI,
 
 | Workflow | Job | Runner | Events | Runs |
 | --- | --- | --- | --- | --- |
-| `ci.yml` | `fast` | `ubuntu-24.04` (hosted) | push, all PRs | `mise run check:fast`; gitleaks full history |
-| `ci.yml` | `cluster` | ARC scale set | push; same-repo PRs | `mise run check` (all tiers) + contract step |
-| `ci.yml` | `e2e` | ARC scale set | push; same-repo PRs | `skaffold run` to the CI namespace; `mise run e2e` |
+| `ci.yml` | `fast` | `ubuntu-24.04` (hosted) | push, all PRs | `mise run ci:fast` (`check:fast`; gitleaks full history) |
+| `ci.yml` | `cluster` | ARC scale set | push; same-repo PRs | `mise run ci:cluster` (`check` all tiers incl. `api` and `codeql`, + contract step) |
+| `ci.yml` | `e2e` | ARC scale set | push; same-repo PRs | `mise run ci:e2e` (Okteto preview `pr-<n>`, `okteto test`; preview destroyed when the PR closes) |
 | `ci.yml` | `ci-gate` | hosted | always | Fails unless `fast`, `cluster` and `e2e` all succeeded (skipped counts as failure) |
-| `codeql.yml` | `analyze` | hosted | push, PRs, weekly | CodeQL for Rust, JS/TS and Actions |
-| `build.yml` | `images` | ARC | push | Build images and chart; push by digest only on `main` |
+| `build.yml` | `images` | ARC | push | `mise run ci:build` (`okteto build`, chart package); `mise run ci:publish` on `main` only (`crane` copy to GHCR by digest) |
+| `renovate.yml` | `renovate` | hosted | schedule | `RENOVATE_DRY_RUN=false mise run renovate` |
 
 All workflows set top-level `permissions: contents: read`. Only the `main` image push job gets
-`packages: write`. Actions are pinned by 40-character SHA. The `main` ruleset requires `ci-gate`
-and `analyze`.
+`packages: write`. Actions are pinned by 40-character SHA. The `main` ruleset requires `ci-gate`.
+No workflow holds check, scan or build logic: each job installs mise and calls one task (D14).
 
 ## Project agent surface
 
@@ -272,7 +280,7 @@ and `analyze`.
 | Skills | `.agents/skills/` (BMAD, TEA, steward) | active | Skills listed |
 | TEA module | `bmad-tea`, `bmad-testarch-*` | active | - |
 | Prompts, presets, themes | - | not-needed: no requirement | - |
-| Local overrides | `mise.local.toml` (untracked: kube context, BuildKit endpoint, registry) | deferred: Story 1.1 / phase 3 | `.gitignore` covers it; `mise.local.toml.example` committed |
+| Local overrides | `mise.local.toml` (untracked: kube and Okteto context) | deferred: Story 1.1 / phase 3 | `.gitignore` covers it; `mise.local.toml.example` committed |
 
 ## Pillar coverage
 
@@ -293,18 +301,17 @@ and `analyze`.
 | Tool | Gap | Decision | Reason | Revisit |
 | --- | --- | --- | --- | --- |
 | Dagger | Local/CI parity | rejected | mise tasks already give parity; Dagger needs an engine and a second task layer | If tasks diverge between local and CI |
-| nektos `act` 0.2.97 | Run workflows locally | accepted, pinned, unused | Cheap insurance for workflow debugging | When a workflow fails only in CI twice |
 | devcontainer | Agent boundary | rejected by Daniel | Native host chosen; residual risk recorded | D2 expiry |
 | kind on Podman | Local cluster | rejected | 2 GiB machine; Daniel provides a dev cluster | - |
-| BuildKit (rootless, mTLS) vs Buildah vs kaniko | In-cluster image builds | BuildKit | Native buildx path, registry cache, `--output type=local` for codegen; Buildah needs custom scripts and does not cover codegen | If Skaffold buildx support regresses |
 | ARC runners vs hosted + kubeconfig | CI access to cluster | ARC | API server stays private; no kubeconfig in GitHub | - |
-| CodeQL vs opengrep | SAST in CI | CodeQL (needs public repo) | User choice; free on public repos | OI-5 |
+| CodeQL vs opengrep | SAST in CI | CodeQL CLI as a mise task (`check/codeql`) | User choice; runs on the local codebase; free use is for open-source code, so OI-5 still applies | OI-5 |
 | gitleaks | Secret detection | accepted | Free, works without git locally (`dir` mode) | - |
 | cargo-deny | Rust advisories, licences, sources | accepted | Standard, offline-capable after DB fetch | - |
 | `npm audit signatures` | npm provenance | accepted | Built into npm | - |
 | Renovate vs Dependabot | Stale exact pins | Renovate | Handles mise, Cargo `=`, npm, image digests, action SHAs | - |
 | GitHub MCP vs `gh` CLI | CI feedback for agent | GitHub MCP, `actions`, read-only | Structured results | If the server or toolset changes |
 | Coverage tools | Test depth | deferred | No evidence of need yet | R24 trigger |
+| DevSpace 6.3.x vs Okteto Platform | Dev loop (dev container, file sync, port-forward) | deferred; Okteto chosen for now (Daniel, 2026-11-12) | Both use the same loop pattern: a clone with a dev image, two-way sync, port-forward. DevSpace needs no in-cluster platform and keeps our BuildKit and registry, but needs a custom digest step and releases slowly. The Okteto Platform is not expected to make the edit loop faster (not measured) | After Epic 1 is complete (Epic 1 retrospective): time one edit-to-response cycle with each tool, then decide |
 
 ## Potential enforcement considerations
 
@@ -323,7 +330,7 @@ Owner for all: Test Architect, at Test Review or Code Review of each story.
 | M2 | No credentials or full SBOMs in logs | Review note; log sample from the dev deployment | Every story touching auth, connectors or logging, until R18 test exists |
 | M3 | Agent image has no scanners; control-plane image contents | Image listing record (VAL-8) | Story 1.1; any Dockerfile change until Story 10.1 |
 | M4 | ARC runner group, namespace RBAC and fork approval settings | Settings screenshots or `gh api` output | Phase 3; any ARC or repo-settings change |
-| M5 | `skaffold dev` was running and healthy during the story (PROC3) | Redeploy log excerpt in Implementation Notes | Every story after 1.1 |
+| M5 | `mise run dev` (`okteto up`) was running and healthy during the story (PROC3) | Dev container rebuild log excerpt in Implementation Notes | Every story after 1.1 |
 | M6 | Locked enums and glossary used, no synonyms | Review note | Every API or UI story until R21 check exists |
 | M7 | `AGENTS.md` and `README.md` are correct and commands work | VAL-13 record | Story 1.1; docs changes |
 
@@ -397,8 +404,8 @@ deterministic check for it at the next RV.
 | ID | Item | Owner | Needed before |
 | --- | --- | --- | --- |
 | OI-1 | Licence choice (no `LICENSE` means all rights reserved) | Daniel | Public announcement or outside contributions |
-| OI-2 | Dev registry: Harbor or Artifact Keeper; repository paths | Daniel | Story 1.1 T9 |
-| OI-3 | Kube context names, CI namespace, BuildKit endpoint and mTLS client files, AGE Pod location | Daniel | Story 1.1 T3/T4/T9 |
+| OI-2 | Closed 2026-11-12: the Okteto Registry is used (external). | Daniel | - |
+| OI-3 | Closed 2026-11-12: a working Okteto context for the workstation and ARC is provided outside this repository. | Daniel | - |
 | OI-4 | Correct Course for PROC3, ARCH34, Stories 1.2 and 2.12 (kind/Podman to cluster, Helm 4); Build re-plan of STORY-1.1; ATDD Edit (VAL-1, VAL-7, VAL-9, VAL-11) | PM, Build, TEA | STORY-1.1 approval |
 | OI-5 | Make the repository public | Daniel | After phase 3 proves the runner split and a clean gitleaks full-history scan |
 
@@ -406,9 +413,9 @@ deterministic check for it at the next RV.
 
 1. Fast-tier checks: `check/lob`, `check/workflows`, `check/secrets`, `deny.toml`, workspace lints, `.pi/readiness.rules.json`.
 2. JUnit adapter `mise-tasks/ci/junit-contract` and `check/contracts`.
-3. ARC scale set, runner group, CI namespace RBAC; `ci.yml` tiers and `ci-gate`; `codeql.yml`.
+3. ARC scale set and runner group (external Okteto identity); `ci.yml` tiers, `ci-gate` and the `ci:*` tasks; `check/codeql`; `renovate.yml`.
 4. GitHub MCP (`actions`, read-only) in `.mcp.json` and `.pi/mcp.json`.
-5. Renovate config; `SECURITY.md`; `CODEOWNERS`; `mise.local.toml.example`.
+5. Renovate config for `mise run renovate`; `SECURITY.md`; `CODEOWNERS`; `mise.local.toml.example`.
 6. Rehearse L2, L4, L5, L9, L10, L13 and L16; prove the contract step; fresh-clone and Pi discovery checks.
 7. Run the scorer (`pnpm dlx @danielboothcloud/agent-readiness . --format json`); fix real gaps; add it to CI.
 8. Set Status `ready` only when the threshold and all applicable critical loops are proven.

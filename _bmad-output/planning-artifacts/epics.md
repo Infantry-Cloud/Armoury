@@ -99,7 +99,7 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 
 **Starter / scaffold (→ Epic 1 Story 1)**
 
-- ARCH1: **No off-the-shelf starter; a monorepo scaffold is the first implementation story.** Cargo workspace (`control-plane`, `agent`, `agent-proto`, resolver 3, Rust 2024); `web/` via `npx sv create web --template minimal --types ts --add tailwindcss` + `shadcn-svelte init` + `@xyflow/svelte`, `adapter-static` with SSR off; `cargo new` for control plane (`axum`, `tokio`, `sqlx` postgres/rustls/uuid/migrate) and agent (`kube` runtime+rustls, `k8s-openapi`, `tokio`); `agent-proto` lib with tonic/prost codegen from `proto/agent/v1`; `helm create charts/armoury` stripped to control-plane + agent subcharts; `mise.toml` (pinned tools) and `mise-tasks/` (mise file tasks; Taskfile replaced 2026-11-05); `api/openapi.yaml`; `.github/workflows/ci.yml` and `build.yml`; `control-plane/Dockerfile` and `agent/Dockerfile`; `skaffold.yaml` (ARCH34). Pin versions at init.
+- ARCH1: **No off-the-shelf starter; a monorepo scaffold is the first implementation story.** Cargo workspace (`control-plane`, `agent`, `agent-proto`, resolver 3, Rust 2024); `web/` via `npx sv create web --template minimal --types ts --add tailwindcss` + `shadcn-svelte init` + `@xyflow/svelte`, `adapter-static` with SSR off; `cargo new` for control plane (`axum`, `tokio`, `sqlx` postgres/rustls/uuid/migrate) and agent (`kube` runtime+rustls, `k8s-openapi`, `tokio`); `agent-proto` lib with tonic/prost codegen from `proto/agent/v1`; `helm create charts/armoury` stripped to control-plane + agent subcharts; `mise.toml` (pinned tools) and `mise-tasks/` (mise file tasks; Taskfile replaced 2026-11-05); `api/openapi.yaml`; `.github/workflows/ci.yml` and `build.yml`; `control-plane/Dockerfile` and `agent/Dockerfile`; `okteto.yaml` (ARCH34). Pin versions at init.
 
 **Platform & data**
 
@@ -136,14 +136,14 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 **Delivery, CI, observability**
 
 - ARCH22: Helm umbrella chart with control-plane and agent subcharts, images referenced by digest; Postgres-AGE and SeaweedFS bundled by default, external DB/S3 opt-in; values cover the air-gap flag, OIDC, retention and connections. The SPA is served by the control plane.
-- ARCH23: CI/CD on GitHub Actions, installing mise (`jdx/mise-action`, pinned by commit) and running the same mise tasks as local; untrusted code (fork pull requests) runs only the fast tier on GitHub-hosted runners, and the full gate, end-to-end tests and image builds run on ARC self-hosted runners in the dev cluster — `ci.yml` (`mise run check`: rustfmt, `clippy -D warnings`, `cargo nextest`, web lint/tests, API drift), `build.yml` (build both images and package the chart on each push; push to GHCR by digest on `main`) and `release.yml` (reuse the built digests; release tags, SLSA provenance, keyless cosign signatures and SBOM attestations for images, charts and the CLI); a scheduled `bundles.yml` builds the Armoury-published feed bundles and signs them and their SLSA provenance with the KMS bundle key (Story 10.2).
+- ARCH23: CI/CD on GitHub Actions (amended 2026-11-12). Every check, scan and build is a mise task, so `mise run ci` runs the whole pipeline on the workstation and in CI. Workflows only install mise (`jdx/mise-action`, pinned by commit) and call `mise run ci:<tier>`; no analysis, scan or build logic lives in workflow YAML. Fork pull requests run only `ci:fast` on GitHub-hosted runners; the full gate, end-to-end tests and image builds run on ARC self-hosted runners in a separate runner cluster, which reach the dev cluster through Okteto — `ci.yml` (`ci:fast`, `ci:cluster`, `ci:e2e`), `build.yml` (`ci:build` on each push; `ci:publish` copies both images by digest to GHCR on `main` only), a scheduled Renovate workflow (`mise run renovate`) and `release.yml` (reuse the built digests; release tags, SLSA provenance, keyless cosign signatures and SBOM attestations for images, charts and the CLI); a scheduled `bundles.yml` builds the Armoury-published feed bundles and signs them and their SLSA provenance with the KMS bundle key (Story 10.2).
 - ARCH24: Observability — Prometheus `/metrics`, pull-only; structured `tracing` JSON logs that never contain credentials or full SBOM payloads; no in-product notifications.
 
 **Code & test patterns (apply to every story)**
 
 - ARCH25: Locality of Behaviour — module-by-capability (`inventory`, `ciscan`, `feeds`, `scan`, `reeval`, `enrichment`, `ranking`, `triage`, `license`, `posture`, `blastradius`, `graph`, `exports`, `evidence`, `packs`, `signing`, `metrics`, `auth`, `agentgw`, `tools`, `postgres`, `blob`, `httpapi`); max 3 layers; explicit dependencies wired only in `main.rs`; no globals/singletons; traits only at the third occurrence; one `thiserror` enum per capability; no `unwrap`/`expect` outside tests/startup; no `unsafe`; no `utils/`/`helpers/`/`common/`; files 100–400 lines.
 - ARCH26: Frontend — TanStack `svelte-query` for server state, Svelte 5 runes for local state, components co-located with their routes, shadcn-svelte primitives in `lib/components/ui`, and a table equivalent for every graph view.
-- ARCH27: Tests co-located — `cargo nextest` + `#[sqlx::test]` against `apache/age:release_PG18_1.8.0`, pinned by digest, which runs as a Pod in the dev cluster (`mise run check` reaches it by port-forward locally and by Service DNS on ARC runners; no local database); agent tested against a mocked kube client plus an integration test in a temporary dev-cluster namespace in CI; Vitest + Playwright (`web/e2e/`, `mise run e2e` against the Skaffold deployment) for the SPA.
+- ARCH27: Tests co-located — `cargo nextest` + `#[sqlx::test]` against `apache/age:release_PG18_1.8.0`, pinned by digest, which runs as a Pod in the developer's Okteto namespace (`mise run check` reaches it by port-forward, from the workstation and from ARC runners alike; no local database); agent tested against a mocked kube client plus an integration test in a temporary Okteto namespace in CI; Vitest + Playwright (`web/e2e/`, `mise run e2e` against the Okteto deployment) for the SPA.
 
 **Validation & open decisions**
 
@@ -156,7 +156,7 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 - ARCH31: **All scanning on the server** (NFR12, governing principle). Syft, Grype, Grant, license policy, the CI policy and every other check run only in the control plane with the fleet tool versions and configuration. A CI runner, a cluster agent or any other client only identifies an artifact or supplies its bytes; the server never uses a client-computed SBOM, finding, license result or verdict. Overrides any conflicting statement.
 - ARCH32: **Evidence history tables.** Each evidence-bearing table has a current table and an insert-only history table (`valid_from`/`valid_to`), partitioned by month on `valid_to` (the ledger by entry time), filled only by a database trigger on update or delete; each version closes when the next starts, so versions cannot overlap (no `WITHOUT OVERLAPS`, which checks only inside one partition). Rule 1: a version is written only on content change; a re-evaluation writes one run entry instead of re-versioning unaffected rows. Rule 2: a coverage test requires every table in every application schema to have a history table or an explicit "not evidence" marker. Each change appends a ledger entry with the digest of the new version; events that are themselves the fact keep their full content in the entry; large content stays content-addressed in the object store. No credentials or secrets in ledger or history (tested). The AGE graph shows current state only.
 - ARCH33: **Long-operation API pattern, polling.** `POST /api/v1/<operations>` returns at once with `id`, `status` (`running`/`completed`/`failed`), `progress`, partial results, `provenance` and a result cursor; `GET /api/v1/<operations>/{id}` returns the same shape. The SPA polls with svelte-query (about 1 s for operations, about 10 s for the Home summary (posture endpoint, including the Needs-attention count) while backlog exists), only while work is queued or running. No SSE in v1. `ponytail:` partial blast-radius results live in memory about 10 minutes (single instance); upgrade path PostgreSQL.
-- ARCH34: **Images, chart build and dev loop.** Multi-stage Dockerfiles (control plane with SPA; agent binary only, no scanner tools; base images pinned by digest); `build.yml` builds both images and the chart and pushes to GHCR by digest on `main`; `skaffold.yaml` (pinned Skaffold) with the Helm deployer (`setValueTemplates`, `repo:tag@digest`) is the development loop (PROC3): `mise run dev` builds both images on the in-cluster BuildKit (rootless, mTLS, through a pinned `buildx`), pushes them to the dev registry (`SKAFFOLD_DEFAULT_REPO`), deploys to the developer's namespace in the dev cluster with an explicit kube context, and port-forwards the UI and API to `localhost:8080`. A `ci` profile deploys to a temporary namespace from ARC runners. No local container runtime or local cluster is used (amended 2026-11-06). Customers install the published chart with one `helm install` (Helm 4). `ponytail:` slow Rust rebuilds — debug dev profile and a cached dependency layer; upgrade path a remote build cache.
+- ARCH34: **Images, chart build and dev loop.** Multi-stage Dockerfiles (control plane with SPA; agent binary only, no scanner tools; base images pinned by digest); `okteto.yaml` on the Okteto Platform in the dev cluster is the development loop (PROC3; amended 2026-11-12): its `build` section builds both images on the Okteto BuildKit into the Okteto Registry, and deploys reference them by digest through `OKTETO_BUILD_<NAME>_IMAGE`; its `deploy` section installs the chart with Helm; its `dev` section defines the control-plane dev container. `mise run dev` runs `okteto up` with an explicit Okteto context: it deploys to the developer's Okteto namespace, syncs files into the dev container, rebuilds with `cargo watch` on a persistent cargo cache and forwards the UI and API to `localhost:8080`. `mise run ci:e2e` deploys an Okteto preview environment for a pull request in CI, or a fresh Okteto namespace from the working tree locally, and runs the same tests in both. `mise run ci:build` and `ci:publish` (`main` only; pinned `crane`; digest preserved) produce the official GHCR images. Okteto is installed and operated outside this repository. No local container runtime or local cluster is used. Customers install the published chart with one `helm install` (Helm 4). `ponytail:` slow Rust rebuilds — debug profile, a `cargo-chef` layer for images and a persistent cargo cache in the dev container; upgrade path a remote build cache.
 - ARCH35: **Connectors and renderers.** Registry access with the `oci-client` crate; discovery modes (PROC2): catalog (default), provider API (ECR, Artifact Registry, Docker Hub), repository list. Package archives are downloaded, checksum-checked against the feed, unpacked safely (no path traversal, no links outside the folder) and SBOM'd with `syft dir:<path>` (`syft file:<path>` for JAR files); an archive without a lock file gives the package itself, not exact dependency versions, shown as a caveat. PDFs are rendered by Typst, a pinned static binary run through `tools`, with the bundled IBM Plex Sans and IBM Plex Mono fonts and the DESIGN.md `print-*` palette (Inter is no longer used).
 - ARCH36: **CI scan path (FR31).** `armoury scan` is a subcommand of the `armoury` binary with no scanner inside. Digest mode (default): the CLI sends the image digest and build details declared by CI; the server pulls the image by digest from the connected registry. Upload mode: the CLI uploads the built image or package archive (never source); the server computes the digest itself. CI scans run through the same pipeline at a higher queue priority. The server decides the verdict with the versioned fleet CI policy (default: report only); the CLI cannot change it, and vendor VEX claims never change it — only a person's review decision does. Exit codes `0` pass, `1` policy failure, `2` no verdict. Artifact identity is the image digest, or package coordinates plus archive checksum; a known artifact gets a new source record, not a duplicate. A scoped CI token (not a user) authenticates the step. Accepted limit: a pipeline can skip the step; central discovery still scans connected registries.
 - ARCH37: **Optional Rekor anchoring of ledger checkpoints** (decided by Daniel, 2026-11-05). Setting `rekor.anchoring.mode`: `disabled` (default), `external` (a Rekor URL and its public key; the public `rekor.sigstore.dev` or a Rekor that another team runs) or `bundled` (the chart deploys `rekor-tiles` with the POSIX backend on its own volume; no witness is required, an optional witness policy is a value). Chart comments recommend `external`. After each signed checkpoint, `signing` submits only the checkpoint digest, its signature and the public key as a `hashedrekord` entry and appends the returned inclusion proof to the ledger. Known limit: Rekor v2 returns no signed timestamp, so detection of a full rebuild that is re-anchored depends on an earlier receipt (for example in an evidence pack) or on a monitor of the log; an RFC 3161 timestamp authority is a later option.
@@ -171,7 +171,7 @@ From `architecture.md` (revised 2026-11-01, Rust backend; amended 2026-11-05 by 
 **Process constraint (project workflow, not architecture)**
 
 - PROC2: **Offer options rather than forcing one approach, with smart defaults** (Daniel, 2026-11-04). Where more than one valid approach is available and supportable — scopes, formats, modes, sources, weights — make it a configurable option instead of picking one for the user. Every option has a smart default, so a default install needs no configuration at all; options are there for users who go looking for them, never a required setup step (protects NFR1). Stories record the default and the alternatives.
-- PROC3: **Skaffold runs during every development step** (Daniel, 2026-11-05). Every development step starts with `mise run dev` (Skaffold `dev` on the dev cluster) running and deploying continuously (amended 2026-11-06). The story's changes are checked against that live deployment as well as by `mise run check`. If the loop is not running or the deployment is not healthy, fix that before you write code. Applies to every story after Story 1.1, which creates the loop; `AGENTS.md` states this rule.
+- PROC3: **The Okteto dev loop runs during every development step** (Daniel, 2026-11-05; amended 2026-11-12). Every development step starts with `mise run dev` (`okteto up` on the dev cluster) running and syncing continuously. The story's changes are checked against that live deployment as well as by `mise run check`. If the loop is not running or the deployment is not healthy, fix that before you write code. Applies to every story after Story 1.1, which creates the loop; `AGENTS.md` states this rule.
 - PROC1: The scaffold story is readiness-enabling work. Agent Readiness (Linear INF-12) runs after it and must be ready before product stories start Build (the `bmad-build` / `bmad-code-review` readiness gate).
 
 ### UX Design Requirements
@@ -356,34 +356,35 @@ So that every later story — and Agent Readiness — has a real codebase, toolc
 
 **Given** `api/openapi.yaml`
 **When** `mise run gen:api` runs
-**Then** it generates the Rust server types with `openapi-generator` (run from its pinned container image, no local Java) and the TS client with `openapi-typescript` + `openapi-fetch` (ARCH12)
+**Then** it generates the Rust server types with `openapi-generator` (run from its pinned container image in the dev cluster; no local Java and no local container runtime) and the TS client with `openapi-typescript` + `openapi-fetch` (ARCH12)
 **And** `mise run check` fails if the generated code differs from the committed code.
 
 **Given** the repository
 **When** the images are built
 **Then** multi-stage Dockerfiles build the control-plane image (`armoury` binary plus the SPA build) and the agent image (`armoury-agent` only, no scanner tools), with base images pinned by digest (ARCH34).
-**And** the dev loop uses a debug build profile and a cached dependency layer (for example `cargo-chef`), so a code change redeploys without a full dependency rebuild; a `ponytail:` comment records the ceiling (slow Rust rebuilds) and the upgrade path (a remote build cache).
+**And** the images use a cached dependency layer (`cargo-chef`), and the dev container builds with the debug profile on a persistent cargo cache, so a code change rebuilds without a full dependency rebuild; a `ponytail:` comment records the ceiling (slow Rust rebuilds) and the upgrade path (a remote build cache).
 
-**Given** a developer workstation with mise and access to the dev cluster (kube context, in-cluster BuildKit, dev registry)
+**Given** a developer workstation with mise and an Okteto context for the dev cluster (Okteto Platform with its BuildKit and registry, provided outside this repository)
 **When** `mise run dev` runs
-**Then** Skaffold builds both images on the in-cluster BuildKit, pushes them to the dev registry, deploys the chart to the developer's namespace with the images as `repo:tag@digest`, port-forwards the UI and API to `localhost:8080`, and redeploys after a code change (ARCH34, PROC3)
+**Then** it runs `okteto up` with an explicit Okteto context: `okteto build` builds both images on the Okteto BuildKit into the Okteto Registry, `okteto deploy` installs the chart into the developer's Okteto namespace with the images by digest, and a dev container replaces the control-plane Deployment, syncs the source, rebuilds with `cargo watch` and forwards the UI and API to `localhost:8080` (ARCH34, PROC3)
 **And** no image build, database or cluster runs on the workstation.
 
-**Given** the Skaffold deployment
+**Given** an Okteto deployment from `mise run dev` or `mise run ci:e2e`
 **When** `mise run e2e` runs
 **Then** a Playwright smoke test loads the web app from it and passes; CI runs the same task.
 
 **Given** a push or pull request
 **When** `.github/workflows/ci.yml` runs
-**Then** it installs mise with `jdx/mise-action` (pinned by commit), runs the fast tier on GitHub-hosted runners for every event, and runs the full `mise run check` gate and `mise run e2e` on ARC runners in the dev cluster for pushes and same-repository pull requests; a fork pull request never reaches an ARC runner, and a required gate job fails unless every tier passed (ARCH23).
+**Then** each job only installs mise with `jdx/mise-action` (pinned by commit) and runs one `mise run ci:<tier>` task, with no check, scan or build logic in the workflow; `ci:fast` runs on GitHub-hosted runners for every event; `ci:cluster` and `ci:e2e` run on ARC runners (a separate runner cluster that reaches the dev cluster through Okteto) only for pushes and same-repository pull requests; a fork pull request never reaches an ARC runner, and a required gate job fails unless every tier passed (ARCH23)
+**And** `mise run ci` runs the same tiers in the same order on the workstation, so a defect fails at the same step locally and in CI.
 
 **Given** a push
 **When** `.github/workflows/build.yml` runs
-**Then** it builds both images on the in-cluster BuildKit from an ARC runner and packages the chart; on `main` it pushes them to GHCR (`ghcr.io`) by digest (ARCH23, ARCH34).
+**Then** an ARC runner runs `mise run ci:build`, which builds both images with `okteto build` and packages the chart; on `main` only, `mise run ci:publish` copies both images by digest to GHCR (`ghcr.io`) with a pinned `crane`, so the GHCR digest equals the built digest (ARCH23, ARCH34).
 
 **Given** the repository root
 **When** an agent or developer opens it
-**Then** `AGENTS.md` (no `CLAUDE.md`) states the Locality of Behaviour rules and layout from the architecture (ARCH25) and PROC3 (keep `mise run dev` running during every development step), and `README.md` documents the init, check, e2e and dev-loop commands and the dev-cluster prerequisites.
+**Then** `AGENTS.md` (no `CLAUDE.md`) states the Locality of Behaviour rules and layout from the architecture (ARCH25) and PROC3 (keep `mise run dev` running during every development step), and `README.md` documents the init, check, e2e and dev-loop commands and the Okteto and dev-cluster prerequisites.
 
 ### Story 1.2: Install the control plane with one Helm command, durable storage included
 
@@ -401,8 +402,8 @@ So that I get a running control plane without tickets to the platform team.
 **And** for the bundled database the chart creates both logins (`armoury_owner`, `armoury_app`) and the AGE extension, with passwords in two Secrets; the control-plane pod mounts only the `armoury_app` Secret
 **And** the bundled database is `apache/age:release_PG18_1.8.0`, pinned by digest (ARCH2).
 
-**Given** the Skaffold `ci` profile from Story 1.1
-**When** it deploys the chart into a fresh, uniquely named namespace of the dev cluster (from an ARC runner in CI, or with `mise run` locally)
+**Given** `mise run ci:e2e` from Story 1.1
+**When** it deploys the chart with Okteto into a fresh, uniquely named namespace of the dev cluster (an Okteto preview environment from an ARC runner in CI, or a fresh Okteto namespace from the workstation)
 **Then** the install, durability and same-origin checks in this story run against that deployment, so they exercise the built images, not placeholders, and the namespace is deleted afterwards (ARCH34).
 
 **Given** the job queue (`riverqueue =0.5.0`, ARCH4)
@@ -1003,8 +1004,8 @@ So that NFR1 is a checked product gate, not a claim.
 
 **Acceptance Criteria:**
 
-**Given** a fresh, uniquely named namespace in the dev cluster and a seeded test registry
-**When** the scripted run deploys the chart into that namespace with Skaffold (ARCH34), then times the customer steps — bootstrap sign-in and registry connection — with no other manual step
+**Given** a fresh, uniquely named Okteto namespace in the dev cluster and a seeded test registry
+**When** the scripted run deploys the chart into that namespace with `okteto deploy` (ARCH34), then times the customer steps — bootstrap sign-in and registry connection — with no other manual step
 **Then** Home and Software are live and visibly checking (Checking band, Checked gauge, "Not checked yet" rows) in under 30 minutes, with the elapsed time per step recorded (NFR1)
 **And** the script fails if any step needs input beyond the documented values and credentials
 **And** the script deletes the namespace when it finishes, pass or fail.
@@ -1119,7 +1120,7 @@ So that I can install it in prod without asking for cluster-admin.
 
 **Given** the agent
 **When** it is tested
-**Then** unit tests run against a mocked kube client and an integration test runs in a temporary namespace of the dev cluster on an ARC runner in CI, with the agent's own read-only ClusterRole, asserting only on workloads in its namespace (ARCH27).
+**Then** unit tests run against a mocked kube client and an integration test runs in a temporary Okteto namespace of the dev cluster, run from an ARC runner in CI, with the agent's own read-only ClusterRole, asserting only on workloads in its namespace (ARCH27).
 
 ### Story 3.3: Reconnect by stateless re-derive, without storms
 
@@ -2531,7 +2532,7 @@ So that I can verify what I install came from Armoury's own build.
 
 **Given** a release tag
 **When** `.github/workflows/release.yml` runs
-**Then** it reuses the `build.yml` pipeline from Story 1.1 for the control-plane image (with the pinned Syft, Grype, Grant, cosign and Typst binaries), the agent image (agent binary only) and the Helm chart as an OCI artifact, tags them for the release in GHCR, signs each digest with cosign keyless, and attaches SLSA build provenance (NFR7, ARCH23)
+**Then** it reuses the `ci:build` and `ci:publish` tasks from Story 1.1 for the control-plane image (with the pinned Syft, Grype, Grant, cosign and Typst binaries), the agent image (agent binary only) and the Helm chart as an OCI artifact, tags them for the release in GHCR, signs each digest with cosign keyless, and attaches SLSA build provenance (NFR7, ARCH23)
 **And** each image also gets an SBOM attestation generated by Syft.
 
 **Given** the published artifacts
@@ -2543,7 +2544,7 @@ So that I can verify what I install came from Armoury's own build.
 **Then** they give copyable `cosign verify` and `cosign verify-attestation` commands with the expected identity and issuer.
 
 **Given** Armoury's own images
-**When** the release workflow installs the release in a temporary namespace of the dev cluster from an ARC runner, connects that instance to GHCR as a registry and lets it scan the release images
+**When** the release workflow installs the release in a temporary Okteto namespace of the dev cluster, run from an ARC runner, connects that instance to GHCR as a registry and lets it scan the release images
 **Then** the result is published with the release, so Armoury reports on itself the same way it reports on a customer fleet
 **And** the namespace is deleted when the run finishes.
 

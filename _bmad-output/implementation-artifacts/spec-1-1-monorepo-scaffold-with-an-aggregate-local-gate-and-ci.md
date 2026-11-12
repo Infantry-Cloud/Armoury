@@ -2,7 +2,7 @@
 title: 'Story 1.1: Monorepo scaffold with an aggregate local gate and CI'
 type: 'chore'
 created: '2026-11-06'
-status: 'ready-for-dev'
+status: 'draft'
 route: 'dispatch'
 review_loop_iteration: 0
 story_key: '1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci'
@@ -118,8 +118,8 @@ After approval, any change to intent, scope, sources, assumptions, acceptance cr
 
 Nothing exists yet except the files marked EXISTING.
 
-- `mise.toml`, `mise.lock` -- EXISTING (codeql 2.27.4, jj 0.46.0, skaffold 2.25.0; keep them). Add exact pins for rust, node, helm 4.x, buildx, kubectl, cargo-nextest, actionlint. No local cluster or container runtime tools.
-- `mise.local.toml.example` -- NEW: `ARMOURY_KUBE_CONTEXT`, `ARMOURY_NAMESPACE`, `SKAFFOLD_DEFAULT_REPO`, `ARMOURY_BUILDX_BUILDER`, BuildKit endpoint and certificate paths (outside the repo, e.g. `~/.config/armoury/buildkit/`). mise loads `mise.local.toml` itself.
+- `mise.toml`, `mise.lock` -- EXISTING. Change `lnktusrn` (2026-11-12) pinned codeql, jj, okteto, crane, gitleaks, helm, kubectl, actionlint, node and `npm:renovate` (SD-5) and removed skaffold. T1 adds exact pins for rust and cargo-nextest. No local cluster or container runtime tools.
+- `mise.local.toml.example` -- NEW: the kube and Okteto context and the developer namespace. Okteto itself is installed and configured outside this repository. mise loads `mise.local.toml` itself.
 - `.gitignore` -- EXISTING. Add `mise.local.toml`, `target/`, `web/node_modules/`, `web/.svelte-kit/`, `web/build/`, Playwright output.
 - `_bmad-output/planning-artifacts/architecture.md` -- `:113` dev loop and Skaffold, `:117` versions to pin (shadcn-svelte: pin a version, never `@latest`), `:121-155` init commands, `:163` AGE Pod and e2e, `:201` CI tiers, `:297` and `:342-390` LoB rules for `AGENTS.md`, `:394-475` target tree (include `web/src/lib/{api,components/ui,command,design,theme}`).
 - `_bmad-output/planning-artifacts/epics.md:337-386` -- the story source. `:404` -- Story 1.2 uses the `ci` profile.
@@ -128,10 +128,10 @@ Nothing exists yet except the files marked EXISTING.
 - `control-plane/src/httpapi/` -- generated rust-axum output plus the router mount; serve the SPA and `/api/v1/*` on 8080. `api/openapi.yaml` holds one trivial operation (`GET /api/v1/healthz`).
 - `web/` -- SvelteKit + Tailwind v4 + shadcn-svelte + `@xyflow/svelte` 1.6.x; `src/routes/+layout.ts` sets `ssr = false`; `src/lib/api/` generated types; `playwright.config.ts` reads `ARMOURY_E2E_BASE_URL`, no `webServer`.
 - `charts/armoury/` -- umbrella chart with `charts/control-plane` and `charts/agent` (from `helm create`, stripped); images rendered as `repo:tag@digest`.
-- `mise-tasks/` -- file tasks: `check/_default` (aggregate: runs steps in order, fails fast, prints the failing step name), `check/fast`, one file per step (`pins`, `rust`, `test-rust`, `web`, `chart`, `api`, `test-tasks`, `test-db`), `gen/api`, `dev`, `e2e`, `ci/deploy`, `ci/teardown`, `image/build`. The AGE Pod + Service manifest sits next to `check/test-db`. `test-db` reaches it by port-forward locally and by Service DNS on ARC (D6). Each cluster task starts with a one-line guard for `ARMOURY_KUBE_CONTEXT`; no shared helper directory.
-- `control-plane/Dockerfile`, `agent/Dockerfile` -- multi-stage, `cargo-chef`, distroless non-root runtime for the agent; the openapi-generator stage lives with `gen/api`.
-- `skaffold.yaml` -- both artifacts through the custom builder (`mise run image:build`), Helm deployer with `setValueTemplates` (`repo:tag@digest`), profiles `dev` (port-forward 8080) and `ci`.
-- `.github/workflows/ci.yml`, `build.yml` -- jobs per AC-10/AC-11; ARC jobs `if:` push or same-repository pull request.
+- `mise-tasks/` -- file tasks: `check/_default` (aggregate: runs steps in order, fails fast, prints the failing step name), `check/fast`, one file per step (`pins`, `rust`, `test-rust`, `web`, `chart`, `test-tasks`; cluster tier `api`, `test-db`, `codeql`), `gen/api`, `dev` (`okteto up`), `e2e`, `ci` (all tiers in CI order), `ci/fast`, `ci/cluster`, `ci/e2e` (Okteto preview in CI, `okteto deploy` locally, then `okteto test`), `ci/build` (`okteto build`, chart package), `ci/publish` (`crane` copy to GHCR, `main` only), `renovate` (dry run unless `RENOVATE_DRY_RUN=false`). The AGE Pod + Service manifest sits next to `check/test-db`. `test-db` reaches it by port-forward locally and by Service DNS on ARC (D6). Each cluster task starts with a one-line guard for `ARMOURY_KUBE_CONTEXT`; no shared helper directory.
+- `control-plane/Dockerfile`, `agent/Dockerfile` -- multi-stage, `cargo-chef`, distroless non-root runtime for the agent; a `dev` stage or pinned image for the Okteto dev container; the openapi-generator runs through `okteto test` with `artifacts` (D7).
+- `okteto.yaml` -- `build` (control-plane, agent; images by digest through `OKTETO_BUILD_<NAME>_IMAGE`), `deploy` (Helm), `dev` (control-plane dev container: sync, `cargo watch`, persistent cargo cache, forward 8080), `test` (e2e and the generator). Replaces `skaffold.yaml`.
+- `.github/workflows/ci.yml`, `build.yml`, `renovate.yml` -- each job installs mise and runs one `mise run ci:<tier>` task (D14); ARC jobs `if:` push or same-repository pull request; no check, scan or build logic in YAML.
 - Existing ATDD scaffolds (not yet locked): `agent-proto/tests/val_2_roundtrip.rs`, `control-plane/tests/val_3_age.rs`, `web/src/routes/val-4.test.ts`, `mise-tasks/check/pins.test.mjs`, `web/e2e/smoke.spec.ts`. TEA ATDD Edit must add `mise-tasks/gen/api.test.mjs` (VAL-7), `mise-tasks/cluster-context.test.mjs` (VAL-15), the new VAL-5 fixtures, and refresh the checklist (R1/R3 are obsolete; R4/R5 still apply).
 
 ## Tasks & Acceptance
@@ -190,6 +190,7 @@ Nothing exists yet except the files marked EXISTING.
 - 2026-11-10 — Build re-plan (planning change `znmusovo`), awaiting Daniel's CHECKPOINT 1 approval. Rewrote Intent, Scope, Boundaries, OQ-1, Sources, Assumptions, AC-2/3/6/8/9/10/11/12 and VAL-1/5/7/8/9/10/11/12 from `epics.md:337-386` and D3-D9. Added AC-13 (Skaffold `ci` profile, for Story 1.2) and AC-14 (explicit kube context) with VAL-14 and VAL-15. VAL-1 is a manual demonstration and VAL-7 a node:test (SD-3). Fast-tier steps follow `docs/agent-readiness.md`. Covers ACR step 7 in `sprint-change-proposal-2026-11-07-aliases.md`. AC and VAL IDs kept where the meaning holds; still Revision 1 (never approved). Daniel decided OQ-5 (option A) and kept the full spec (about 7,200 tokens).
 - 2026-11-10 — CHECKPOINT 1: Daniel approved the plan (product review, "Approve and stop"). Build status `ready-for-dev`. Contract Approval stays `draft`; next step is TEA ATDD.
 - 2026-11-11 — TEA ATDD (change `mmlpxlwq`), edits approved by Daniel in session: E5 VAL-5 adds a `latest` crate feature and a missing `mise.local.toml.example`; E6 VAL-1 runs `check:fast` without the context line and reads the AC-1 facts; E7 VAL-5 adds workflow `container:`/`services:` images; E8 VAL-8 checks the debug profile; E9 VAL-9 adds `pgrep` and the registry prefix; E10 VAL-10 names the unreachable URL; E12 VAL-14 checks the printed namespace and URL. Added OQ-6 (ARC dropped; `mise run ci`), which blocks approval until Correct Course. Still Revision 1 (never approved).
+- 2026-11-12 — Correct Course `_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-12.md` (approved by Daniel): Okteto replaces Skaffold, every CI step becomes a mise task (`mise run ci`, `ci:<tier>`), `act` leaves, Renovate becomes `mise run renovate`, PR integration tests run in Okteto previews, `api` and CodeQL move to the cluster tier. Okteto is external; the contract only assumes a working Okteto context. Status set to `draft` so Build re-plans and repeats CHECKPOINT 1. Build must propose these frozen-block edits for Daniel's approval: the Okteto assumption line; remove OQ-5; close OQ-6; AC-6/VAL-7; AC-8/VAL-9; AC-9/VAL-10; AC-10/AC-11/VAL-11/VAL-12; AC-13/VAL-14; AC-14/VAL-15; a new AC that `mise run ci` runs every tier locally in CI order. Then TEA ATDD Edit updates `mise-tasks/gen/api.test.mjs` (VAL-7) and `mise-tasks/cluster-context.test.mjs` (VAL-15). Still Revision 1 (never approved).
 
 ## Review Triage Log
 
