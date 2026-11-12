@@ -794,7 +794,7 @@
     {
       "key": "epic:8",
       "kind": "epic",
-      "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
+      "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -815,15 +815,15 @@
       "evidence": null,
       "milestone_key": "epic:8",
       "synced": {
-        "title": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality",
+        "title": "Epic 8: Fleet signals — Prometheus metrics and data quality",
         "parent_id": null,
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:dd4c134fce8bf3a4",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "8",
-        "source_title": "Fleet signals \u2014 Prometheus metrics and data quality",
+        "source_title": "Fleet signals — Prometheus metrics and data quality",
         "source_digest": "sha256:a9554f6296e36c8b",
-        "milestone_name": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality"
+        "milestone_name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
       },
       "notes": [
         {
@@ -1594,7 +1594,7 @@
     {
       "key": "story:2:2.6",
       "kind": "story",
-      "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
+      "title": "Story 2.6: Package feed connections — npm and PyPI",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1630,20 +1630,20 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.6: Package feed connections \u2014 npm and PyPI",
+        "title": "Story 2.6: Package feed connections — npm and PyPI",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:557aa1f189094a47",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.6",
-        "source_title": "Package feed connections \u2014 npm and PyPI",
+        "source_title": "Package feed connections — npm and PyPI",
         "source_digest": "sha256:7347258083de0ea1"
       }
     },
     {
       "key": "story:2:2.7",
       "kind": "story",
-      "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
+      "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1673,13 +1673,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.7: Package feed connections \u2014 Maven, Cargo and Go modules",
+        "title": "Story 2.7: Package feed connections — Maven, Cargo and Go modules",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:ae474f4662fe78b0",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.7",
-        "source_title": "Package feed connections \u2014 Maven, Cargo and Go modules",
+        "source_title": "Package feed connections — Maven, Cargo and Go modules",
         "source_digest": "sha256:ab5be3062c817d5b"
       }
     },
@@ -1728,7 +1728,7 @@
     {
       "key": "story:2:2.9",
       "kind": "story",
-      "title": "Story 2.9: Home summary \u2014 checking, coverage and freshness",
+      "title": "Story 2.9: Home summary — checking, coverage and freshness",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1766,20 +1766,20 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.9: Home summary \u2014 checking, coverage and freshness",
+        "title": "Story 2.9: Home summary — checking, coverage and freshness",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:eefdb6065ae7edc8",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.9",
-        "source_title": "Home summary \u2014 checking, coverage and freshness",
+        "source_title": "Home summary — checking, coverage and freshness",
         "source_digest": "sha256:df8b57d0a8d32f22"
       }
     },
     {
       "key": "story:2:2.10",
       "kind": "story",
-      "title": "Story 2.10: Home \u2014 Needs attention and open issues by severity",
+      "title": "Story 2.10: Home — Needs attention and open issues by severity",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1802,13 +1802,13 @@
       "evidence": null,
       "milestone_key": "epic:2",
       "synced": {
-        "title": "Story 2.10: Home \u2014 Needs attention and open issues by severity",
+        "title": "Story 2.10: Home — Needs attention and open issues by severity",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:14ca069b395cb306",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.10",
-        "source_title": "Home \u2014 Needs attention and open issues by severity",
+        "source_title": "Home — Needs attention and open issues by severity",
         "source_digest": "sha256:29ba0f61075b7217"
       },
       "notes": [
@@ -1886,7 +1886,7 @@
     {
       "key": "story:2:2.12",
       "kind": "story",
-      "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
+      "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1928,20 +1928,20 @@
       ],
       "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)",
       "synced": {
-        "title": "Story 2.12: Prove minute 29 \u2014 scripted install-to-posture run",
+        "title": "Story 2.12: Prove minute 29 — scripted install-to-posture run",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:84ff3c79d1fce6c0",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.12",
-        "source_title": "Prove minute 29 \u2014 scripted install-to-posture run",
+        "source_title": "Prove minute 29 — scripted install-to-posture run",
         "source_digest": "sha256:4a72c6028ca7ba49"
       }
     },
     {
       "key": "story:2:2.13",
       "kind": "story",
-      "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
+      "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -1977,13 +1977,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 2.13: Prove the scale anchor \u2014 initial-evaluation load test",
+        "title": "Story 2.13: Prove the scale anchor — initial-evaluation load test",
         "parent_id": "5e076a6d-98de-49e1-86a9-5365b2b256a9",
         "milestone_id": "d9ad13aa-3a1b-4faa-9478-2e431ae2666c",
         "block_digest": "sha256:82c44f3fbdef5c3f",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "2.13",
-        "source_title": "Prove the scale anchor \u2014 initial-evaluation load test",
+        "source_title": "Prove the scale anchor — initial-evaluation load test",
         "source_digest": "sha256:77fd6dace1574a2d"
       }
     },
@@ -2697,7 +2697,7 @@
     {
       "key": "story:5:5.2",
       "kind": "story",
-      "title": "Story 5.2: Issues list \u2014 severity groups, filters and the Home summary",
+      "title": "Story 5.2: Issues list — severity groups, filters and the Home summary",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -2720,13 +2720,13 @@
       "evidence": null,
       "milestone_key": "epic:5",
       "synced": {
-        "title": "Story 5.2: Issues list \u2014 severity groups, filters and the Home summary",
+        "title": "Story 5.2: Issues list — severity groups, filters and the Home summary",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:915b0fb8674b3d5b",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "5.2",
-        "source_title": "Issues list \u2014 severity groups, filters and the Home summary",
+        "source_title": "Issues list — severity groups, filters and the Home summary",
         "source_digest": "sha256:fce9e0fda2ebf35f"
       },
       "notes": [
@@ -3044,7 +3044,7 @@
     {
       "key": "story:5:5.8",
       "kind": "story",
-      "title": "Story 5.8: Review scope \u2014 all places or only this software",
+      "title": "Story 5.8: Review scope — all places or only this software",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -3070,13 +3070,13 @@
       },
       "milestone_key": "epic:5",
       "synced": {
-        "title": "Story 5.8: Review scope \u2014 all places or only this software",
+        "title": "Story 5.8: Review scope — all places or only this software",
         "parent_id": "5a14930e-491e-4cbb-b875-b581c2d45477",
         "milestone_id": "782131d3-59c9-4fe4-8ccd-7942780ca68d",
         "block_digest": "sha256:d0fad5fa99c8fcd2",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "5.8",
-        "source_title": "Review scope \u2014 all places or only this software",
+        "source_title": "Review scope — all places or only this software",
         "source_digest": "sha256:80c261e4803274be"
       },
       "notes": [
@@ -3217,7 +3217,7 @@
     {
       "key": "story:6:6.3",
       "kind": "story",
-      "title": "Story 6.3: Exposure surface \u2014 answer and table, from \u2318K",
+      "title": "Story 6.3: Exposure surface — answer and table, from ⌘K",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -3273,13 +3273,13 @@
       ],
       "description_synced": "2026-11-05 (sprint-change-proposal-2026-11-05.md)",
       "synced": {
-        "title": "Story 6.3: Exposure surface \u2014 answer and table, from \u2318K",
+        "title": "Story 6.3: Exposure surface — answer and table, from ⌘K",
         "parent_id": "704be205-3102-4924-aa72-25383a2f3275",
         "milestone_id": "9dd3b863-6cad-43c6-8841-54e05324527d",
         "block_digest": "sha256:223ab413c295ff6c",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "6.3",
-        "source_title": "Exposure surface \u2014 answer and table, from \u2318K",
+        "source_title": "Exposure surface — answer and table, from ⌘K",
         "source_digest": "sha256:18b9be841be5d207"
       }
     },
@@ -3788,7 +3788,7 @@
     {
       "key": "story:8:8.4",
       "kind": "story",
-      "title": "Story 8.4: Prometheus panel in Settings \u2192 Signals",
+      "title": "Story 8.4: Prometheus panel in Settings → Signals",
       "skill": null,
       "source": {
         "path": "_bmad-output/planning-artifacts/epics.md",
@@ -3811,13 +3811,13 @@
       "evidence": null,
       "milestone_key": "epic:8",
       "synced": {
-        "title": "Story 8.4: Prometheus panel in Settings \u2192 Signals",
+        "title": "Story 8.4: Prometheus panel in Settings → Signals",
         "parent_id": "e8963591-f35e-48d1-b196-2942e19a77ff",
         "milestone_id": "6b845ec6-d12a-41df-a767-da6532883c2a",
         "block_digest": "sha256:a366be7ad54deca2",
         "at": "2026-11-08T13:30:04+00:00",
         "source_id": "8.4",
-        "source_title": "Prometheus panel in Settings \u2192 Signals",
+        "source_title": "Prometheus panel in Settings → Signals",
         "source_digest": "sha256:15f08dc682662ba6"
       },
       "notes": [
@@ -4965,7 +4965,7 @@
     {
       "key": "task:story:1:1.1:t9",
       "kind": "task",
-      "title": "Task T9: Skaffold dev and ci profiles and Playwright smoke test",
+      "title": "Task T9: Okteto dev loop, e2e deployments and Playwright smoke test",
       "skill": null,
       "source": {
         "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
@@ -4995,7 +4995,7 @@
     {
       "key": "task:story:1:1.1:t10",
       "kind": "task",
-      "title": "Task T10: CI and image build workflows",
+      "title": "Task T10: CI tiers, mise run ci, and the build and publish workflows",
       "skill": null,
       "source": {
         "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
@@ -5003,7 +5003,7 @@
       },
       "parent_key": "story:1:1.1",
       "after": [],
-      "done_when": "AC-10, AC-11 evidence for VAL-11, VAL-12 accepted by independent Code Review",
+      "done_when": "AC-10, AC-11, AC-13, AC-15 evidence for VAL-11, VAL-12, VAL-16 accepted by independent Code Review",
       "local_status": "backlog",
       "publication": "published",
       "remote": {
@@ -5055,7 +5055,7 @@
     {
       "key": "task:story:1:1.1:t12",
       "kind": "task",
-      "title": "Task T12: Explicit kube context guard for cluster tasks",
+      "title": "Task T12: Explicit Okteto and kube context guard for cluster tasks",
       "skill": null,
       "source": {
         "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
@@ -5154,6 +5154,52 @@
         "source_title": "Verify artifact signatures against trusted signers",
         "source_digest": "sha256:fa073b950ef95919"
       }
+    },
+    {
+      "key": "task:story:1:1.1:t13",
+      "kind": "task",
+      "title": "Task T13: CodeQL gate step with reasoned dismissals",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t13"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-3, AC-16 evidence for VAL-1, VAL-17 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "86ba235c-1258-4107-958e-83a12693a9aa",
+        "identifier": "INF-122",
+        "url": "https://linear.app/infantry-cloud/issue/INF-122"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
+    },
+    {
+      "key": "task:story:1:1.1:t14",
+      "kind": "task",
+      "title": "Task T14: Renovate dry-run task and scheduled workflow",
+      "skill": null,
+      "source": {
+        "path": "_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md",
+        "id": "task-t14"
+      },
+      "parent_key": "story:1:1.1",
+      "after": [],
+      "done_when": "AC-17 evidence for VAL-18 accepted by independent Code Review",
+      "local_status": "backlog",
+      "publication": "published",
+      "remote": {
+        "id": "76dfed5a-ef2f-4c98-9b0c-4fa32cfa9dc7",
+        "identifier": "INF-123",
+        "url": "https://linear.app/infantry-cloud/issue/INF-123"
+      },
+      "evidence": null,
+      "milestone_key": "epic:1",
+      "notes": []
     }
   ],
   "workspace": {
@@ -5207,7 +5253,7 @@
     "epic:8": {
       "id": "6b845ec6-d12a-41df-a767-da6532883c2a",
       "marker": "BMAD-ID: 6c72558f-a015-481f-9427-04b4a978be1e:milestone:8",
-      "name": "Epic 8: Fleet signals \u2014 Prometheus metrics and data quality"
+      "name": "Epic 8: Fleet signals — Prometheus metrics and data quality"
     },
     "epic:9": {
       "id": "b47c4637-0d4d-47dd-bb0f-1ebeb5449310",
