@@ -370,6 +370,28 @@ deterministic check for it at the next RV.
 - Gives up: least privilege for the agent session.
 - Expiry: 2027-02-06. At expiry, replace it with a fine-grained repo token or renew this decision.
 
+### SD-5: Renovate install trust exception (2026-11-12)
+
+- Trigger and evidence: `mise install` of `npm:renovate@44.236.3` failed. The mise npm installer
+  (`aube`, trust policy `no-downgrade`) refused `@yarnpkg/libzip@3.2.2`, which Renovate pulls in
+  through `@yarnpkg/core`. Versions 3.2.0 and 3.2.1 have SLSA provenance and were published by
+  `yarnbot`; 3.2.2 (2025-09-18, latest) has no provenance and was published by hand by `arcanis`.
+  Its `gitHead` `2eb98307` is the Yarn Bot commit "Releasing 16 new packages" of the same day in
+  `yarnpkg/berry`. The tarball was not compared with that source.
+- Concern: a trust downgrade can mean a tampered release.
+- Options: an older Renovate (tested: `renovate@39.0.0` fails the same way, because every
+  `@yarnpkg/core` range resolves to 3.2.2); exclude only this version; defer Renovate; turn off the
+  check for all npm tools (`npm.shell_out=true`).
+- Decision (Daniel): exclude only this version.
+- What changed: `mise.toml` `"npm:renovate" = { version = "44.236.3", trust_policy_excludes =
+  ["@yarnpkg/libzip@3.2.2"] }`; `mise.lock` and `.mise/locks/npm-renovate/` record it. jj change
+  `lnktusrn`.
+- Re-proof: `mise install` exit 0; `renovate --version` prints 44.236.3. The check stays on for
+  every other package and version.
+- Gives up: the provenance check for this one package version.
+- Expiry: 2027-02-12, or the next Renovate bump, whichever is first. Then check whether a
+  `@yarnpkg/libzip` release with provenance exists, and remove the exclusion if it does.
+
 ## Open items
 
 | ID | Item | Owner | Needed before |
