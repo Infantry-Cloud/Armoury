@@ -1,6 +1,8 @@
 //! Acceptance test STORY-1.1 VAL-3 (AC-3, AC-5): `#[sqlx::test]` runs in the `test-db` gate step
-//! against the digest-pinned `apache/age:release_PG18_1.8.0` Pod in the dev cluster, which the
-//! step provides through `DATABASE_URL`. It belongs to the database group, so `test-rust` skips it.
+//! against the digest-pinned `apache/age:release_PG18_1.8.0` Pod. The step starts a run-unique Pod
+//! in the Okteto namespace (`ARMOURY_NAMESPACE`), reaches it through `kubectl port-forward` and
+//! provides it through `DATABASE_URL`. The test belongs to the database group, so `test-rust`
+//! skips it.
 //!
 //! ATDD red phase: locked at contract approval. Task T3 adds `control-plane` to the Cargo
 //! workspace and activates this test by removing the `#[ignore]` line only (the validator
