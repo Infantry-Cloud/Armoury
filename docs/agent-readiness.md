@@ -75,7 +75,7 @@ Conflicts and stale planning text, resolved with Daniel:
 | architecture.md says "Helm 3"; host has Helm 4.3.1 | D1: pin Helm 4 | Correct Course (OI-4) |
 | PROC3, ARCH34, Stories 1.1, 1.2, 2.12 use kind on local Podman | D3-D8: dev cluster, in-cluster BuildKit, ARC runners | Correct Course + Build re-plan of 1.1 (OI-4) |
 | AR default is devcontainer + Dagger | Native host with mise; mise tasks are the parity layer | Recorded below |
-| CodeQL needs a licence on a private Free-plan repo | Make the repository public (after phase 3 proofs) | OI-5 |
+| CodeQL needs a licence on a private Free-plan repo | Repository public since 2026-11-12; Apache-2.0 `LICENSE` committed 2026-11-13 (SD-6), so the CodeQL open-source terms apply | OI-6 (history scan) |
 
 ## Decisions
 
@@ -94,7 +94,7 @@ Conflicts and stale planning text, resolved with Daniel:
 | D11 | Security set: CodeQL (CI), gitleaks, cargo-deny, `npm audit signatures`, Renovate. | 2026-11-06 |
 | D12 | CI feedback for the agent: official GitHub MCP server, `actions` toolset, read-only. | 2026-11-06 |
 | D13 | Fork PRs: split CI tiers plus "require approval for all outside collaborators". `pull_request_target` is banned. | 2026-11-06 |
-| D14 | Every CI step (checks, CodeQL, gitleaks, image builds, publish, Renovate) is a mise task. Workflows only install mise and call `mise run ci:<tier>`. Okteto is installed and operated outside this repository; the repository assumes a working Okteto context. | 2026-11-12 |
+| D14 | Every CI step (checks, CodeQL, gitleaks, image builds, publish, Renovate) is a mise task. Workflows only install mise and call `mise run ci:<tier>`. Okteto is installed and operated outside this repository; the repository assumes a working Okteto context. Amended 2026-11-13 (SD-6): a job may also upload or download JUnit reports with SHA-pinned `actions/upload-artifact`/`actions/download-artifact` steps; they move files and hold no logic. | 2026-11-12 |
 
 ## Environment threat model
 
@@ -129,13 +129,15 @@ and prints the failing step name. Story 1.1 builds the product steps; phase 3 ad
 | fast | `lob` | Locality of Behaviour structure rules (R1-R9) |
 | fast | `secrets` | `gitleaks dir` on the working copy |
 | fast | `rust` | `cargo fmt --check`, `cargo clippy --locked -- -D warnings`, `cargo deny check` |
-| fast | `test-rust` | `cargo nextest run` without the database group |
+| fast | `test-rust` | `cargo nextest run --profile ci` without the database group |
 | fast | `web` | `npm ci`, `npm audit signatures`, ESLint, Prettier, `svelte-check`, Vitest |
 | fast | `chart` | `helm lint` |
+| fast | `test-tasks` | node:test over `'mise-tasks/**/!(*.cluster).test.mjs'` (VAL-5, VAL-15, VAL-16) |
 | cluster | `api` | `gen:api` into a temporary directory, then `diff -r` with committed output (no VCS); needs Okteto (D7) |
-| cluster | `test-db` | `cargo nextest run` database group against the AGE Pod |
+| cluster | `test-db` | `cargo nextest run --profile ci-db`, database group, against a run-unique AGE Pod |
+| cluster | `test-tasks-cluster` | node:test over `'mise-tasks/**/*.cluster.test.mjs'`, task tests that need Okteto (VAL-7) |
 | cluster | `codeql` | CodeQL CLI database create and analyze for Rust, JS/TS and Actions; runs on the local codebase |
-| both | `contracts` | Contract validator `ci --require-jj` with this run's JUnit reports |
+| both | `contracts` | Contract validator at the phase each spec has reached (`validate`, no JUnit). CI results are checked by `ci:contracts` (Contract CI Wiring) |
 
 `mise run check:fast` runs only the fast tier. It is for iteration and the fork-PR CI tier,
 never for handoff. `mise run e2e` runs Playwright against an Okteto deployment.
@@ -162,7 +164,7 @@ Budgets are initial targets; phase 3 records the first measurements without clai
 | L6 | Broken Rust behaviour | `check/test-rust`, `check/test-db` | nextest failure output | Fix code, rerun focused test | < 3 min | L, H, A | deferred: Story 1.1 T2-T3 |
 | L7 | Broken web types, lint, behaviour | `check/web` | ESLint/svelte-check/Vitest output | Fix code | < 2 min | L, H | deferred: Story 1.1 T5 |
 | L8 | Invalid chart | `check/chart` | `helm lint` output | Fix template | < 10 s | L, H | deferred: Story 1.1 T6 |
-| L9 | Generated code drift or hand edit | `check/api` | `diff -r` output | Run `mise run gen:api` | < 1 min | L, H | deferred: Story 1.1 T4 |
+| L9 | Generated code drift or hand edit | `check/api` | `diff -r` output | Run `mise run gen:api` | < 1 min | L, A | deferred: Story 1.1 T4 |
 | L10 | Floating version, missing lockfile | `check/pins` (VAL-5) | Offending file named | Pin exactly | < 5 s | L, H | deferred: Story 1.1 T7 |
 | L11 | Secret, vulnerable crate, bad npm signature | `check/secrets`, `cargo deny`, `npm audit signatures` | Tool output | Remove secret / bump dep | < 1 min | L, H | deferred: phase 3 |
 | L12 | Unsafe workflow change | `check/workflows` | actionlint / rule output | Fix workflow | < 5 s | L, H | deferred: phase 3 |
@@ -202,14 +204,14 @@ Enforcement levels: hard, warning, context, manual. "Trigger" lists the agent-fa
 | R17 | P2 | Every operation declares `x-armoury-role` | hard later | Spec test | gate | H | deferred: Story 1.4 |
 | R18 | P2 | Credentials never logged | manual now | Review (M2); redaction test | review | - | deferred test: Story 1.3 |
 | R19 | P3 | No warnings; strict types | hard | `clippy -D warnings`; `svelte-check` with strict `tsconfig` | pi-lens; gate | H | deferred 1.1 |
-| R20 | P3 | Generated code never hand-edited | hard | `check/api` drift; R1 block list includes generated paths | write/edit; gate | H | deferred 1.1 / phase 3 |
+| R20 | P3 | Generated code never hand-edited | hard | `check/api` drift; R1 block list includes generated paths | write/edit; gate | A | deferred 1.1 / phase 3 |
 | R21 | P3 | Locked enums and glossary, never free strings | manual now | Review (M6); typed enums in OpenAPI/Rust/TS | review | - | deferred check: first triage-status story (Epic 5) |
 | R22 | P4 | Aggregate gate passes before handoff and in CI | hard | `mise run check`; Build and Code Review hooks; ruleset on `main` | handoff; CI | H, A | deferred phase 3 |
-| R23 | P4 | Acceptance tests run, pass and stay unweakened | hard | Locked tests; `check/contracts` with JUnit; edit guard | gate; CI | A | deferred phase 3 |
+| R23 | P4 | Acceptance tests run, pass and stay unweakened | hard | Locked tests; `ci:contracts` with every JUnit report; edit guard | gate; CI | H | deferred phase 3 |
 | R24 | P4 | Coverage measured | - | not adopted now | - | - | deferred: trigger = a review finds untested logic twice |
 | R25 | P5 | Feedback within budget | warning | Budgets in register; phase 3 measures; slow steps get routed, not removed | phase 3 | - | deferred phase 3 |
 | R26 | P6 | `AGENTS.md` states LoB rules, layout, PROC3; README commands work | manual | VAL-13 (STORY-1.1); M7 | review | - | active 1.1 |
-| R27 | P6 | `LICENSE`, `SECURITY.md`, `CODEOWNERS` present | context | Files at repo root | - | - | deferred: LICENSE OI-1; SECURITY.md + CODEOWNERS phase 3 |
+| R27 | P6 | `LICENSE`, `SECURITY.md`, `CODEOWNERS` present | context | Files at repo root | - | - | `LICENSE` active (Apache-2.0, SD-6); SECURITY.md + CODEOWNERS phase 3 |
 | R28 | process | `mise run dev` (`okteto up`) runs during development (PROC3) | context + manual | `AGENTS.md`; review asks for redeploy evidence (M5) | - | - | deferred 1.1 |
 
 ### Enforcement coverage
@@ -225,46 +227,61 @@ Enforcement levels: hard, warning, context, manual. "Trigger" lists the agent-fa
 
 Every mechanical VAL-* is planned as `path::test name` and carries its VAL ID in the test name or
 a reporter tag. JUnit reports go outside the workspace (`$RUNNER_TEMP` in CI,
-`$TMPDIR/armoury-check/` locally). The local gate runs the same contract step as a preview.
+`$TMPDIR/armoury-check/` locally). Each step writes its own report file, so no report
+overwrites another. Every mechanical VAL must appear in a report that reaches `ci:contracts`.
 
 | Suite | Test command | JUnit report | VAL ID convention | Contract and test identity | Runs in |
 | --- | --- | --- | --- | --- | --- |
-| Rust (nextest) | `cargo nextest run --profile ci` with `CARGO_TARGET_DIR` outside the workspace | `<target>/nextest/ci/junit.xml` (`.config/nextest.toml`) | test fn name `val_<n>_...` | Adapter adds `contract` and `test-file` (binary id -> `<crate>/tests/<stem>.rs` or source file) | ARC `cluster` job; local gate |
-| Web unit (Vitest) | `vitest run --reporter=junit --outputFile=<dir>/web-unit.xml` | `web-unit.xml` | test name `VAL-<n> ...` | Adapter adds `contract`; normalises `classname` to `web/...` path | ARC; local gate |
-| E2E (Playwright) | `PLAYWRIGHT_JUNIT_OUTPUT_FILE=<dir>/e2e.xml playwright test --reporter=junit` | `e2e.xml` | tag `@VAL-<n>` (keep `omitTags` off) | Adapter adds `contract`; normalises spec path to `web/e2e/...` | ARC `e2e` job; `mise run e2e` |
-| Task tests (node:test) | `node --test --test-reporter=junit --test-reporter-destination=<dir>/tasks.xml mise-tasks/` | `tasks.xml` | test name `VAL-<n> ...` | Adapter adds `contract` and `test-file` | ARC; local gate |
+| Rust (nextest), `test-rust` | `cargo nextest run --profile ci` with `CARGO_TARGET_DIR` outside the workspace | `<target>/nextest/ci/junit.xml` (`.config/nextest.toml`), copied to `rust.xml` | test fn name `val_<n>_...` | Adapter adds `contract` and `test-file` (binary id -> `<crate>/tests/<stem>.rs` or source file) | `cluster` job; local gate |
+| Rust database (nextest), `test-db` | `cargo nextest run --profile ci-db` (database group) | `<target>/nextest/ci-db/junit.xml`, copied to `rust-db.xml` | test fn name `val_<n>_...` | As above | `cluster` job; local gate |
+| Web unit (Vitest) | `vitest run --reporter=junit --outputFile=<dir>/web-unit.xml` | `web-unit.xml` | test name `VAL-<n> ...` | Adapter adds `contract`; normalises `classname` to `web/...` path | `cluster` job; local gate |
+| E2E (Playwright) | `okteto test` in `ci:e2e` with `PLAYWRIGHT_JUNIT_OUTPUT_FILE` and `--reporter=junit`; the task moves the returned artifact out of the workspace | `e2e.xml` | tag `@VAL-<n>` (keep `omitTags` off) | Adapter adds `contract`; normalises spec path to `web/e2e/...` | `e2e` job; `mise run e2e` |
+| Task tests (node:test), `test-tasks` | `node --test --test-reporter=junit --test-reporter-destination=<dir>/tasks.xml 'mise-tasks/**/!(*.cluster).test.mjs'` | `tasks.xml` | test name `VAL-<n> ...` | Adapter adds `contract` and `test-file` (node reports the absolute `file`) | `cluster` job (also `fast`, unreported); local gate |
+| Cluster task tests (node:test), `test-tasks-cluster` | `node --test --test-reporter=junit --test-reporter-destination=<dir>/tasks-cluster.xml 'mise-tasks/**/*.cluster.test.mjs'` | `tasks-cluster.xml` | test name `VAL-<n> ...` | As above | `cluster` job; local gate |
 
 - **Adapter:** `mise-tasks/ci/junit-contract` (phase 3). It reads every spec's planned
   `path::test` checks and adds `contract` and `test-file` testcase properties only to a testcase
   whose reported file and test name match that planned check exactly. It never invents results,
   changes statuses or matches on a VAL ID alone.
-- **Contract step:** after all suites, the ARC job runs
-  `uv run _bmad/custom/scripts/validate_story_contract.py ci --require-jj --junit "$RUNNER_TEMP/rust.xml" --junit "$RUNNER_TEMP/web-unit.xml" --junit "$RUNNER_TEMP/e2e.xml" --junit "$RUNNER_TEMP/tasks.xml"`.
-  It records the run ID (`$GITHUB_RUN_ID`) and commit in the job summary.
+- **Report transfer (SD-6):** the `cluster` job uploads `rust.xml`, `rust-db.xml`, `web-unit.xml`,
+  `tasks.xml` and `tasks-cluster.xml`; the `e2e` job uploads `e2e.xml`. Each upload is one
+  SHA-pinned `actions/upload-artifact` step that runs also when the task failed (`if: always()`).
+  The validator `ci` command needs every report in one call, and ARC runners share no files.
+- **Contract step:** the `contracts` job (`needs: [cluster, e2e]`, hosted) downloads both
+  artifacts into `$RUNNER_TEMP/junit/` with one `actions/download-artifact` step and runs
+  `mise run ci:contracts`, which calls
+  `uv run _bmad/custom/scripts/validate_story_contract.py ci --require-jj --junit "$RUNNER_TEMP/junit/rust.xml" --junit "$RUNNER_TEMP/junit/rust-db.xml" --junit "$RUNNER_TEMP/junit/web-unit.xml" --junit "$RUNNER_TEMP/junit/e2e.xml" --junit "$RUNNER_TEMP/junit/tasks.xml" --junit "$RUNNER_TEMP/junit/tasks-cluster.xml"`.
+  A missing report fails the step. It records the run ID (`$GITHUB_RUN_ID`) and commit in the job
+  summary. On the workstation, `mise run ci:contracts` after `mise run ci` reads the same files
+  from `$TMPDIR/armoury-check/` as a preview.
 - **jj in CI:** `actions/checkout` with `fetch-depth: 0`, then `jj git init --colocate` (jj from
   mise) so `--require-jj` can find the sealed approval changes. CI only; agents never run git.
-- **Fork PRs** cannot reach the contract step (no ARC). The `ci-gate` job then fails, and a
-  maintainer re-runs the change from a same-repo branch.
+- **Fork PRs** cannot reach the contract step (no ARC, so `contracts` is skipped). The `ci-gate`
+  job then fails, and a maintainer re-runs the change from a same-repo branch.
 - **Proof (phase 3):** a temporary VAL-tagged test that fails must fail the contract step naming
   the VAL ID, then pass after repair; a report without the test must fail with "CI did not run
   it". Then remove the probe.
-- **Command-only checks** cannot be verified from CI results. STORY-1.1 VAL-1 and VAL-7 are being
-  changed by TEA (SD-3).
+- **Command-only checks** cannot be verified from CI results. STORY-1.1 has none: VAL-7 is
+  `mise-tasks/gen/api.cluster.test.mjs` and VAL-1 is a manual demonstration (SD-3, done).
 
 ## CI design
 
 | Workflow | Job | Runner | Events | Runs |
 | --- | --- | --- | --- | --- |
 | `ci.yml` | `fast` | `ubuntu-24.04` (hosted) | push, all PRs | `mise run ci:fast` (`check:fast`; gitleaks full history) |
-| `ci.yml` | `cluster` | ARC scale set | push; same-repo PRs | `mise run ci:cluster` (`check` all tiers incl. `api` and `codeql`, + contract step) |
-| `ci.yml` | `e2e` | ARC scale set | push; same-repo PRs | `mise run ci:e2e` (Okteto preview `pr-<n>`, `okteto test`; preview destroyed when the PR closes) |
-| `ci.yml` | `ci-gate` | hosted | always | Fails unless `fast`, `cluster` and `e2e` all succeeded (skipped counts as failure) |
-| `build.yml` | `images` | ARC | push | `mise run ci:build` (`okteto build`, chart package); `mise run ci:publish` on `main` only (`crane` copy to GHCR by digest) |
-| `renovate.yml` | `renovate` | hosted | schedule | `RENOVATE_DRY_RUN=false mise run renovate` |
+| `ci.yml` | `cluster` | ARC scale set | push; same-repo PRs | `mise run ci:cluster` (`check` all tiers incl. `api`, `test-tasks-cluster` and `codeql`); uploads its JUnit reports |
+| `ci.yml` | `e2e` | ARC scale set | push; same-repo PRs | `mise run ci:e2e` (Okteto preview `pr-<n>` or a fresh `armoury-ci-*` namespace, `okteto test`); uploads `e2e.xml` |
+| `ci.yml` | `contracts` | hosted | push; same-repo PRs; needs `cluster`, `e2e` | Downloads the reports; `mise run ci:contracts` (SD-6) |
+| `ci.yml` | `ci-gate` | hosted | always (`if: always()`) | Fails unless `fast`, `cluster`, `e2e` and `contracts` all succeeded (skipped or cancelled counts as failure) |
+| `build.yml` | `build` | ARC | push | `mise run ci:build` (`okteto build`, chart package); image digests as job outputs |
+| `build.yml` | `publish` | ARC | push to `main`; needs `build` | `mise run ci:publish` (`crane` copy to GHCR by digest); only job with `packages: write` |
+| `preview-cleanup.yml` | `preview-destroy` | ARC | same-repo PR closed | `mise run ci:preview-destroy` |
+| `renovate.yml` | `renovate` | hosted | schedule; manual dispatch | `RENOVATE_DRY_RUN=false mise run renovate` |
 
 All workflows set top-level `permissions: contents: read`. Only the `main` image push job gets
 `packages: write`. Actions are pinned by 40-character SHA. The `main` ruleset requires `ci-gate`.
-No workflow holds check, scan or build logic: each job installs mise and calls one task (D14).
+No workflow holds check, scan or build logic: each job installs mise and calls one task (D14);
+the only other steps move JUnit reports between jobs (D14 amendment, SD-6).
 
 ## Project agent surface
 
@@ -288,11 +305,11 @@ No workflow holds check, scan or build logic: each job installs mise and calls o
 | --- | --- | --- |
 | Style and linting | rustfmt, clippy, ESLint, Prettier; no pre-commit (jj has no git hooks; Pi edit feedback instead) | deferred: 1.1 |
 | Testing | nextest + `#[sqlx::test]`, Vitest, Playwright, node:test for tasks; coverage not adopted | deferred: 1.1; coverage deferred (R24) |
-| Documentation | `AGENTS.md`, `README.md`, `SECURITY.md`, `CODEOWNERS`; `LICENSE` open | deferred: 1.1, phase 3, OI-1 |
+| Documentation | `AGENTS.md`, `README.md`, `SECURITY.md`, `CODEOWNERS`; `LICENSE` (Apache-2.0) | `LICENSE` active; others deferred: 1.1, phase 3 |
 | Dev environment | Native host + mise (unsandboxed); dev cluster; `mise.local.toml` | building |
 | CI/CD | GitHub Actions: hosted + ARC tiers; ruleset on `main` | deferred: 1.1, phase 3 |
 | Code health | Renovate; dead code via clippy `dead_code` (deny via `-D warnings`) and ESLint | deferred: phase 3 |
-| Security | CodeQL, gitleaks, cargo-deny, npm audit signatures, secret scanning | deferred: phase 3, OI-5 |
+| Security | CodeQL (Story 1.1), gitleaks, cargo-deny, npm audit signatures, secret scanning | deferred: 1.1, phase 3, OI-6 |
 | Architecture | `check/lob`, crate dependency rule, story guards | deferred: phase 3 and stories |
 | Agent context | `AGENTS.md`, pi-lens, readiness extension, contract guard, MCP | building |
 
@@ -304,7 +321,7 @@ No workflow holds check, scan or build logic: each job installs mise and calls o
 | devcontainer | Agent boundary | rejected by Daniel | Native host chosen; residual risk recorded | D2 expiry |
 | kind on Podman | Local cluster | rejected | 2 GiB machine; Daniel provides a dev cluster | - |
 | ARC runners vs hosted + kubeconfig | CI access to cluster | ARC | API server stays private; no kubeconfig in GitHub | - |
-| CodeQL vs opengrep | SAST in CI | CodeQL CLI as a mise task (`check/codeql`) | User choice; runs on the local codebase; free use is for open-source code, so OI-5 still applies | OI-5 |
+| CodeQL vs opengrep | SAST in CI | CodeQL CLI as a mise task (`check/codeql`) | User choice; runs on the local codebase; free use is for open-source code: met by the public repository and the Apache-2.0 `LICENSE` (SD-6) | - |
 | gitleaks | Secret detection | accepted | Free, works without git locally (`dir` mode) | - |
 | cargo-deny | Rust advisories, licences, sources | accepted | Standard, offline-capable after DB fetch | - |
 | `npm audit signatures` | npm provenance | accepted | Built into npm | - |
@@ -369,7 +386,9 @@ deterministic check for it at the next RV.
 
 - Trigger: `steward_scan` concern `ci-unverifiable` (command-only planned checks).
 - Decision (Daniel): VAL-7 becomes a node:test test (`mise-tasks/gen/api.test.mjs`); VAL-1 becomes
-  a manual demonstration. Routed to TEA (ATDD Edit). Pending.
+  a manual demonstration. Routed to TEA (ATDD Edit).
+- Done 2026-11-13: TEA ATDD Edit (jj change `wsqtxwxm`). After Correct Course 2026-11-12, VAL-7
+  needs Okteto and moved to `mise-tasks/gen/api.cluster.test.mjs` (cluster tier, `test-tasks-cluster`).
 
 ### SD-4: Classic GitHub token in agent sessions (2026-11-06)
 
@@ -399,23 +418,58 @@ deterministic check for it at the next RV.
 - Expiry: 2027-02-12, or the next Renovate bump, whichever is first. Then check whether a
   `@yarnpkg/libzip` release with provenance exists, and remove the exclusion if it does.
 
+### SD-6: Every acceptance report reaches the contract step (2026-11-13)
+
+- Trigger and evidence: STORY-1.1 ATDD Edit, approval blocker B6. The Task tests row ran
+  `node --test … mise-tasks/` into one `tasks.xml`. That also ran `*.cluster.test.mjs` in the fast
+  tier, the new `test-tasks-cluster` step had no report, and the contract step had no `--junit`
+  for it. CI could never verify STORY-1.1 VAL-7. Also: `test-rust` and `test-db` both wrote
+  `nextest/ci/junit.xml`, and `e2e.xml` came from the `e2e` job while the contract step ran in
+  `cluster` (ARC runners share no files).
+- Concern: a mechanical VAL that no report carries fails delivery for ever, or invites a waiver
+  that hides a real gap (agent failure: claims success it did not achieve).
+- Options: (a) a hosted `contracts` job that downloads every report and runs `ci:contracts`;
+  (b) run e2e inside the `cluster` job; (c) defer with a waiver on VAL-10.
+- Decision (Daniel): (a). Also Apache-2.0 for OI-1, with `LICENSE` committed now.
+- What changed: Aggregate gate (`test-tasks`, `test-tasks-cluster`, nextest profiles `ci`/`ci-db`,
+  `contracts` row), Contract CI Wiring (one report per step, report transfer, `contracts` job),
+  CI design (`contracts`, `build`/`publish`, `preview-cleanup.yml`, `ci-gate` with
+  `if: always()`), D14 amendment (artifact steps move files and hold no logic), L9/R20 tier A,
+  R23, SD-3 status, OI-1/OI-5/OI-6, phase 3 list, `LICENSE`. jj change `oyqnzyns`.
+- Re-proof (now): node 26.13.1 with a fixture tree. `'mise-tasks/**/!(*.cluster).test.mjs'`
+  selects only non-cluster files, and `'mise-tasks/**/*.cluster.test.mjs'` selects only cluster
+  files. On this repository the fast glob runs VAL-5, VAL-15 and VAL-16, and the cluster glob runs only
+  VAL-7, whose testcase name equals its planned name. The node JUnit reporter writes the absolute
+  `file` attribute. The validator `ci` command
+  accepts a repeated `--junit`. The end-to-end proof (a failing VAL test fails `ci:contracts`; a
+  missing test gives "CI did not run it") stays in phase 3 item 6, because the adapter does not
+  exist yet.
+- Gives up: one hosted job and two artifact steps per run; the workflows are no longer
+  "install mise and run one task" only.
+- Contract consequence: STORY-1.1 AC-10 says each job only installs mise and runs one task, and
+  `ci-gate` needs `fast`, `cluster` and `e2e`. Routed to TEA (ATDD Edit) to allow the report
+  steps and the `contracts` job, then the CI naming check again. Approval stays blocked until then.
+- Revisit: when the adapter is built (phase 3 item 2), or if GitHub Actions artifacts become
+  unreliable on ARC.
+
 ## Open items
 
 | ID | Item | Owner | Needed before |
 | --- | --- | --- | --- |
-| OI-1 | Licence choice (no `LICENSE` means all rights reserved) | Daniel | Public announcement or outside contributions |
+| OI-1 | Closed 2026-11-13: Apache-2.0, `LICENSE` committed (SD-6). | Daniel | - |
 | OI-2 | Closed 2026-11-12: the Okteto Registry is used (external). | Daniel | - |
 | OI-3 | Closed 2026-11-12: a working Okteto context for the workstation and ARC is provided outside this repository. | Daniel | - |
 | OI-4 | Correct Course for PROC3, ARCH34, Stories 1.2 and 2.12 (kind/Podman to cluster, Helm 4); Build re-plan of STORY-1.1; ATDD Edit (VAL-1, VAL-7, VAL-9, VAL-11) | PM, Build, TEA | STORY-1.1 approval |
-| OI-5 | Make the repository public | Daniel | After phase 3 proves the runner split and a clean gitleaks full-history scan |
+| OI-5 | Closed 2026-11-12: the repository is public (`gh repo view` reports `PUBLIC`). The history scan moves to OI-6. | Daniel | - |
+| OI-6 | Clean gitleaks full-history scan of the public repository | Vera, Daniel | Phase 3 (`check/secrets`) |
 
 ## Phase 3 build list
 
 1. Fast-tier checks: `check/lob`, `check/workflows`, `check/secrets`, `deny.toml`, workspace lints, `.pi/readiness.rules.json`.
-2. JUnit adapter `mise-tasks/ci/junit-contract` and `check/contracts`.
-3. ARC scale set and runner group (external Okteto identity); `ci.yml` tiers, `ci-gate` and the `ci:*` tasks; `check/codeql`; `renovate.yml`.
+2. JUnit adapter `mise-tasks/ci/junit-contract`, `check/contracts` and `ci:contracts`; the report uploads and the `contracts` job in `ci.yml` (SD-6).
+3. ARC scale set and runner group (external Okteto identity, public repositories allowed). `ci.yml`, `check/codeql` and `renovate.yml` moved to Story 1.1 (OQ-7).
 4. GitHub MCP (`actions`, read-only) in `.mcp.json` and `.pi/mcp.json`.
-5. Renovate config for `mise run renovate`; `SECURITY.md`; `CODEOWNERS`; `mise.local.toml.example`.
+5. `SECURITY.md`; `CODEOWNERS`. Renovate and `mise.local.toml.example` moved to Story 1.1 (OQ-7).
 6. Rehearse L2, L4, L5, L9, L10, L13 and L16; prove the contract step; fresh-clone and Pi discovery checks.
 7. Run the scorer (`pnpm dlx @danielboothcloud/agent-readiness . --format json`); fix real gaps; add it to CI.
 8. Set Status `ready` only when the threshold and all applicable critical loops are proven.
