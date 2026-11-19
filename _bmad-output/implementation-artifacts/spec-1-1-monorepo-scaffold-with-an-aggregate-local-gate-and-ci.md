@@ -184,17 +184,25 @@ Nothing exists yet except the files marked EXISTING.
 
 ## Contract Approval
 
-- Status: draft
-- Approved by: pending
-- Validation approved by: pending
-- Approved at: pending
-- Contract digest: pending
+- Status: approved
+- Approved by: Daniel
+- Validation approved by: TEA Test Architect (bmad-testarch-atdd)
+- Approved at: 2026-11-19T21:12:47Z
+- Contract digest: sha256:4e2951a091712cd03caa8cf34cc99d2fa01a54c30ee38a8315e68c43d0876cfc
 - Validation artifacts: `_bmad-output/test-artifacts/atdd-checklist-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md`; `agent-proto/tests/val_2_roundtrip.rs`; `control-plane/tests/val_3_age.rs`; `web/src/routes/val-4.test.ts`; `mise-tasks/check/pins.test.mjs`; `mise-tasks/gen/api.cluster.test.mjs`; `web/e2e/smoke.spec.ts`; `mise-tasks/cluster-context.test.mjs`; `mise-tasks/ci/ci.test.mjs`
 
 ### Locked Tests
 
 | Path | Lock digest |
 | --- | --- |
+| agent-proto/tests/val_2_roundtrip.rs | sha256:f829c94d6241d49faeb89df6b1ccd5ca782ed9887ac407a60c59764ad39d2532 |
+| control-plane/tests/val_3_age.rs | sha256:7f2e10c1d6e58018602cb78408c96c409e8cb049313fa61f81edde5a45077331 |
+| web/src/routes/val-4.test.ts | sha256:077e9f067ebe98ce0fd55041215e1fdad0ae5b86d2ada7128b7630907bdc46f4 |
+| mise-tasks/check/pins.test.mjs | sha256:c8a718c5f0ae067cb37d42ba78b71017b8619384496d12a4e0a26a62b04b37e0 |
+| mise-tasks/gen/api.cluster.test.mjs | sha256:1fb82c771042e8a183dec81477b4f26b0e9d45827c475fc6409c835accdf51d9 |
+| web/e2e/smoke.spec.ts | sha256:add9af23130ab68682a3719191c2a90fa7c8b3076106bed2cb271b8b317f6264 |
+| mise-tasks/cluster-context.test.mjs | sha256:633d2d17e9f2669bef9bfa0e01f09f3229acddcbb93d4846ea5b23568a375d64 |
+| mise-tasks/ci/ci.test.mjs | sha256:d71128b56cff6bbbb0dc41d4f74a0b6c8c95a99804c80e6d587ddcdaa7fa93f0 |
 
 ## Delivery Evidence
 
