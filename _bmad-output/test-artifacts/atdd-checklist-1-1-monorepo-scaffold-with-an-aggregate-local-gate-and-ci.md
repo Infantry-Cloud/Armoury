@@ -16,7 +16,7 @@ storyFile: _bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with
 atddChecklistPath: _bmad-output/test-artifacts/atdd-checklist-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md
 contract: STORY-1.1
 contractRevision: 1
-contractStatus: draft (approval blocked by B6, Contract CI Wiring)
+contractStatus: draft (ready for product approval)
 detectedStack: fullstack (target; no manifests exist yet)
 generationMode: AI generation (no app exists to record)
 executionMode: sequential (one writer; two independent reviewer subagents)
@@ -62,7 +62,7 @@ acceptanceCriteria:
 
 # ATDD Checklist - Epic 1, Story 1.1: Monorepo scaffold with an aggregate local gate and CI
 
-**Contract:** STORY-1.1, Revision 1, Risk medium, Status **draft**. Approval is **blocked by B6** (Contract CI Wiring).
+**Contract:** STORY-1.1, Revision 1, Risk medium, Status **draft**. B6 is resolved (SD-6). The contract waits for product approval.
 **Story file:** `_bmad-output/implementation-artifacts/spec-1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci.md`
 **ATDD change:** `wsqtxwxm`, `test(story-1.1): add acceptance tests` (this Edit run, 2026-11-13). Earlier runs: `qnkkvwmm` (2026-11-06) and `mmlpxlwq` (2026-11-11).
 
@@ -93,7 +93,7 @@ A fresh-context reviewer challenged the draft contract. Daniel decided the open 
 | B3 | A skipped `ci-gate` passes a ruleset | AC-10: `ci-gate` always runs; VAL-11 checks the red run's `ci-gate` is `failure` |
 | B4 | Okteto 3.25.0 runs `git` inside a Git repository (`pkg/repository.LocalGit`, confirmed with `strings`) | Boundaries and VAL-7 header: run `okteto test` from a temporary directory outside the repository |
 | B5 | CodeQL terms need an OSI licence; no `LICENSE` exists (confirmed in the CodeQL 2.27.4 `LICENSE.md`) | Assumption: an OSI licence (OI-1) is committed before T13 (Daniel) |
-| B6 | Contract CI Wiring has no `test-tasks-cluster` report, and its task-test command also picks up `*.cluster.test.mjs` | **Open. Routed to Vera (`bmad-agent-steward`).** Blocks approval. |
+| B6 | Contract CI Wiring has no `test-tasks-cluster` report, and its task-test command also picks up `*.cluster.test.mjs` | Resolved by Vera, SD-6 (change `oyqnzyns`): one report per step and a hosted `contracts` job. AC-10/VAL-11 edited in change `rppznkzx` (Daniel approved) to allow the report steps; `ci-gate` needs every other job. |
 | SF-1..16 | AC-1 chart clause; AC-3 globs and Pod cleanup; cleanup on failure; VAL-15 inputs; main-only `ci:publish` (Daniel: main only, Okteto credentials); YAML wording; VAL-5/6/8/9/12/17/18 oracles; AC-16 suite; AC-17 dry run | Applied to the contract and the scaffolds |
 
 A second fresh-context review of the edited contract and scaffolds found three more blockers. Daniel approved the fixes C1-C9 in this session:
@@ -218,15 +218,21 @@ Changes in this Edit:
 Evidence location for all records: `_bmad-output/implementation-artifacts/evidence/1-1/`.
 Every manual row has an exact procedure, an observable oracle, evidence, an owner and a reason.
 
-## CI naming check
+## CI naming check (passes, 2026-11-13)
 
-- **Names:** they follow the Contract CI Wiring convention: `val_<n>_…` for Rust, `VAL-<n> …` for Vitest and node:test, and `@VAL-10` for Playwright.
-- **Wiring: approval blocker B6.** In `docs/agent-readiness.md`, the Task tests row runs `node --test … mise-tasks/` into one `tasks.xml`.
-  - That command also picks up `*.cluster.test.mjs`.
-  - There is no `test-tasks-cluster` report, and the contract step has no `--junit` for it. So CI could never verify VAL-7.
-  - The fix is Vera's: add a `test-tasks-cluster` row (`tasks-cluster.xml`, ARC `cluster` job and the local gate), restrict the fast row, and add the report to the contract step.
-  - Also stale in the same document: SD-3 and the note at "Command-only checks" still name `mise-tasks/gen/api.test.mjs`. The Aggregate gate table lacks the two task-test steps.
-- **Recorded for AR phase 3 (not blockers):** `test-rust` and `test-db` both write `<target>/nextest/ci/junit.xml`. `e2e.xml` is made in the `e2e` job, but the contract step runs in `cluster`. The `okteto test` artifacts land inside the workspace.
+| VAL | Planned test | Suite and step | Report | Job |
+| --- | --- | --- | --- | --- |
+| VAL-2 | `val_2_generated_message_roundtrip` | nextest, `test-rust` | `rust.xml` | `cluster` |
+| VAL-3 | `val_3_age_extension_is_available` | nextest, `test-db` | `rust-db.xml` | `cluster` |
+| VAL-4 | `VAL-4 root layout …` | Vitest, `web` | `web-unit.xml` | `cluster` |
+| VAL-5, VAL-15, VAL-16 | `VAL-5 …`, `VAL-15 …`, `VAL-16 …` | node:test, `test-tasks` | `tasks.xml` | `cluster` |
+| VAL-7 | `VAL-7 …` | node:test, `test-tasks-cluster` | `tasks-cluster.xml` | `cluster` |
+| VAL-10 | `loads the web app @VAL-10` | Playwright through `okteto test`, `ci:e2e` | `e2e.xml` | `e2e` |
+
+- Every report goes to the hosted `contracts` job, which runs `ci:contracts` with all six reports (SD-6).
+- I ran the globs on this repository. The fast glob runs VAL-5, VAL-15 and VAL-16. The cluster glob runs only VAL-7, with its planned name.
+- Contract and full test identity come from the JUnit adapter `mise-tasks/ci/junit-contract`. It is designed but not built: AR phase 3 builds it before Code Review of Story 1.1 (SD-2). If it is missing, delivered-phase validation fails, so this is not an approval blocker.
+- **Recorded for AR phase 3:** the `okteto test` artifacts land inside the workspace, so `ci:e2e` must move `e2e.xml` out before upload.
 
 ## Residual risks for Dev (no contract change)
 
@@ -276,7 +282,6 @@ mise run e2e                                         # VAL-10 against mise run d
 
 The contract stays **draft**. No approval change was made, and no test is locked.
 
-1. Vera (`bmad-agent-steward`) fixes B6 in `docs/agent-readiness.md` (Contract CI Wiring and the stale SD-3 text).
-2. Run ATDD in Validate mode (or a short re-check) to confirm the CI naming check.
-3. Daniel gives explicit product approval, and the Test Architect review passes.
-4. The separate JJ APPROVAL change records the digest and the `### Locked Tests` table (eight files).
+1. Daniel gives explicit product approval. The Test Architect review passes (two independent reviews; every blocker fixed and proven by mutation runs).
+2. The separate JJ APPROVAL change records the digest and the `### Locked Tests` table (eight files).
+3. Approved-phase validation passes. Then resume `bmad-build` with the spec path.
