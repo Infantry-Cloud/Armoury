@@ -1,0 +1,73 @@
+[check:api] $ ~/projects/home/armoury/mise-tasks/check/api
+ i  Using danielboothcloud @ dashboard.okteto.lab.danielbooth.cloud as context
+ i  Executing test container 'generate'
+ i  Running 'rm -rf out'
+ ✓  Command 'rm -rf out' successfully executed
+ i  Running 'java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate --input-spec api/openapi.yaml --generator-name rust-axum --output out/rust --additional-properties=packageName=armoury-httpapi,hideGenerationTimestamp=true'
+[main] INFO  o.o.codegen.DefaultGenerator - Generating with dryRun=false
+[main] INFO  o.o.c.ignore.CodegenIgnoreProcessor - Output directory (/okteto/src/out/rust) does not exist, or is inaccessible. No file (.openapi-generator-ignore) will be evaluated.
+[main] INFO  o.o.codegen.DefaultGenerator - OpenAPI Generator: rust-axum (server)
+[main] INFO  o.o.codegen.DefaultGenerator - Generator 'rust-axum' is considered beta.
+[main] INFO  o.o.c.l.RustAxumServerCodegen - Environment variable RUST_POST_PROCESS_FILE not defined. rustfmt will be used by default. To choose a different tool, try 'export RUST_POST_PROCESS_FILE="/usr/local/bin/rustfmt"' (Linux/Mac)
+[main] INFO  o.o.c.l.RustAxumServerCodegen - NOTE: To enable file post-processing, 'enablePostProcessFile' must be set to `true`  (--enable-post-process-file for CLI).
+[main] WARN  o.o.c.l.RustAxumServerCodegen - generateAliasAsModel is set to false, which means array/map will be generated as model instead and the resulting code may have issues. Please enable `generateAliasAsModel` to address the issue.
+[main] INFO  o.o.codegen.utils.URLPathUtils - 'host' (OAS 2.0) or 'servers' (OAS 3.0) not defined in the spec. Default to [http://localhost] for server URL [http://localhost/]
+[main] WARN  o.o.c.languages.AbstractRustCodegen - ApplicationJson cannot be used as a model name. Renamed to ApplicationSlashJson
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/apis/health.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/Cargo.toml
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.gitignore
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/types.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/header.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/models.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/apis/mod.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/server/mod.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/lib.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/README.md
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator-ignore
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator/VERSION
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator/FILES
+############################################################################################
+# Thanks for using OpenAPI Generator.                                                      #
+# We appreciate your support! Please consider donating to help us maintain this project.   #
+# https://opencollective.com/openapi_generator/donate                                      #
+############################################################################################
+ ✓  Command 'java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate --input-spec api/openapi.yaml --generator-name rust-axum --output out/rust --additional-properties=packageName=armoury-httpapi,hideGenerationTimestamp=true' successfully executed
+ ✓  Test container 'generate' passed
+✨ openapi-typescript 7.13.0
+🚀 /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.nRqVQ3G1yV/api/openapi.yaml → /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.lPSaSN0cK7/web/src/lib/api/schema.d.ts [20.8ms]
+gen:api: wrote control-plane/src/httpapi/server/generated and web/src/lib/api/schema.d.ts under /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.lPSaSN0cK7
+api: generated file differs from the spec: control-plane/src/httpapi/server/generated/src/apis/health.rs
+--- /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.lPSaSN0cK7/control-plane/src/httpapi/server/generated/src/apis/health.rs	2026-11-20 07:55:37
++++ /Users/danielbooth/projects/home/armoury/control-plane/src/httpapi/server/generated/src/apis/health.rs	2026-11-19 21:32:47
+@@ -20,6 +20,8 @@
+ 
+ 
+ 
++
++
+ /// Health
+ #[async_trait]
+ #[allow(clippy::ptr_arg)]
+api: generated file differs from the spec: control-plane/src/httpapi/server/generated/src/server/mod.rs
+--- /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.lPSaSN0cK7/control-plane/src/httpapi/server/generated/src/server/mod.rs	2026-11-20 07:55:37
++++ /Users/danielbooth/projects/home/armoury/control-plane/src/httpapi/server/generated/src/server/mod.rs	2026-11-19 21:32:47
+@@ -38,6 +38,7 @@
+ }
+ 
+ 
++
+ #[tracing::instrument(skip_all)]
+ fn get_healthz_validation(
+ ) -> std::result::Result<(
+@@ -47,6 +48,7 @@
+ Ok((
+ ))
+ }
++
+ /// GetHealthz - GET /api/v1/healthz
+ #[tracing::instrument(skip_all)]
+ async fn get_healthz<I, A, E>(
+@@ -121,6 +123,7 @@
+ }
+api: generated code does not match api/openapi.yaml; run 'mise run gen:api' and never edit generated files
+[check:api] ERROR task failed

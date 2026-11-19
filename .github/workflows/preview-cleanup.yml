@@ -1,0 +1,25 @@
+# Destroys the pr-<n> Okteto preview when a same-repository pull request closes.
+name: preview-cleanup
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  preview-destroy:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    # ARC scale set label, declared in .github/actionlint.yaml.
+    runs-on: armoury-arc
+    steps:
+      # The base branch: the merge ref of a closed pull request may no longer exist.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          persist-credentials: false
+      - uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: 2026.11.8
+      - run: mise run ci:preview-destroy

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#MISE description="CI build (build.yml): build both images with okteto build, print their digests and package the chart with Helm 4"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+: "${ARMOURY_NAMESPACE:?is not set; copy mise.local.toml.example to mise.local.toml}"
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+out="${RUNNER_TEMP:-${TMPDIR:-/tmp}}/armoury-build"
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+cd "$root"
+
+json_field() { node -e 'const v = JSON.parse(require("fs").readFileSync(0, "utf8"))[process.argv[1]]; if (!v) process.exit(1); process.stdout.write(String(v))' "$1"; }
+
+registry="$(OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto context show --output json | json_field registry)" || {
+  echo "ci:build: could not read the Okteto Registry from context $ARMOURY_OKTETO_CONTEXT" >&2
+  exit 1
+}
+tag="ci-${GITHUB_RUN_ID:-local}-$(date +%Y%m%d%H%M%S)"
+for image in control-plane agent; do
+  okteto build "$image" --context "$ARMOURY_OKTETO_CONTEXT" --namespace "$ARMOURY_NAMESPACE" --file okteto.yaml \
+    --tag "$registry/$ARMOURY_NAMESPACE/armoury-$image:$tag" --progress plain
+done
+
+# Read the pushed digests with crane, logged in to the Okteto Registry through a throwaway config.
+export DOCKER_CONFIG="$work/docker"
+credentials="$(printf '%s\n' "$registry" | OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto registrytoken get)"
+printf '%s' "$credentials" | json_field Secret |
+  crane auth login "$registry" --username "$(printf '%s' "$credentials" | json_field Username)" --password-stdin
+for image in control-plane agent; do
+  repository="$registry/$ARMOURY_NAMESPACE/armoury-$image"
+  digest="$(crane digest "$repository:$tag")"
+  output="$(printf '%s' "$image" | tr '-' '_')_image=$repository@$digest"
+  echo "ci:build: $output"
+  if [ -n "${GITHUB_OUTPUT:-}" ]; then echo "$output" >>"$GITHUB_OUTPUT"; fi
+done
+
+mkdir -p "$out"
+helm package charts/armoury --destination "$out"

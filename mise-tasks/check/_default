@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Aggregate gate: fast tier, then cluster tier (api, test-db, test-tasks-cluster, codeql). The handoff gate."
+set -uo pipefail
+steps="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+"$steps/fast" || exit 1
+for step in api test-db test-tasks-cluster codeql; do
+  echo "==> check:$step"
+  if ! "$steps/$step"; then
+    echo "check: FAILED at step '$step' (rerun it with: mise run check:$step)" >&2
+    exit 1
+  fi
+done
+echo "check: all steps passed"

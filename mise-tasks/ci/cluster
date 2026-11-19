@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="CI tier cluster (ARC runners): the whole gate, both tiers"
+set -euo pipefail
+exec "$(dirname "${BASH_SOURCE[0]}")/../check/_default"

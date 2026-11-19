@@ -1,0 +1,1706 @@
+[ci:e2e] $ ~/projects/home/armoury/mise-tasks/ci/e2e
+ci:e2e: creating namespace armoury-ci-20261120084612-57891-18693
+ ✓  Namespace 'armoury-ci-20261120084612-57891-18693' created
+ i  Using armoury-ci-20261120084612-57891-18693 @ dashboard.okteto.lab.danielbooth.cloud as context
+ !  Repository not detected: the env vars 'OKTETO_GIT_BRANCH' and 'OKTETO_GIT_COMMIT' might not be available.
+    For more information, check out: https://www.okteto.com/docs/core/okteto-variables/#default-environment-variables
+ !  Smart builds: git metadata unavailable for "agent"
+ !  Smart builds: git metadata unavailable for "control-plane-dev"
+ !  Smart builds: git metadata unavailable for "control-plane"
+ i  Building '/Users/danielbooth/projects/home/armoury/agent/Dockerfile'...
+#1 [internal] load build definition from buildkit-1427272514
+#1 transferring dockerfile: 1.24kB 0.2s
+#1 transferring dockerfile: 1.24kB 0.2s done
+#1 DONE 0.3s
+
+#2 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#2 ...
+
+#3 [internal] load metadata for gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#3 DONE 0.7s
+
+#2 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#2 DONE 6.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 256B 0.2s done
+#4 DONE 0.2s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [stage-3 1/2] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#6 resolve gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f 0.1s done
+#6 DONE 0.1s
+
+#7 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#7 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#7 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.1s done
+#7 CACHED
+
+#6 [stage-3 1/2] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#6 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 585.61kB 0.6s done
+#5 DONE 0.9s
+
+#8 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#8 4.014     Updating crates.io index
+#8 4.745  Downloading crates ...
+#8 4.835   Downloaded cargo-chef v0.1.78
+#8 4.989   Installing cargo-chef v0.1.78
+#8 4.995     Updating crates.io index
+#8 6.952     Updating crates.io index
+#8 7.020  Downloading crates ...
+#8 7.050   Downloaded anstyle-query v1.1.5
+#8 7.055   Downloaded anstyle v1.0.13
+#8 7.060   Downloaded anstream v0.6.21
+#8 7.069   Downloaded ahash v0.8.12
+#8 7.080   Downloaded cargo-platform v0.3.2
+#8 7.086   Downloaded heck v0.5.0
+#8 7.092   Downloaded debug-ignore v1.0.5
+#8 7.103   Downloaded autocfg v1.5.0
+#8 7.111   Downloaded anstyle-parse v0.2.7
+#8 7.118   Downloaded equivalent v1.0.2
+#8 7.123   Downloaded same-file v1.0.6
+#8 7.129   Downloaded expect-test v1.5.1
+#8 7.134   Downloaded is_terminal_polyfill v1.70.2
+#8 7.138   Downloaded cfg-if v1.0.4
+#8 7.144   Downloaded nested v0.1.1
+#8 7.149   Downloaded clap_lex v1.0.0
+#8 7.154   Downloaded globwalk v0.9.1
+#8 7.160   Downloaded guppy-workspace-hack v0.1.0
+#8 7.163   Downloaded itoa v1.0.17
+#8 7.175   Downloaded serde_spanned v1.1.1
+#8 7.182   Downloaded env_filter v1.0.0
+#8 7.187   Downloaded pathdiff v0.2.3
+#8 7.191   Downloaded colorchoice v1.0.4
+#8 7.194   Downloaded utf8parse v0.2.2
+#8 7.199   Downloaded strsim v0.11.1
+#8 7.205   Downloaded version_check v0.9.5
+#8 7.210   Downloaded target-lexicon v0.13.3
+#8 7.219   Downloaded toml_datetime v1.1.1+spec-1.1.0
+#8 7.224   Downloaded cargo-manifest v0.21.0
+#8 7.230   Downloaded fixedbitset v0.5.7
+#8 7.238   Downloaded dissimilar v1.0.10
+#8 7.245   Downloaded globset v0.4.18
+#8 7.250   Downloaded crossbeam-deque v0.8.6
+#8 7.255   Downloaded foldhash v0.1.5
+#8 7.260   Downloaded fs-err v3.3.0
+#8 7.268   Downloaded semver v1.0.27
+#8 7.282   Downloaded either v1.15.0
+#8 7.284   Downloaded cargo_metadata v0.23.1
+#8 7.292   Downloaded env_logger v0.11.9
+#8 7.300   Downloaded walkdir v2.5.0
+#8 7.307   Downloaded zmij v1.0.21
+#8 7.315   Downloaded target-spec v3.5.7
+#8 7.321   Downloaded toml_writer v1.1.1+spec-1.1.0
+#8 7.326   Downloaded bitflags v2.11.0
+#8 7.346   Downloaded camino v1.2.2
+#8 7.354   Downloaded thiserror v2.0.18
+#8 7.383   Downloaded thiserror-impl v2.0.18
+#8 7.389   Downloaded crossbeam-epoch v0.9.18
+#8 7.399   Downloaded anyhow v1.0.102
+#8 7.416   Downloaded crossbeam-utils v0.8.21
+#8 7.427   Downloaded smallvec v1.15.1
+#8 7.436   Downloaded static_assertions v1.1.0
+#8 7.442   Downloaded cfg-expr v0.20.6
+#8 7.453   Downloaded quote v1.0.44
+#8 7.465   Downloaded clap_derive v4.5.55
+#8 7.475   Downloaded getrandom v0.3.4
+#8 7.490   Downloaded log v0.4.29
+#8 7.499   Downloaded once_cell v1.21.3
+#8 7.509   Downloaded serde_derive v1.0.228
+#8 7.522   Downloaded ignore v0.4.25
+#8 7.530   Downloaded proc-macro2 v1.0.106
+#8 7.544   Downloaded toml v1.1.2+spec-1.1.0
+#8 7.560   Downloaded toml_parser v1.1.2+spec-1.1.0
+#8 7.569   Downloaded unicode-ident v1.0.24
+#8 7.580   Downloaded clap v4.5.60
+#8 7.624   Downloaded serde_core v1.0.228
+#8 7.634   Downloaded serde v1.0.228
+#8 7.647   Downloaded memchr v2.8.0
+#8 7.669   Downloaded indexmap v2.13.0
+#8 7.686   Downloaded aho-corasick v1.1.4
+#8 7.706   Downloaded hashbrown v0.15.5
+#8 7.723   Downloaded clap_builder v4.5.60
+#8 7.745   Downloaded guppy v0.17.25
+#8 7.772   Downloaded itertools v0.14.0
+#8 7.803   Downloaded regex v1.12.3
+#8 7.825   Downloaded hashbrown v0.16.1
+#8 7.845   Downloaded serde_json v1.0.149
+#8 7.877   Downloaded winnow v1.0.1
+#8 7.919   Downloaded zerocopy v0.8.40
+#8 7.962   Downloaded bstr v1.12.1
+#8 7.990   Downloaded syn v2.0.117
+#8 8.028   Downloaded regex-syntax v0.8.10
+#8 8.051   Downloaded regex-automata v0.4.14
+#8 8.105   Downloaded jiff v0.2.22
+#8 8.157   Downloaded libc v0.2.182
+#8 8.333   Downloaded petgraph v0.8.3
+#8 8.614    Compiling serde_core v1.0.228
+#8 8.614    Compiling proc-macro2 v1.0.106
+#8 8.615    Compiling unicode-ident v1.0.24
+#8 8.615    Compiling memchr v2.8.0
+#8 10.12    Compiling quote v1.0.44
+#8 10.78    Compiling aho-corasick v1.1.4
+#8 11.98    Compiling regex-syntax v0.8.10
+#8 12.26    Compiling syn v2.0.117
+#8 15.01    Compiling regex-automata v0.4.14
+#8 18.80    Compiling crossbeam-utils v0.8.21
+#8 19.15    Compiling hashbrown v0.16.1
+#8 20.38    Compiling libc v0.2.182
+#8 20.85    Compiling utf8parse v0.2.2
+#8 20.98    Compiling camino v1.2.2
+#8 21.23    Compiling serde v1.0.228
+#8 21.37    Compiling thiserror v2.0.18
+#8 21.63    Compiling log v0.4.29
+#8 21.72    Compiling target-lexicon v0.13.3
+#8 22.08    Compiling equivalent v1.0.2
+#8 22.18    Compiling zmij v1.0.21
+#8 22.45    Compiling indexmap v2.13.0
+#8 22.68    Compiling anstyle-parse v0.2.7
+#8 23.39    Compiling serde_derive v1.0.228
+#8 24.17    Compiling thiserror-impl v2.0.18
+#8 24.20    Compiling version_check v0.9.5
+#8 24.55    Compiling anstyle v1.0.13
+#8 25.06    Compiling guppy-workspace-hack v0.1.0
+#8 25.30    Compiling getrandom v0.3.4
+#8 25.63    Compiling anstyle-query v1.1.5
+#8 25.75    Compiling serde_json v1.0.149
+#8 26.01    Compiling colorchoice v1.0.4
+#8 26.12    Compiling is_terminal_polyfill v1.70.2
+#8 26.17    Compiling zerocopy v0.8.40
+#8 26.24    Compiling anstream v0.6.21
+#8 26.93    Compiling ahash v0.8.12
+#8 27.08    Compiling crossbeam-epoch v0.9.18
+#8 29.32    Compiling bstr v1.12.1
+#8 29.84    Compiling foldhash v0.1.5
+#8 30.21    Compiling same-file v1.0.6
+#8 30.33    Compiling target-spec v3.5.7
+#8 30.42    Compiling winnow v1.0.1
+#8 30.52    Compiling cfg-if v1.0.4
+#8 30.62    Compiling autocfg v1.5.0
+#8 30.68    Compiling smallvec v1.15.1
+#8 31.15    Compiling itoa v1.0.17
+#8 31.23    Compiling once_cell v1.21.3
+#8 31.48    Compiling fs-err v3.3.0
+#8 31.61    Compiling toml_parser v1.1.2+spec-1.1.0
+#8 31.69    Compiling cfg-expr v0.20.6
+#8 33.97    Compiling walkdir v2.5.0
+#8 33.99    Compiling globset v0.4.18
+#8 34.98    Compiling hashbrown v0.15.5
+#8 35.68    Compiling crossbeam-deque v0.8.6
+#8 36.08    Compiling regex v1.12.3
+#8 36.36    Compiling toml_datetime v1.1.1+spec-1.1.0
+#8 37.02    Compiling serde_spanned v1.1.1
+#8 37.20    Compiling semver v1.0.27
+#8 38.30    Compiling cargo-platform v0.3.2
+#8 38.33    Compiling heck v0.5.0
+#8 38.59    Compiling fixedbitset v0.5.7
+#8 39.11    Compiling anyhow v1.0.102
+#8 39.37    Compiling toml_writer v1.1.1+spec-1.1.0
+#8 39.39    Compiling either v1.15.0
+#8 39.55    Compiling clap_lex v1.0.0
+#8 39.65    Compiling strsim v0.11.1
+#8 39.73    Compiling toml v1.1.2+spec-1.1.0
+#8 40.06    Compiling clap_builder v4.5.60
+#8 40.81    Compiling itertools v0.14.0
+#8 43.45    Compiling petgraph v0.8.3
+#8 43.86    Compiling clap_derive v4.5.55
+#8 46.86    Compiling cargo_metadata v0.23.1
+#8 47.41    Compiling env_filter v1.0.0
+#8 49.06    Compiling ignore v0.4.25
+#8 49.43    Compiling pathdiff v0.2.3
+#8 49.59    Compiling static_assertions v1.1.0
+#8 49.67    Compiling bitflags v2.11.0
+#8 50.21    Compiling jiff v0.2.22
+#8 56.56    Compiling dissimilar v1.0.10
+#8 57.89    Compiling nested v0.1.1
+#8 58.16    Compiling debug-ignore v1.0.5
+#8 58.27    Compiling guppy v0.17.25
+#8 59.01    Compiling expect-test v1.5.1
+#8 59.21    Compiling env_logger v0.11.9
+#8 60.95    Compiling globwalk v0.9.1
+#8 61.83    Compiling clap v4.5.60
+#8 62.23    Compiling cargo-manifest v0.21.0
+#8 65.14    Compiling cargo-chef v0.1.78
+#8 79.62     Finished `release` profile [optimized] target(s) in 1m 18s
+#8 79.64   Installing /usr/local/cargo/bin/cargo-chef
+#8 79.65    Installed package `cargo-chef v0.1.78` (executable `cargo-chef`)
+#8 DONE 80.0s
+
+#9 [chef 3/3] WORKDIR /src
+#9 DONE 0.3s
+
+#10 [planner 1/2] COPY . .
+#10 DONE 0.3s
+
+#11 [planner 2/2] RUN cargo chef prepare --recipe-path recipe.json
+#11 DONE 0.4s
+
+#12 [rust-build 1/4] COPY --from=planner /src/recipe.json recipe.json
+#12 DONE 0.2s
+
+#13 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury-agent --recipe-path recipe.json
+#13 0.413     Updating crates.io index
+#13 2.898  Downloading crates ...
+#13 3.014   Downloaded futures-macro v0.3.34
+#13 3.028   Downloaded async-stream v0.3.6
+#13 3.050   Downloaded async-stream-impl v0.3.6
+#13 3.052   Downloaded anstyle v1.0.14
+#13 3.062   Downloaded anyhow v1.0.104
+#13 3.082   Downloaded form_urlencoded v1.2.2
+#13 3.087   Downloaded annotate-snippets v0.12.18
+#13 3.107   Downloaded dunce v1.0.5
+#13 3.110   Downloaded enum-ordinalize v4.4.2
+#13 3.114   Downloaded equivalent v1.0.3
+#13 3.119   Downloaded event-listener-strategy v0.5.4
+#13 3.123   Downloaded futures-io v0.3.34
+#13 3.128   Downloaded futures-sink v0.3.34
+#13 3.133   Downloaded futures-task v0.3.34
+#13 3.139   Downloaded hostname v0.4.2
+#13 3.149   Downloaded nohash-hasher v0.2.0
+#13 3.154   Downloaded pest_stack_guard v1.0.1
+#13 3.163   Downloaded signal-hook-registry v1.4.8
+#13 3.169   Downloaded slab v0.4.12
+#13 3.175   Downloaded tracing-serde v0.2.0
+#13 3.179   Downloaded allocator-api2 v0.2.21
+#13 3.194   Downloaded ar_archive_writer v0.5.5
+#13 3.210   Downloaded atomic-waker v1.1.2
+#13 3.216   Downloaded cfg-if v1.0.5
+#13 3.223   Downloaded enum-ordinalize-derive v4.4.2
+#13 3.231   Downloaded errno v0.3.15
+#13 3.239   Downloaded http-body v1.1.0
+#13 3.247   Downloaded itoa v1.0.19
+#13 3.254   Downloaded parking v2.2.1
+#13 3.259   Downloaded subtle v2.6.1
+#13 3.267   Downloaded lazy_static v1.5.1
+#13 3.275   Downloaded matchers v0.2.0
+#13 3.280   Downloaded ordered-float v2.10.1
+#13 3.285   Downloaded percent-encoding v2.3.2
+#13 3.289   Downloaded cmake v0.1.57
+#13 3.295   Downloaded core_detect v1.0.0
+#13 3.301   Downloaded either v1.19.0
+#13 3.307   Downloaded fastrand v2.5.0
+#13 3.313   Downloaded find-msvc-tools v0.1.15
+#13 3.320   Downloaded foldhash v0.2.0
+#13 3.326   Downloaded futures-core v0.3.34
+#13 3.332   Downloaded http-body-util v0.1.5
+#13 3.343   Downloaded hyper-rustls v0.27.10
+#13 3.350   Downloaded hyper-timeout v0.5.2
+#13 3.356   Downloaded jobserver v0.1.35
+#13 3.364   Downloaded multiversion_no_op v1.0.0
+#13 3.368   Downloaded openssl-probe v0.2.2
+#13 3.373   Downloaded pin-project-internal v1.2.0
+#13 3.380   Downloaded autocfg v1.5.1
+#13 3.387   Downloaded encoding_rs_io v0.1.8
+#13 3.393   Downloaded json-patch v4.2.0
+#13 3.398   Downloaded nu-ansi-term v0.50.3
+#13 3.407   Downloaded pem v4.0.0
+#13 3.413   Downloaded pest_derive v2.9.6
+#13 3.423   Downloaded pest_generator v2.9.6
+#13 3.429   Downloaded rustc_version v0.4.1
+#13 3.434   Downloaded rustls-native-certs v0.8.5
+#13 3.440   Downloaded serde-value v0.7.0
+#13 3.444   Downloaded thread_local v1.1.10
+#13 3.450   Downloaded tokio-macros v2.7.2
+#13 3.454   Downloaded untrusted v0.9.0
+#13 3.463   Downloaded arraydeque v0.5.1
+#13 3.468   Downloaded base64 v0.23.1
+#13 3.486   Downloaded event-listener v5.4.2
+#13 3.493   Downloaded fs_extra v1.3.0
+#13 3.499   Downloaded mime v0.3.18
+#13 3.506   Downloaded pkg-config v0.3.34
+#13 3.513   Downloaded quote v1.0.47
+#13 3.526   Downloaded parking_lot_core v0.10.0
+#13 3.536   Downloaded sync_wrapper v1.0.2
+#13 3.542   Downloaded tower-layer v0.3.3
+#13 3.546   Downloaded tower-service v0.3.3
+#13 3.552   Downloaded try-lock v0.2.5
+#13 3.556   Downloaded async-broadcast v0.7.2
+#13 3.563   Downloaded base64 v0.22.1
+#13 3.578   Downloaded futures-channel v0.3.34
+#13 3.587   Downloaded getrandom v0.2.17
+#13 3.601   Downloaded kube v5.1.0
+#13 3.605   Downloaded once_cell v1.21.4
+#13 3.616   Downloaded scopeguard v1.2.0
+#13 3.621   Downloaded want v0.3.2
+#13 3.625   Downloaded backon v1.6.0
+#13 3.636   Downloaded lock_api v0.5.0
+#13 3.643   Downloaded secrecy v0.10.3
+#13 3.646   Downloaded shlex v2.0.1
+#13 3.651   Downloaded stacker v0.1.25
+#13 3.661   Downloaded thiserror-impl v2.0.21
+#13 3.667   Downloaded tokio-rustls v0.26.6
+#13 3.674   Downloaded tracing-log v0.2.0
+#13 3.680   Downloaded zmij v1.0.23
+#13 3.688   Downloaded jsonpath-rust v1.0.13
+#13 3.702   Downloaded pin-project v1.2.0
+#13 3.775   Downloaded pin-project-lite v0.2.18
+#13 3.803   Downloaded rustls-pki-types v1.16.0
+#13 3.815   Downloaded rustversion v1.0.23
+#13 3.828   Downloaded simdutf8 v0.1.5
+#13 3.837   Downloaded smallvec v1.16.6
+#13 3.843   Downloaded thiserror v2.0.21
+#13 3.878   Downloaded tracing-attributes v0.1.31
+#13 3.892   Downloaded ucd-trie v0.1.8
+#13 3.900   Downloaded unicode-ident v1.0.27
+#13 3.914   Downloaded futures v0.3.34
+#13 3.942   Downloaded num-traits v0.2.19
+#13 3.956   Downloaded parking_lot v0.13.0
+#13 3.968   Downloaded psm v0.1.32
+#13 3.987   Downloaded semver v1.0.28
+#13 4.000   Downloaded serde_core v1.0.229
+#13 4.019   Downloaded sharded-slab v0.1.7
+#13 4.038   Downloaded socket2 v0.6.5
+#13 4.048   Downloaded tracing-core v0.1.36
+#13 4.072   Downloaded zeroize v1.9.2
+#13 4.083   Downloaded bitflags v2.13.2
+#13 4.119   Downloaded httparse v1.10.1
+#13 4.135   Downloaded jsonptr v0.7.1
+#13 4.167   Downloaded log v0.4.35
+#13 4.189   Downloaded bytes v1.12.2
+#13 4.212   Downloaded serde_derive v1.0.229
+#13 4.242   Downloaded serde v1.0.229
+#13 4.269   Downloaded tower v0.5.3
+#13 4.372   Downloaded pest_meta v2.9.6
+#13 4.386   Downloaded rustls-platform-verifier v0.7.1
+#13 4.414   Downloaded derive_more v2.1.1
+#13 4.523   Downloaded educe v0.8.2
+#13 4.603   Downloaded kube-core v5.1.0
+#13 4.638   Downloaded tokio-util v0.7.20
+#13 4.711   Downloaded derive_more-impl v2.1.1
+#13 4.739   Downloaded proc-macro2 v1.0.107
+#13 4.757   Downloaded serde_json v1.0.154
+#13 4.805   Downloaded tower-http v0.7.1
+#13 4.859   Downloaded http v1.5.0
+#13 4.875   Downloaded rustls-webpki v0.103.17
+#13 4.892   Downloaded tracing-subscriber v0.3.23
+#13 4.938   Downloaded unicode-width v0.2.3
+#13 4.959   Downloaded memchr v2.8.3
+#13 4.991   Downloaded mio v1.2.5
+#13 5.024   Downloaded aho-corasick v1.1.5
+#13 5.050   Downloaded jiff-core v0.1.8
+#13 5.064   Downloaded kube-runtime v5.1.0
+#13 5.077   Downloaded cc v1.11.2
+#13 5.095   Downloaded hyper-util v0.1.21
+#13 5.124   Downloaded kube-client v5.1.0
+#13 5.138   Downloaded pest v2.9.6
+#13 5.151   Downloaded zerocopy v0.8.63
+#13 5.293   Downloaded regex v1.13.2
+#13 5.314   Downloaded futures-util v0.3.34
+#13 5.374   Downloaded syn v2.0.119
+#13 5.421   Downloaded syn v3.0.10
+#13 5.464   Downloaded hyper v1.12.0
+#13 5.498   Downloaded tracing v0.1.44
+#13 5.543   Downloaded aws-lc-rs v1.19.0
+#13 5.597   Downloaded granit-parser v2.2.0
+#13 5.640   Downloaded object v0.39.1
+#13 5.686   Downloaded regex-syntax v0.8.12
+#13 5.700   Downloaded rustls v0.23.46
+#13 5.734   Downloaded serde-saphyr v2.2.0
+#13 5.960   Downloaded encoding_rs v0.8.44
+#13 5.992   Downloaded regex-automata v0.4.19
+#13 6.050   Downloaded tokio v1.54.1
+#13 6.272   Downloaded jiff v0.2.46
+#13 6.321   Downloaded libc v0.2.191
+#13 6.550   Downloaded ring v0.17.14
+#13 6.723   Downloaded k8s-openapi v0.29.0
+#13 8.140   Downloaded aws-lc-sys v0.47.0
+#13 9.372    Compiling libc v0.2.191
+#13 9.372    Compiling proc-macro2 v1.0.107
+#13 9.372    Compiling quote v1.0.47
+#13 9.372    Compiling unicode-ident v1.0.27
+#13 9.680    Compiling find-msvc-tools v0.1.15
+#13 10.01    Compiling shlex v2.0.1
+#13 10.29    Compiling memchr v2.8.3
+#13 11.60    Compiling syn v3.0.10
+#13 12.13    Compiling jobserver v0.1.35
+#13 12.27    Compiling pin-project-lite v0.2.18
+#13 12.44    Compiling object v0.39.1
+#13 12.61    Compiling cc v1.11.2
+#13 12.81    Compiling itoa v1.0.19
+#13 13.07    Compiling once_cell v1.21.4
+#13 13.59    Compiling serde_core v1.0.229
+#13 14.00    Compiling syn v2.0.119
+#13 15.85    Compiling futures-core v0.3.34
+#13 16.07    Compiling stacker v0.1.25
+#13 19.83    Compiling cfg-if v1.0.5
+#13 19.94    Compiling cmake v0.1.57
+#13 20.47    Compiling ar_archive_writer v0.5.5
+#13 20.58    Compiling errno v0.3.15
+#13 20.80    Compiling bytes v1.12.2
+#13 21.33    Compiling log v0.4.35
+#13 21.73    Compiling pkg-config v0.3.34
+#13 21.77    Compiling psm v0.1.32
+#13 22.18    Compiling fs_extra v1.3.0
+#13 22.34    Compiling dunce v1.0.5
+#13 22.41    Compiling signal-hook-registry v1.4.8
+#13 22.46    Compiling tokio-macros v2.7.2
+#13 22.47    Compiling mio v1.2.5
+#13 22.57    Compiling aws-lc-sys v0.47.0
+#13 23.10    Compiling socket2 v0.6.5
+#13 23.36    Compiling pest_stack_guard v1.0.1
+#13 23.63    Compiling zmij v1.0.23
+#13 23.69    Compiling tokio v1.54.1
+#13 23.97    Compiling tracing-core v0.1.36
+#13 24.82    Compiling zeroize v1.9.2
+#13 25.12    Compiling serde v1.0.229
+#13 25.53    Compiling futures-sink v0.3.34
+#13 25.61    Compiling smallvec v1.16.6
+#13 26.19    Compiling http v1.5.0
+#13 26.46    Compiling serde_derive v1.0.229
+#13 29.57    Compiling aws-lc-rs v1.19.0
+#13 29.91    Compiling serde_json v1.0.154
+#13 30.10    Compiling slab v0.4.12
+#13 30.60    Compiling futures-channel v0.3.34
+#13 30.93    Compiling tracing-attributes v0.1.31
+#13 32.97    Compiling futures-macro v0.3.34
+#13 33.26    Compiling futures-task v0.3.34
+#13 33.62    Compiling futures-io v0.3.34
+#13 33.90    Compiling rustversion v1.0.23
+#13 34.11    Compiling autocfg v1.5.1
+#13 34.39    Compiling futures-util v0.3.34
+#13 34.76    Compiling num-traits v0.2.19
+#13 35.24    Compiling tracing v0.1.44
+#13 39.92    Compiling http-body v1.1.0
+#13 40.08    Compiling rustls-pki-types v1.16.0
+#13 40.29    Compiling httparse v1.10.1
+#13 41.09    Compiling aho-corasick v1.1.5
+#13 41.65    Compiling thiserror v2.0.21
+#13 41.72    Compiling tower-service v0.3.3
+#13 41.85    Compiling scopeguard v1.2.0
+#13 42.00    Compiling untrusted v0.9.0
+#13 42.02    Compiling regex-syntax v0.8.12
+#13 42.19    Compiling try-lock v0.2.5
+#13 42.33    Compiling ucd-trie v0.1.8
+#13 42.74    Compiling rustls v0.23.46
+#13 42.96    Compiling pest v2.9.6
+#13 45.27    Compiling want v0.3.2
+#13 45.49    Compiling regex-automata v0.4.19
+#13 51.09    Compiling encoding_rs v0.8.44
+#13 53.82    Compiling thiserror-impl v2.0.21
+#13 54.81    Compiling atomic-waker v1.1.2
+#13 54.96    Compiling subtle v2.6.1
+#13 55.11    Compiling hyper v1.12.0
+#13 56.28    Compiling pest_meta v2.9.6
+#13 59.17    Compiling core_detect v1.0.0
+#13 59.40    Compiling simdutf8 v0.1.5
+#13 59.75    Compiling k8s-openapi v0.29.0
+#13 60.12    Compiling openssl-probe v0.2.2
+#13 60.49    Compiling multiversion_no_op v1.0.0
+#13 60.73    Compiling percent-encoding v2.3.2
+#13 60.78    Compiling base64 v0.22.1
+#13 61.11    Compiling jiff-core v0.1.8
+#13 64.59    Compiling jiff v0.2.46
+#13 70.99    Compiling rustls-native-certs v0.8.5
+#13 72.78    Compiling pest_generator v2.9.6
+#13 73.60    Compiling hyper-util v0.1.21
+#13 74.08    Compiling ordered-float v2.10.1
+#13 74.47    Compiling jsonptr v0.7.1
+#13 76.90    Compiling tokio-util v0.7.20
+#13 77.39    Compiling derive_more-impl v2.1.1
+#13 78.75    Compiling zerocopy v0.8.63
+#13 78.78    Compiling unicode-width v0.2.3
+#13 79.06    Compiling arraydeque v0.5.1
+#13 79.11    Compiling anstyle v1.0.14
+#13 79.33    Compiling getrandom v0.3.4
+#13 79.45    Compiling parking v2.2.1
+#13 79.68    Compiling sync_wrapper v1.0.2
+#13 79.80    Compiling tower-layer v0.3.3
+#13 80.07    Compiling version_check v0.9.5
+#13 80.10    Compiling base64 v0.23.1
+#13 80.45    Compiling ahash v0.8.12
+#13 80.47    Compiling tower v0.5.3
+#13 81.16    Compiling event-listener v5.4.2
+#13 81.70    Compiling annotate-snippets v0.12.18
+#13 81.81    Compiling granit-parser v2.2.0
+#13 83.34    Compiling derive_more v2.1.1
+#13 83.46    Compiling json-patch v4.2.0
+#13 84.28    Compiling serde-value v0.7.0
+#13 85.35    Compiling pest_derive v2.9.6
+#13 86.11    Compiling encoding_rs_io v0.1.8
+#13 86.40    Compiling form_urlencoded v1.2.2
+#13 86.79    Compiling regex v1.13.2
+#13 89.12    Compiling enum-ordinalize-derive v4.4.2
+#13 89.88    Compiling mime v0.3.18
+#13 90.64    Compiling bitflags v2.13.2
+#13 91.10    Compiling nohash-hasher v0.2.0
+#13 91.23    Compiling serde-saphyr v2.2.0
+#13 91.25    Compiling tower-http v0.7.1
+#13 93.35    Compiling enum-ordinalize v4.4.2
+#13 93.42    Compiling jsonpath-rust v1.0.13
+#13 113.4    Compiling kube-core v5.1.0
+#13 116.0    Compiling event-listener-strategy v0.5.4
+#13 116.5    Compiling pem v4.0.0
+#13 117.5    Compiling hyper-timeout v0.5.2
+#13 117.8    Compiling lock_api v0.5.0
+#13 118.3    Compiling http-body-util v0.1.5
+#13 118.8    Compiling futures v0.3.34
+#13 118.9    Compiling parking_lot_core v0.10.0
+#13 119.5    Compiling secrecy v0.10.3
+#13 119.7    Compiling async-stream-impl v0.3.6
+#13 120.4    Compiling pin-project-internal v1.2.0
+#13 122.0    Compiling equivalent v1.0.3
+#13 122.1    Compiling foldhash v0.2.0
+#13 122.4    Compiling allocator-api2 v0.2.21
+#13 122.4    Compiling either v1.19.0
+#13 122.8    Compiling fastrand v2.5.0
+#13 123.0    Compiling hashbrown v0.16.1
+#13 123.3    Compiling backon v1.6.0
+#13 123.8    Compiling pin-project v1.2.0
+#13 123.9    Compiling async-stream v0.3.6
+#13 124.1    Compiling parking_lot v0.13.0
+#13 125.6    Compiling async-broadcast v0.7.2
+#13 125.9    Compiling educe v0.8.2
+#13 126.1    Compiling hostname v0.4.2
+#13 126.4    Compiling anyhow v1.0.104
+#13 127.0    Compiling lazy_static v1.5.1
+#13 127.1    Compiling sharded-slab v0.1.7
+#13 128.8    Compiling matchers v0.2.0
+#13 129.1    Compiling tracing-serde v0.2.0
+#13 129.4    Compiling tracing-log v0.2.0
+#13 129.8    Compiling thread_local v1.1.10
+#13 129.9    Compiling nu-ansi-term v0.50.3
+#13 130.3    Compiling tracing-subscriber v0.3.23
+#13 147.1    Compiling rustls-webpki v0.103.17
+#13 154.9    Compiling tokio-rustls v0.26.6
+#13 154.9    Compiling rustls-platform-verifier v0.7.1
+#13 155.3    Compiling hyper-rustls v0.27.10
+#13 155.7    Compiling kube-client v5.1.0
+#13 164.7    Compiling kube-runtime v5.1.0
+#13 168.6    Compiling kube v5.1.0
+#13 179.2    Compiling armoury-agent v0.0.1 (/src/agent)
+#13 179.4 warning: unused dependency `anyhow`
+#13 179.4   --> agent/Cargo.toml:18:15
+#13 179.4    |
+#13 179.4 18 | [dependencies.anyhow]
+#13 179.4    |               ^^^^^^^
+#13 179.4    |
+#13 179.4    = note: `cargo::unused_dependencies` is set to `warn` by default
+#13 179.4 help: consider removing the dependency on `anyhow`
+#13 179.4 warning: unused dependency `kube`
+#13 179.4   --> agent/Cargo.toml:24:15
+#13 179.4    |
+#13 179.4 24 | [dependencies.kube]
+#13 179.4    |               ^^^^^
+#13 179.4    |
+#13 179.4 help: consider removing the dependency on `kube`
+#13 179.4 warning: unused dependency `tracing-subscriber`
+#13 179.4   --> agent/Cargo.toml:33:15
+#13 179.4    |
+#13 179.4 33 | [dependencies.tracing-subscriber]
+#13 179.4    |               ^^^^^^^^^^^^^^^^^^^
+#13 179.4    |
+#13 179.4 help: consider removing the dependency on `tracing-subscriber`
+#13 179.4 warning: `armoury-agent` (manifest) generated 3 warnings
+#13 179.4     Finished `release` profile [optimized] target(s) in 2m 59s
+#13 DONE 180.1s
+
+#14 [rust-build 3/4] COPY . .
+#14 DONE 1.1s
+
+#15 [rust-build 4/4] RUN cargo build --profile "release" --locked --package armoury-agent   && cp "target/$([ "release" = dev ] && echo debug || echo "release")/armoury-agent" /armoury-agent
+#15 0.702    Compiling armoury-agent v0.1.0 (/src/agent)
+#15 6.100     Finished `release` profile [optimized] target(s) in 5.78s
+#15 DONE 6.8s
+
+#16 [stage-3 2/2] COPY --from=rust-build /armoury-agent /usr/local/bin/armoury-agent
+#16 DONE 0.3s
+
+#17 exporting to image
+#17 exporting layers
+#17 exporting layers 1.0s done
+#17 exporting manifest sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 0.1s done
+#17 exporting config sha256:c0ccc797f8d30727acf212afd9f627cb634a90ebdef6dcd2a6de4b2dcfb773e8 0.1s done
+#17 DONE 1.2s
+
+#17 exporting to image
+#17 pushing layers
+#17 pushing layers 1.9s done
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-agent:okteto@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-agent:okteto@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 0.1s done
+#17 pushing layers 0.5s done
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-agent:08f9324d82cbc74623e27f8599dceea085e5e20b184faeb1f047abb704b51a06@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-agent:08f9324d82cbc74623e27f8599dceea085e5e20b184faeb1f047abb704b51a06@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 0.1s done
+#17 DONE 3.7s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-agent:okteto' successfully pushed
+ i  Building '/Users/danielbooth/projects/home/armoury/control-plane/Dockerfile'...
+#1 [internal] load build definition from buildkit-2295155882
+#1 DONE 0.0s
+
+#1 [internal] load build definition from buildkit-2295155882
+#1 transferring dockerfile: 2.12kB 0.2s
+#1 transferring dockerfile: 2.12kB 0.2s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#3 DONE 2.2s
+
+#4 [internal] load metadata for gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#4 DONE 5.5s
+
+#5 [internal] load .dockerignore
+#5 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 33B 0.1s
+#5 transferring context: 256B 0.3s done
+#5 DONE 0.3s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1 0.4s done
+#7 DONE 0.4s
+
+#8 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#8 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#8 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.4s done
+#8 DONE 0.4s
+
+#9 [stage-5 1/3] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#9 resolve gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f 0.4s done
+#9 DONE 0.4s
+
+#6 [internal] load build context
+#6 transferring context: 10.04kB 0.3s done
+#6 DONE 0.4s
+
+#9 [stage-5 1/3] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#9 CACHED
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 ...
+
+#10 [chef 3/3] WORKDIR /src
+#10 CACHED
+
+#11 [planner 1/2] COPY . .
+#11 CACHED
+
+#12 [planner 2/2] RUN cargo chef prepare --recipe-path recipe.json
+#12 CACHED
+
+#13 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#13 CACHED
+
+#14 [rust-build 1/4] COPY --from=planner /src/recipe.json recipe.json
+#14 CACHED
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 sha256:1da6a5f4212bfe1ab4762ae108ed9890e34a3857dc7609c54f6302eb5d697930 446B / 446B 0.1s done
+#7 sha256:1034a24a8b583bae409e8d94b31e4e98a600244fddf575403959d02863a54498 0B / 55.85MB 0.2s
+#7 sha256:12f47f3a306a855e620d932bfde2f39f7bffe966715f71e0b807a765e7fb482b 0B / 3.31kB 0.2s
+#7 sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 0B / 28.25MB 0.2s
+#7 sha256:1034a24a8b583bae409e8d94b31e4e98a600244fddf575403959d02863a54498 20.97MB / 55.85MB 0.3s
+#7 sha256:12f47f3a306a855e620d932bfde2f39f7bffe966715f71e0b807a765e7fb482b 3.31kB / 3.31kB 0.3s done
+#7 sha256:1034a24a8b583bae409e8d94b31e4e98a600244fddf575403959d02863a54498 55.85MB / 55.85MB 0.5s
+#7 sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 7.34MB / 28.25MB 0.3s
+#7 sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 28.25MB / 28.25MB 0.5s
+#7 sha256:1034a24a8b583bae409e8d94b31e4e98a600244fddf575403959d02863a54498 55.85MB / 55.85MB 0.6s done
+#7 sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 28.25MB / 28.25MB 0.7s done
+#7 extracting sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3
+#7 extracting sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 1.9s done
+#7 DONE 3.6s
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 0.377     Updating crates.io index
+#15 3.280  Downloading crates ...
+#15 3.374   Downloaded atomic-waker v1.1.2
+#15 3.390   Downloaded anyhow v1.0.104
+#15 3.425   Downloaded scopeguard v1.2.0
+#15 3.434   Downloaded cpufeatures v0.2.17
+#15 3.443   Downloaded crypto-common v0.1.6
+#15 3.453   Downloaded darling_macro v0.23.0
+#15 3.460   Downloaded equivalent v1.0.3
+#15 3.472   Downloaded futures-io v0.3.34
+#15 3.480   Downloaded futures-sink v0.3.34
+#15 3.486   Downloaded httpdate v1.0.3
+#15 3.494   Downloaded ident_case v1.0.1
+#15 3.500   Downloaded futures-core v0.3.34
+#15 3.510   Downloaded futures-task v0.3.34
+#15 3.519   Downloaded cfg-if v1.0.5
+#15 3.533   Downloaded headers-core v0.3.0
+#15 3.537   Downloaded http-body v1.1.0
+#15 3.553   Downloaded http-range-header v0.4.2
+#15 3.560   Downloaded matchers v0.2.0
+#15 3.561   Downloaded stable_deref_trait v1.2.1
+#15 3.565   Downloaded form_urlencoded v1.2.2
+#15 3.568   Downloaded sha1 v0.10.7
+#15 3.574   Downloaded siphasher v1.0.4
+#15 3.581   Downloaded string_cache_codegen v0.11.2
+#15 3.583   Downloaded thread_local v1.1.10
+#15 3.588   Downloaded block-buffer v0.10.4
+#15 3.591   Downloaded dtoa-short v0.3.5
+#15 3.594   Downloaded serde_urlencoded v0.7.1
+#15 3.600   Downloaded sync_wrapper v1.0.2
+#15 3.603   Downloaded time-core v0.1.9
+#15 3.606   Downloaded tower-service v0.3.3
+#15 3.609   Downloaded signal-hook-registry v1.4.8
+#15 3.613   Downloaded zerofrom v0.1.8
+#15 3.616   Downloaded tokio-macros v2.7.2
+#15 3.620   Downloaded tower-layer v0.3.3
+#15 3.623   Downloaded utf8_iter v1.1.0
+#15 3.628   Downloaded validator v0.20.0
+#15 3.634   Downloaded validator_derive v0.20.1
+#15 3.641   Downloaded yoke-derive v0.8.4
+#15 3.644   Downloaded lazy_static v1.5.1
+#15 3.650   Downloaded errno v0.3.15
+#15 3.656   Downloaded tracing-serde v0.2.0
+#15 3.658   Downloaded zerofrom-derive v0.1.8
+#15 3.661   Downloaded idna_adapter v1.2.2
+#15 3.664   Downloaded num-conv v0.2.2
+#15 3.667   Downloaded simdutf8 v0.1.5
+#15 3.675   Downloaded string_cache v0.11.0
+#15 3.681   Downloaded maplit v1.0.2
+#15 3.684   Downloaded multiversion_no_op v1.0.0
+#15 3.687   Downloaded serde_html_form v0.2.8
+#15 3.694   Downloaded slab v0.4.12
+#15 3.699   Downloaded synstructure v0.14.0
+#15 3.702   Downloaded tracing-log v0.2.0
+#15 3.708   Downloaded unicase v2.10.0
+#15 3.714   Downloaded writeable v0.6.4
+#15 3.724   Downloaded rustversion v1.0.23
+#15 3.738   Downloaded serde v1.0.229
+#15 3.756   Downloaded web_atoms v0.3.0
+#15 3.761   Downloaded percent-encoding v2.3.2
+#15 3.765   Downloaded potential_utf v0.1.6
+#15 3.770   Downloaded tinystr v0.8.5
+#15 3.780   Downloaded utf_types v1.0.0
+#15 3.786   Downloaded zerovec-derive v0.11.7
+#15 3.794   Downloaded zmij v1.0.23
+#15 3.802   Downloaded new_debug_unreachable v1.0.6
+#15 3.807   Downloaded precomputed-hash v0.1.1
+#15 3.809   Downloaded proc-macro-error-attr3 v3.1.1
+#15 3.814   Downloaded tendril v0.5.1
+#15 3.822   Downloaded yoke v0.8.4
+#15 3.829   Downloaded async-trait v0.1.92
+#15 3.849   Downloaded autocfg v1.5.1
+#15 3.858   Downloaded digest v0.10.7
+#15 3.866   Downloaded displaydoc v0.2.7
+#15 3.876   Downloaded futures-macro v0.3.34
+#15 3.881   Downloaded itoa v1.0.19
+#15 3.888   Downloaded serde_path_to_error v0.1.20
+#15 3.895   Downloaded smallvec v1.16.6
+#15 3.901   Downloaded time-macros v0.2.32
+#15 3.915   Downloaded tracing-attributes v0.1.31
+#15 3.928   Downloaded core_detect v1.0.0
+#15 3.936   Downloaded fastrand v2.5.0
+#15 3.942   Downloaded generic-array v0.14.9
+#15 3.949   Downloaded spin v0.9.9
+#15 3.960   Downloaded lock_api v0.4.14
+#15 3.965   Downloaded serde_derive v1.0.229
+#15 3.979   Downloaded serde_core v1.0.229
+#15 3.990   Downloaded sharded-slab v0.1.7
+#15 4.005   Downloaded socket2 v0.6.5
+#15 4.012   Downloaded unicode-ident v1.0.27
+#15 4.024   Downloaded deranged v0.5.9
+#15 4.029   Downloaded dtoa v1.0.11
+#15 4.036   Downloaded http-body-util v0.1.5
+#15 4.045   Downloaded regex v1.13.2
+#15 4.068   Downloaded tracing-core v0.1.36
+#15 4.080   Downloaded markup5ever v0.40.0
+#15 4.085   Downloaded mime v0.3.18
+#15 4.092   Downloaded phf_codegen v0.14.0
+#15 4.097   Downloaded powerfmt v0.2.1
+#15 4.102   Downloaded proc-macro-error3 v3.1.1
+#15 4.119   Downloaded ryu v1.0.23
+#15 4.132   Downloaded mime_guess v2.0.5
+#15 4.138   Downloaded nu-ansi-term v0.50.3
+#15 4.147   Downloaded phf_generator v0.14.0
+#15 4.150   Downloaded phf_shared v0.14.0
+#15 4.155   Downloaded quote v1.0.47
+#15 4.163   Downloaded aho-corasick v1.1.5
+#15 4.181   Downloaded phf v0.14.0
+#15 4.186   Downloaded pin-project-lite v0.2.18
+#15 4.211   Downloaded zerotrie v0.2.5
+#15 4.227   Downloaded tower v0.5.3
+#15 4.262   Downloaded typenum v1.20.1
+#15 4.271   Downloaded url v2.5.8
+#15 4.277   Downloaded cookie v0.18.2
+#15 4.285   Downloaded darling v0.23.0
+#15 4.303   Downloaded httparse v1.10.1
+#15 4.315   Downloaded axum-core v0.5.6
+#15 4.326   Downloaded tokio-util v0.7.20
+#15 4.363   Downloaded zerovec v0.11.9
+#15 4.390   Downloaded once_cell v1.21.4
+#15 4.401   Downloaded matchit v0.8.4
+#15 4.411   Downloaded multer v3.1.0
+#15 4.424   Downloaded serde_json v1.0.154
+#15 4.460   Downloaded bitflags v2.13.2
+#15 4.482   Downloaded tower-http v0.7.1
+#15 4.534   Downloaded ammonia v4.2.5
+#15 4.546   Downloaded cssparser v0.38.0
+#15 4.556   Downloaded iana-time-zone v0.1.65
+#15 4.569   Downloaded litemap v0.8.3
+#15 4.579   Downloaded tracing-subscriber v0.3.23
+#15 4.611   Downloaded icu_provider v2.4.0
+#15 4.619   Downloaded num-traits v0.2.19
+#15 4.627   Downloaded log v0.4.35
+#15 4.636   Downloaded parking_lot v0.12.5
+#15 4.646   Downloaded proc-macro2 v1.0.107
+#15 4.660   Downloaded time v0.3.55
+#15 4.727   Downloaded axum-extra v0.12.6
+#15 4.746   Downloaded bytes v1.12.2
+#15 4.763   Downloaded syn v3.0.10
+#15 4.807   Downloaded darling_core v0.23.0
+#15 4.835   Downloaded headers v0.4.2
+#15 4.864   Downloaded icu_locale_core v2.4.0
+#15 4.896   Downloaded parking_lot_core v0.9.12
+#15 4.906   Downloaded syn v2.0.119
+#15 4.947   Downloaded base64 v0.22.1
+#15 4.963   Downloaded html5ever v0.40.1
+#15 4.980   Downloaded icu_normalizer_data v2.4.0
+#15 4.987   Downloaded tracing v0.1.44
+#15 5.043   Downloaded http v1.5.0
+#15 5.059   Downloaded icu_collections v2.4.0
+#15 5.090   Downloaded indexmap v2.14.2
+#15 5.109   Downloaded memchr v2.8.3
+#15 5.136   Downloaded mio v1.2.5
+#15 5.164   Downloaded hyper-util v0.1.21
+#15 5.186   Downloaded icu_properties v2.4.0
+#15 5.196   Downloaded idna v1.1.0
+#15 5.205   Downloaded hashbrown v0.17.1
+#15 5.227   Downloaded axum v0.8.9
+#15 5.262   Downloaded tokio v1.54.1
+#15 5.464   Downloaded futures-util v0.3.34
+#15 5.527   Downloaded hyper v1.12.0
+#15 5.559   Downloaded icu_properties_data v2.4.0
+#15 5.609   Downloaded chrono v0.4.45
+#15 5.636   Downloaded regex-syntax v0.8.12
+#15 5.659   Downloaded encoding_rs v0.8.44
+#15 5.679   Downloaded icu_normalizer v2.4.0
+#15 5.701   Downloaded regex-automata v0.4.19
+#15 5.746   Downloaded libc v0.2.191
+#15 ...
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 extracting sha256:12f47f3a306a855e620d932bfde2f39f7bffe966715f71e0b807a765e7fb482b 0.1s done
+#7 extracting sha256:1034a24a8b583bae409e8d94b31e4e98a600244fddf575403959d02863a54498 3.1s done
+#7 DONE 6.8s
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 extracting sha256:1da6a5f4212bfe1ab4762ae108ed9890e34a3857dc7609c54f6302eb5d697930 0.1s done
+#7 DONE 6.8s
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 6.254    Compiling proc-macro2 v1.0.107
+#15 6.257    Compiling quote v1.0.47
+#15 6.257    Compiling unicode-ident v1.0.27
+#15 6.257    Compiling libc v0.2.191
+#15 6.462    Compiling itoa v1.0.19
+#15 6.662    Compiling smallvec v1.16.6
+#15 6.852    Compiling version_check v0.9.5
+#15 7.036    Compiling stable_deref_trait v1.2.1
+#15 7.183    Compiling bytes v1.12.2
+#15 7.489    Compiling cfg-if v1.0.5
+#15 7.665    Compiling pin-project-lite v0.2.18
+#15 7.794    Compiling serde_core v1.0.229
+#15 8.646    Compiling memchr v2.8.3
+#15 8.983    Compiling syn v3.0.10
+#15 8.983    Compiling syn v2.0.119
+#15 9.498    Compiling http v1.5.0
+#15 ...
+
+#16 [web-build 2/6] WORKDIR /src/web
+#16 DONE 4.8s
+
+#17 [web-build 3/6] COPY web/package.json web/package-lock.json web/.npmrc ./
+#17 DONE 0.3s
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 ...
+
+#18 [web-build 4/6] RUN npm ci --no-audit --no-fund
+#18 ...
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 13.61    Compiling futures-core v0.3.34
+#15 13.92    Compiling scopeguard v1.2.0
+#15 14.21    Compiling siphasher v1.0.4
+#15 14.72    Compiling once_cell v1.21.4
+#15 15.18    Compiling log v0.4.35
+#15 15.56    Compiling percent-encoding v2.3.2
+#15 15.98    Compiling phf_shared v0.14.0
+#15 16.01    Compiling errno v0.3.15
+#15 16.26    Compiling litemap v0.8.3
+#15 16.63    Compiling writeable v0.6.4
+#15 16.75    Compiling synstructure v0.14.0
+#15 17.33    Compiling fastrand v2.5.0
+#15 17.58    Compiling utf_types v1.0.0
+#15 18.18    Compiling serde v1.0.229
+#15 18.28    Compiling utf8_iter v1.1.0
+#15 18.60    Compiling phf_generator v0.14.0
+#15 18.67    Compiling signal-hook-registry v1.4.8
+#15 18.98    Compiling tracing-core v0.1.36
+#15 19.01    Compiling socket2 v0.6.5
+#15 19.45    Compiling mio v1.2.5
+#15 20.35    Compiling zerofrom-derive v0.1.8
+#15 20.92    Compiling yoke-derive v0.8.4
+#15 21.20    Compiling zerovec-derive v0.11.7
+#15 21.87    Compiling displaydoc v0.2.7
+#15 23.01    Compiling zerofrom v0.1.8
+#15 23.14    Compiling serde_derive v1.0.229
+#15 23.26    Compiling yoke v0.8.4
+#15 23.30    Compiling tokio-macros v2.7.2
+#15 23.40    Compiling generic-array v0.14.9
+#15 23.73    Compiling zerovec v0.11.9
+#15 23.84    Compiling zerotrie v0.2.5
+#15 24.59    Compiling icu_properties_data v2.4.0
+#15 24.93    Compiling rustversion v1.0.23
+#15 24.98    Compiling parking_lot_core v0.9.12
+#15 25.37    Compiling tinystr v0.8.5
+#15 25.39    Compiling potential_utf v0.1.6
+#15 25.59    Compiling icu_normalizer_data v2.4.0
+#15 25.77    Compiling icu_collections v2.4.0
+#15 25.95    Compiling icu_locale_core v2.4.0
+#15 26.20    Compiling tokio v1.54.1
+#15 27.70    Compiling form_urlencoded v1.2.2
+#15 28.47    Compiling http-body v1.1.0
+#15 28.81    Compiling icu_provider v2.4.0
+#15 30.26    Compiling mime v0.3.18
+#15 31.90    Compiling httparse v1.10.1
+#15 33.36    Compiling zmij v1.0.23
+#15 33.41    Compiling typenum v1.20.1
+#15 36.32    Compiling futures-macro v0.3.34
+#15 37.18    Compiling phf_codegen v0.14.0
+#15 37.51    Compiling string_cache_codegen v0.11.2
+#15 37.55    Compiling tracing-attributes v0.1.31
+#15 38.02    Compiling lock_api v0.4.14
+#15 38.52    Compiling slab v0.4.12
+#15 38.64    Compiling tower-service v0.3.3
+#15 38.85    Compiling futures-task v0.3.34
+#15 38.96    Compiling serde_json v1.0.154
+#15 39.30    Compiling httpdate v1.0.3
+#15 39.34    Compiling new_debug_unreachable v1.0.6
+#15 39.55    Compiling futures-util v0.3.34
+#15 40.14    Compiling parking_lot v0.12.5
+#15 40.57    Compiling tracing v0.1.44
+#15 41.39    Compiling web_atoms v0.3.0
+#15 42.31    Compiling encoding_rs v0.8.44
+#15 42.48    Compiling
+#15 ...
+
+#18 [web-build 4/6] RUN npm ci --no-audit --no-fund
+#18 31.08 
+#18 31.08 > armoury-web@0.1.0 prepare
+#18 31.08 > svelte-kit sync || echo ''
+#18 31.08 
+#18 32.34 No Svelte config file found in /src/web - using SvelteKit's default configuration without an adapter.
+#18 33.16 
+#18 33.16 added 264 packages in 33s
+#18 33.16 npm notice
+#18 33.16 npm notice New major version of npm available! 11.20.0 -> 12.2.3
+#18 33.16 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#18 33.16 npm notice To update run: npm install -g npm@12.2.3
+#18 33.16 npm notice
+#18 DONE 35.9s
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 42.48    Compiling icu_normalizer v2.4.0
+#15 42.61    Compiling icu_properties v2.4.0
+#15 45.74    Compiling aho-corasick v1.1.5
+#15 46.45    Compiling tower-layer v0.3.3
+#15 46.83    Compiling precomputed-hash v0.1.1
+#15 46.87    Compiling ident_case v1.0.1
+#15 47.03    Compiling strsim v0.11.1
+#15 47.08    Compiling regex-syntax v0.8.12
+#15 47.63    Compiling darling_core v0.23.0
+#15 ...
+
+#19 [web-build 5/6] COPY web/ ./
+#19 DONE 0.7s
+
+#20 [web-build 6/6] RUN npm run build
+#20 1.012 
+#20 1.012 > armoury-web@0.1.0 build
+#20 1.012 > vite build
+#20 1.012 
+#20 3.559 vite v8.3.8 building ssr environment for production...
+#20 3.593 transforming...
+#20 4.444 ✓ 149 modules transformed.
+#20 4.521 rendering chunks...
+#20 ...
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 53.46    Compiling regex-automata v0.4.19
+#15 56.58    Compiling string_cache v0.11.0
+#15 ...
+
+#20 [web-build 6/6] RUN npm run build
+#20 6.750 vite v8.3.8 building client environment for production...
+#20 6.778 transforming...
+#20 7.348 ✓ 160 modules transformed.
+#20 7.404 rendering chunks...
+#20 7.496 computing gzip size...
+#20 7.499 .svelte-kit/output/client/_app/version.json                                                     0.02 kB │ gzip:  0.04 kB
+#20 7.499 .svelte-kit/output/client/.vite/manifest.json                                                   4.72 kB │ gzip:  0.75 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-vietnamese-wght-normal.CBcvBZtf.woff2    10.25 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-greek-ext-wght-normal.DlzME5K_.woff2     11.23 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-cyrillic-wght-normal.DqGufNeO.woff2      18.74 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-greek-wght-normal.CkhJZR-_.woff2         18.99 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-cyrillic-ext-wght-normal.BOeWTOD4.woff2  25.96 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-latin-wght-normal.Dx4kXJAl.woff2         48.25 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2     85.06 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/assets/0.Dm-bfkE0.css                                 11.39 kB │ gzip:  3.08 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/entry/start.DZ_SA9sX.js                                0.06 kB │ gzip:  0.07 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/chunks/xihTtKlq.js                                     0.06 kB │ gzip:  0.08 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/nodes/2.Dv8qvsSB.js                                    0.19 kB │ gzip:  0.18 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/nodes/1.C5PSDU8c.js                                    0.57 kB │ gzip:  0.32 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/chunks/Bjy-W4x2.js                                     1.36 kB │ gzip:  0.65 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/nodes/0.CPFNiGyO.js                                    2.45 kB │ gzip:  1.02 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/entry/app.BghYQGof.js                                  4.39 kB │ gzip:  2.00 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/chunks/BSw8iLo1.js                                    26.63 kB │ gzip: 10.30 kB
+#20 7.499 .svelte-kit/output/client/_app/immutable/chunks/Bov8hZ9P.js                                    37.97 kB │ gzip: 14.54 kB
+#20 7.499 
+#20 7.501 ✓ built in 749ms
+#20 9.576 computing gzip size...
+#20 9.587 .svelte-kit/output/server/.vite/manifest.json                                                    5.40 kB │ gzip:  0.80 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-vietnamese-wght-normal.CBcvBZtf.woff2     10.25 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-greek-ext-wght-normal.DlzME5K_.woff2      11.23 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-cyrillic-wght-normal.DqGufNeO.woff2       18.74 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-greek-wght-normal.CkhJZR-_.woff2          18.99 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-cyrillic-ext-wght-normal.BOeWTOD4.woff2   25.96 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-latin-wght-normal.Dx4kXJAl.woff2          48.25 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2      85.06 kB
+#20 9.587 .svelte-kit/output/server/_app/immutable/assets/_layout.BPgrmIj0.css                            11.32 kB │ gzip:  3.08 kB
+#20 9.587 .svelte-kit/output/server/entries/pages/_layout.ts.js                                            0.05 kB │ gzip:  0.07 kB
+#20 9.587 .svelte-kit/output/server/env.js                                                                 0.13 kB │ gzip:  0.12 kB
+#20 9.587 .svelte-kit/output/server/entries/pages/_page.svelte.js                                          0.19 kB │ gzip:  0.17 kB
+#20 9.587 .svelte-kit/output/server/chunks/env.js                                                          0.26 kB │ gzip:  0.16 kB
+#20 9.587 .svelte-kit/output/server/chunks/rolldown-runtime.js                                             0.34 kB │ gzip:  0.24 kB
+#20 9.587 .svelte-kit/output/server/internal.js                                                            0.40 kB │ gzip:  0.19 kB
+#20 9.587 .svelte-kit/output/server/chunks/internal.js                                                     0.72 kB │ gzip:  0.33 kB
+#20 9.587 .svelte-kit/output/server/entries/pages/_layout.svelte.js                                        2.54 kB │ gzip:  1.03 kB
+#20 9.587 .svelte-kit/output/server/entries/fallbacks/error.svelte.js                                      4.08 kB │ gzip:  1.65 kB
+#20 9.587 .svelte-kit/output/server/chunks/shared.js                                                      10.49 kB │ gzip:  3.37 kB
+#20 9.587 .svelte-kit/output/server/chunks/exports.js                                                     11.15 kB │ gzip:  3.61 kB
+#20 9.587 .svelte-kit/output/server/chunks/utils.js                                                       31.66 kB │ gzip:  9.33 kB
+#20 9.587 .svelte-kit/output/server/chunks/internal2.js                                                   39.77 kB │ gzip: 11.44 kB
+#20 9.587 .svelte-kit/output/server/remote-entry.js                                                       54.37 kB │ gzip: 12.02 kB
+#20 9.587 .svelte-kit/output/server/chunks/server.js                                                     116.28 kB │ gzip: 30.66 kB
+#20 9.587 .svelte-kit/output/server/index.js                                                             125.70 kB │ gzip: 31.94 kB
+#20 9.587 
+#20 9.589 ✓ built in 6.03s
+#20 9.590 
+#20 9.590 Run npm run preview to preview your production build locally.
+#20 9.596 
+#20 9.596 > Using @sveltejs/adapter-static
+#20 9.925   Wrote site to "build"
+#20 9.927   ✔ done
+#20 9.931 [33m[PLUGIN_TIMINGS] [0mJavaScript callbacks ran for 6.2s. The build took 6.0s. Callbacks such as `closeBundle` run after the build ends, so callback time can be more than build time.
+#20 9.931 The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+#20 9.931   - plugin vite-plugin-sveltekit-compile writeBundle (83%, 5.0s, 1 call)
+#20 9.931 Additional callback time came from the callbacks below and from callbacks under 1s.
+#20 9.931 1 callback is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
+#20 9.931   - plugin vite-plugin-sveltekit-guard resolveId (611 calls)
+#20 9.931 See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+#20 9.931 
+#20 DONE 11.9s
+
+#15 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#15 60.04    Compiling idna_adapter v1.2.2
+#15 62.25    Compiling block-buffer v0.10.4
+#15 62.44    Compiling crypto-common v0.1.6
+#15 62.65    Compiling phf v0.14.0
+#15 62.88    Compiling http-body-util v0.1.5
+#15 63.24    Compiling multer v3.1.0
+#15 63.39    Compiling multiversion_no_op v1.0.0
+#15 63.49    Compiling time-core v0.1.9
+#15 63.75    Compiling num-conv v0.2.2
+#15 63.85    Compiling atomic-waker v1.1.2
+#15 63.98    Compiling autocfg v1.5.1
+#15 64.00    Compiling core_detect v1.0.0
+#15 64.31    Compiling simdutf8 v0.1.5
+#15 64.50    Compiling ryu v1.0.23
+#15 64.57    Compiling sync_wrapper v1.0.2
+#15 64.69    Compiling num-traits v0.2.19
+#15 64.90    Compiling time-macros v0.2.32
+#15 64.92    Compiling hyper v1.12.0
+#15 68.25    Compiling digest v0.10.7
+#15 68.55    Compiling idna v1.1.0
+#15 69.96    Compiling darling_macro v0.23.0
+#15 70.41    Compiling tendril v0.5.1
+#15 70.84    Compiling proc-macro-error-attr3 v3.1.1
+#15 71.30    Compiling cookie v0.18.2
+#15 71.50    Compiling unicase v2.10.0
+#15 71.78    Compiling equivalent v1.0.3
+#15 71.98    Compiling cpufeatures v0.2.17
+#15 72.07    Compiling dtoa v1.0.11
+#15 72.21    Compiling hashbrown v0.17.1
+#15 72.33    Compiling powerfmt v0.2.1
+#15 72.62    Compiling deranged v0.5.9
+#15 72.95    Compiling spin v0.9.9
+#15 73.56    Compiling indexmap v2.14.2
+#15 74.89    Compiling time v0.3.55
+#15 74.90    Compiling dtoa-short v0.3.5
+#15 75.08    Compiling sha1 v0.10.7
+#15 75.15    Compiling mime_guess v2.0.5
+#15 75.70    Compiling proc-macro-error3 v3.1.1
+#15 75.74    Compiling markup5ever v0.40.0
+#15 76.08    Compiling darling v0.23.0
+#15 76.20    Compiling url v2.5.8
+#15 76.29    Compiling hyper-util v0.1.21
+#15 76.94    Compiling serde_urlencoded v0.7.1
+#15 77.43    Compiling axum-core v0.5.6
+#15 80.03    Compiling tower v0.5.3
+#15 80.51    Compiling serde_path_to_error v0.1.20
+#15 80.79    Compiling headers-core v0.3.0
+#15 80.92    Compiling base64 v0.22.1
+#15 81.27    Compiling matchit v0.8.4
+#15 81.67    Compiling axum v0.8.9
+#15 81.99    Compiling headers v0.4.2
+#15 84.60    Compiling validator_derive v0.20.1
+#15 84.88    Compiling html5ever v0.40.1
+#15 84.99    Compiling cssparser v0.38.0
+#15 86.62    Compiling serde_html_form v0.2.8
+#15 87.20    Compiling regex v1.13.2
+#15 87.57    Compiling anyhow v1.0.104
+#15 87.60    Compiling maplit v1.0.2
+#15 87.74    Compiling futures-sink v0.3.34
+#15 87.89    Compiling lazy_static v1.5.1
+#15 88.02    Compiling iana-time-zone v0.1.65
+#15 88.28    Compiling chrono v0.4.45
+#15 88.85    Compiling axum-extra v0.12.6
+#15 90.67    Compiling sharded-slab v0.1.7
+#15 91.21    Compiling validator v0.20.0
+#15 91.78    Compiling tokio-util v0.7.20
+#15 92.80    Compiling ammonia v4.2.5
+#15 93.14    Compiling matchers v0.2.0
+#15 93.42    Compiling tracing-serde v0.2.0
+#15 93.68    Compiling async-trait v0.1.92
+#15 94.84    Compiling tracing-log v0.2.0
+#15 95.06    Compiling thread_local v1.1.10
+#15 95.30    Compiling http-range-header v0.4.2
+#15 95.32    Compiling bitflags v2.13.2
+#15 95.46    Compiling nu-ansi-term v0.50.3
+#15 95.76    Compiling tower-http v0.7.1
+#15 96.04    Compiling tracing-subscriber v0.3.23
+#15 96.35    Compiling armoury-httpapi v0.0.1 (/src/control-plane/src/httpapi/server)
+#15 102.8    Compiling armoury v0.0.1 (/src/control-plane)
+#15 103.0 warning: unused dependency `anyhow`
+#15 103.0   --> control-plane/Cargo.toml:18:15
+#15 103.0    |
+#15 103.0 18 | [dependencies.anyhow]
+#15 103.0    |               ^^^^^^^
+#15 103.0    |
+#15 103.0    = note: `cargo::unused_dependencies` is set to `warn` by default
+#15 103.0 help: consider removing the dependency on `anyhow`
+#15 103.0 warning: unused dependency `armoury-httpapi`
+#15 103.0   --> control-plane/Cargo.toml:21:15
+#15 103.0    |
+#15 103.0 21 | [dependencies.armoury-httpapi]
+#15 103.0    |               ^^^^^^^^^^^^^^^^
+#15 103.0    |
+#15 103.0 help: consider removing the dependency on `armoury-httpapi`
+#15 103.0 warning: unused dependency `tower-http`
+#15 103.0   --> control-plane/Cargo.toml:42:15
+#15 103.0    |
+#15 103.0 42 | [dependencies.tower-http]
+#15 103.0    |               ^^^^^^^^^^^
+#15 103.0    |
+#15 103.0 help: consider removing the dependency on `tower-http`
+#15 103.0 warning: unused dependency `tracing-subscriber`
+#15 103.0   --> control-plane/Cargo.toml:48:15
+#15 103.0    |
+#15 103.0 48 | [dependencies.tracing-subscriber]
+#15 103.0    |               ^^^^^^^^^^^^^^^^^^^
+#15 103.0    |
+#15 103.0 help: consider removing the dependency on `tracing-subscriber`
+#15 103.0 warning: `armoury` (manifest) generated 4 warnings
+#15 103.0     Finished `release` profile [optimized] target(s) in 1m 42s
+#15 DONE 104.7s
+
+#21 [rust-build 3/4] COPY . .
+#21 DONE 0.7s
+
+#22 [rust-build 4/4] RUN cargo build --profile "release" --locked --package armoury   && cp "target/$([ "release" = dev ] && echo debug || echo "release")/armoury" /armoury
+#22 0.781    Compiling armoury-httpapi v0.1.0 (/src/control-plane/src/httpapi/server)
+#22 1.991    Compiling armoury v0.1.0 (/src/control-plane)
+#22 7.630     Finished `release` profile [optimized] target(s) in 7.28s
+#22 DONE 7.9s
+
+#23 [stage-5 2/3] COPY --from=rust-build /armoury /usr/local/bin/armoury
+#23 DONE 0.7s
+
+#24 [stage-5 3/3] COPY --from=web-build /src/web/build /usr/share/armoury/web
+#24 DONE 0.3s
+
+#25 exporting to image
+#25 exporting layers
+#25 exporting layers 0.7s done
+#25 exporting manifest sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 0.1s done
+#25 exporting config sha256:ad50a998d5eb0e08de2f98f7a0832b0252588da5c3bd8ee0dbc1bca817cf02e2 0.1s done
+#25 DONE 0.8s
+
+#25 exporting to image
+#25 pushing layers
+#25 pushing layers 2.3s done
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane:okteto@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane:okteto@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 0.1s done
+#25 pushing layers 0.7s done
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane:bfb709ff35fde48a8c9a421d523168e3d094dcee2cf11f3374466af3e6fa8451@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane:bfb709ff35fde48a8c9a421d523168e3d094dcee2cf11f3374466af3e6fa8451@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 0.1s done
+#25 DONE 4.0s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane:okteto' successfully pushed
+ i  Building '/Users/danielbooth/projects/home/armoury/control-plane/Dockerfile'...
+#1 [internal] load build definition from buildkit-1798388679
+#1 transferring dockerfile: 2.12kB 0.2s
+#1 transferring dockerfile: 2.12kB 0.2s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 33B 0.1s
+#4 transferring context: 256B 0.2s done
+#4 DONE 0.2s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#6 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1 0.1s done
+#6 DONE 0.1s
+
+#7 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#7 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.1s done
+#7 DONE 0.2s
+
+#8 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#8 CACHED
+
+#9 [chef 3/3] WORKDIR /src
+#9 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 1.62kB 0.2s done
+#5 DONE 0.2s
+
+#10 [web-build 2/6] WORKDIR /src/web
+#10 CACHED
+
+#11 [web-build 3/6] COPY web/package.json web/package-lock.json web/.npmrc ./
+#11 CACHED
+
+#12 [web-build 4/6] RUN npm ci --no-audit --no-fund
+#12 CACHED
+
+#13 [web-build 5/6] COPY web/ ./
+#13 CACHED
+
+#14 [web-build 6/6] RUN npm run build
+#14 CACHED
+
+#15 [dev 1/3] RUN cargo install cargo-watch --version 8.5.3 --locked
+#15 0.306     Updating crates.io index
+#15 0.380  Downloading crates ...
+#15 0.456   Downloaded cargo-watch v8.5.3
+#15 0.622   Installing cargo-watch v8.5.3
+#15 0.634     Updating crates.io index
+#15 4.358 warning: package `futures-util v0.3.30` in Cargo.lock is yanked in registry `crates-io`
+#15 4.423     Updating crates.io index
+#15 5.113  Downloading crates ...
+#15 5.156   Downloaded aho-corasick v0.7.20
+#15 5.190   Downloaded ansi_term v0.12.1
+#15 5.197   Downloaded async-broadcast v0.7.1
+#15 5.206   Downloaded async-channel v2.3.1
+#15 5.209   Downloaded async-executor v1.13.1
+#15 5.218   Downloaded async-fs v2.1.2
+#15 5.222   Downloaded atomic-waker v1.1.2
+#15 5.228   Downloaded atty v0.2.14
+#15 5.233   Downloaded bitflags v1.3.2
+#15 5.251   Downloaded block-buffer v0.10.4
+#15 5.258   Downloaded cfg-if v0.1.10
+#15 5.264   Downloaded cfg-if v1.0.0
+#15 5.271   Downloaded cfg_aliases v0.2.1
+#15 5.276   Downloaded async-trait v0.1.83
+#15 5.309   Downloaded autocfg v1.4.0
+#15 5.324   Downloaded blocking v1.6.1
+#15 5.330   Downloaded byteorder v1.5.0
+#15 5.337   Downloaded bitflags v2.6.0
+#15 5.355   Downloaded cargo-platform v0.1.8
+#15 5.360   Downloaded cpufeatures v0.2.14
+#15 5.366   Downloaded async-lock v3.4.0
+#15 5.374   Downloaded async-task v4.7.1
+#15 5.384   Downloaded async-io v2.3.4
+#15 5.396   Downloaded concurrent-queue v2.5.0
+#15 5.402   Downloaded crypto-common v0.1.6
+#15 5.405   Downloaded darling_macro v0.12.4
+#15 5.408   Downloaded derive_builder_macro v0.10.2
+#15 5.411   Downloaded dirs v4.0.0
+#15 5.416   Downloaded dirs-sys v0.3.7
+#15 5.420   Downloaded endi v1.1.0
+#15 5.425   Downloaded enumflags2_derive v0.7.10
+#15 5.428   Downloaded errno v0.3.9
+#15 5.434   Downloaded filetime v0.2.25
+#15 5.442   Downloaded aho-corasick v1.1.3
+#15 5.461   Downloaded camino v1.1.9
+#15 5.467   Downloaded equivalent v1.0.1
+#15 5.470   Downloaded fastrand v2.1.1
+#15 5.475   Downloaded fnv v1.0.7
+#15 5.479   Downloaded futures-core v0.3.30
+#15 5.485   Downloaded futures-io v0.3.30
+#15 5.488   Downloaded futures-sink v0.3.30
+#15 5.491   Downloaded phf_shared v0.11.2
+#15 5.495   Downloaded serde_repr v0.1.19
+#15 5.504   Downloaded shell-escape v0.1.5
+#15 5.508   Downloaded futures-task v0.3.30
+#15 5.514   Downloaded generic-array v0.14.7
+#15 5.520   Downloaded home v0.5.9
+#15 5.523   Downloaded lazy_static v1.5.0
+#15 5.531   Downloaded memoffset v0.9.1
+#15 5.536   Downloaded pin-utils v0.1.0
+#15 5.541   Downloaded proc-macro-crate v3.2.0
+#15 5.548   Downloaded serde_derive v1.0.210
+#15 5.559   Downloaded sha1 v0.10.6
+#15 5.567   Downloaded ident_case v1.0.1
+#15 5.596   Downloaded inotify-sys v0.1.5
+#15 5.599   Downloaded is-terminal v0.4.13
+#15 5.602   Downloaded itoa v1.0.11
+#15 5.608   Downloaded piper v0.2.4
+#15 5.615   Downloaded memoffset v0.6.5
+#15 5.620   Downloaded rand_chacha v0.3.1
+#15 5.624   Downloaded thiserror-impl v1.0.64
+#15 5.631   Downloaded stderrlog v0.6.0
+#15 5.644   Downloaded textwrap v0.11.0
+#15 5.650   Downloaded thread_local v1.1.8
+#15 5.656   Downloaded vec_map v0.8.2
+#15 5.660   Downloaded xdg-home v1.3.0
+#15 5.664   Downloaded zvariant_utils v2.1.0
+#15 5.667   Downloaded crossbeam-utils v0.8.20
+#15 5.678   Downloaded darling v0.12.4
+#15 5.690   Downloaded derive_builder_core v0.10.2
+#15 5.698   Downloaded digest v0.10.7
+#15 5.706   Downloaded dotenvy v0.15.7
+#15 5.718   Downloaded either v1.13.0
+#15 5.724   Downloaded enumflags2 v0.7.10
+#15 5.730   Downloaded event-listener-strategy v0.5.2
+#15 5.734   Downloaded lazycell v1.3.0
+#15 5.738   Downloaded phf_generator v0.11.2
+#15 5.742   Downloaded siphasher v0.3.11
+#15 5.748   Downloaded strsim v0.10.0
+#15 5.754   Downloaded which v4.4.2
+#15 5.761   Downloaded mio-extras v2.0.6
+#15 5.765   Downloaded phf_codegen v0.11.2
+#15 5.768   Downloaded zbus_names v3.0.0
+#15 5.774   Downloaded zvariant_derive v4.2.0
+#15 5.781   Downloaded strsim v0.8.0
+#15 5.785   Downloaded toml_datetime v0.6.8
+#15 5.788   Downloaded glob v0.3.1
+#15 5.794   Downloaded globset v0.4.6
+#15 5.799   Downloaded hex v0.4.3
+#15 5.806   Downloaded iana-time-zone v0.1.61
+#15 5.816   Downloaded thiserror v1.0.64
+#15 5.842   Downloaded inotify v0.7.1
+#15 5.849   Downloaded net2 v0.2.39
+#15 5.859   Downloaded ordered-stream v0.2.0
+#15 5.864   Downloaded parking v2.2.1
+#15 5.868   Downloaded phf v0.11.2
+#15 5.873   Downloaded ppv-lite86 v0.2.20
+#15 5.878   Downloaded quote v1.0.37
+#15 5.891   Downloaded slab v0.4.9
+#15 5.899   Downloaded watchexec v1.17.2
+#15 5.907   Downloaded zbus_macros v4.4.0
+#15 5.915   Downloaded cargo_metadata v0.18.1
+#15 5.924   Downloaded derive_builder v0.10.2
+#15 5.945   Downloaded event-listener v5.3.1
+#15 5.954   Downloaded iovec v0.1.4
+#15 5.961   Downloaded pin-project-lite v0.2.14
+#15 5.988   Downloaded serde_json v1.0.128
+#15 6.018   Downloaded typenum v1.17.0
+#15 6.028   Downloaded unicode-ident v1.0.13
+#15 6.040   Downloaded zerocopy-derive v0.7.35
+#15 6.063   Downloaded termcolor v1.1.3
+#15 6.067   Downloaded terminfo v0.7.5
+#15 6.084   Downloaded tracing-attributes v0.1.27
+#15 6.094   Downloaded getrandom v0.2.15
+#15 6.107   Downloaded log v0.4.22
+#15 6.116   Downloaded semver v1.0.23
+#15 6.126   Downloaded rand_core v0.6.4
+#15 6.131   Downloaded darling_core v0.12.4
+#15 6.152   Downloaded once_cell v1.20.1
+#15 6.164   Downloaded proc-macro2 v1.0.86
+#15 6.174   Downloaded ryu v1.0.18
+#15 6.190   Downloaded zvariant v4.2.0
+#15 6.210   Downloaded futures-lite v2.3.0
+#15 6.214   Downloaded num-traits v0.2.19
+#15 6.226   Downloaded polling v3.7.3
+#15 6.240   Downloaded notify v4.0.18
+#15 6.253   Downloaded tracing-core v0.1.32
+#15 6.265   Downloaded zbus v4.4.0
+#15 6.297   Downloaded notify-rust v4.11.3
+#15 6.310   Downloaded toml_edit v0.22.22
+#15 6.449   Downloaded tracing v0.1.40
+#15 6.463   Downloaded serde v1.0.210
+#15 6.474   Downloaded memchr v2.7.4
+#15 6.497   Downloaded winnow v0.6.20
+#15 6.535   Downloaded zerocopy v0.7.35
+#15 6.625   Downloaded indexmap v2.6.0
+#15 6.641   Downloaded mio v0.6.23
+#15 6.659   Downloaded syn v1.0.109
+#15 6.697   Downloaded rand v0.8.5
+#15 6.710   Downloaded syn v2.0.79
+#15 6.746   Downloaded unicode-width v0.1.14
+#15 6.759   Downloaded clearscreen v1.0.11
+#15 6.768   Downloaded command-group v1.0.8
+#15 6.785   Downloaded nom v5.1.3
+#15 6.807   Downloaded hashbrown v0.15.0
+#15 6.825   Downloaded clap v2.34.0
+#15 6.846   Downloaded futures-util v0.3.30
+#15 6.920   Downloaded portable-atomic v1.9.0
+#15 6.944   Downloaded chrono v0.4.38
+#15 6.971   Downloaded nix v0.22.3
+#15 7.007   Downloaded nix v0.24.3
+#15 7.046   Downloaded regex v1.11.0
+#15 7.106   Downloaded bstr v0.2.17
+#15 7.134   Downloaded nix v0.29.0
+#15 7.177   Downloaded rustix v0.38.37
+#15 7.295   Downloaded regex-syntax v0.8.5
+#15 7.317   Downloaded regex-automata v0.4.8
+#15 7.372   Downloaded libc v0.2.159
+#15 7.484   Downloaded linux-raw-sys v0.4.14
+#15 7.882    Compiling proc-macro2 v1.0.86
+#15 7.882    Compiling unicode-ident v1.0.13
+#15 7.883    Compiling libc v0.2.159
+#15 7.883    Compiling autocfg v1.4.0
+#15 8.090    Compiling cfg-if v1.0.0
+#15 8.179    Compiling pin-project-lite v0.2.14
+#15 8.299    Compiling version_check v0.9.5
+#15 8.520    Compiling memchr v2.7.4
+#15 8.783    Compiling crossbeam-utils v0.8.20
+#15 9.112    Compiling quote v1.0.37
+#15 9.467    Compiling syn v2.0.79
+#15 9.825    Compiling parking v2.2.1
+#15 10.03    Compiling serde v1.0.210
+#15 10.12    Compiling concurrent-queue v2.5.0
+#15 10.40    Compiling slab v0.4.9
+#15 10.49    Compiling futures-core v0.3.30
+#15 10.54    Compiling event-listener v5.3.1
+#15 10.70    Compiling bitflags v2.6.0
+#15 10.98    Compiling rustix v0.38.37
+#15 11.06    Compiling typenum v1.17.0
+#15 11.07    Compiling futures-io v0.3.30
+#15 11.31    Compiling syn v1.0.109
+#15 11.40    Compiling hashbrown v0.15.0
+#15 11.63    Compiling equivalent v1.0.1
+#15 11.81    Compiling event-listener-strategy v0.5.2
+#15 11.92    Compiling generic-array v0.14.7
+#15 11.98    Compiling siphasher v0.3.11
+#15 12.15    Compiling bitflags v1.3.2
+#15 12.25    Compiling indexmap v2.6.0
+#15 12.28    Compiling rand_core v0.6.4
+#15 12.29    Compiling fastrand v2.1.1
+#15 12.49    Compiling once_cell v1.20.1
+#15 12.79    Compiling winnow v0.6.20
+#15 12.87    Compiling toml_datetime v0.6.8
+#15 13.13    Compiling linux-raw-sys v0.4.14
+#15 13.19    Compiling rand v0.8.5
+#15 13.93    Compiling phf_shared v0.11.2
+#15 15.42    Compiling toml_edit v0.22.22
+#15 17.83    Compiling serde_derive v1.0.210
+#15 19.76    Compiling strsim v0.10.0
+#15 20.20    Compiling ident_case v1.0.1
+#15 20.34    Compiling fnv v1.0.7
+#15 20.46    Compiling log v0.4.22
+#15 20.88    Compiling darling_core v0.12.4
+#15 22.55    Compiling proc-macro-crate v3.2.0
+#15 23.31    Compiling zerocopy-derive v0.7.35
+#15 24.16    Compiling zvariant_utils v2.1.0
+#15 24.46    Compiling phf_generator v0.11.2
+#15 24.54    Compiling futures-lite v2.3.0
+#15 24.61    Compiling byteorder v1.5.0
+#15 24.92    Compiling zerocopy v0.7.35
+#15 24.96    Compiling phf_codegen v0.11.2
+#15 25.41    Compiling darling_macro v0.12.4
+#15 26.18    Compiling enumflags2_derive v0.7.10
+#15 26.54    Compiling tracing-attributes v0.1.27
+#15 26.72    Compiling tracing-core v0.1.32
+#15 27.17    Compiling getrandom v0.2.15
+#15 27.66    Compiling nom v5.1.3
+#15 28.11    Compiling memoffset v0.6.5
+#15 28.45    Compiling memoffset v0.9.1
+#15 28.52    Compiling thiserror v1.0.64
+#15 29.03    Compiling cfg_aliases v0.2.1
+#15 29.13    Compiling async-task v4.7.1
+#15 29.21    Compiling atomic-waker v1.1.2
+#15 29.36    Compiling cfg-if v0.1.10
+#15 29.43    Compiling piper v0.2.4
+#15 29.45    Compiling net2 v0.2.39
+#15 29.47    Compiling enumflags2 v0.7.10
+#15 29.52    Compiling tracing v0.1.40
+#15 29.82    Compiling nix v0.29.0
+#15 30.10    Compiling ppv-lite86 v0.2.20
+#15 30.13    Compiling darling v0.12.4
+#15 30.21    Compiling terminfo v0.7.5
+#15 30.38    Compiling crypto-common v0.1.6
+#15 30.44    Compiling block-buffer v0.10.4
+#15 30.51    Compiling zvariant_derive v4.2.0
+#15 30.61    Compiling thiserror-impl v1.0.64
+#15 30.71    Compiling async-lock v3.4.0
+#15 31.35    Compiling async-channel v2.3.1
+#15 31.75    Compiling iovec v0.1.4
+#15 32.00    Compiling dirs-sys v0.3.7
+#15 32.34    Compiling aho-corasick v1.1.3
+#15 32.40    Compiling num-traits v0.2.19
+#15 32.72    Compiling static_assertions v1.1.0
+#15 32.77    Compiling endi v1.1.0
+#15 32.95    Compiling regex-syntax v0.8.5
+#15 33.09    Compiling zvariant v4.2.0
+#15 33.45    Compiling dirs v4.0.0
+#15 33.60    Compiling mio v0.6.23
+#15 35.10    Compiling blocking v1.6.1
+#15 35.62    Compiling regex-automata v0.4.8
+#15 37.84    Compiling rand_chacha v0.3.1
+#15 38.59    Compiling digest v0.10.7
+#15 38.89    Compiling derive_builder_core v0.10.2
+#15 39.27    Compiling phf v0.11.2
+#15 39.50    Compiling polling v3.7.3
+#15 39.82    Compiling inotify-sys v0.1.5
+#15 39.94    Compiling home v0.5.9
+#15 40.01    Compiling lazycell v1.3.0
+#15 40.13    Compiling futures-task v0.3.30
+#15 40.15    Compiling pin-utils v0.1.0
+#15 40.22    Compiling serde_json v1.0.128
+#15 40.35    Compiling same-file v1.0.6
+#15 40.49    Compiling cpufeatures v0.2.14
+#15 40.51    Compiling camino v1.1.9
+#15 40.60    Compiling either v1.13.0
+#15 40.95    Compiling futures-sink v0.3.30
+#15 41.02    Compiling semver v1.0.23
+#15 41.06    Compiling futures-util v0.3.30
+#15 41.35    Compiling which v4.4.2
+#15 41.93    Compiling sha1 v0.10.6
+#15 42.38    Compiling walkdir v2.5.0
+#15 43.08    Compiling regex v1.11.0
+#15 44.06    Compiling mio-extras v2.0.6
+#15 44.50    Compiling inotify v0.7.1
+#15 44.92    Compiling derive_builder_macro v0.10.2
+#15 45.38    Compiling async-io v2.3.4
+#15 46.98    Compiling nix v0.22.3
+#15 48.16    Compiling zbus_names v3.0.0
+#15 48.25    Compiling async-fs v2.1.2
+#15 49.30    Compiling async-executor v1.13.1
+#15 49.59    Compiling zbus_macros v4.4.0
+#15 49.84    Compiling async-trait v0.1.83
+#15 50.49    Compiling serde_repr v0.1.19
+#15 51.16    Compiling nix v0.24.3
+#15 51.23    Compiling async-broadcast v0.7.1
+#15 51.66    Compiling ordered-stream v0.2.0
+#15 52.29    Compiling xdg-home v1.3.0
+#15 52.44    Compiling filetime v0.2.25
+#15 52.70    Compiling bstr v0.2.17
+#15 53.02    Compiling aho-corasick v0.7.20
+#15 53.20    Compiling hex v0.4.3
+#15 53.61    Compiling unicode-width v0.1.14
+#15 53.85    Compiling iana-time-zone v0.1.61
+#15 54.03    Compiling itoa v1.0.11
+#15 54.22    Compiling ryu v1.0.18
+#15 54.45    Compiling zbus v4.4.0
+#15 54.50    Compiling globset v0.4.6
+#15 55.77    Compiling chrono v0.4.38
+#15 57.19    Compiling textwrap v0.11.0
+#15 57.62    Compiling clearscreen v1.0.11
+#15 57.66    Compiling notify v4.0.18
+#15 58.52    Compiling command-group v1.0.8
+#15 58.81    Compiling derive_builder v0.10.2
+#15 59.58    Compiling cargo-platform v0.1.8
+#15 60.11    Compiling thread_local v1.1.8
+#15 60.13    Compiling atty v0.2.14
+#15 60.24    Compiling is-terminal v0.4.13
+#15 60.37    Compiling strsim v0.8.0
+#15 60.52    Compiling ansi_term v0.12.1
+#15 60.86    Compiling vec_map v0.8.2
+#15 60.95    Compiling glob v0.3.1
+#15 61.15    Compiling lazy_static v1.5.0
+#15 61.24    Compiling termcolor v1.1.3
+#15 61.26    Compiling clap v2.34.0
+#15 61.92    Compiling stderrlog v0.6.0
+#15 61.95    Compiling watchexec v1.17.2
+#15 62.82    Compiling cargo_metadata v0.18.1
+#15 66.40    Compiling notify-rust v4.11.3
+#15 69.65    Compiling shell-escape v0.1.5
+#15 69.83    Compiling dotenvy v0.15.7
+#15 96.35    Compiling cargo-watch v8.5.3
+#15 156.0     Finished `release` profile [optimized] target(s) in 2m 35s
+#15 156.0   Installing /usr/local/cargo/bin/cargo-watch
+#15 156.0    Installed package `cargo-watch v8.5.3` (executable `cargo-watch`)
+#15 DONE 156.5s
+
+#16 [dev 2/3] COPY --from=web-build /src/web/build /usr/share/armoury/web
+#16 DONE 0.4s
+
+#17 [dev 3/3] WORKDIR /usr/src/armoury
+#17 DONE 0.2s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 6.4s done
+#18 exporting manifest sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 0.1s done
+#18 exporting config sha256:a414350aebc4c5b297c160e2a41a458185bd3395e160f17b123a7e57e20adee3
+#18 exporting config sha256:a414350aebc4c5b297c160e2a41a458185bd3395e160f17b123a7e57e20adee3 0.3s done
+#18 DONE 6.7s
+
+#18 exporting to image
+#18 pushing layers
+#18 pushing layers 14.2s done
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane-dev:okteto@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane-dev:okteto@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 0.1s done
+#18 pushing layers 0.4s done
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane-dev:3efbf5f5940685a8be13a0d3387be1627c8ad4c63a32aaeb5903ef92f91c97fa@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane-dev:3efbf5f5940685a8be13a0d3387be1627c8ad4c63a32aaeb5903ef92f91c97fa@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 0.1s done
+#18 DONE 21.5s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/armoury-ci-20261120084612-57891-18693/armoury-control-plane-dev:okteto' successfully pushed
+ i  Running stage 'Deploy the Armoury chart'
+Executing command 'Deploy the Armoury chart'...
+Release "armoury" does not exist. Installing it now.
+NAME: armoury
+LAST DEPLOYED: Fri Nov 20 08:57:11 2026
+NAMESPACE: armoury-ci-20261120084612-57891-18693
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+NOTES:
+Armoury 0.1.0 is installed in namespace armoury-ci-20261120084612-57891-18693.
+Open the web app:
+  kubectl --namespace armoury-ci-20261120084612-57891-18693 port-forward service/armoury-control-plane 8080:8080
+  then browse to http://localhost:8080
+Command 'Deploy the Armoury chart' successfully executed
+ x  'armoury' resources were not healthy after 20m0s
+ci:e2e: deleting namespace armoury-ci-20261120084612-57891-18693
+Successfully assigned okteto/namespace-destroy-all-armoury-ci-20261120084612-5789-17951cmc6t to prod-microcloud-k8s-worker-1
+Container started
+Container image "ghcr.io/okteto/backend:1.50.1" already present on machine and can be accessed by the pod
+Container created
+Container started
+Destroy all started for armoury-ci-20261120084612-57891-18693
+Skipping Persistent Volume Claims
+no dev environments detected to be gracefully destroyed
+found helm releases installed at namespace
+ ✓  Context 'dashboard.okteto.lab.danielbooth.cloud' created
+ ✓  Updated kubernetes context 'dashboard_okteto_lab_danielbooth_cloud/armoury-ci-20261120084612-57891-18693' in '/home/backend/.kube/config'
+uninstalling helm release armoury
+release "armoury" uninstalled
+WARNING: Failed to list metrics.k8s.io/v1beta1 PodMetrics: invalid selector: [!space.okteto.com/managed]
+Kind=Pod armoury-agent-7f45c788bd-wpfln destroyed
+Kind=ConfigMap okteto-git-armoury destroyed
+Namespace successfully deleted
+ ✓  Namespace 'armoury-ci-20261120084612-57891-18693' deleted
+[ci:e2e] ERROR task failed
+
+real	31m38.065s
+user	0m2.381s
+sys	0m3.493s

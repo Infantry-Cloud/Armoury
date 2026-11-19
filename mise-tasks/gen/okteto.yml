@@ -1,0 +1,16 @@
+# Generator manifest for `mise run gen:api` (D7). No `build` or `deploy` section, so
+# `okteto test` never deploys the app; `artifacts` return the generated files.
+# The task copies this file and the spec into a scratch directory and runs `okteto test` there.
+test:
+  generate:
+    image: docker.io/openapitools/openapi-generator-cli:v7.27.0@sha256:949efd0d5cf3c093ef169887b2ebe0879ee2e8074b6476264232ce4fd8ef46d0
+    commands:
+      - rm -rf out
+      - >-
+        java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate
+        --input-spec api/openapi.yaml
+        --generator-name rust-axum
+        --output out/rust
+        --additional-properties=packageName=armoury-httpapi,hideGenerationTimestamp=true
+    artifacts:
+      - out

@@ -1,0 +1,14 @@
+## RED 1: ci/e2e mutated to drop --use=false from okteto namespace create
+✖ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (2870.178458ms)
+✖ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (2870.178458ms)
+  + actual - expected
+  +     namespaceCreateWithoutUseFalse: [
+  +       'okteto namespace create armoury-ci-20261119221605-39530-27486'
+  +     ],
+## Probe 2 (not a defect under the oracle): check/test-db with trap '' INT still deletes its Pod because cargo exits 130 and the EXIT trap runs; passes as the ATDD checklist predicts
+✔ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (3099.853083ms)
+## RED 3 (found during implementation): port-forward race in check/test-db made testDbFailRanCargo false; fixed by checking liveness before reading the log
+## GREEN: restored (6 consecutive passing runs before this record)
+✔ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (2674.910709ms)
+ℹ pass 1
+ℹ fail 0

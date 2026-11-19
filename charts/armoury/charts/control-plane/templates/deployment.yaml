@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "control-plane.fullname" . }}
+  labels:
+    {{- include "control-plane.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      {{- include "control-plane.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "control-plane.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "control-plane.fullname" . }}
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: control-plane
+          image: {{ include "control-plane.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /api/v1/healthz
+              port: http
+            initialDelaySeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

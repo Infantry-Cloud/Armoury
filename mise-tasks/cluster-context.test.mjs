@@ -295,7 +295,7 @@ function runCase(dir, bin, kase, variables, extra = {}) {
 	};
 }
 
-test.skip('VAL-15 cluster tasks require and pass an explicit Okteto and kube context', (t) => {
+test('VAL-15 cluster tasks require and pass an explicit Okteto and kube context', (t) => {
 	const dir = mkdtempSync(join(tmpdir(), 'val-15-context-'));
 	t.after(() => rmSync(dir, { recursive: true, force: true }));
 	const bin = shimBin(dir);

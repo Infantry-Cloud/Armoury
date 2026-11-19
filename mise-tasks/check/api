@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#MISE description="Gate step api: regenerate from api/openapi.yaml into a temporary directory and compare with the committed output (no VCS)"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+: "${ARMOURY_NAMESPACE:?is not set; copy mise.local.toml.example to mise.local.toml}"
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+root="$(cd "${1:-$repo}" && pwd)"
+# Same generated paths as `gen/api`.
+generated_dirs=("control-plane/src/httpapi/server/generated" "web/src/lib/api")
+
+fresh="$(mktemp -d)"
+trap 'rm -rf "$fresh"' EXIT
+mkdir -p "$fresh/api"
+cp "$root/api/openapi.yaml" "$fresh/api/openapi.yaml"
+"$repo/mise-tasks/gen/api" "$fresh"
+
+files_under() {
+  if [ -d "$1" ]; then (cd "$1" && find . -type f | sed 's|^\./||'); fi
+}
+
+drift=0
+for dir in "${generated_dirs[@]}"; do
+  while IFS= read -r file; do
+    path="$dir/$file"
+    if [ ! -f "$root/$path" ]; then
+      echo "api: missing generated file: $path"
+      drift=1
+    elif [ ! -f "$fresh/$path" ]; then
+      echo "api: file not produced by the generator: $path"
+      drift=1
+    elif ! cmp -s "$root/$path" "$fresh/$path"; then
+      echo "api: generated file differs from the spec: $path"
+      diff -u "$fresh/$path" "$root/$path" | head -n 20 || true
+      drift=1
+    fi
+  done < <({ files_under "$root/$dir"; files_under "$fresh/$dir"; } | sort -u)
+done
+
+if [ "$drift" -ne 0 ]; then
+  echo "api: generated code does not match api/openapi.yaml; run 'mise run gen:api' and never edit generated files" >&2
+  exit 1
+fi
+echo "api: generated code matches api/openapi.yaml"

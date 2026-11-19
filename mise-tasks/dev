@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Dev loop (PROC3): okteto up builds both images, deploys the chart into ARMOURY_NAMESPACE and starts the control-plane dev container on localhost:8080"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+: "${ARMOURY_NAMESPACE:?is not set; copy mise.local.toml.example to mise.local.toml}"
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# --deploy rebuilds changed images and redeploys, so the chart always runs the current digests.
+exec okteto up control-plane --context "$ARMOURY_OKTETO_CONTEXT" --namespace "$ARMOURY_NAMESPACE" --file okteto.yaml --deploy

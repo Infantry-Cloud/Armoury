@@ -1,0 +1,27 @@
+## VAL-7 without a working Okteto context on this workstation (no ~/.okteto context; mise.local.toml absent)
+## Expected RED until an Okteto context exists (assumption before T4 unmet)
+
+test at mise-tasks/gen/api.cluster.test.mjs:100:1
+✖ VAL-7 gen:api is repeatable and the api step names an edited generated file (295.573083ms)
+  AssertionError [ERR_ASSERTION]: /Users/danielbooth/projects/home/armoury/mise-tasks/gen/api: line 4: ARMOURY_OKTETO_CONTEXT: is not set; copy mise.local.toml.example to mise.local.toml
+  
+  + actual - expected
+  
+    {
+      error: undefined,
+  +   status: 1
+  -   status: 0
+    }
+  
+      at TestContext.<anonymous> (file:///Users/danielbooth/projects/home/armoury/mise-tasks/gen/api.cluster.test.mjs:108:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { status: 1, error: undefined },
+    expected: { status: 0, error: undefined },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

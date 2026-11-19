@@ -9,7 +9,7 @@ import { expect, test } from '@playwright/test';
 
 // SSR is off, so the title alone comes from app.html even when the JavaScript bundle fails.
 // The visible product name proves the client app rendered; page errors fail the test.
-test.skip('loads the web app @VAL-10', async ({ page }) => {
+test('loads the web app @VAL-10', async ({ page }) => {
 	const pageErrors: string[] = [];
 	page.on('pageerror', (error) => pageErrors.push(error.message));
 

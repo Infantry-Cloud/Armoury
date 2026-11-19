@@ -1,0 +1,23 @@
+[package]
+name = "armoury-agent"
+version = "0.1.0"
+description = "Armoury cluster agent: a read-only Kubernetes watcher that reports to the control plane."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "armoury-agent"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+k8s-openapi.workspace = true
+kube.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[lints]
+workspace = true

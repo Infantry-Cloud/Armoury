@@ -1,0 +1,780 @@
+[dev] $ ~/projects/home/armoury/mise-tasks/dev
+ i  Using danielboothcloud @ dashboard.okteto.lab.danielbooth.cloud as context
+ !  Repository not detected: the env vars 'OKTETO_GIT_BRANCH' and 'OKTETO_GIT_COMMIT' might not be available.
+    For more information, check out: https://www.okteto.com/docs/core/okteto-variables/#default-environment-variables
+ !  Smart builds: git metadata unavailable for "agent"
+ !  Smart builds: git metadata unavailable for "control-plane"
+ !  Smart builds: git metadata unavailable for "control-plane-dev"
+ i  Building '/Users/danielbooth/projects/home/armoury/agent/Dockerfile'...
+#1 [internal] load build definition from buildkit-3734231619
+#1 transferring dockerfile: 1.24kB 0.1s done
+#1 DONE 0.4s
+
+#2 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#2 ...
+
+#3 [internal] load metadata for gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#3 DONE 0.3s
+
+#2 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#2 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 33B 0.1s
+#4 transferring context: 256B 0.1s done
+#4 DONE 0.2s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.3s done
+#6 DONE 0.4s
+
+#7 [stage-3 1/2] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#7 resolve gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f 0.3s done
+#7 DONE 0.3s
+
+#5 [internal] load build context
+#5 transferring context: 10.04kB 0.2s done
+#5 DONE 0.3s
+
+#8 [planner 1/2] COPY . .
+#8 CACHED
+
+#9 [planner 2/2] RUN cargo chef prepare --recipe-path recipe.json
+#9 CACHED
+
+#10 [chef 3/3] WORKDIR /src
+#10 CACHED
+
+#11 [rust-build 1/4] COPY --from=planner /src/recipe.json recipe.json
+#11 CACHED
+
+#12 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury-agent --recipe-path recipe.json
+#12 CACHED
+
+#13 [rust-build 3/4] COPY . .
+#13 CACHED
+
+#14 [rust-build 4/4] RUN cargo build --profile "release" --locked --package armoury-agent   && cp "target/$([ "release" = dev ] && echo debug || echo "release")/armoury-agent" /armoury-agent
+#14 CACHED
+
+#15 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#15 CACHED
+
+#16 [stage-3 2/2] COPY --from=rust-build /armoury-agent /usr/local/bin/armoury-agent
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 0.0s done
+#17 exporting config sha256:c0ccc797f8d30727acf212afd9f627cb634a90ebdef6dcd2a6de4b2dcfb773e8
+#17 exporting config sha256:c0ccc797f8d30727acf212afd9f627cb634a90ebdef6dcd2a6de4b2dcfb773e8 0.2s done
+#17 DONE 0.3s
+
+#17 exporting to image
+#17 pushing layers
+#17 pushing layers 0.7s done
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-agent:okteto@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-agent:okteto@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 done
+#17 pushing layers 0.6s done
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-agent:27cd11119c3189c865ee4da3c642db47659f1128193be6d4271502b86f655ccc@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868
+#17 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-agent:27cd11119c3189c865ee4da3c642db47659f1128193be6d4271502b86f655ccc@sha256:132718a669461c370ae6850397524a24e7c4e2d8087d35f5f885f93b6d055868 0.1s done
+#17 DONE 1.7s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-agent:okteto' successfully pushed
+ i  Building '/Users/danielbooth/projects/home/armoury/control-plane/Dockerfile'...
+#1 [internal] load build definition from buildkit-1258961500
+#1 transferring dockerfile:
+#1 transferring dockerfile: 2.12kB 0.2s done
+#1 DONE 0.5s
+
+#2 [internal] load metadata for gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#2 DONE 0.2s
+
+#3 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#3 DONE 0.3s
+
+#4 [internal] load metadata for docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#4 DONE 0.3s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 256B 0.1s done
+#5 DONE 0.2s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1 0.2s done
+#7 DONE 0.3s
+
+#8 [stage-5 1/3] FROM gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f
+#8 resolve gcr.io/distroless/cc-debian12:nonroot@sha256:9dac0a79194e45a7da0158a9c6da57b217585af0786db3845d1f0ec1a0dd182f 0.2s done
+#8 DONE 0.2s
+
+#9 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#9 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.3s done
+#9 DONE 0.3s
+
+#6 [internal] load build context
+#6 transferring context: 10.04kB 0.1s done
+#6 DONE 0.2s
+
+#10 [rust-build 3/4] COPY . .
+#10 CACHED
+
+#11 [web-build 4/6] RUN npm ci --no-audit --no-fund
+#11 CACHED
+
+#12 [planner 2/2] RUN cargo chef prepare --recipe-path recipe.json
+#12 CACHED
+
+#13 [chef 3/3] WORKDIR /src
+#13 CACHED
+
+#14 [web-build 3/6] COPY web/package.json web/package-lock.json web/.npmrc ./
+#14 CACHED
+
+#15 [rust-build 1/4] COPY --from=planner /src/recipe.json recipe.json
+#15 CACHED
+
+#16 [stage-5 2/3] COPY --from=rust-build /armoury /usr/local/bin/armoury
+#16 CACHED
+
+#17 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#17 CACHED
+
+#18 [web-build 2/6] WORKDIR /src/web
+#18 CACHED
+
+#19 [rust-build 4/4] RUN cargo build --profile "release" --locked --package armoury   && cp "target/$([ "release" = dev ] && echo debug || echo "release")/armoury" /armoury
+#19 CACHED
+
+#20 [planner 1/2] COPY . .
+#20 CACHED
+
+#21 [rust-build 2/4] RUN cargo chef cook --profile "release" --locked --package armoury --recipe-path recipe.json
+#21 CACHED
+
+#22 [web-build 6/6] RUN npm run build
+#22 CACHED
+
+#23 [web-build 5/6] COPY web/ ./
+#23 CACHED
+
+#24 [stage-5 3/3] COPY --from=web-build /src/web/build /usr/share/armoury/web
+#24 CACHED
+
+#25 exporting to image
+#25 exporting layers done
+#25 exporting manifest sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 0.1s done
+#25 exporting config sha256:ad50a998d5eb0e08de2f98f7a0832b0252588da5c3bd8ee0dbc1bca817cf02e2 0.0s done
+#25 DONE 0.1s
+
+#25 exporting to image
+#25 pushing layers
+#25 pushing layers 0.5s done
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane:okteto@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane:okteto@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 done
+#25 pushing layers 0.3s done
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane:b76c2bf2c3b1b81b1a88804814336265aee1111108ea20b411af18c5b7c5b3d2@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5
+#25 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane:b76c2bf2c3b1b81b1a88804814336265aee1111108ea20b411af18c5b7c5b3d2@sha256:81789a82863cc9e0c7022a3c14d74ab637d276a40b491e1db9b6c8032ee841c5 0.1s done
+#25 DONE 1.0s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane:okteto' successfully pushed
+ i  Building '/Users/danielbooth/projects/home/armoury/control-plane/Dockerfile'...
+#1 [internal] load build definition from buildkit-663205875
+#1 transferring dockerfile: 2.12kB 0.1s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#3 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 256B 0.1s done
+#4 DONE 0.2s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 ...
+
+#7 [web-build 1/6] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1
+#7 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:5df79989ed685e09f0a98019db4cebfb22fb9df1a53c0161664a011f7ff6b0f1 0.3s done
+#7 DONE 0.3s
+
+#6 [chef 1/3] FROM docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea
+#6 resolve docker.io/library/rust:1.100.0-bookworm@sha256:ade39a710ef85f3506cffcfec3e8a24ba090badef1dff2fb798f71d878833fea 0.4s done
+#6 DONE 0.4s
+
+#5 [internal] load build context
+#5 transferring context: 1.62kB 0.1s done
+#5 DONE 0.2s
+
+#8 [web-build 2/6] WORKDIR /src/web
+#8 CACHED
+
+#9 [web-build 3/6] COPY web/package.json web/package-lock.json web/.npmrc ./
+#9 CACHED
+
+#10 [dev 2/3] COPY --from=web-build /src/web/build /usr/share/armoury/web
+#10 CACHED
+
+#11 [dev 1/3] RUN cargo install cargo-watch --version 8.5.3 --locked
+#11 CACHED
+
+#12 [web-build 5/6] COPY web/ ./
+#12 CACHED
+
+#13 [web-build 6/6] RUN npm run build
+#13 CACHED
+
+#14 [chef 2/3] RUN cargo install cargo-chef --version 0.1.78 --locked
+#14 CACHED
+
+#15 [chef 3/3] WORKDIR /src
+#15 CACHED
+
+#16 [web-build 4/6] RUN npm ci --no-audit --no-fund
+#16 CACHED
+
+#17 [dev 3/3] WORKDIR /usr/src/armoury
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 exporting manifest sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 0.0s done
+#18 exporting config sha256:a414350aebc4c5b297c160e2a41a458185bd3395e160f17b123a7e57e20adee3 0.0s done
+#18 pushing layers
+#18 pushing layers 0.4s done
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane-dev:okteto@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane-dev:okteto@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 done
+#18 pushing layers 0.5s done
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane-dev:0aa6280b1a6dcd1a17b14fa986d2dee3ce370e74722698ceb2413f5d77ab0229@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393
+#18 pushing manifest for registry.okteto.lab.danielbooth.cloud/okteto/armoury-control-plane-dev:0aa6280b1a6dcd1a17b14fa986d2dee3ce370e74722698ceb2413f5d77ab0229@sha256:0df7518bc85ed7350282ea41fcfbcb0bc119a1da7e4d8a6f4db448bbedfe6393 0.1s done
+#18 DONE 1.0s
+ ✓  Image 'registry.okteto.lab.danielbooth.cloud/danielboothcloud/armoury-control-plane-dev:okteto' successfully pushed
+ i  Running stage 'Deploy the Armoury chart'
+Executing command 'Deploy the Armoury chart'...
+Release "armoury" has been upgraded. Happy Helming!
+NAME: armoury
+LAST DEPLOYED: Fri Nov 20 13:27:18 2026
+NAMESPACE: danielboothcloud
+STATUS: deployed
+REVISION: 2
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+NOTES:
+Armoury 0.1.0 is installed in namespace danielboothcloud.
+Open the web app:
+  kubectl --namespace danielboothcloud port-forward service/armoury-control-plane 8080:8080
+  then browse to http://localhost:8080
+Command 'Deploy the Armoury chart' successfully executed
+ i  There are no available endpoints for 'armoury'.
+    Follow this link to know more about how to create public endpoints for your application:
+    https://www.okteto.com/docs/core/endpoints/automatic-ssl
+ ✓  SSH keys generated
+Installing dependencies...
+syncthing-macos-arm64-v2.1.3.zip  270.03 KiB / 10.75 MiB [>____________________________] 2.45% ? p/ssyncthing-macos-arm64-v2.1.3.zip  686.03 KiB / 10.75 MiB [->___________________________] 6.23% ? p/ssyncthing-macos-arm64-v2.1.3.zip  1022.03 KiB / 10.75 MiB [-->_________________________] 9.29% ? p/ssyncthing-macos-arm64-v2.1.3.zip  1022.03 KiB / 10.75 MiB [->___________________] 9.29% 1.09 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  1.90 MiB / 10.75 MiB [---->__________________] 17.72% 1.09 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  2.11 MiB / 10.75 MiB [---->__________________] 19.61% 1.09 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  2.76 MiB / 10.75 MiB [----->_________________] 25.71% 1.24 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  3.15 MiB / 10.75 MiB [------>________________] 29.35% 1.24 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  3.58 MiB / 10.75 MiB [------->_______________] 33.27% 1.24 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  3.98 MiB / 10.75 MiB [-------->______________] 37.05% 1.29 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  4.11 MiB / 10.75 MiB [-------->______________] 38.22% 1.29 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  4.79 MiB / 10.75 MiB [---------->____________] 44.61% 1.29 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  5.22 MiB / 10.75 MiB [----------->___________] 48.54% 1.34 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  5.64 MiB / 10.75 MiB [------------>__________] 52.46% 1.34 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  6.04 MiB / 10.75 MiB [------------>__________] 56.24% 1.34 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  6.45 MiB / 10.75 MiB [------------->_________] 60.02% 1.39 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  6.84 MiB / 10.75 MiB [-------------->________] 63.66% 1.39 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  7.28 MiB / 10.75 MiB [--------------->_______] 67.73% 1.39 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  7.69 MiB / 10.75 MiB [---------------->______] 71.51% 1.43 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  8.12 MiB / 10.75 MiB [----------------->_____] 75.58% 1.43 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  8.53 MiB / 10.75 MiB [------------------>____] 79.36% 1.43 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  8.94 MiB / 10.75 MiB [------------------->___] 83.14% 1.47 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  9.37 MiB / 10.75 MiB [-------------------->__] 87.21% 1.47 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  9.78 MiB / 10.75 MiB [-------------------->__] 90.99% 1.47 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  10.19 MiB / 10.75 MiB [-------------------->_] 94.77% 1.51 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  10.59 MiB / 10.75 MiB [--------------------->] 98.55% 1.51 MiB p/ssyncthing-macos-arm64-v2.1.3.zip  10.75 MiB / 10.75 MiB [---------------------] 100.00% 2.12 MiB p/s ✓  Dependencies successfully installed
+ ✓  Persistent volume successfully attached
+ ✓  Images successfully pulled
+   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [______________________________________] 0%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [->____________________________________] 5%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [-->___________________________________] 7%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [---->_________________________________] 12%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [----->________________________________] 17%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [-------->_____________________________] 23%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 29%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [---------->___________________________] 30%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [------------------------->____________] 69%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [----------------->____________________] 48%
+[1A[J   [--------->____________________________] 26%
+[1A[J   [--------->____________________________] 26%
+[1A[J   [--------->____________________________] 26%
+[1A[J   [--------->____________________________] 26%
+[1A[J   [--------->____________________________] 26%
+[1A[J   [-------------------------------->_____] 86%
+[1A[J   [-------------------------------->_____] 86%
+[1A[J   [-------------------------------->_____] 86%
+[1A[J   [-------------------------------->_____] 86%
+[1A[J   [------------------------------->______] 83%
+[1A[J   [------------------------------->______] 83%
+[1A[J   [------------------------------->______] 83%
+[1A[J   [------------------------------->______] 83%
+[1A[J   [------------------------------->______] 83%
+[1A[J   [------------------------------->______] 84%
+[1A[J   [------------------------------->______] 84%
+[1A[J   [------------------------------->______] 84%
+[1A[J   [------------------------------->______] 84%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [----------------------------------->__] 94%
+[1A[J   [---------------------------------->___] 93%
+[1A[J   [---------------------------------->___] 93%
+[1A[J   [---------------------------------->___] 93%
+[1A[J   [---------------------------------->___] 93%
+[1A[J   [--------------------------------------] 100%
+[1A[J ✓  Files synchronized
+    Context:   dashboard.okteto.lab.danielbooth.cloud
+    Namespace: danielboothcloud
+    Name:      control-plane
+    Forward:   8080 -> 8080
+
+[Running 'cargo run --locked --package armoury']
+[1m[92m    Updating[0m crates.io index
+[1m[96m       Fetch[0m 71 complete; 1 pending   [1m[96m       Fetch[0m 109 complete; 21 pending [1m[96m       Fetch[0m 128 complete; 2 pending  [1m[96m       Fetch[0m 134 complete; 47 pending [1m[96m       Fetch[0m 180 complete; 1 pending  [1m[96m       Fetch[0m 226 complete; 3 pending  [1m[96m Downloading[0m 0 crates                 [1m[96m Downloading[0m 1 crate                  [1m[96m Downloading[0m 2 crates                 [1m[96m Downloading[0m 3 crates                 [1m[96m Downloading[0m 4 crates                 [1m[96m Downloading[0m 5 crates                 [1m[96m Downloading[0m 6 crates                 [1m[96m Downloading[0m 7 crates                 [1m[96m Downloading[0m 8 crates                 [1m[96m Downloading[0m 9 crates                 [1m[96m Downloading[0m 10 crates                [1m[96m Downloading[0m 11 crates                [1m[96m Downloading[0m 12 crates                [1m[96m Downloading[0m 13 crates                [1m[96m Downloading[0m 14 crates                [1m[96m Downloading[0m 15 crates                [1m[96m Downloading[0m 16 crates                [1m[96m Downloading[0m 17 crates                [1m[96m Downloading[0m 18 crates                [1m[96m Downloading[0m 19 crates                [1m[96m Downloading[0m 20 crates                [1m[96m Downloading[0m 21 crates                [1m[96m Downloading[0m 22 crates                [1m[96m Downloading[0m 23 crates                [1m[96m Downloading[0m 24 crates                [1m[96m Downloading[0m 25 crates                [1m[96m Downloading[0m 26 crates                [1m[96m Downloading[0m 27 crates                [1m[96m Downloading[0m 28 crates                [1m[96m Downloading[0m 29 crates                [1m[96m Downloading[0m 30 crates                [1m[96m Downloading[0m 31 crates                [1m[96m Downloading[0m 32 crates                [1m[96m Downloading[0m 33 crates                [1m[96m Downloading[0m 34 crates                [1m[96m Downloading[0m 35 crates                [1m[96m Downloading[0m 36 crates                [1m[96m Downloading[0m 37 crates                [1m[96m Downloading[0m 38 crates                [1m[96m Downloading[0m 39 crates                [1m[96m Downloading[0m 40 crates                [1m[96m Downloading[0m 41 crates                [1m[96m Downloading[0m 42 crates                [1m[96m Downloading[0m 43 crates                [1m[96m Downloading[0m 44 crates                [1m[96m Downloading[0m 45 crates                [1m[96m Downloading[0m 46 crates                [1m[96m Downloading[0m 47 crates                [1m[96m Downloading[0m 48 crates                [1m[96m Downloading[0m 49 crates                [1m[96m Downloading[0m 50 crates                [1m[96m Downloading[0m 51 crates                [1m[96m Downloading[0m 52 crates                [1m[96m Downloading[0m 53 crates                [1m[96m Downloading[0m 54 crates                [1m[96m Downloading[0m 55 crates                [1m[96m Downloading[0m 56 crates                [1m[96m Downloading[0m 57 crates                [1m[96m Downloading[0m 58 crates                [1m[96m Downloading[0m 59 crates                [1m[96m Downloading[0m 60 crates                [1m[96m Downloading[0m 61 crates                [1m[96m Downloading[0m 62 crates                [1m[96m Downloading[0m 63 crates                [1m[96m Downloading[0m 64 crates                [1m[96m Downloading[0m 65 crates                [1m[96m Downloading[0m 66 crates                [1m[96m Downloading[0m 67 crates                [1m[96m Downloading[0m 68 crates                [1m[96m Downloading[0m 69 crates                [1m[96m Downloading[0m 70 crates                [1m[96m Downloading[0m 71 crates                [1m[96m Downloading[0m 72 crates                [1m[96m Downloading[0m 73 crates                [1m[96m Downloading[0m 74 crates                [1m[96m Downloading[0m 75 crates                [1m[96m Downloading[0m 76 crates                [1m[96m Downloading[0m 77 crates                [1m[96m Downloading[0m 78 crates                [1m[96m Downloading[0m 79 crates                [1m[96m Downloading[0m 80 crates                [1m[96m Downloading[0m 81 crates                [1m[96m Downloading[0m 82 crates                [1m[96m Downloading[0m 83 crates                [1m[96m Downloading[0m 84 crates                [1m[96m Downloading[0m 85 crates                [1m[96m Downloading[0m 86 crates                [1m[96m Downloading[0m 87 crates                [1m[96m Downloading[0m 88 crates                [1m[96m Downloading[0m 89 crates                [1m[96m Downloading[0m 90 crates                [1m[96m Downloading[0m 91 crates                [1m[96m Downloading[0m 92 crates                [1m[96m Downloading[0m 93 crates                [1m[96m Downloading[0m 94 crates                [1m[96m Downloading[0m 95 crates                [1m[96m Downloading[0m 96 crates                [1m[96m Downloading[0m 97 crates                [1m[96m Downloading[0m 98 crates                [1m[96m Downloading[0m 99 crates                [1m[96m Downloading[0m 100 crates               [1m[96m Downloading[0m 101 crates               [1m[96m Downloading[0m 102 crates               [1m[96m Downloading[0m 103 crates               [1m[96m Downloading[0m 104 crates               [1m[96m Downloading[0m 105 crates               [1m[96m Downloading[0m 106 crates               [1m[96m Downloading[0m 107 crates               [1m[96m Downloading[0m 108 crates               [1m[96m Downloading[0m 109 crates               [1m[96m Downloading[0m 110 crates               [1m[96m Downloading[0m 111 crates               [1m[96m Downloading[0m 112 crates               [1m[96m Downloading[0m 113 crates               [1m[96m Downloading[0m 114 crates               [1m[96m Downloading[0m 115 crates               [1m[96m Downloading[0m 116 crates               [1m[96m Downloading[0m 117 crates               [1m[96m Downloading[0m 118 crates               [1m[96m Downloading[0m 119 crates               [1m[96m Downloading[0m 120 crates               [1m[96m Downloading[0m 121 crates               [1m[96m Downloading[0m 122 crates               [1m[96m Downloading[0m 123 crates               [1m[96m Downloading[0m 124 crates               [1m[96m Downloading[0m 125 crates               [1m[96m Downloading[0m 126 crates               [1m[96m Downloading[0m 127 crates               [1m[96m Downloading[0m 128 crates               [1m[96m Downloading[0m 129 crates               [1m[96m Downloading[0m 130 crates               [1m[96m Downloading[0m 131 crates               [1m[96m Downloading[0m 132 crates               [1m[96m Downloading[0m 133 crates               [1m[96m Downloading[0m 134 crates               [1m[96m Downloading[0m 135 crates               [1m[96m Downloading[0m 136 crates               [1m[96m Downloading[0m 137 crates               [1m[96m Downloading[0m 138 crates               [1m[96m Downloading[0m 139 crates               [1m[96m Downloading[0m 140 crates               [1m[96m Downloading[0m 141 crates               [1m[96m Downloading[0m 142 crates               [1m[96m Downloading[0m 143 crates               [1m[96m Downloading[0m 144 crates               [1m[96m Downloading[0m 145 crates               [1m[96m Downloading[0m 146 crates               [1m[96m Downloading[0m 147 crates               [1m[96m Downloading[0m 148 crates               [1m[96m Downloading[0m 149 crates               [1m[96m Downloading[0m 150 crates               [1m[96m Downloading[0m 151 crates               [1m[96m Downloading[0m 152 crates               [1m[96m Downloading[0m 153 crates               [1m[96m Downloading[0m 154 crates               [1m[96m Downloading[0m 155 crates               [1m[96m Downloading[0m 156 crates               [1m[96m Downloading[0m 157 crates               [1m[96m Downloading[0m 158 crates               [1m[96m Downloading[0m 159 crates               [K[1m[92m  Downloaded[0m autocfg v1.5.1
+[1m[96m Downloading[0m 159 crates, remaining ...[K[1m[92m  Downloaded[0m cpufeatures v0.2.17
+[1m[96m Downloading[0m 158 crates, remaining ...[K[1m[92m  Downloaded[0m darling_macro v0.23.0
+[1m[96m Downloading[0m 157 crates, remaining ...[K[1m[92m  Downloaded[0m displaydoc v0.2.7
+[1m[96m Downloading[0m 156 crates, remaining ...[K[1m[92m  Downloaded[0m dtoa-short v0.3.5
+[1m[96m Downloading[0m 155 crates, remaining ...[K[1m[92m  Downloaded[0m equivalent v1.0.3
+[1m[96m Downloading[0m 154 crates, remaining ...[K[1m[92m  Downloaded[0m futures-core v0.3.34
+[1m[96m Downloading[0m 153 crates, remaining ...[K[1m[92m  Downloaded[0m new_debug_unreachable v1.0.6
+[1m[96m Downloading[0m 152 crates, remaining ...[K[1m[92m  Downloaded[0m anyhow v1.0.104
+[1m[96m Downloading[0m 151 crates, remaining ...[K[1m[92m  Downloaded[0m async-trait v0.1.92
+[1m[96m Downloading[0m 150 crates, remaining ...[K[1m[92m  Downloaded[0m cfg-if v1.0.5
+[1m[96m Downloading[0m 149 crates, remaining ...[K[1m[92m  Downloaded[0m futures-io v0.3.34
+[1m[96m Downloading[0m 148 crates, remaining ...[K[1m[92m  Downloaded[0m futures-sink v0.3.34
+[1m[96m Downloading[0m 147 crates, remaining ...[K[1m[92m  Downloaded[0m itoa v1.0.19
+[1m[96m Downloading[0m 146 crates, remaining ...[K[1m[92m  Downloaded[0m deranged v0.5.9
+[1m[96m Downloading[0m 145 crates, remaining ...[K[1m[92m  Downloaded[0m dtoa v1.0.11
+[1m[96m Downloading[0m 144 crates, remaining ...[K[1m[92m  Downloaded[0m headers-core v0.3.0
+[1m[96m Downloading[0m 143 crates, remaining ...[K[1m[92m  Downloaded[0m lazy_static v1.5.1
+[1m[96m Downloading[0m 142 crates, remaining ...[K[1m[92m  Downloaded[0m precomputed-hash v0.1.1
+[1m[96m Downloading[0m 141 crates, remaining ...[K[1m[92m  Downloaded[0m http-body v1.1.0
+[1m[96m Downloading[0m 140 crates, remaining ...[K[1m[92m  Downloaded[0m multiversion_no_op v1.0.0
+[1m[96m Downloading[0m 139 crates, remaining ...[K[1m[92m  Downloaded[0m form_urlencoded v1.2.2
+[1m[96m Downloading[0m 138 crates, remaining ...[K[1m[92m  Downloaded[0m matchers v0.2.0
+[1m[96m Downloading[0m 137 crates, remaining ...[K[1m[92m  Downloaded[0m percent-encoding v2.3.2
+[1m[96m Downloading[0m 136 crates, remaining ...[K[1m[92m  Downloaded[0m scopeguard v1.2.0
+[1m[96m Downloading[0m 135 crates, remaining ...[K[1m[92m  Downloaded[0m serde v1.0.229
+[1m[96m Downloading[0m 134 crates, remaining ...[K[1m[92m  Downloaded[0m signal-hook-registry v1.4.8
+[1m[96m Downloading[0m 133 crates               [K[1m[92m  Downloaded[0m simdutf8 v0.1.5
+[1m[96m Downloading[0m 132 crates               [K[1m[92m  Downloaded[0m siphasher v1.0.4
+[1m[96m Downloading[0m 131 crates               [K[1m[92m  Downloaded[0m errno v0.3.15
+[1m[96m Downloading[0m 130 crates               [K[1m[92m  Downloaded[0m num-conv v0.2.2
+[1m[96m Downloading[0m 129 crates               [K[1m[92m  Downloaded[0m slab v0.4.12
+[1m[96m Downloading[0m 128 crates               [K[1m[92m  Downloaded[0m smallvec v1.16.6
+[1m[96m Downloading[0m 127 crates               [K[1m[92m  Downloaded[0m maplit v1.0.2
+[1m[96m Downloading[0m 126 crates               [K[1m[92m  Downloaded[0m string_cache_codegen v0.11.2
+[1m[96m Downloading[0m 125 crates               [K[1m[92m  Downloaded[0m sync_wrapper v1.0.2
+[1m[96m Downloading[0m 124 crates               [K[1m[92m  Downloaded[0m time-core v0.1.9
+[1m[96m Downloading[0m 123 crates               [K[1m[92m  Downloaded[0m proc-macro-error-attr3 v3.1.1
+[1m[96m Downloading[0m 122 crates               [K[1m[92m  Downloaded[0m potential_utf v0.1.6
+[1m[96m Downloading[0m 121 crates               [K[1m[92m  Downloaded[0m thread_local v1.1.10
+[1m[96m Downloading[0m 120 crates               [K[1m[92m  Downloaded[0m tokio-macros v2.7.2
+[1m[96m Downloading[0m 119 crates               [K[1m[92m  Downloaded[0m tower-service v0.3.3
+[1m[96m Downloading[0m 118 crates               [K[1m[92m  Downloaded[0m tracing-serde v0.2.0
+[1m[96m Downloading[0m 117 crates               [K[1m[92m  Downloaded[0m futures-macro v0.3.34
+[1m[96m Downloading[0m 116 crates               [K[1m[92m  Downloaded[0m futures-task v0.3.34
+[1m[96m Downloading[0m 115 crates               [K[1m[92m  Downloaded[0m generic-array v0.14.9
+[1m[96m Downloading[0m 114 crates               [K[1m[92m  Downloaded[0m http-body-util v0.1.5
+[1m[96m Downloading[0m 113 crates               [K[1m[92m  Downloaded[0m http-range-header v0.4.2
+[1m[96m Downloading[0m 112 crates               [K[1m[92m  Downloaded[0m httpdate v1.0.3
+[1m[96m Downloading[0m 111 crates               [K[1m[92m  Downloaded[0m idna_adapter v1.2.2
+[1m[96m Downloading[0m 110 crates               [K[1m[92m  Downloaded[0m powerfmt v0.2.1
+[1m[96m Downloading[0m 109 crates               [K[1m[92m  Downloaded[0m stable_deref_trait v1.2.1
+[1m[96m Downloading[0m 108 crates               [K[1m[92m  Downloaded[0m tower-layer v0.3.3
+[1m[96m Downloading[0m 107 crates               [K[1m[92m  Downloaded[0m validator_derive v0.20.1
+[1m[96m Downloading[0m 106 crates               [K[1m[92m  Downloaded[0m zerofrom v0.1.8
+[1m[96m Downloading[0m 105 crates               [K[1m[92m  Downloaded[0m zerofrom-derive v0.1.8
+[1m[96m Downloading[0m 104 crates               [K[1m[92m  Downloaded[0m core_detect v1.0.0
+[1m[96m Downloading[0m 103 crates               [K[1m[92m  Downloaded[0m darling v0.23.0
+[1m[96m Downloading[0m 102 crates               [K[1m[92m  Downloaded[0m yoke-derive v0.8.4
+[1m[96m Downloading[0m 101 crates               [K[1m[92m  Downloaded[0m cookie v0.18.2
+[1m[96m Downloading[0m 100 crates               [K[1m[92m  Downloaded[0m serde_urlencoded v0.7.1
+[1m[96m Downloading[0m 99 crates                [K[1m[92m  Downloaded[0m sha1 v0.10.7
+[1m[96m Downloading[0m 98 crates                [K[1m[92m  Downloaded[0m tinystr v0.8.5
+[1m[96m Downloading[0m 97 crates                [K[1m[92m  Downloaded[0m validator v0.20.0
+[1m[96m Downloading[0m 96 crates                [K[1m[92m  Downloaded[0m mime_guess v2.0.5
+[1m[96m Downloading[0m 95 crates                [K[1m[92m  Downloaded[0m phf_codegen v0.14.0
+[1m[96m Downloading[0m 94 crates                [K[1m[92m  Downloaded[0m utf8_iter v1.1.0
+[1m[96m Downloading[0m 93 crates                [K[1m[92m  Downloaded[0m axum-core v0.5.6
+[1m[96m Downloading[0m 92 crates                [K[1m[92m  Downloaded[0m synstructure v0.14.0
+[1m[96m Downloading[0m 91 crates                [K[1m[92m  Downloaded[0m zerovec-derive v0.11.7
+[1m[96m Downloading[0m 90 crates                [K[1m[92m  Downloaded[0m utf_types v1.0.0
+[1m[96m Downloading[0m 89 crates                [K[1m[92m  Downloaded[0m web_atoms v0.3.0
+[1m[96m Downloading[0m 88 crates                [K[1m[92m  Downloaded[0m fastrand v2.5.0
+[1m[96m Downloading[0m 87 crates                [K[1m[92m  Downloaded[0m mime v0.3.18
+[1m[96m Downloading[0m 86 crates                [K[1m[92m  Downloaded[0m multer v3.1.0
+[1m[96m Downloading[0m 85 crates                [K[1m[92m  Downloaded[0m phf v0.14.0
+[1m[96m Downloading[0m 84 crates                [K[1m[92m  Downloaded[0m phf_generator v0.14.0
+[1m[96m Downloading[0m 83 crates                [K[1m[92m  Downloaded[0m rustversion v1.0.23
+[1m[96m Downloading[0m 82 crates                [K[1m[92m  Downloaded[0m tracing-attributes v0.1.31
+[1m[96m Downloading[0m 81 crates                [K[1m[92m  Downloaded[0m tracing-log v0.2.0
+[1m[96m Downloading[0m 80 crates                [K[1m[92m  Downloaded[0m unicase v2.10.0
+[1m[96m Downloading[0m 79 crates                [K[1m[92m  Downloaded[0m writeable v0.6.4
+[1m[96m Downloading[0m 78 crates                [K[1m[92m  Downloaded[0m zmij v1.0.23
+[1m[96m Downloading[0m 77 crates                [K[1m[92m  Downloaded[0m spin v0.9.9
+[1m[96m Downloading[0m 76 crates                [K[1m[92m  Downloaded[0m string_cache v0.11.0
+[1m[96m Downloading[0m 75 crates                [K[1m[92m  Downloaded[0m quote v1.0.47
+[1m[96m Downloading[0m 74 crates                [K[1m[92m  Downloaded[0m bitflags v2.13.2
+[1m[96m Downloading[0m 73 crates                [K[1m[92m  Downloaded[0m serde_html_form v0.2.8
+[1m[96m Downloading[0m 72 crates                [K[1m[92m  Downloaded[0m serde_path_to_error v0.1.20
+[1m[96m Downloading[0m 71 crates                [K[1m[92m  Downloaded[0m tendril v0.5.1
+[1m[96m Downloading[0m 70 crates                [K[1m[92m  Downloaded[0m time-macros v0.2.32
+[1m[96m Downloading[0m 69 crates                [K[1m[92m  Downloaded[0m yoke v0.8.4
+[1m[96m Downloading[0m 68 crates                [K[1m[92m  Downloaded[0m ammonia v4.2.5
+[1m[96m Downloading[0m 67 crates                [K[1m[92m  Downloaded[0m socket2 v0.6.5
+[1m[96m Downloading[0m 66 crates                [K[1m[92m  Downloaded[0m iana-time-zone v0.1.65
+[1m[96m Downloading[0m 65 crates                [K[1m[92m  Downloaded[0m lock_api v0.4.14
+[1m[96m Downloading[0m 64 crates                [K[1m[92m  Downloaded[0m matchit v0.8.4
+[1m[96m Downloading[0m 63 crates                [K[1m[92m  Downloaded[0m nu-ansi-term v0.50.3
+[1m[96m Downloading[0m 62 crates                [K[1m[92m  Downloaded[0m once_cell v1.21.4
+[1m[96m Downloading[0m 61 crates                [K[1m[92m  Downloaded[0m phf_shared v0.14.0
+[1m[96m Downloading[0m 60 crates                [K[1m[92m  Downloaded[0m pin-project-lite v0.2.18
+[1m[96m Downloading[0m 59 crates                [K[1m[92m  Downloaded[0m proc-macro-error3 v3.1.1
+[1m[96m Downloading[0m 58 crates                [K[1m[92m  Downloaded[0m litemap v0.8.3
+[1m[96m Downloading[0m 57 crates                [K[1m[92m  Downloaded[0m markup5ever v0.40.0
+[1m[96m Downloading[0m 56 crates                [K[1m[92m  Downloaded[0m parking_lot v0.12.5
+[1m[96m Downloading[0m 55 crates                [K[1m[92m  Downloaded[0m parking_lot_core v0.9.12
+[1m[96m Downloading[0m 54 crates                [K[1m[92m  Downloaded[0m tracing-core v0.1.36
+[1m[96m Downloading[0m 53 crates                [K[1m[92m  Downloaded[0m unicode-ident v1.0.27
+[1m[96m Downloading[0m 52 crates                [K[1m[92m  Downloaded[0m httparse v1.10.1
+[1m[96m Downloading[0m 51 crates                [K[1m[92m  Downloaded[0m icu_provider v2.4.0
+[1m[96m Downloading[0m 50 crates                [K[1m[92m  Downloaded[0m log v0.4.35
+[1m[96m Downloading[0m 49 crates                [K[1m[92m  Downloaded[0m zerotrie v0.2.5
+[1m[96m Downloading[0m 48 crates                [K[1m[92m  Downloaded[0m proc-macro2 v1.0.107
+[1m[96m Downloading[0m 47 crates                [K[1m[92m  Downloaded[0m typenum v1.20.1
+[1m[96m Downloading[0m 46 crates                [K[1m[92m  Downloaded[0m url v2.5.8
+[1m[96m Downloading[0m 45 crates                [K[1m[92m  Downloaded[0m ryu v1.0.23
+[1m[96m Downloading[0m 44 crates                [K[1m[92m  Downloaded[0m tower v0.5.3
+[1m[96m Downloading[0m 43 crates                [K[1m[92m  Downloaded[0m base64 v0.22.1
+[1m[96m Downloading[0m 42 crates                [K[1m[92m  Downloaded[0m cssparser v0.38.0
+[1m[96m Downloading[0m 41 crates                [K[1m[92m  Downloaded[0m darling_core v0.23.0
+[1m[96m Downloading[0m 40 crates                [K[1m[92m  Downloaded[0m serde_derive v1.0.229
+[1m[96m Downloading[0m 39 crates                [K[1m[92m  Downloaded[0m axum-extra v0.12.6
+[1m[96m Downloading[0m 38 crates                [K[1m[92m  Downloaded[0m bytes v1.12.2
+[1m[96m Downloading[0m 37 crates                [K[1m[92m  Downloaded[0m icu_normalizer_data v2.4.0
+[1m[96m Downloading[0m 36 crates                [K[1m[92m  Downloaded[0m headers v0.4.2
+[1m[96m Downloading[0m 35 crates                [K[1m[92m  Downloaded[0m icu_locale_core v2.4.0
+[1m[96m Downloading[0m 34 crates                [K[1m[92m  Downloaded[0m zerovec v0.11.9
+[1m[96m Downloading[0m 33 crates                [K[1m[92m  Downloaded[0m serde_core v1.0.229
+[1m[96m Downloading[0m 32 crates                [K[1m[92m  Downloaded[0m sharded-slab v0.1.7
+[1m[96m Downloading[0m 31 crates                [K[1m[92m  Downloaded[0m tokio-util v0.7.20
+[1m[96m Downloading[0m 30 crates                [K[1m[92m  Downloaded[0m tower-http v0.7.1
+[1m[96m Downloading[0m 29 crates                [K[1m[92m  Downloaded[0m html5ever v0.40.1
+[1m[96m Downloading[0m 28 crates                [K[1m[92m  Downloaded[0m time v0.3.55
+[1m[96m Downloading[0m 27 crates                [K[1m[92m  Downloaded[0m indexmap v2.14.2
+[1m[96m Downloading[0m 26 crates                [K[1m[92m  Downloaded[0m tracing-subscriber v0.3.23
+[1m[96m Downloading[0m 25 crates                [K[1m[92m  Downloaded[0m mio v1.2.5
+[1m[96m Downloading[0m 24 crates                [K[1m[92m  Downloaded[0m http v1.5.0
+[1m[96m Downloading[0m 23 crates                [K[1m[92m  Downloaded[0m icu_collections v2.4.0
+[1m[96m Downloading[0m 22 crates                [K[1m[92m  Downloaded[0m memchr v2.8.3
+[1m[96m Downloading[0m 21 crates                [K[1m[92m  Downloaded[0m hyper-util v0.1.21
+[1m[96m Downloading[0m 20 crates                [K[1m[92m  Downloaded[0m idna v1.1.0
+[1m[96m Downloading[0m 19 crates                [K[1m[92m  Downloaded[0m aho-corasick v1.1.5
+[1m[96m Downloading[0m 18 crates                [K[1m[92m  Downloaded[0m icu_properties v2.4.0
+[1m[96m Downloading[0m 17 crates                [K[1m[92m  Downloaded[0m regex v1.13.2
+[1m[96m Downloading[0m 16 crates                [K[1m[92m  Downloaded[0m serde_json v1.0.154
+[1m[96m Downloading[0m 15 crates                [K[1m[92m  Downloaded[0m futures-util v0.3.34
+[1m[96m Downloading[0m 14 crates                [K[1m[92m  Downloaded[0m hashbrown v0.17.1
+[1m[96m Downloading[0m 13 crates                [K[1m[92m  Downloaded[0m hyper v1.12.0
+[1m[96m Downloading[0m 12 crates                [K[1m[92m  Downloaded[0m syn v2.0.119
+[1m[96m Downloading[0m 11 crates                [K[1m[92m  Downloaded[0m syn v3.0.10
+[1m[96m Downloading[0m 10 crates                [K[1m[92m  Downloaded[0m axum v0.8.9
+[1m[96m Downloading[0m 9 crates                 [K[1m[92m  Downloaded[0m icu_properties_data v2.4.0
+[1m[96m Downloading[0m 8 crates                 [K[1m[92m  Downloaded[0m chrono v0.4.45
+[1m[96m Downloading[0m 7 crates                 [K[1m[92m  Downloaded[0m tracing v0.1.44
+[1m[96m Downloading[0m 6 crates, extracting t...[K[1m[92m  Downloaded[0m regex-syntax v0.8.12
+[1m[96m Downloading[0m 5 crates                 [K[1m[92m  Downloaded[0m encoding_rs v0.8.44
+[1m[96m Downloading[0m 4 crates, extracting e...[K[1m[92m  Downloaded[0m icu_normalizer v2.4.0
+[1m[96m Downloading[0m 3 crates, extracting i...[K[1m[92m  Downloaded[0m regex-automata v0.4.19
+[1m[96m Downloading[0m 2 crates, extracting r...[K[1m[92m  Downloaded[0m tokio v1.54.1
+[1m[96m Downloading[0m 1 crate, extracting to...[K[1m[92m  Downloaded[0m libc v0.2.191
+[1m[96m Downloading[0m 0 crates, extracting l...[K[1m[92m  Downloaded[0m 160 crates (11.8MiB) in 2.39s
+[1m[92m   Compiling[0m proc-macro2 v1.0.107
+[1m[92m   Compiling[0m unicode-ident v1.0.27
+[1m[96m    Building[0m [                 ] 0/209[K[1m[92m   Compiling[0m quote v1.0.47
+[1m[96m    Building[0m [                 ] 1/209[1m[96m    Building[0m [                 ] 2/209[1m[96m    Building[0m [                 ] 3/209[K[1m[92m   Compiling[0m libc v0.2.191
+[1m[96m    Building[0m [                 ] 4/209[1m[96m    Building[0m [                 ] 5/209[1m[96m    Building[0m [                 ] 6/209[K[1m[92m   Compiling[0m itoa v1.0.19
+[1m[96m    Building[0m [                 ] 7/209[1m[96m    Building[0m [                 ] 8/209[1m[96m    Building[0m [                 ] 9/209[K[1m[92m   Compiling[0m syn v3.0.10
+[1m[96m    Building[0m [                ] 10/209[K[1m[92m   Compiling[0m smallvec v1.16.6
+[1m[96m    Building[0m [                ] 11/209[K[1m[92m   Compiling[0m version_check v0.9.5
+[1m[96m    Building[0m [                ] 12/209[K[1m[92m   Compiling[0m cfg-if v1.0.5
+[1m[96m    Building[0m [                ] 13/209[K[1m[92m   Compiling[0m bytes v1.12.2
+[1m[96m    Building[0m [>               ] 14/209[K[1m[92m   Compiling[0m stable_deref_trait v1.2.1
+[1m[96m    Building[0m [>               ] 15/209[K[1m[92m   Compiling[0m pin-project-lite v0.2.18
+[1m[96m    Building[0m [>               ] 16/209[K[1m[92m   Compiling[0m serde_core v1.0.229
+[1m[96m    Building[0m [>               ] 17/209[1m[96m    Building[0m [>               ] 18/209[K[1m[92m   Compiling[0m syn v2.0.119
+[1m[96m    Building[0m [>               ] 19/209[K[1m[92m   Compiling[0m synstructure v0.14.0
+[1m[96m    Building[0m [>               ] 20/209[K[1m[92m   Compiling[0m zerofrom-derive v0.1.8
+[1m[96m    Building[0m [>               ] 21/209[K[1m[92m   Compiling[0m zerofrom v0.1.8
+[1m[96m    Building[0m [>               ] 22/209[K[1m[92m   Compiling[0m yoke-derive v0.8.4
+[1m[96m    Building[0m [>               ] 23/209[K[1m[92m   Compiling[0m zerovec-derive v0.11.7
+[1m[96m    Building[0m [>               ] 24/209[K[1m[92m   Compiling[0m yoke v0.8.4
+[1m[96m    Building[0m [>               ] 25/209[K[1m[92m   Compiling[0m displaydoc v0.2.7
+[1m[96m    Building[0m [>               ] 26/209[K[1m[92m   Compiling[0m zerovec v0.11.9
+[1m[96m    Building[0m [=>              ] 27/209[K[1m[92m   Compiling[0m memchr v2.8.3
+[1m[96m    Building[0m [=>              ] 28/209[K[1m[92m   Compiling[0m siphasher v1.0.4
+[1m[96m    Building[0m [=>              ] 29/209[K[1m[92m   Compiling[0m phf_shared v0.14.0
+[1m[96m    Building[0m [=>              ] 30/209[1m[96m    Building[0m [=>              ] 31/209[K[1m[92m   Compiling[0m http v1.5.0
+[1m[96m    Building[0m [=>              ] 32/209[K[1m[92m   Compiling[0m scopeguard v1.2.0
+[1m[96m    Building[0m [=>              ] 33/209[K[1m[92m   Compiling[0m futures-core v0.3.34
+[1m[96m    Building[0m [=>              ] 34/209[K[1m[92m   Compiling[0m once_cell v1.21.4
+[1m[96m    Building[0m [=>              ] 35/209[K[1m[92m   Compiling[0m percent-encoding v2.3.2
+[1m[96m    Building[0m [=>              ] 36/209[K[1m[92m   Compiling[0m log v0.4.35
+[1m[96m    Building[0m [=>              ] 37/209[K[1m[92m   Compiling[0m tinystr v0.8.5
+[1m[96m    Building[0m [=>              ] 38/209[K[1m[92m   Compiling[0m errno v0.3.15
+[1m[96m    Building[0m [=>              ] 39/209[K[1m[92m   Compiling[0m writeable v0.6.4
+[1m[96m    Building[0m [==>             ] 40/209[K[1m[92m   Compiling[0m utf_types v1.0.0
+[1m[96m    Building[0m [==>             ] 41/209[K[1m[92m   Compiling[0m fastrand v2.5.0
+[1m[96m    Building[0m [==>             ] 42/209[K[1m[92m   Compiling[0m serde v1.0.229
+[1m[96m    Building[0m [==>             ] 43/209[K[1m[92m   Compiling[0m litemap v0.8.3
+[1m[96m    Building[0m [==>             ] 44/209[1m[96m    Building[0m [==>             ] 45/209[K[1m[92m   Compiling[0m icu_locale_core v2.4.0
+[1m[96m    Building[0m [==>             ] 46/209[K[1m[92m   Compiling[0m utf8_iter v1.1.0
+[1m[96m    Building[0m [==>             ] 47/209[K[1m[92m   Compiling[0m phf_generator v0.14.0
+[1m[96m    Building[0m [==>             ] 48/209[K[1m[92m   Compiling[0m signal-hook-registry v1.4.8
+[1m[96m    Building[0m [==>             ] 49/209[K[1m[92m   Compiling[0m tracing-core v0.1.36
+[1m[96m    Building[0m [==>             ] 50/209[K[1m[92m   Compiling[0m potential_utf v0.1.6
+[1m[96m    Building[0m [==>             ] 51/209[K[1m[92m   Compiling[0m zerotrie v0.2.5
+[1m[96m    Building[0m [==>             ] 52/209[K[1m[92m   Compiling[0m tokio-macros v2.7.2
+[1m[96m    Building[0m [===>            ] 53/209[K[1m[92m   Compiling[0m serde_derive v1.0.229
+[1m[96m    Building[0m [===>            ] 54/209[K[1m[92m   Compiling[0m generic-array v0.14.9
+[1m[96m    Building[0m [===>            ] 55/209[K[1m[92m   Compiling[0m socket2 v0.6.5
+[1m[96m    Building[0m [===>            ] 56/209[K[1m[92m   Compiling[0m mio v1.2.5
+[1m[96m    Building[0m [===>            ] 57/209[K[1m[92m   Compiling[0m rustversion v1.0.23
+[1m[96m    Building[0m [===>            ] 58/209[K[1m[92m   Compiling[0m icu_normalizer_data v2.4.0
+[1m[96m    Building[0m [===>            ] 59/209[K[1m[92m   Compiling[0m icu_properties_data v2.4.0
+[1m[96m    Building[0m [===>            ] 60/209[K[1m[92m   Compiling[0m parking_lot_core v0.9.12
+[1m[96m    Building[0m [===>            ] 61/209[1m[96m    Building[0m [===>            ] 62/209[1m[96m    Building[0m [===>            ] 63/209[1m[96m    Building[0m [===>            ] 64/209[1m[96m    Building[0m [===>            ] 65/209[K[1m[92m   Compiling[0m tokio v1.54.1
+[1m[96m    Building[0m [====>           ] 66/209[1m[96m    Building[0m [====>           ] 67/209[1m[96m    Building[0m [====>           ] 68/209[K[1m[92m   Compiling[0m icu_provider v2.4.0
+[1m[96m    Building[0m [====>           ] 69/209[K[1m[92m   Compiling[0m icu_collections v2.4.0
+[1m[96m    Building[0m [====>           ] 70/209[K[1m[92m   Compiling[0m form_urlencoded v1.2.2
+[1m[96m    Building[0m [====>           ] 71/209[K[1m[92m   Compiling[0m http-body v1.1.0
+[1m[96m    Building[0m [====>           ] 72/209[K[1m[92m   Compiling[0m mime v0.3.18
+[1m[96m    Building[0m [====>           ] 73/209[K[1m[92m   Compiling[0m httparse v1.10.1
+[1m[96m    Building[0m [====>           ] 74/209[K[1m[92m   Compiling[0m typenum v1.20.1
+[1m[96m    Building[0m [====>           ] 75/209[K[1m[92m   Compiling[0m zmij v1.0.23
+[1m[96m    Building[0m [====>           ] 76/209[1m[96m    Building[0m [====>           ] 77/209[1m[96m    Building[0m [====>           ] 78/209[1m[96m    Building[0m [=====>          ] 79/209[1m[96m    Building[0m [=====>          ] 80/209[1m[96m    Building[0m [=====>          ] 81/209[1m[96m    Building[0m [=====>          ] 82/209[1m[96m    Building[0m [=====>          ] 83/209[K[1m[92m   Compiling[0m phf_codegen v0.14.0
+[1m[96m    Building[0m [=====>          ] 84/209[K[1m[92m   Compiling[0m string_cache_codegen v0.11.2
+[1m[96m    Building[0m [=====>          ] 85/209[K[1m[92m   Compiling[0m lock_api v0.4.14
+[1m[96m    Building[0m [=====>          ] 86/209[K[1m[92m   Compiling[0m tracing-attributes v0.1.31
+[1m[96m    Building[0m [=====>          ] 87/209[K[1m[92m   Compiling[0m futures-macro v0.3.34
+[1m[96m    Building[0m [=====>          ] 88/209[K[1m[92m   Compiling[0m tower-service v0.3.3
+[1m[96m    Building[0m [=====>          ] 89/209[K[1m[92m   Compiling[0m new_debug_unreachable v1.0.6
+[1m[96m    Building[0m [=====>          ] 90/209[K[1m[92m   Compiling[0m futures-task v0.3.34
+[1m[96m    Building[0m [=====>          ] 91/209[K[1m[92m   Compiling[0m httpdate v1.0.3
+[1m[96m    Building[0m [======>         ] 92/209[K[1m[92m   Compiling[0m serde_json v1.0.154
+[1m[96m    Building[0m [======>         ] 93/209[K[1m[92m   Compiling[0m slab v0.4.12
+[1m[96m    Building[0m [======>         ] 94/209[1m[96m    Building[0m [======>         ] 95/209[K[1m[92m   Compiling[0m tracing v0.1.44
+[1m[96m    Building[0m [======>         ] 96/209[K[1m[92m   Compiling[0m futures-util v0.3.34
+[1m[96m    Building[0m [======>         ] 97/209[K[1m[92m   Compiling[0m parking_lot v0.12.5
+[1m[96m    Building[0m [======>         ] 98/209[K[1m[92m   Compiling[0m web_atoms v0.3.0
+[1m[96m    Building[0m [======>         ] 99/209[K[1m[92m   Compiling[0m icu_properties v2.4.0
+[1m[96m    Building[0m [======>        ] 100/209[K[1m[92m   Compiling[0m icu_normalizer v2.4.0
+[1m[96m    Building[0m [======>        ] 101/209[K[1m[92m   Compiling[0m encoding_rs v0.8.44
+[1m[96m    Building[0m [======>        ] 102/209[1m[96m    Building[0m [======>        ] 103/209[1m[96m    Building[0m [======>        ] 104/209[K[1m[92m   Compiling[0m aho-corasick v1.1.5
+[1m[96m    Building[0m [======>        ] 105/209[K[1m[92m   Compiling[0m regex-syntax v0.8.12
+[1m[96m    Building[0m [======>        ] 106/209[K[1m[92m   Compiling[0m precomputed-hash v0.1.1
+[1m[96m    Building[0m [======>        ] 107/209[K[1m[92m   Compiling[0m strsim v0.11.1
+[1m[96m    Building[0m [======>        ] 108/209[K[1m[92m   Compiling[0m ident_case v1.0.1
+[1m[96m    Building[0m [======>        ] 109/209[K[1m[92m   Compiling[0m tower-layer v0.3.3
+[1m[96m    Building[0m [======>        ] 110/209[K[1m[92m   Compiling[0m darling_core v0.23.0
+[1m[96m    Building[0m [======>        ] 111/209[K[1m[92m   Compiling[0m string_cache v0.11.0
+[1m[96m    Building[0m [=======>       ] 112/209[K[1m[92m   Compiling[0m regex-automata v0.4.19
+[1m[96m    Building[0m [=======>       ] 113/209[1m[96m    Building[0m [=======>       ] 114/209[1m[96m    Building[0m [=======>       ] 115/209[K[1m[92m   Compiling[0m idna_adapter v1.2.2
+[1m[96m    Building[0m [=======>       ] 116/209[1m[96m    Building[0m [=======>       ] 117/209[K[1m[92m   Compiling[0m crypto-common v0.1.6
+[1m[96m    Building[0m [=======>       ] 118/209[K[1m[92m   Compiling[0m block-buffer v0.10.4
+[1m[96m    Building[0m [=======>       ] 119/209[K[1m[92m   Compiling[0m http-body-util v0.1.5
+[1m[96m    Building[0m [=======>       ] 120/209[K[1m[92m   Compiling[0m phf v0.14.0
+[1m[96m    Building[0m [=======>       ] 121/209[K[1m[92m   Compiling[0m multer v3.1.0
+[1m[96m    Building[0m [=======>       ] 122/209[K[1m[92m   Compiling[0m num-conv v0.2.2
+[1m[96m    Building[0m [=======>       ] 123/209[K[1m[92m   Compiling[0m ryu v1.0.23
+[1m[96m    Building[0m [=======>       ] 124/209[K[1m[92m   Compiling[0m multiversion_no_op v1.0.0
+[1m[96m    Building[0m [=======>       ] 125/209[K[1m[92m   Compiling[0m atomic-waker v1.1.2
+[1m[96m    Building[0m [========>      ] 126/209[K[1m[92m   Compiling[0m time-core v0.1.9
+[1m[96m    Building[0m [========>      ] 127/209[K[1m[92m   Compiling[0m core_detect v1.0.0
+[1m[96m    Building[0m [========>      ] 128/209[K[1m[92m   Compiling[0m sync_wrapper v1.0.2
+[1m[96m    Building[0m [========>      ] 129/209[K[1m[92m   Compiling[0m autocfg v1.5.1
+[1m[96m    Building[0m [========>      ] 130/209[K[1m[92m   Compiling[0m simdutf8 v0.1.5
+[1m[96m    Building[0m [========>      ] 131/209[1m[96m    Building[0m [========>      ] 132/209[K[1m[92m   Compiling[0m num-traits v0.2.19
+[1m[96m    Building[0m [========>      ] 133/209[K[1m[92m   Compiling[0m time-macros v0.2.32
+[1m[96m    Building[0m [========>      ] 134/209[K[1m[92m   Compiling[0m hyper v1.12.0
+[1m[96m    Building[0m [========>      ] 135/209[1m[96m    Building[0m [========>      ] 136/209[1m[96m    Building[0m [========>      ] 137/209[K[1m[92m   Compiling[0m digest v0.10.7
+[1m[96m    Building[0m [========>      ] 138/209[K[1m[92m   Compiling[0m idna v1.1.0
+[1m[96m    Building[0m [========>      ] 139/209[K[1m[92m   Compiling[0m darling_macro v0.23.0
+[1m[96m    Building[0m [=========>     ] 140/209[K[1m[92m   Compiling[0m tendril v0.5.1
+[1m[96m    Building[0m [=========>     ] 141/209[K[1m[92m   Compiling[0m cookie v0.18.2
+[1m[96m    Building[0m [=========>     ] 142/209[K[1m[92m   Compiling[0m proc-macro-error-attr3 v3.1.1
+[1m[96m    Building[0m [=========>     ] 143/209[K[1m[92m   Compiling[0m cpufeatures v0.2.17
+[1m[96m    Building[0m [=========>     ] 144/209[K[1m[92m   Compiling[0m hashbrown v0.17.1
+[1m[96m    Building[0m [=========>     ] 145/209[K[1m[92m   Compiling[0m spin v0.9.9
+[1m[96m    Building[0m [=========>     ] 146/209[K[1m[92m   Compiling[0m powerfmt v0.2.1
+[1m[96m    Building[0m [=========>     ] 147/209[K[1m[92m   Compiling[0m deranged v0.5.9
+[1m[96m    Building[0m [=========>     ] 148/209[K[1m[92m   Compiling[0m dtoa v1.0.11
+[1m[96m    Building[0m [=========>     ] 149/209[K[1m[92m   Compiling[0m equivalent v1.0.3
+[1m[96m    Building[0m [=========>     ] 150/209[K[1m[92m   Compiling[0m unicase v2.10.0
+[1m[96m    Building[0m [=========>     ] 151/209[K[1m[92m   Compiling[0m mime_guess v2.0.5
+[1m[96m    Building[0m [=========>     ] 152/209[K[1m[92m   Compiling[0m indexmap v2.14.2
+[1m[96m    Building[0m [=========>     ] 153/209[K[1m[92m   Compiling[0m time v0.3.55
+[1m[96m    Building[0m [==========>    ] 154/209[K[1m[92m   Compiling[0m dtoa-short v0.3.5
+[1m[96m    Building[0m [==========>    ] 155/209[1m[96m    Building[0m [==========>    ] 156/209[K[1m[92m   Compiling[0m proc-macro-error3 v3.1.1
+[1m[96m    Building[0m [==========>    ] 157/209[K[1m[92m   Compiling[0m sha1 v0.10.7
+[1m[96m    Building[0m [==========>    ] 158/209[1m[96m    Building[0m [==========>    ] 159/209[K[1m[92m   Compiling[0m markup5ever v0.40.0
+[1m[96m    Building[0m [==========>    ] 160/209[K[1m[92m   Compiling[0m darling v0.23.0
+[1m[96m    Building[0m [==========>    ] 161/209[K[1m[92m   Compiling[0m url v2.5.8
+[1m[96m    Building[0m [==========>    ] 162/209[K[1m[92m   Compiling[0m hyper-util v0.1.21
+[1m[96m    Building[0m [==========>    ] 163/209[1m[96m    Building[0m [==========>    ] 164/209[K[1m[92m   Compiling[0m tower v0.5.3
+[1m[96m    Building[0m [==========>    ] 165/209[K[1m[92m   Compiling[0m axum-core v0.5.6
+[1m[96m    Building[0m [==========>    ] 166/209[K[1m[92m   Compiling[0m serde_urlencoded v0.7.1
+[1m[96m    Building[0m [==========>    ] 167/209[K[1m[92m   Compiling[0m serde_path_to_error v0.1.20
+[1m[96m    Building[0m [===========>   ] 168/209[K[1m[92m   Compiling[0m headers-core v0.3.0
+[1m[96m    Building[0m [===========>   ] 169/209[K[1m[92m   Compiling[0m base64 v0.22.1
+[1m[96m    Building[0m [===========>   ] 170/209[K[1m[92m   Compiling[0m matchit v0.8.4
+[1m[96m    Building[0m [===========>   ] 171/209[K[1m[92m   Compiling[0m axum v0.8.9
+[1m[96m    Building[0m [===========>   ] 172/209[K[1m[92m   Compiling[0m headers v0.4.2
+[1m[96m    Building[0m [===========>   ] 173/209[1m[96m    Building[0m [===========>   ] 174/209[K[1m[92m   Compiling[0m validator_derive v0.20.1
+[1m[96m    Building[0m [===========>   ] 175/209[1m[96m    Building[0m [===========>   ] 176/209[K[1m[92m   Compiling[0m html5ever v0.40.1
+[1m[96m    Building[0m [===========>   ] 177/209[K[1m[92m   Compiling[0m cssparser v0.38.0
+[1m[96m    Building[0m [===========>   ] 178/209[K[1m[92m   Compiling[0m serde_html_form v0.2.8
+[1m[96m    Building[0m [===========>   ] 179/209[1m[96m    Building[0m [===========>   ] 180/209[K[1m[92m   Compiling[0m regex v1.13.2
+[1m[96m    Building[0m [===========>   ] 181/209[K[1m[92m   Compiling[0m iana-time-zone v0.1.65
+[1m[96m    Building[0m [============>  ] 182/209[K[1m[92m   Compiling[0m futures-sink v0.3.34
+[1m[96m    Building[0m [============>  ] 183/209[K[1m[92m   Compiling[0m lazy_static v1.5.1
+[1m[96m    Building[0m [============>  ] 184/209[K[1m[92m   Compiling[0m anyhow v1.0.104
+[1m[96m    Building[0m [============>  ] 185/209[K[1m[92m   Compiling[0m maplit v1.0.2
+[1m[96m    Building[0m [============>  ] 186/209[K[1m[92m   Compiling[0m ammonia v4.2.5
+[1m[96m    Building[0m [============>  ] 187/209[1m[96m    Building[0m [============>  ] 188/209[K[1m[92m   Compiling[0m sharded-slab v0.1.7
+[1m[96m    Building[0m [============>  ] 189/209[K[1m[92m   Compiling[0m tokio-util v0.7.20
+[1m[96m    Building[0m [============>  ] 190/209[K[1m[92m   Compiling[0m validator v0.20.0
+[1m[96m    Building[0m [============>  ] 191/209[K[1m[92m   Compiling[0m chrono v0.4.45
+[1m[96m    Building[0m [============>  ] 192/209[1m[96m    Building[0m [============>  ] 193/209[K[1m[92m   Compiling[0m axum-extra v0.12.6
+[1m[96m    Building[0m [============>  ] 194/209[K[1m[92m   Compiling[0m matchers v0.2.0
+[1m[96m    Building[0m [============>  ] 195/209[K[1m[92m   Compiling[0m tracing-serde v0.2.0
+[1m[96m    Building[0m [=============> ] 196/209[K[1m[92m   Compiling[0m tracing-log v0.2.0
+[1m[96m    Building[0m [=============> ] 197/209[K[1m[92m   Compiling[0m async-trait v0.1.92
+[1m[96m    Building[0m [=============> ] 198/209[K[1m[92m   Compiling[0m thread_local v1.1.10
+[1m[96m    Building[0m [=============> ] 199/209[K[1m[92m   Compiling[0m nu-ansi-term v0.50.3
+[1m[96m    Building[0m [=============> ] 200/209[K[1m[92m   Compiling[0m http-range-header v0.4.2
+[1m[96m    Building[0m [=============> ] 201/209[K[1m[92m   Compiling[0m bitflags v2.13.2
+[1m[96m    Building[0m [=============> ] 202/209[K[1m[92m   Compiling[0m tower-http v0.7.1
+[1m[96m    Building[0m [=============> ] 203/209[K[1m[92m   Compiling[0m armoury-httpapi v0.1.0 (/usr/src/armoury/control-plane/src/httpapi/server)
+[1m[96m    Building[0m [=============> ] 204/209[K[1m[92m   Compiling[0m tracing-subscriber v0.3.23
+[1m[96m    Building[0m [=============> ] 205/209[1m[96m    Building[0m [=============> ] 206/209[1m[96m    Building[0m [=============> ] 207/209[K[1m[92m   Compiling[0m armoury v0.1.0 (/usr/src/armoury/control-plane)
+[1m[96m    Building[0m [=============> ] 208/209[K[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 1m 41s
+[1m[92m     Running[0m `/var/cache/armoury/target/debug/armoury`
+{"timestamp":"2026-11-20T13:30:23.724041Z","level":"INFO","fields":{"message":"control plane listening","addr":"0.0.0.0:8080","web_root":"/usr/share/armoury/web"},"target":"armoury"}
+[0m[34m2026-11-20T13:30:58.050+00:00 - INFO [0mPaths updated: [PathOp { path: "/usr/src/armoury/control-plane/src/.syncthing.main.rs.tmp", op: Some(CREATE), cookie: None }, PathOp { path: "/usr/src/armoury/control-plane/src/.syncthing.main.rs.tmp", op: Some(WRITE), cookie: None }, PathOp { path: "/usr/src/armoury/control-plane/src/.syncthing.main.rs.tmp", op: Some(CLOSE_WRITE), cookie: None }, PathOp { path: "/usr/src/armoury/control-plane/src/.syncthing.main.rs.tmp", op: Some(CHMOD), cookie: None }, PathOp { path: "/usr/src/armoury/control-plane/src/main.rs", op: Some(REMOVE), cookie: None }, PathOp { path: "/usr/src/armoury/control-plane/src/.syncthing.main.rs.tmp", op: Some(RENAME), cookie: Some(251212) }, PathOp { path: "/usr/src/armoury/control-plane/src/main.rs", op: Some(RENAME), cookie: Some(251212) }, PathOp { path: "/usr/src/armoury/control-plane/src/main.rs", op: Some(CHMOD), cookie: None }]
+[Running 'cargo run --locked --package armoury']
+[1m[92m   Compiling[0m armoury v0.1.0 (/usr/src/armoury/control-plane)
+[1m[96m    Building[0m [=============> ] 208/209[K[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 2.04s
+[1m[92m     Running[0m `/var/cache/armoury/target/debug/armoury`
+{"timestamp":"2026-11-20T13:31:00.168041Z","level":"INFO","fields":{"message":"control plane listening (rebuild probe)","addr":"0.0.0.0:8080","web_root":"/usr/share/armoury/web"},"target":"armoury"}
+
+
+

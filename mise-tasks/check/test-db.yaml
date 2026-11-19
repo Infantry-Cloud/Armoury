@@ -1,0 +1,40 @@
+# AGE test database for the `test-db` gate step (D6). `check/test-db` renames the Pod to a
+# run-unique name, reaches it through `kubectl port-forward` and deletes it on exit.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: armoury-test-db
+  labels:
+    app.kubernetes.io/name: armoury-test-db
+    app.kubernetes.io/part-of: armoury
+spec:
+  restartPolicy: Never
+  # Safety net: stops the Pod if a run dies without its cleanup (for example SIGKILL).
+  activeDeadlineSeconds: 3600
+  containers:
+    - name: age
+      image: docker.io/apache/age:release_PG18_1.8.0@sha256:47a0b054c3663a3e64a25fc0c5a982f1b58348019274b326a691cdf77f78eb58
+      # Throwaway data, so durability settings are off for speed.
+      args: [postgres, -c, shared_preload_libraries=age, -c, fsync=off, -c, synchronous_commit=off, -c, full_page_writes=off]
+      env:
+        # Reachable only inside the namespace and through the step's port-forward; holds no real data.
+        - name: POSTGRES_HOST_AUTH_METHOD
+          value: trust
+      ports:
+        - containerPort: 5432
+      readinessProbe:
+        exec:
+          command: [pg_isready, -h, 127.0.0.1, -U, postgres]
+        periodSeconds: 2
+      resources:
+        requests:
+          cpu: 250m
+          memory: 256Mi
+        limits:
+          memory: 1Gi
+      volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql
+  volumes:
+    - name: data
+      emptyDir: {}

@@ -1,0 +1,11 @@
+// Keep build output and local state out of the `okteto up` file sync.
+target
+web/node_modules
+web/.svelte-kit
+web/build
+web/test-results
+web/playwright-report
+.git
+.jj
+.mise
+mise.local.toml

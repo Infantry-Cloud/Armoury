@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#MISE description="Gate step test-rust: cargo nextest without the database tests"
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+reports="${ARMOURY_REPORT_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/armoury-check}"
+cd "$root"
+mkdir -p "$reports"
+
+status=0
+cargo nextest run --profile ci --workspace --locked || status=$?
+junit="${CARGO_TARGET_DIR:-$root/target}/nextest/ci/junit.xml"
+if [ -f "$junit" ]; then cp "$junit" "$reports/rust.xml"; fi
+exit "$status"

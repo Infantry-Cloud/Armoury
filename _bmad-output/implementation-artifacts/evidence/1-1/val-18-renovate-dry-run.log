@@ -1,0 +1,61 @@
+## env -u GITHUB_TOKEN -u RENOVATE_TOKEN mise run renovate  (2026-11-19T22:29:12Z); platform=local, dryRun=lookup; full log 3723 lines (debug)
+516:DEBUG: Found cargo package files (repository=local)
+517:DEBUG: Found dockerfile package files (repository=local)
+518:DEBUG: Found github-actions package files (repository=local)
+519:DEBUG: Found helmv3 package files (repository=local)
+520:DEBUG: Found kubernetes package files (repository=local)
+521:DEBUG: Found mise package files (repository=local)
+522:DEBUG: Found npm package files (repository=local)
+523:DEBUG: Found regex package files (repository=local)
+524:DEBUG: Found 16 package file(s) (repository=local)
+525: INFO: Dependency extraction complete (repository=local, baseBranch=)
+887:DEBUG: Returning 11 branch(es) (repository=local)
+       "stats": {
+         "managers": {
+           "cargo": {"fileCount": 5, "depCount": 57},
+           "dockerfile": {"fileCount": 2, "depCount": 5},
+           "github-actions": {"fileCount": 3, "depCount": 23},
+           "helmv3": {"fileCount": 1, "depCount": 2},
+           "kubernetes": {"fileCount": 1, "depCount": 1},
+           "mise": {"fileCount": 1, "depCount": 12},
+           "npm": {"fileCount": 1, "depCount": 30},
+           "regex": {"fileCount": 2, "depCount": 3}
+         },
+         "total": {"fileCount": 16, "depCount": 133}
+       "stats": {
+         "count": 66,
+         "avgMs": 7185,
+         "medianMs": 5689.058292,
+         "maxMs": 30409.901417,
+         "totalMs": 474208.12379100017
+       },
+       "datasources": {
+"packageFile": ".github/workflows/build.yml"
+"packageFile": ".github/workflows/ci.yml"
+"packageFile": ".github/workflows/preview-cleanup.yml"
+"packageFile": "agent-proto/Cargo.toml"
+"packageFile": "agent/Cargo.toml"
+"packageFile": "agent/Dockerfile"
+"packageFile": "Cargo.toml"
+"packageFile": "charts/armoury/Chart.yaml"
+"packageFile": "control-plane/Cargo.toml"
+"packageFile": "control-plane/Dockerfile"
+"packageFile": "control-plane/src/httpapi/server/Cargo.toml"
+"packageFile": "mise-tasks/check/test-db.yaml"
+"packageFile": "mise-tasks/gen/okteto.yml"
+"packageFile": "mise.toml"
+"packageFile": "okteto.yaml"
+"packageFile": "web/package.json"
+## branch names Renovate would use (dry run; local platform cannot create branches or PRs):
+branch=renovate/base64-0.x
+branch=renovate/major-vitest-monorepo
+branch=renovate/npm-renovate-44.x
+branch=renovate/serde_html_form-0.x
+branch=renovate/sveltejs-adapter-static-4.x
+branch=renovate/sveltejs-kit-3.x
+branch=renovate/typescript-7.x
+branch=renovate/ubuntu-26.x
+branch=renovate/validator-0.x
+branch=renovate/xyflow-svelte-1.x
+branch=renovate/xyflow-svelte-2.x
+exit=0

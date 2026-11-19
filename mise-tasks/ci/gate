@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+//MISE description="CI gate (ci.yml ci-gate job): fail unless every needed job succeeded; skipped or cancelled counts as failure"
+// Reads ARMOURY_CI_NEEDS, the `needs` context of the ci-gate job as JSON.
+const raw = process.env.ARMOURY_CI_NEEDS;
+if (!raw) {
+	console.error('ci:gate: ARMOURY_CI_NEEDS is not set (pass ${{ toJSON(needs) }})');
+	process.exit(1);
+}
+const needs = Object.entries(JSON.parse(raw));
+if (needs.length === 0) {
+	console.error('ci:gate: no needed jobs to check');
+	process.exit(1);
+}
+for (const [job, { result }] of needs) console.log(`ci:gate: ${job} ${result}`);
+const failed = needs.filter(([, { result }]) => result !== 'success').map(([job]) => job);
+if (failed.length > 0) {
+	console.error(`ci:gate: FAILED, not successful: ${failed.join(', ')}`);
+	process.exit(1);
+}
+console.log('ci:gate: every job succeeded');

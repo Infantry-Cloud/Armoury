@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+#MISE description="Gate step codeql: CodeQL databases for Rust, JS/TS and Actions, analysed locally with the pinned code-scanning packs; any result fails"
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+config="$root/.github/codeql/codeql-config.yml"
+languages=(rust javascript-typescript actions)
+
+# Databases and SARIF stay outside the workspace; nothing is uploaded to GitHub.
+work="$(mktemp -d "${TMPDIR:-/tmp}/armoury-codeql.XXXXXX")"
+trap 'rm -rf "$work"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+# The pinned packs (`name@version`) are listed once, in the configuration.
+packs=()
+while IFS= read -r pack; do packs+=("$pack"); done < <(sed -n 's/^ *- *\(codeql\/[a-z-]*@[0-9][0-9.]*\):.*/\1/p' "$config")
+if [ "${#packs[@]}" -ne "${#languages[@]}" ]; then
+  echo "codeql: expected one pinned pack per language in $config" >&2
+  exit 1
+fi
+codeql pack download "${packs[@]}"
+
+# The Rust extractor runs cargo; a persistent target dir outside the workspace makes reruns faster.
+cargo_cache="${XDG_CACHE_HOME:-$HOME/.cache}/armoury/codeql-cargo-target"
+mkdir -p "$cargo_cache"
+codeql database create "$work/db" --db-cluster --overwrite --build-mode=none \
+  --language="$(IFS=,; echo "${languages[*]}")" --source-root="$root" --codescanning-config="$config" \
+  --extractor-option="rust.cargo_target_dir=$cargo_cache"
+
+# The cluster holds one database per language (javascript-typescript is stored as `javascript`).
+for database in "$work"/db/*/; do
+  [ -f "$database/codeql-database.yml" ] || continue
+  language="$(basename "$database")"
+  echo "codeql: analysing the $language database"
+  # No queries given: the packs, suites and query-filters come from the configuration.
+  codeql database analyze "$database" --format=sarif-latest --output="$work/$language.sarif" --threads=0
+done
+
+node - "$work"/*.sarif <<'EOF'
+const { readFileSync } = require('node:fs');
+let count = 0;
+for (const file of process.argv.slice(2)) {
+	for (const run of JSON.parse(readFileSync(file, 'utf8')).runs ?? []) {
+		for (const result of run.results ?? []) {
+			const location = result.locations?.[0]?.physicalLocation;
+			const where = `${location?.artifactLocation?.uri ?? '?'}:${location?.region?.startLine ?? '?'}`;
+			console.error(`codeql: ${where} ${result.ruleId}: ${result.message?.text ?? ''}`);
+			count += 1;
+		}
+	}
+}
+if (count > 0) {
+	console.error(`codeql: ${count} result(s); fix them or dismiss with a reasoned query-filters entry in .github/codeql/codeql-config.yml`);
+	process.exit(1);
+}
+console.log('codeql: no results');
+EOF

@@ -1,0 +1,11 @@
+image:
+  # Required: `repository@sha256:<digest>` (or `repository:tag@sha256:<digest>`).
+  ref: ""
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi

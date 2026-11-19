@@ -1,0 +1,12 @@
+## mise run check:codeql on the working tree (2026-11-19T23:00:05Z); databases in $TMPDIR/armoury-codeql.*, removed on exit
+2:Package specifications to check for download: codeql/rust-queries@0.1.46, codeql/javascript-queries@2.5.0, codeql/actions-queries@0.6.39
+8:Initializing databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.Raxp6U/db.
+401:Finalizing databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.Raxp6U/db.
+421:codeql: analysing the actions database
+484:CodeQL scanned 4 out of 4 GitHub Actions files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage informati
+485:codeql: analysing the javascript database
+761:CodeQL scanned 4 out of 4 GitHub Actions files and 18 out of 18 JavaScript/TypeScript files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invoca
+762:codeql: analysing the rust database
+882:CodeQL scanned 14 out of 14 Rust files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+890:codeql: no results
+891:exit=0

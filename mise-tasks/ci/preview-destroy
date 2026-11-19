@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Destroy the pr-<n> preview of a closed same-repository pull request (preview-cleanup.yml)"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+: "${GITHUB_EVENT_PATH:?is not set; this task reads the pull_request event}"
+
+number="$(node -e 'const e = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); const n = e.pull_request?.number ?? e.number; if (!Number.isInteger(n)) process.exit(1); console.log(n)' "$GITHUB_EVENT_PATH")"
+echo "ci:preview-destroy: destroying preview pr-$number"
+okteto preview destroy "pr-$number" --context "$ARMOURY_OKTETO_CONTEXT" --wait --timeout 10m

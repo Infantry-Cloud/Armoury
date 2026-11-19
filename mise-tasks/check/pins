@@ -1,0 +1,167 @@
+#!/usr/bin/env node
+//MISE description="Gate step pins: every tool, crate, npm package, image and action is pinned exactly; lockfiles exist (R9)"
+// Usage: check/pins [root]  (default: this repository). Exit 1 names each offending file.
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { basename, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = process.argv[2] ?? fileURLToPath(new URL('../..', import.meta.url));
+
+// BMAD and agent tooling (`_bmad`, `.agents`, `.pi`) and mise's own install state (`.mise`) are
+// not part of the product build; dependency and VCS folders hold no manifests of ours.
+const SKIP_DIRS = new Set(['_bmad', '.agents', '.pi', '.mise', 'node_modules', 'target', '.jj', '.git', '.svelte-kit']);
+const EXACT_VERSION = /^v?\d+\.\d+\.\d+([-+][0-9A-Za-z.+-]+)?$/;
+const NPM_EXACT = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
+const ACTION_SHA = /^[^@\s]+@[0-9a-f]{40}$/;
+const OKTETO_BUILD_IMAGE = /^\$\{OKTETO_BUILD_[A-Z0-9_]+_IMAGE\}$/;
+
+const problems = [];
+const report = (file, message) => problems.push(`${relative(root, file) || file}: ${message}`);
+
+function walk(dir, files = []) {
+	const entries = readdirSync(dir, { withFileTypes: true });
+	// openapi-generator output carries its own floating manifest that is never built.
+	if (entries.some((entry) => entry.isDirectory() && entry.name === '.openapi-generator')) return files;
+	for (const entry of entries) {
+		const path = join(dir, entry.name);
+		if (entry.isDirectory()) {
+			if (!SKIP_DIRS.has(entry.name)) walk(path, files);
+		} else if (entry.isFile()) {
+			files.push(path);
+		}
+	}
+	return files;
+}
+
+const unquote = (value) => value.trim().replace(/^["']|["']$/g, '');
+const stripComment = (line) => line.replace(/\s+#.*$/, '');
+
+// [tools] in mise.toml: plain strings or inline tables with `version`.
+function checkMiseToml(file) {
+	let inTools = false;
+	for (const raw of readFileSync(file, 'utf8').split('\n')) {
+		const line = stripComment(raw).trim();
+		if (line.startsWith('[')) {
+			inTools = line === '[tools]';
+			continue;
+		}
+		const match = inTools && line.match(/^("[^"]+"|[^=\s]+)\s*=\s*(.+)$/);
+		if (!match) continue;
+		const [, tool, value] = match;
+		const version = value.startsWith('{') ? value.match(/\bversion\s*=\s*"([^"]*)"/)?.[1] : unquote(value);
+		if (!version || !EXACT_VERSION.test(version)) report(file, `tool ${unquote(tool)} is not pinned to an exact version (${version ?? value})`);
+	}
+}
+
+// Every dependency requirement in a Cargo.toml is `=x.y.z`, a workspace or a path reference.
+function checkCargoToml(file) {
+	let section = '';
+	for (const raw of readFileSync(file, 'utf8').split('\n')) {
+		const line = stripComment(raw).trim();
+		if (line.startsWith('[')) {
+			section = line.replace(/^\[+|\]+$/g, '');
+			continue;
+		}
+		if (/\bfeatures\s*=\s*\[[^\]]*["']latest["']/.test(line)) report(file, `a "latest" feature is floating: ${line}`);
+		const tableDep = section.match(/(^|\.)(dependencies|dev-dependencies|build-dependencies)\.(.+)$/);
+		if (tableDep) {
+			const version = line.match(/^version\s*=\s*"([^"]*)"/)?.[1];
+			if (version !== undefined && !version.startsWith('=')) report(file, `${tableDep[3]} requirement "${version}" is not exact (=x.y.z)`);
+			continue;
+		}
+		if (!/(^|\.)(dependencies|dev-dependencies|build-dependencies)$/.test(section)) continue;
+		const match = line.match(/^([A-Za-z0-9_-]+)(\.workspace)?\s*=\s*(.+)$/);
+		if (!match || match[2]) continue;
+		const [, name, , value] = match;
+		if (value.startsWith('{')) {
+			if (/\bworkspace\s*=\s*true/.test(value)) continue;
+			const version = value.match(/\bversion\s*=\s*"([^"]*)"/)?.[1];
+			if (version === undefined && /\bpath\s*=/.test(value)) continue;
+			if (version === undefined && /\bgit\s*=/.test(value) && /\brev\s*=/.test(value)) continue;
+			if (!version?.startsWith('=')) report(file, `${name} requirement is not exact (=x.y.z): ${value}`);
+		} else if (!unquote(value).startsWith('=')) {
+			report(file, `${name} requirement "${unquote(value)}" is not exact (=x.y.z)`);
+		}
+	}
+}
+
+function checkPackageJson(file) {
+	const manifest = JSON.parse(readFileSync(file, 'utf8'));
+	for (const field of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+		for (const [name, version] of Object.entries(manifest[field] ?? {})) {
+			if (!NPM_EXACT.test(version)) report(file, `${field}.${name} "${version}" is not an exact version`);
+		}
+	}
+	if (!existsSync(join(file, '..', 'package-lock.json'))) report(join(file, '..', 'package-lock.json'), 'missing lockfile');
+}
+
+function checkImage(file, image, where) {
+	if (image === '' || image.includes('{{')) return; // empty mapping key, or rendered by Helm
+	if (OKTETO_BUILD_IMAGE.test(image)) return; // Okteto sets it to <registry>/<name>@sha256:<digest>
+	if (!/@sha256:[0-9a-f]{64}$/.test(image)) report(file, `${where} ${image} is not pinned by @sha256 digest`);
+	else if (/:latest@/.test(image)) report(file, `${where} ${image} uses the latest tag`);
+}
+
+// `image:` values in Kubernetes, Okteto and workflow YAML; `container:` scalars and `uses:` refs in workflows.
+function checkYaml(file, isWorkflow) {
+	for (const raw of readFileSync(file, 'utf8').split('\n')) {
+		const line = stripComment(raw);
+		const image = line.match(/^\s*(?:-\s*)?image:\s*(.*)$/);
+		if (image) checkImage(file, unquote(image[1]), 'image');
+		if (!isWorkflow) continue;
+		const container = line.match(/^\s*container:\s*(\S.*)$/);
+		if (container) checkImage(file, unquote(container[1]), 'container');
+		const uses = line.match(/^\s*(?:-\s*)?uses:\s*(\S+)/);
+		if (uses) {
+			const ref = unquote(uses[1]);
+			if (ref.startsWith('./')) continue;
+			if (ref.startsWith('docker://')) checkImage(file, ref.slice('docker://'.length), 'action image');
+			else if (!ACTION_SHA.test(ref)) report(file, `action ${ref} is not pinned to a 40-character commit SHA`);
+		}
+	}
+}
+
+// FROM must carry a digest unless it names an earlier stage of the same Dockerfile.
+function checkDockerfile(file) {
+	const stages = new Set();
+	for (const raw of readFileSync(file, 'utf8').split('\n')) {
+		const line = raw.trim();
+		const from = line.match(/^FROM\s+(?:--platform=\S+\s+)?(\S+)(?:\s+AS\s+(\S+))?/i);
+		if (from) {
+			const [, image, stage] = from;
+			if (!stages.has(image.toLowerCase()) && image !== 'scratch') checkImage(file, image, 'FROM');
+			if (stage) stages.add(stage.toLowerCase());
+			continue;
+		}
+		const copyFrom = line.match(/--from=(\S+)/);
+		if (copyFrom && !stages.has(copyFrom[1].toLowerCase()) && !/^\d+$/.test(copyFrom[1])) checkImage(file, copyFrom[1], 'COPY --from');
+	}
+}
+
+function checkRequiredFiles() {
+	for (const name of ['mise.lock', 'mise.local.toml.example', 'Cargo.lock']) {
+		if (!existsSync(join(root, name))) report(join(root, name), 'missing (must be committed)');
+	}
+	const gitignore = join(root, '.gitignore');
+	const ignored = existsSync(gitignore) &&
+		readFileSync(gitignore, 'utf8').split('\n').some((line) => ['mise.local.toml', '/mise.local.toml'].includes(line.trim()));
+	if (!ignored) report(gitignore, 'must ignore mise.local.toml (site values stay untracked)');
+}
+
+checkRequiredFiles();
+for (const file of walk(root)) {
+	const name = basename(file);
+	const rel = relative(root, file);
+	if (name === 'mise.toml') checkMiseToml(file);
+	else if (name === 'Cargo.toml') checkCargoToml(file);
+	else if (name === 'package.json') checkPackageJson(file);
+	else if (name === 'Dockerfile' || name.endsWith('.Dockerfile')) checkDockerfile(file);
+	else if (/\.ya?ml$/.test(name)) checkYaml(file, /^\.github[/\\]workflows[/\\]/.test(rel));
+}
+
+if (problems.length > 0) {
+	console.error(problems.join('\n'));
+	console.error(`pins: ${problems.length} floating reference(s) or missing lockfile(s)`);
+	process.exit(1);
+}
+console.log('pins: every reference is pinned exactly');

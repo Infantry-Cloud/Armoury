@@ -12,7 +12,6 @@ use sqlx::PgPool;
 
 // Migrations are off on purpose: this check is about the database image, not the schema.
 #[sqlx::test(migrations = false)]
-#[ignore = "ATDD red phase: Task T3 removes this line"]
 async fn val_3_age_extension_is_available(pool: PgPool) -> sqlx::Result<()> {
     sqlx::query("CREATE EXTENSION IF NOT EXISTS age")
         .execute(&pool)

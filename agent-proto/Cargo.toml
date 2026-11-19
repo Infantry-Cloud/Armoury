@@ -1,0 +1,18 @@
+[package]
+name = "agent-proto"
+version = "0.1.0"
+description = "Agent to control-plane protocol types generated from proto/agent/v1."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+prost.workspace = true
+
+[build-dependencies]
+protox.workspace = true
+tonic-prost-build.workspace = true
+
+[lints]
+workspace = true

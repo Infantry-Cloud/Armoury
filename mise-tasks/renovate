@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE description="Renovate: a dry run over this working tree (no token, no branches or pull requests) unless RENOVATE_DRY_RUN=false (renovate.yml only)"
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+if [ "${RENOVATE_DRY_RUN:-}" = false ]; then
+  : "${RENOVATE_TOKEN:?is not set; renovate.yml passes it from the RENOVATE_TOKEN secret}"
+  : "${GITHUB_REPOSITORY:?is not set}"
+  unset RENOVATE_DRY_RUN
+  exec renovate --platform=github "$GITHUB_REPOSITORY"
+fi
+
+# The local platform reads this working tree only; without tokens it cannot write to GitHub.
+exec env -u GITHUB_TOKEN -u GH_TOKEN -u RENOVATE_TOKEN -u GITHUB_COM_TOKEN \
+  LOG_LEVEL="${LOG_LEVEL:-debug}" renovate --platform=local --dry-run=lookup

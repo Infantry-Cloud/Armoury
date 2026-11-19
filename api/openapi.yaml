@@ -1,0 +1,33 @@
+openapi: 3.0.3
+info:
+  title: Armoury API
+  description: The REST contract between the Armoury web app and the control plane.
+  version: 0.1.0
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+paths:
+  /api/v1/healthz:
+    get:
+      operationId: getHealthz
+      tags:
+        - health
+      summary: Report that the control plane is serving requests
+      responses:
+        '200':
+          description: The control plane is serving requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+components:
+  schemas:
+    Health:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok

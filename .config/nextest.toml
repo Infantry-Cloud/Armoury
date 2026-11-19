@@ -1,0 +1,18 @@
+# Database tests are the control plane's integration tests (`control-plane/tests/`); only the
+# `test-db` gate step runs them, against its AGE Pod. Every other run leaves them out.
+[profile.default]
+default-filter = "not (package(armoury) & kind(test))"
+
+[profile.ci]
+default-filter = "not (package(armoury) & kind(test))"
+fail-fast = false
+
+[profile.ci.junit]
+path = "junit.xml"
+
+[profile.ci-db]
+default-filter = "package(armoury) & kind(test)"
+fail-fast = false
+
+[profile.ci-db.junit]
+path = "junit.xml"

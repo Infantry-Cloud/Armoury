@@ -1,0 +1,41 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"description": "Keep every pin exact: mise tools, =x.y.z Cargo requirements, exact npm versions, image digests and action SHAs.",
+	"extends": ["config:recommended", "docker:pinDigests", "helpers:pinGitHubActionDigests"],
+	"rangeStrategy": "pin",
+	"ignorePaths": [
+		"**/node_modules/**",
+		"control-plane/src/httpapi/server/generated/**",
+		"_bmad/**",
+		"_bmad-output/**",
+		".agents/**",
+		".pi/**",
+		".mise/**"
+	],
+	"kubernetes": {
+		"managerFilePatterns": ["/^mise-tasks/.+\\.ya?ml$/"]
+	},
+	"customManagers": [
+		{
+			"description": "Images in Okteto manifests (okteto.yaml / okteto.yml in any directory)",
+			"customType": "regex",
+			"managerFilePatterns": ["/(^|/)okteto\\.ya?ml$/"],
+			"matchStrings": [
+				"image:\\s*(?<depName>[^\\s:@]+(?::\\d+)?/[^\\s:@]+):(?<currentValue>[^\\s@]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+			],
+			"datasourceTemplate": "docker"
+		}
+	],
+	"packageRules": [
+		{
+			"description": "Cargo requirements stay `=x.y.z`",
+			"matchManagers": ["cargo"],
+			"rangeStrategy": "replace"
+		},
+		{
+			"description": "The generator image must stay in step with the committed generated code; bump with mise run gen:api",
+			"matchDepNames": ["docker.io/openapitools/openapi-generator-cli"],
+			"groupName": "openapi-generator"
+		}
+	]
+}

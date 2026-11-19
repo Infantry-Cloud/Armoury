@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="CI tier fast (hosted runners, every event): the fast tier of the gate"
+set -euo pipefail
+exec "$(dirname "${BASH_SOURCE[0]}")/../check/fast"

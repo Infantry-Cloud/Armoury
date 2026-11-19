@@ -8,7 +8,6 @@ use agent_proto::v1::Heartbeat;
 use prost::Message;
 
 #[test]
-#[ignore = "ATDD red phase: Task T2 removes this line"]
 fn val_2_generated_message_roundtrip() {
     let sent = Heartbeat {
         agent_id: "val-2-agent".to_owned(),

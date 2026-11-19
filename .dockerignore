@@ -1,0 +1,15 @@
+# Image builds need only the sources: Rust crates, proto, web.
+.git
+.jj
+.mise
+.pi
+.agents
+_bmad
+_bmad-output
+target
+web/node_modules
+web/.svelte-kit
+web/build
+web/test-results
+web/playwright-report
+mise.local.toml

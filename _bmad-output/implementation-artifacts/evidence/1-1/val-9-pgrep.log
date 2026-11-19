@@ -1,0 +1,8 @@
+none docker
+none dockerd
+none podman
+none containerd
+none colima
+none kind
+none postgres
+none buildkitd

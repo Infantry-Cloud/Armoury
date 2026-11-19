@@ -97,7 +97,7 @@ function escapeRegExp(text) {
 	return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-test.skip('VAL-7 gen:api is repeatable and the api step names an edited generated file', (t) => {
+test('VAL-7 gen:api is repeatable and the api step names an edited generated file', (t) => {
 	const dir = mkdtempSync(join(tmpdir(), 'val-7-gen-api-'));
 	t.after(() => rmSync(dir, { recursive: true, force: true }));
 	const bin = shimBin(dir);

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#MISE description="Fast tier of the gate (iteration and fork pull requests only; hand off with mise run check)"
+set -uo pipefail
+steps="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+for step in pins rust test-rust web chart test-tasks; do
+  echo "==> check:$step"
+  if ! "$steps/$step"; then
+    echo "check: FAILED at step '$step' (rerun it with: mise run check:$step)" >&2
+    exit 1
+  fi
+done
+echo "check:fast: all fast-tier steps passed"

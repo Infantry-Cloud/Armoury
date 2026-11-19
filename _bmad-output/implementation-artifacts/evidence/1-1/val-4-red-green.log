@@ -1,0 +1,19 @@
+## RED: root layout with ssr = true (temporary mutation)
+ ❯ src/routes/val-4.test.ts:10:25
+      8|  const { default: svelteConfig } = await import('../../svelte.config.j…
+      9|
+     10|  expect(rootLayout.ssr).toBe(false);
+       |                         ^
+     11|  expect(svelteConfig.kit?.adapter?.name).toBe('@sveltejs/adapter-stati…
+     12| });
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  21:51:21
+   Duration  366ms (transform 97ms, setup 0ms, import 83ms, tests 67ms, environment 0ms)
+## GREEN: layout restored
+ RUN  v4.1.12 /Users/danielbooth/projects/home/armoury/web
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:51:23
+   Duration  148ms (transform 22ms, setup 0ms, import 25ms, tests 10ms, environment 0ms)

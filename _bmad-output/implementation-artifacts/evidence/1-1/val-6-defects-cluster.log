@@ -1,0 +1,7 @@
+# VAL-6 cluster defects 2026-11-20T08:18:00Z; copy: /tmp/armoury-val6c.Xft779 (tracked files from jj file list, change ttwsqvwx); Okteto context https://dashboard.okteto.lab.danielbooth.cloud
+- failing #[sqlx::test] (control-plane/tests/probe_db.rs): exit=1 failing step=test-db expected=test-db OK
+- edited generated code (control-plane/src/httpapi/server/generated/src/models.rs): exit=1 failing step=api expected=api OK
+113:api: generated file differs from the spec: control-plane/src/httpapi/server/generated/src/models.rs
+122:api: generated code does not match api/openapi.yaml; run 'mise run gen:api' and never edit generated files
+No resources found in danielboothcloud namespace.
+done

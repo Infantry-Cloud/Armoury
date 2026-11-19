@@ -1,3 +1,16 @@
 !_bmad
 __pycache__/
 _bmad/config.user.toml
+
+# Site values (mise.local.toml.example is the committed template)
+mise.local.toml
+
+# Build output
+target/
+web/node_modules/
+web/.svelte-kit/
+web/build/
+web/test-results/
+web/playwright-report/
+web/blob-report/
+.DS_Store

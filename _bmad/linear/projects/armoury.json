@@ -4734,7 +4734,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-2 evidence for VAL-5 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "a681983d-26c9-428c-829a-48ba38899dce",
@@ -4764,7 +4764,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-5 evidence for VAL-1, VAL-2 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "0ac2180a-b554-48c4-9c57-d9757fee316f",
@@ -4794,7 +4794,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-3 evidence for VAL-1, VAL-3 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "22d3a082-a47c-48c5-a26b-82d8aa412937",
@@ -4824,7 +4824,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-6 evidence for VAL-7 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "78a63977-a5b0-48f3-b330-1bd5af67c936",
@@ -4854,7 +4854,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-5 evidence for VAL-4 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "0adaf6b4-9631-479e-aaec-f56bc8563db6",
@@ -4884,7 +4884,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-3, AC-5 evidence for VAL-1 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "ee3a1123-ea97-42a0-bc99-8de4cf997787",
@@ -4914,7 +4914,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-2, AC-3, AC-4 evidence for VAL-1, VAL-5, VAL-6 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "b1b2afb1-5628-49e6-8abf-0e484f5874b0",
@@ -4944,7 +4944,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-7 evidence for VAL-8 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "0c447401-bb7a-431f-a0cb-d100c75ecc74",
@@ -4974,7 +4974,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-8, AC-9, AC-13 evidence for VAL-9, VAL-10, VAL-14 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "20720ec5-587f-4106-b731-c071d2f10d98",
@@ -5004,7 +5004,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-10, AC-11, AC-13, AC-15 evidence for VAL-11, VAL-12, VAL-16 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "ccd648d1-66bc-4a42-ac3c-1e8125b60ccf",
@@ -5034,7 +5034,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-12 evidence for VAL-13 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "cd4e716f-d797-4294-85a4-8b873d740afb",
@@ -5064,7 +5064,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-14 evidence for VAL-15 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "464c2647-3dad-4f22-87d6-9ca9a6502d1a",
@@ -5167,7 +5167,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-3, AC-16 evidence for VAL-1, VAL-17 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "86ba235c-1258-4107-958e-83a12693a9aa",
@@ -5190,7 +5190,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-17 evidence for VAL-18 accepted by independent Code Review",
-      "local_status": "backlog",
+      "local_status": "in-progress",
       "publication": "published",
       "remote": {
         "id": "76dfed5a-ef2f-4c98-9b0c-4fa32cfa9dc7",

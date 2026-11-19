@@ -1,0 +1,6 @@
+# The e2e test context is web/ (okteto.yaml); upload sources only.
+node_modules
+.svelte-kit
+build
+test-results
+playwright-report

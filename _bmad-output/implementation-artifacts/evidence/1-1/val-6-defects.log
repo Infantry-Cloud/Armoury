@@ -1,0 +1,10 @@
+# VAL-6 record 2026-11-19T23:47:08Z; copy: /tmp/armoury-val6.dA5GKA (tracked files from jj file list); no Okteto context on this workstation
+- unformatted Rust (agent/src/main.rs): exit=1 failing step=rust expected=rust OK
+- clippy warning (control-plane/src/main.rs): exit=1 failing step=rust expected=rust OK
+- failing Rust test (control-plane/src/httpapi/mod.rs): exit=1 failing step=test-rust expected=test-rust OK
+- web lint error (web/src/routes/+layout.ts): exit=1 failing step=web expected=web OK
+- svelte-check type error (web/src/routes/+page.svelte): exit=1 failing step=web expected=web OK
+- failing Vitest test (web/src/routes/probe.test.ts): exit=1 failing step=web expected=web OK
+- invalid chart template (charts/armoury/charts/agent/templates/serviceaccount.yaml): exit=1 failing step=chart expected=chart OK
+- failing #[sqlx::test] (test-db) and edited generated code (api): NOT RUN; the cluster tier needs a working Okteto context
+done

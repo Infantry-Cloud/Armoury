@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#MISE description="CI publish (build.yml, main only): copy both built images by digest from the Okteto Registry to GHCR with crane"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+if [ "${GITHUB_REF:-}" != refs/heads/main ]; then
+  echo "ci:publish: only refs/heads/main publishes to GHCR (GITHUB_REF is '${GITHUB_REF:-unset}')" >&2
+  exit 1
+fi
+: "${ARMOURY_CONTROL_PLANE_IMAGE:?is not set; build.yml passes it from the build job}"
+: "${ARMOURY_AGENT_IMAGE:?is not set; build.yml passes it from the build job}"
+: "${GITHUB_REPOSITORY_OWNER:?is not set}"
+for built in "$ARMOURY_CONTROL_PLANE_IMAGE" "$ARMOURY_AGENT_IMAGE"; do
+  if ! [[ "$built" =~ ^[^@[:space:]]+@sha256:[0-9a-f]{64}$ ]]; then
+    echo "ci:publish: '$built' is not repository@sha256:<digest>" >&2
+    exit 1
+  fi
+done
+
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+export DOCKER_CONFIG="$work/docker"
+json_field() { node -e 'const v = JSON.parse(require("fs").readFileSync(0, "utf8"))[process.argv[1]]; if (!v) process.exit(1); process.stdout.write(String(v))' "$1"; }
+
+source_registry="${ARMOURY_CONTROL_PLANE_IMAGE%%/*}"
+credentials="$(printf '%s\n' "$source_registry" | OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto registrytoken get)"
+printf '%s' "$credentials" | json_field Secret |
+  crane auth login "$source_registry" --username "$(printf '%s' "$credentials" | json_field Username)" --password-stdin
+: "${GITHUB_TOKEN:?is not set; build.yml passes the job token (packages: write)}"
+printf '%s' "$GITHUB_TOKEN" | crane auth login ghcr.io --username "${GITHUB_ACTOR:-$GITHUB_REPOSITORY_OWNER}" --password-stdin
+
+owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+for pair in "control-plane=$ARMOURY_CONTROL_PLANE_IMAGE" "agent=$ARMOURY_AGENT_IMAGE"; do
+  name="${pair%%=*}"
+  built="${pair#*=}"
+  digest="${built#*@}"
+  destination="ghcr.io/$owner/armoury-$name:sha-${GITHUB_SHA:?is not set}"
+  crane copy "$built" "$destination"
+  published="$(crane digest "$destination")"
+  if [ "$published" != "$digest" ]; then
+    echo "ci:publish: $destination has digest $published, expected $digest" >&2
+    exit 1
+  fi
+  echo "ci:publish: ghcr.io/$owner/armoury-$name@$digest"
+done

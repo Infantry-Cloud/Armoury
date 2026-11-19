@@ -1,0 +1,11 @@
+# Images are referenced by digest only (`repository@sha256:<digest>`). `okteto.yaml` sets them
+# from the Okteto build; there is no floating default.
+control-plane:
+  enabled: true
+  image:
+    ref: ""
+
+agent:
+  enabled: true
+  image:
+    ref: ""

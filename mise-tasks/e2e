@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="Playwright smoke test against a running deployment (default http://localhost:8080 from mise run dev; override with ARMOURY_E2E_BASE_URL)"
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/../web"
+export ARMOURY_E2E_BASE_URL="${ARMOURY_E2E_BASE_URL:-http://localhost:8080}"
+
+echo "e2e: testing $ARMOURY_E2E_BASE_URL"
+# The browser build is pinned by the @playwright/test version in package-lock.json.
+npx --no -- playwright install chromium
+npx --no -- playwright test

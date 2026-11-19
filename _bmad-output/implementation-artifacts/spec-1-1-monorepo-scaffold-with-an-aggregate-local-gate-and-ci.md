@@ -2,8 +2,9 @@
 title: 'Story 1.1: Monorepo scaffold with an aggregate local gate and CI'
 type: 'chore'
 created: '2026-11-06'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
+baseline_commit: '52e5b8e6a2e7f62197df63c653fb5756f0dcf637'
 review_loop_iteration: 0
 story_key: '1-1-monorepo-scaffold-with-an-aggregate-local-gate-and-ci'
 context:
@@ -167,20 +168,20 @@ Nothing exists yet except the files marked EXISTING.
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] T1 `mise.toml`, `mise.local.toml.example`, `.gitignore`, `.stignore` -- pin the toolchain, document site values, ignore build output -- AC-2 via VAL-5
-- [ ] T2 `Cargo.toml`, `proto/agent/v1/agent.proto`, `agent-proto/` -- workspace, lints and proto codegen -- AC-1, AC-5 via VAL-1, VAL-2
-- [ ] T3 `control-plane/`, `agent/`, `mise-tasks/check/test-db` and the AGE Pod manifest -- minimal binaries, one-origin server on 8080, database step -- AC-1, AC-3 via VAL-1, VAL-3
-- [ ] T4 `api/openapi.yaml`, `mise-tasks/gen/api` and its Okteto manifest, `mise-tasks/check/api`, generated output -- generation and drift check -- AC-6 via VAL-7
-- [ ] T5 `web/` -- SvelteKit app, lint, `svelte-check`, Vitest -- AC-1, AC-5 via VAL-4
-- [ ] T6 `charts/armoury/` -- umbrella chart and subcharts -- AC-3, AC-5 via VAL-1
-- [ ] T7 `mise-tasks/check/` -- aggregate gate in two tiers, `check:fast`, remaining steps and the pins checker; then the defect demonstration -- AC-2, AC-3, AC-4 via VAL-1, VAL-5, VAL-6
-- [ ] T8 `control-plane/Dockerfile`, `agent/Dockerfile` -- digest-pinned multi-stage images and the dev target -- AC-7 via VAL-8
-- [ ] T9 `okteto.yaml`, `mise-tasks/{dev,e2e,ci/e2e,ci/preview-destroy}`, `web/playwright.config.ts` -- Okteto dev loop, e2e deployments and smoke test -- AC-8, AC-9, AC-13 via VAL-9, VAL-10, VAL-14
-- [ ] T10 `mise-tasks/ci/{_default,fast,cluster,build,publish}`, `.github/workflows/{ci,build,preview-cleanup}.yml` -- CI tiers, `mise run ci`, image build and publish -- AC-10, AC-11, AC-13, AC-15 via VAL-11, VAL-12, VAL-16
-- [ ] T11 `AGENTS.md`, `README.md` -- rules, layout, PROC3, commands, Okteto prerequisites -- AC-12 via VAL-13
-- [ ] T12 every task that calls `okteto` or `kubectl` -- explicit-context guard, activated by its test -- AC-14 via VAL-15
-- [ ] T13 `mise-tasks/check/codeql`, `.github/codeql/codeql-config.yml` -- CodeQL cluster-tier step with reasoned dismissals -- AC-3, AC-16 via VAL-1, VAL-17
-- [ ] T14 `mise-tasks/renovate`, `renovate.json`, `.github/workflows/renovate.yml` -- Renovate dry-run task and scheduled workflow -- AC-17 via VAL-18
+- [x] T1 `mise.toml`, `mise.local.toml.example`, `.gitignore`, `.stignore` -- pin the toolchain, document site values, ignore build output -- AC-2 via VAL-5
+- [x] T2 `Cargo.toml`, `proto/agent/v1/agent.proto`, `agent-proto/` -- workspace, lints and proto codegen -- AC-1, AC-5 via VAL-1, VAL-2
+- [x] T3 `control-plane/`, `agent/`, `mise-tasks/check/test-db` and the AGE Pod manifest -- minimal binaries, one-origin server on 8080, database step -- AC-1, AC-3 via VAL-1, VAL-3
+- [x] T4 `api/openapi.yaml`, `mise-tasks/gen/api` and its Okteto manifest, `mise-tasks/check/api`, generated output -- generation and drift check -- AC-6 via VAL-7
+- [x] T5 `web/` -- SvelteKit app, lint, `svelte-check`, Vitest -- AC-1, AC-5 via VAL-4
+- [x] T6 `charts/armoury/` -- umbrella chart and subcharts -- AC-3, AC-5 via VAL-1
+- [x] T7 `mise-tasks/check/` -- aggregate gate in two tiers, `check:fast`, remaining steps and the pins checker; then the defect demonstration -- AC-2, AC-3, AC-4 via VAL-1, VAL-5, VAL-6
+- [x] T8 `control-plane/Dockerfile`, `agent/Dockerfile` -- digest-pinned multi-stage images and the dev target -- AC-7 via VAL-8
+- [x] T9 `okteto.yaml`, `mise-tasks/{dev,e2e,ci/e2e,ci/preview-destroy}`, `web/playwright.config.ts` -- Okteto dev loop, e2e deployments and smoke test -- AC-8, AC-9, AC-13 via VAL-9, VAL-10, VAL-14
+- [x] T10 `mise-tasks/ci/{_default,fast,cluster,build,publish}`, `.github/workflows/{ci,build,preview-cleanup}.yml` -- CI tiers, `mise run ci`, image build and publish -- AC-10, AC-11, AC-13, AC-15 via VAL-11, VAL-12, VAL-16
+- [x] T11 `AGENTS.md`, `README.md` -- rules, layout, PROC3, commands, Okteto prerequisites -- AC-12 via VAL-13
+- [x] T12 every task that calls `okteto` or `kubectl` -- explicit-context guard, activated by its test -- AC-14 via VAL-15
+- [x] T13 `mise-tasks/check/codeql`, `.github/codeql/codeql-config.yml` -- CodeQL cluster-tier step with reasoned dismissals -- AC-3, AC-16 via VAL-1, VAL-17
+- [x] T14 `mise-tasks/renovate`, `renovate.json`, `.github/workflows/renovate.yml` -- Renovate dry-run task and scheduled workflow -- AC-17 via VAL-18
 
 ## Contract Approval
 
@@ -223,6 +224,57 @@ Nothing exists yet except the files marked EXISTING.
 - Reviewed at: pending
 
 ## Implementation Notes
+
+- Implementation session: a2f4088c-aed1-43be-bfff-1af12c5f041b
+- Implementation stage: change `ttwsqvwx`, baseline `52e5b8e6a2e7f62197df63c653fb5756f0dcf637` (`mztrkprp`, approval change r1).
+- Environment (2026-11-19): macOS arm64, no Okteto context (`okteto context list`: "Your context is not set"; no `~/.okteto/context`), no `mise.local.toml`. The assumption "Before T3, T4 and T9: a working Okteto context" is unmet, so no cluster-tier check (`api`, `test-db`, `test-tasks-cluster`, `ci:e2e`, `dev`, image builds) has run. T3, T4, T7, T9 and T13 stay unticked until their checks run.
+- Evidence files: `_bmad-output/implementation-artifacts/evidence/1-1/`. Locked tests: only skip markers removed; `validate_story_contract.py lock` reproduces all eight lock digests; `validate --phase approved` VALID.
+- Build verification (2026-11-19, after fixing a corrupted comment in `mise-tasks/check/test-db.yaml`): approved-phase validation VALID; `mise run check:fast` exit 0 in 31 s (`check-fast-build-verify.log`); `mise run check` exit 1 at `api` (`ARMOURY_OKTETO_CONTEXT` not set). Blocked on the unmet Okteto-context assumption.
+- Aggregate gate: `mise run check:fast` exits 0 (`check-fast-final.log`). `mise run check` stops at `api` because `ARMOURY_OKTETO_CONTEXT` is not set (`val-1-fresh-copy.log`). The handoff gate has therefore not passed.
+- Okteto context (2026-11-20): Daniel logged in to `https://dashboard.okteto.lab.danielbooth.cloud` (namespace `danielboothcloud`, kube context `dashboard_okteto_lab_danielbooth_cloud`, Kubernetes v1.36.6, so `k8s-openapi` `v1_33` holds); untracked `mise.local.toml` written. `okteto context show --output json` has the `registry` field that `ci:build` reads.
+- First `check:api` failed naming `apis/health.rs` and `server/mod.rs` (blank-line differences from the online generator; `val-7-api-drift-online-generator.log`), as Decision 3 anticipated. Resolved by `mise run gen:api` (pinned image via `okteto test`); `check:api` then passes.
+- Handoff gate: `mise run check` exit 0 in 9 m 35 s, every step in tier order (`check-full-okteto.log`).
+- BLOCKER for T9 (VAL-9, VAL-10 in Okteto, VAL-14) and the image builds (VAL-8, VAL-12): `ci:e2e` run 1 failed in `okteto build` at `cargo install cargo-chef` (`index.crates.io` transferred 0 bytes; `val-14-run1-buildkit-mtu-failure.log`) and still deleted its `armoury-ci-` namespace. Cause, outside this repository: the Okteto BuildKit Pod's `eth0` MTU is 1300 but its CNI bridge `buildkit0` (`/etc/buildkit/cni.json`, no `mtu`) is 1500, so large packets from `RUN` steps are dropped. A probe Pod in `danielboothcloud` reaches crates.io, npm and GitHub over IPv4 in about 0.1 s. Fix belongs to Daniel's Okteto install (for example Helm value `buildkit.network.mode: host`, or `"mtu": 1300` in the BuildKit CNI config).
+- Blockers resolved outside this repository (2026-11-20): GitOps `b851fbd` set BuildKit `network.mode: host`; nodes then failed `x509` pulling from the Okteto Registry through Okteto's self-signed internal ingress. `sveltos-bootstrap` 0.1.43/0.1.44 now copies each mirrored GatewayRoute's ZeroSSL Secret back into its vCluster (`okteto/okteto-tls`) and GitOps `63f2d8d` points Okteto's ingress at it; the internal ingress (10.106.125.129) now serves the ZeroSSL certificate.
+
+### Evidence candidates (Dev-owned VAL-*), jj change `ttwsqvwx` (working copy, not pushed)
+
+| VAL ID | Candidate | Evidence |
+| --- | --- | --- |
+| VAL-1 | PASS | `val-1-fresh-copy-okteto.log` (2026-11-20): fresh copy of `jj file list` plus `mise.local.toml`, no shared target; `mise install && mise run check` exit 0 in 13 m 19 s naming every AC-3 step in tier order; then without the two context lines and with `KUBECONFIG=/nonexistent`, `check:fast` exit 0 with no cluster step; resolver 3, edition 2024, binaries `armoury` and `armoury-agent`, Tailwind 4.3.5, `@xyflow/svelte` 1.6.6, `adapter-static` 3.0.11, `components.json`, umbrella chart with `agent` and `control-plane` subcharts, `api/openapi.yaml`. |
+| VAL-2 | PASS | `val-2-red-green.log` (RED: proto field renamed, compile error; GREEN: 1 passed). Also in `check:test-rust`. |
+| VAL-3 | PASS | `check-full-okteto.log` (`check:test-db`): `val_3_age_extension_is_available` passed against the run-unique AGE Pod in `danielboothcloud`; the Pod was deleted afterwards (`kubectl get pods`: none). RED before activation: fails without `DATABASE_URL`. |
+| VAL-4 | PASS | `val-4-red-green.log` (RED: `ssr = true` mutation). |
+| VAL-5 | PASS | `val-5-red-green.log` (RED: npm-range checks disabled, 5 cases fail). |
+| VAL-6 | PASS | `val-6-defects.log` (7 defects) plus `val-6-defects-cluster.log` (2026-11-20): a failing `#[sqlx::test]` exits 1 at `test-db` (its Pod still deleted) and an edited generated file exits 1 at `api` naming `.../generated/src/models.rs`. All 9 fail at the expected step. |
+| VAL-7 | PASS | `check-full-okteto.log` (`check:test-tasks-cluster`): `VAL-7 gen:api is repeatable and the api step names an edited generated file` passed (139 s). Earlier RED: `val-7-red-no-okteto-context.log`. |
+| VAL-10 | PASS | `val-10-e2e-okteto-dev.log`: `mise run e2e` exit 0 against the `mise run dev` deployment (`localhost:8080`); `val-14-run3.log`/`run4.log`: the same spec passed in the `okteto test` run of `ci:e2e`. Unreachable URL: `val-10-e2e.log`. |
+| VAL-10 (earlier) | PARTIAL | `val-10-e2e.log`: `ARMOURY_E2E_BASE_URL=http://127.0.0.1:9 mise run e2e` exits 1; supplementary pass against the control plane run locally with `cargo run` (not an Okteto deployment). |
+| VAL-14 | PASS | 2026-11-20: run 3 `armoury-ci-20261120131738-17458-9454` (`val-14-run3.log`) and run 4 `armoury-ci-20261120132211-29479-24136` (`val-14-run4.log`) each printed namespace and base URL, passed the smoke test and deleted the namespace (exit 0); run 5 `armoury-ci-20261120132432-39600-404` (`val-14-run5-interrupt.log`) was sent SIGINT after the deploy, deleted its namespace and exited 130; `val-14-namespaces-after.log` lists only `danielboothcloud`. |
+| VAL-14 (earlier) | BLOCKED | Run 2 (`val-14-run2.log`, after GitOps set BuildKit `network.mode: host`): all three images built and pushed (MTU fault fixed), chart installed, then `okteto deploy` timed out after 20 m and the namespace was deleted. Cause (outside this repository): the Okteto daemon's `updateHosts` task points nodes' `registry.okteto.lab.danielbooth.cloud` at the internal ingress-nginx (10.106.125.129), which serves `default-ssl-certificate-selfsigned` (issuer `okteto-wildcard-ca`); `privateCA` injection is disabled on Talos, so containerd fails `x509: certificate signed by unknown authority` and both Pods stay `ImagePullBackOff`. Pods see the valid ZeroSSL cert via the Tailscale gateway. Run 1 (`val-14-run1-buildkit-mtu-failure.log`): namespace `armoury-ci-20261120075950-72844-26648` created with `--use=false`, `okteto build` failed on the BuildKit MTU fault, namespace deleted on failure, exit 1. Two passing runs and the interrupt run wait for the BuildKit fix. |
+| VAL-15 | PASS | `val-15-red-green.log` (RED: `--use=false` dropped; a real port-forward race found and fixed in `check/test-db`). |
+| VAL-16 | PASS | `val-16-red-green.log` (RED: runner continues after a failing tier). |
+| VAL-17 | PASS (candidate) | Whole-gate run: `check-full-okteto.log` shows databases for `actions`, `javascript` and `rust`, `codeql: no results`. |
+| VAL-17 (earlier) | PARTIAL | `codeql-clean-run.log`: `check:codeql` on the working tree, no results, about 17 min cold. `val-17-codeql-injection.log`: in a copy, `eval(window.location.hash...)` in `web/src/routes/+layout.ts` fails with `web/src/routes/+layout.ts:3 js/code-injection` (exit 1); a reasoned `query-filters` exclusion then passes (exit 0); no database or SARIF left in the copy. Run as `check:codeql`, because the whole gate stops at `api` without Okteto. |
+
+Test Architect inputs for VAL-9 (2026-11-20): `val-9-dev.log` (`mise run dev`: `okteto up` built and deployed, forward 8080, `cargo watch` running; a temporary string edit in `control-plane/src/main.rs`, reverted afterwards, recompiled only `armoury v0.1.0` in 2.04 s); `val-9-pod-images.log` (both Pods run `registry.okteto.lab.danielbooth.cloud/...@sha256:` images, the control plane as `armoury-control-plane-dev`); `val-9-pgrep.log` (none of the eight processes running); `localhost:8080` served the SPA and `/api/v1/healthz` `{"status":"ok"}`. The restart-and-edit-again step is not recorded. Also `val-18-renovate-dry-run.log` (local platform, `--dry-run=lookup`, no token: 16 package files, 133 dependencies across cargo, dockerfile, github-actions, helmv3, kubernetes, mise, npm and the Okteto regex manager).
+
+### Decisions and deviations for review
+
+1. SvelteKit 2.70.4, not 3.x: locked VAL-4 imports `svelte.config.js` (`kit.adapter`), which SvelteKit 3 rejects. `npm audit` reports SvelteKit advisories fixed only in 3.x (enhanced forms, prerender cache-control, remote functions), none used by this static SPA. Moving to SvelteKit 3 needs a VAL-4 change (Correct Course). TypeScript 5.9.3, because openapi-typescript 7.13.0 peers on TypeScript 5.
+2. Generated Rust server types: crate `armoury-httpapi` with a hand-written exact-pin manifest at `control-plane/src/httpapi/server/Cargo.toml` (`[lib] path = "generated/src/lib.rs"`); `generated/` is the complete generator output, including its own unused floating `Cargo.toml`. `check/pins` skips folders that contain `.openapi-generator/`; Renovate ignores the folder; `check/rust` excludes the crate from rustfmt and clippy.
+3. The committed Rust output was first produced by the openapi-generator online service; on 2026-11-20 `check:api` showed whitespace drift and `mise run gen:api` (pinned image through `okteto test`) replaced it, so the committed output is now the pinned generator's. The TS types were generated locally with the pinned openapi-typescript.
+4. `clippy::needless_update` is allowed workspace-wide, because locked VAL-2 uses `..Default::default()` on a one-field message. Default rustfmt settings, so the locked tests stay formatted.
+5. `agent-proto` compiles the proto with protox (no `protoc` anywhere). kube uses the aws-lc-rs provider; the agent logs the API server version at startup; `k8s-openapi` feature `v1_33` (oldest available; confirm the dev cluster runs at least 1.33). sqlx is a control-plane dev-dependency until Story 1.2 (cargo's unused-dependency lint).
+6. The database test group is the control plane's integration tests (`package(armoury) & kind(test)`, nextest profiles `ci` and `ci-db`, each writing JUnit).
+7. `okteto.yaml`: deploy runs remotely in `ghcr.io/okteto/pipeline-runner:1.50.2` (digest) with `helm4` from the Okteto CLI image; the e2e test container is Playwright v1.65.1 (digest) against `http://armoury-control-plane.<namespace>.svc.cluster.local:8080`. `gen:api` passes `--name armoury-gen-api`.
+8. Runtime images use the release profile; the `dev` target uses the debug profile and `cargo-watch` 8.5.3; cargo-chef 0.1.78 is installed by `cargo install --locked`.
+9. `ci-gate` runs a new task, `mise run ci:gate`, which reads `toJSON(needs)`. ARC jobs use the label `armoury-arc` (declared in `.github/actionlint.yaml`); the scale set must use that name. JUnit reports are written by the steps to `$RUNNER_TEMP` or `$TMPDIR/armoury-check`; the upload steps and the `contracts` job stay in AR phase 3 (item 2).
+10. `ci:build` reads the Okteto Registry host from `okteto context show --output json` (`registry`), builds with `okteto build --tag` and reads digests with crane; `ci:publish` copies to `ghcr.io/<owner>/armoury-<name>:sha-<GITHUB_SHA>` and compares digests. Both are unverified against a real Okteto.
+11. `check/pins` also skips `.pi/` (untracked) and `.mise/` (mise's own lock state), besides the folders the test names.
+12. CodeQL packs are keyed `javascript` in the configuration (the CLI's pack language name). The Rust extractor's cargo target is cached in `~/.cache/armoury/codeql-cargo-target`. An `eval(location.hash)` inside a `.svelte` component produced no result (16 of 18 JS/TS files scanned), so Svelte component scripts are a likely CodeQL coverage gap.
+13. `playwright install chromium` removed an older unused browser from the shared `~/Library/Caches/ms-playwright`.
+14. `agent-proto/build.rs` reads `CARGO_MANIFEST_DIR` at run time: the compile-time `env!` form broke builds that share a target directory across checkouts (found by the VAL-6 run).
 
 ## Spec Change Log
 

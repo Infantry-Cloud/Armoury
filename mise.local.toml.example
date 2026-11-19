@@ -1,0 +1,8 @@
+# Copy to mise.local.toml (untracked) and fill in your site values. mise loads it automatically.
+[env]
+# Okteto context, passed to every `okteto --context` (see `okteto context list`).
+ARMOURY_OKTETO_CONTEXT = "https://okteto.example.com"
+# Kube context that `okteto kubeconfig` writes for your namespace, passed to every `kubectl --context`.
+ARMOURY_KUBE_CONTEXT = "okteto_example_com/your-namespace"
+# Your Okteto namespace: `mise run dev` deploys here and `test-db` runs its AGE Pod here.
+ARMOURY_NAMESPACE = "your-namespace"

@@ -1,0 +1,18 @@
+## RED: Heartbeat without agent_id (temporary proto mutation)
+error[E0560]: struct `Heartbeat` has no field named `agent_id`
+  --> agent-proto/tests/val_2_roundtrip.rs:13:9
+   |
+13 |         agent_id: "val-2-agent".to_owned(),
+   |         ^^^^^^^^ `Heartbeat` does not have this field
+   |
+   = note: available fields are: `agent_name`
+
+For more information about this error, try `rustc --explain E0560`.
+error: could not compile `agent-proto` (test "val_2_roundtrip") due to 1 previous error
+error: command `/Users/danielbooth/.rustup/toolchains/1.100.0-aarch64-apple-darwin/bin/cargo '--color=auto' test --no-run '--message-format=json-render-diagnostics' '--package=agent-proto'` exited with code 101
+## GREEN: proto restored
+ Nextest run ID 72c4416c-3c31-4e83-8e3a-ddfd4a0c393e with nextest profile: default
+    Starting 1 test across 2 binaries
+        PASS [   0.012s] (1/1) agent-proto::val_2_roundtrip val_2_generated_message_roundtrip
+────────────
+     Summary [   0.013s] 1 test run: 1 passed, 0 skipped

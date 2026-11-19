@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#MISE description="CI tier e2e: deploy to a fresh armoury-ci-* namespace (or the pr-<n> preview for a pull request), run the smoke test with okteto test, clean up"
+set -euo pipefail
+: "${ARMOURY_OKTETO_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+reports="${ARMOURY_REPORT_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/armoury-check}"
+okteto_flags=(--context "$ARMOURY_OKTETO_CONTEXT" --file okteto.yaml)
+namespace=""
+created=""
+
+# Deletes only the namespace this run created (AC-14), also on failure and interrupt.
+cleanup() {
+  local status=$?
+  trap - EXIT INT TERM
+  if [ -n "$created" ]; then
+    echo "ci:e2e: deleting namespace $namespace"
+    OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto namespace delete "$namespace" ||
+      echo "ci:e2e: could not delete namespace $namespace; delete it by hand" >&2
+  fi
+  exit "$status"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+cd "$root"
+if [ "${GITHUB_EVENT_NAME:-}" = pull_request ]; then
+  : "${GITHUB_EVENT_PATH:?is not set for a pull_request event}"
+  number="$(node -e 'const e = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); const n = e.pull_request?.number ?? e.number; if (!Number.isInteger(n)) process.exit(1); console.log(n)' "$GITHUB_EVENT_PATH")"
+  namespace="pr-$number"
+  echo "ci:e2e: deploying preview $namespace from branch ${GITHUB_HEAD_REF:?}"
+  okteto preview deploy "$namespace" "${okteto_flags[@]}" --scope global \
+    --repository "https://github.com/${GITHUB_REPOSITORY:?}" --branch "$GITHUB_HEAD_REF" \
+    --sourceUrl "https://github.com/$GITHUB_REPOSITORY/pull/$number" --wait --timeout 20m
+else
+  namespace="armoury-ci-$(date +%Y%m%d%H%M%S)-$$-$RANDOM"
+  echo "ci:e2e: creating namespace $namespace"
+  OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto namespace create "$namespace" --use=false
+  created=1
+  okteto deploy "${okteto_flags[@]}" --namespace "$namespace" --wait --timeout 20m
+fi
+
+echo "ci:e2e: namespace $namespace"
+echo "ci:e2e: base URL http://armoury-control-plane.$namespace.svc.cluster.local:8080"
+rm -rf web/test-results
+status=0
+okteto test e2e "${okteto_flags[@]}" --namespace "$namespace" --timeout 15m || status=$?
+# okteto test returns the report into the workspace; move it out for the contract step.
+if [ -f web/test-results/e2e.xml ]; then
+  mkdir -p "$reports"
+  mv web/test-results/e2e.xml "$reports/e2e.xml"
+fi
+exit "$status"

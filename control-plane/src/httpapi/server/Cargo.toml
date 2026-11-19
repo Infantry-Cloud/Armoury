@@ -1,0 +1,41 @@
+# Hand-written manifest for the rust-axum server types that `mise run gen:api` writes to
+# `generated/` (never edit that folder). Exact pins replace the generator's floating ones.
+[package]
+name = "armoury-httpapi"
+version = "0.1.0"
+description = "Server types generated from api/openapi.yaml."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+path = "generated/src/lib.rs"
+
+[features]
+default = ["server"]
+server = []
+
+[dependencies]
+ammonia = "=4.2.5"
+async-trait.workspace = true
+axum.workspace = true
+axum-extra.workspace = true
+base64 = "=0.22.1"
+bytes = "=1.12.2"
+chrono = { version = "=0.4.45", features = ["serde"] }
+futures-util = "=0.3.34"
+headers.workspace = true
+http.workspace = true
+regex = "=1.13.2"
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_html_form = "=0.2.8"
+serde_json = { version = "=1.0.154", features = ["raw_value"] }
+tokio = { version = "=1.54.1", default-features = false, features = ["signal", "rt-multi-thread"] }
+tracing = { version = "=0.1.44", features = ["attributes"] }
+validator = { version = "=0.20.0", features = ["derive"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+unreachable_code = "allow"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(feature, values("conversion"))'] }

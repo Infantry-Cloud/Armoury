@@ -1,0 +1,27 @@
+# CodeQL configuration for the `codeql` gate step (mise-tasks/check/codeql). Nothing is uploaded.
+# Query packs are pinned to the versions released with the pinned CLI (codeql 2.27.4 in mise.toml).
+name: armoury
+disable-default-queries: true
+packs:
+  rust:
+    - codeql/rust-queries@0.1.46:codeql-suites/rust-code-scanning.qls
+  javascript:
+    - codeql/javascript-queries@2.5.0:codeql-suites/javascript-code-scanning.qls
+  actions:
+    - codeql/actions-queries@0.6.39:codeql-suites/actions-code-scanning.qls
+paths-ignore:
+  - "**/node_modules"
+  - target
+  - web/build
+  - web/.svelte-kit
+  - web/test-results
+  - _bmad
+  - _bmad-output
+  - .agents
+  - .pi
+  - .mise
+# Dismissals: one `exclude` entry per rule, each with a `# Reason:` comment above it, for example
+#   # Reason: <why this result is not a vulnerability here>
+#   - exclude:
+#       id: js/example-rule
+query-filters: []

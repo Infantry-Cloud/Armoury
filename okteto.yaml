@@ -1,0 +1,72 @@
+# Dev loop and CI deployments on the Okteto Platform (PROC3, D4-D8). Okteto is operated outside
+# this repository; the tasks pass the context and namespace explicitly (D3).
+name: armoury
+
+build:
+  control-plane:
+    context: .
+    dockerfile: control-plane/Dockerfile
+  agent:
+    context: .
+    dockerfile: agent/Dockerfile
+  control-plane-dev:
+    context: .
+    dockerfile: control-plane/Dockerfile
+    target: dev
+
+# Runs remotely in a digest-pinned runner; `helm4` comes with the Okteto CLI (pinned in mise.toml).
+# The OKTETO_BUILD_<NAME>_IMAGE values are `<registry>/<namespace>/<name>@sha256:<digest>`.
+deploy:
+  image: ghcr.io/okteto/pipeline-runner:1.50.2@sha256:ab32e7e76b65dbb999cc44162cb8f9a1be6d8186d7a94c9f196e7e1ea4edb588
+  commands:
+    - name: Deploy the Armoury chart
+      command: >-
+        helm4 upgrade --install armoury charts/armoury
+        --namespace "${OKTETO_NAMESPACE}"
+        --set control-plane.image.ref="${OKTETO_BUILD_CONTROL_PLANE_IMAGE}"
+        --set agent.image.ref="${OKTETO_BUILD_AGENT_IMAGE}"
+
+dev:
+  control-plane:
+    selector:
+      app.kubernetes.io/name: armoury-control-plane
+    image: ${OKTETO_BUILD_CONTROL_PLANE_DEV_IMAGE}
+    command: ["cargo", "watch", "--why", "--watch", "control-plane", "--watch", "Cargo.toml", "--watch", "Cargo.lock", "-x", "run --locked --package armoury"]
+    workdir: /usr/src/armoury
+    sync:
+      - .:/usr/src/armoury
+    # Persistent cargo registry and target dir, so a source change rebuilds only workspace crates.
+    volumes:
+      - /usr/local/cargo/registry
+      - /var/cache/armoury/target
+    persistentVolume:
+      size: 30Gi
+    forward:
+      - 8080:8080
+    securityContext:
+      runAsUser: 0
+      runAsNonRoot: false
+      readOnlyRootFilesystem: false
+    resources:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        memory: 6Gi
+
+# Same Playwright spec and configuration as `mise run e2e`, against the in-cluster service URL.
+test:
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.65.1-noble@sha256:1507cbfc550a63a6b7396791ca4f00df17beb56342d2447b3f106c306f525579
+    context: web
+    caches:
+      - /root/.npm
+    commands:
+      - npm ci --no-audit --no-fund
+      - >-
+        CI=true
+        PLAYWRIGHT_JUNIT_OUTPUT_FILE=test-results/e2e.xml
+        ARMOURY_E2E_BASE_URL="http://armoury-control-plane.${OKTETO_NAMESPACE}.svc.cluster.local:8080"
+        npx playwright test
+    artifacts:
+      - test-results

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Gate step rust: rustfmt check and clippy -D warnings (the generated server crate is excluded)"
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+
+# armoury-httpapi is generator output (`mise run gen:api`); the `api` step guards it instead.
+cargo fmt --check --package armoury --package armoury-agent --package agent-proto
+cargo clippy --workspace --exclude armoury-httpapi --all-targets --locked -- -D warnings

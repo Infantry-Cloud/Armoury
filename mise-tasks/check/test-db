@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#MISE description="Gate step test-db: #[sqlx::test] tests against a run-unique AGE Pod in ARMOURY_NAMESPACE"
+set -euo pipefail
+: "${ARMOURY_KUBE_CONTEXT:?is not set; copy mise.local.toml.example to mise.local.toml}"
+: "${ARMOURY_NAMESPACE:?is not set; copy mise.local.toml.example to mise.local.toml}"
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+reports="${ARMOURY_REPORT_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/armoury-check}"
+kube=(--context "$ARMOURY_KUBE_CONTEXT" --namespace "$ARMOURY_NAMESPACE")
+pod="armoury-test-db-$(date +%Y%m%d%H%M%S)-$$-$RANDOM"
+work="$(mktemp -d)"
+created=""
+forward_pid=""
+
+# Deletes only the Pod this run created (AC-14), also on failure and interrupt.
+cleanup() {
+  local status=$?
+  trap - EXIT INT TERM
+  if [ -n "$forward_pid" ]; then kill "$forward_pid" 2>/dev/null || true; fi
+  if [ -n "$created" ]; then
+    kubectl delete pod "$pod" "${kube[@]}" --ignore-not-found --wait=false >/dev/null ||
+      echo "test-db: could not delete Pod $pod in $ARMOURY_NAMESPACE; delete it by hand" >&2
+  fi
+  rm -rf "$work"
+  exit "$status"
+}
+trap cleanup EXIT
+# dash and bash skip the EXIT trap on a signal unless the signal itself exits.
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+echo "test-db: starting Pod $pod in namespace $ARMOURY_NAMESPACE"
+sed "s/^  name: armoury-test-db\$/  name: $pod/" "$root/mise-tasks/check/test-db.yaml" |
+  kubectl create "${kube[@]}" -f -
+created=1
+kubectl wait "pod/$pod" "${kube[@]}" --for=condition=Ready --timeout=300s
+
+kubectl port-forward "pod/$pod" "${kube[@]}" --address 127.0.0.1 :5432 >"$work/forward.log" 2>&1 &
+forward_pid=$!
+port=""
+for _ in $(seq 1 300); do
+  # Check liveness before reading, so a port-forward that printed and exited is still read.
+  alive=""
+  if kill -0 "$forward_pid" 2>/dev/null; then alive=1; fi
+  port="$(sed -n 's/^Forwarding from 127\.0\.0\.1:\([0-9][0-9]*\) -> 5432$/\1/p' "$work/forward.log" | head -n 1)"
+  if [ -n "$port" ] || [ -z "$alive" ]; then break; fi
+  sleep 0.1
+done
+if [ -z "$port" ]; then
+  cat "$work/forward.log" >&2
+  echo "test-db: port-forward to Pod $pod did not start" >&2
+  exit 1
+fi
+
+export DATABASE_URL="postgres://postgres@127.0.0.1:$port/postgres"
+cd "$root"
+mkdir -p "$reports"
+status=0
+cargo nextest run --profile ci-db --workspace --locked || status=$?
+junit="${CARGO_TARGET_DIR:-$root/target}/nextest/ci-db/junit.xml"
+if [ -f "$junit" ]; then cp "$junit" "$reports/rust-db.xml"; fi
+exit "$status"

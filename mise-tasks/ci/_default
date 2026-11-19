@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#MISE description="Run the CI tiers in CI order on the workstation: ci:fast, ci:cluster, ci:e2e (stops at the first failure)"
+set -uo pipefail
+
+for tier in ci:fast ci:cluster ci:e2e; do
+  echo "==> $tier"
+  if ! mise run "$tier"; then
+    echo "ci: FAILED at tier $tier (rerun it with: mise run $tier)" >&2
+    exit 1
+  fi
+done
+echo "ci: all tiers passed"

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Gate step chart: helm lint and a local render of charts/armoury (no cluster)"
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+
+# The chart requires images by digest; a probe digest lets lint and render run locally.
+probe="sha256:0000000000000000000000000000000000000000000000000000000000000000"
+images=(--set "control-plane.image.ref=registry.invalid/armoury-control-plane@$probe"
+  --set "agent.image.ref=registry.invalid/armoury-agent@$probe")
+helm lint charts/armoury --strict "${images[@]}"
+helm template armoury charts/armoury "${images[@]}" >/dev/null

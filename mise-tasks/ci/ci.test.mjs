@@ -50,7 +50,7 @@ function runCi(dir, bin, failing) {
 	};
 }
 
-test.skip('VAL-16 mise run ci runs the CI tiers in order and stops at the first failure', (t) => {
+test('VAL-16 mise run ci runs the CI tiers in order and stops at the first failure', (t) => {
 	const dir = mkdtempSync(join(tmpdir(), 'val-16-ci-'));
 	t.after(() => rmSync(dir, { recursive: true, force: true }));
 	const bin = shimBin(dir);

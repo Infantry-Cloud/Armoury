@@ -1,0 +1,44 @@
+## VAL-10 negative: ARMOURY_E2E_BASE_URL=http://127.0.0.1:9 mise run e2e (no deployment reachable)
+[e2e] $ ~/projects/home/armoury/mise-tasks/e2e
+e2e: testing http://127.0.0.1:9
+|                                                                                |   0% of 191.9 MiB
+|                                                                                |   0% of 100.8 MiB
+
+Running 1 test using 1 worker
+
+  ✘  1 e2e/smoke.spec.ts:12:1 › loads the web app @VAL-10 (1.2s)
+
+
+  1) e2e/smoke.spec.ts:12:1 › loads the web app @VAL-10 ────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_UNSAFE_PORT at http://127.0.0.1:9/
+    Call log:
+      - navigating to "http://127.0.0.1:9/", waiting until "load"
+
+
+      14 | 	page.on('pageerror', (error) => pageErrors.push(error.message));
+      15 |
+    > 16 | 	const response = await page.goto('/');
+         | 	                            ^
+      17 |
+      18 | 	expect(response?.status()).toBe(200);
+      19 | 	await expect(page).toHaveTitle(/Armoury/);
+        at /Users/danielbooth/projects/home/armoury/web/e2e/smoke.spec.ts:16:30
+
+    Error Context: test-results/smoke-loads-the-web-app-VAL-10/error-context.md
+
+  1 failed
+    e2e/smoke.spec.ts:12:1 › loads the web app @VAL-10 ─────────────────────────────────────────────
+[e2e] ERROR task failed
+exit=1
+
+## Supplementary (not an Okteto deployment): control plane run locally with cargo, serving web/build on localhost:8080; mise run e2e
+[e2e] $ ~/projects/home/armoury/mise-tasks/e2e
+e2e: testing http://localhost:8080
+
+Running 1 test using 1 worker
+
+  ✓  1 e2e/smoke.spec.ts:12:1 › loads the web app @VAL-10 (371ms)
+
+  1 passed (1.2s)
+exit=0

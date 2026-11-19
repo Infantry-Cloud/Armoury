@@ -3,7 +3,7 @@
 // Imports are dynamic so the file loads while the skipped test's targets do not exist yet.
 import { expect, test } from 'vitest';
 
-test.skip('VAL-4 root layout disables SSR and uses the static adapter', async () => {
+test('VAL-4 root layout disables SSR and uses the static adapter', async () => {
 	const rootLayout = await import('./+layout');
 	const { default: svelteConfig } = await import('../../svelte.config.js');
 

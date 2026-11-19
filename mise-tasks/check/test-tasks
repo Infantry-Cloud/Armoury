@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="Gate step test-tasks: node:test over the task tests that need no cluster"
+set -euo pipefail
+reports="${ARMOURY_REPORT_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/armoury-check}"
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+mkdir -p "$reports"
+
+node --test --test-reporter=spec --test-reporter-destination=stdout \
+  --test-reporter=junit --test-reporter-destination="$reports/tasks.xml" \
+  'mise-tasks/**/!(*.cluster).test.mjs'

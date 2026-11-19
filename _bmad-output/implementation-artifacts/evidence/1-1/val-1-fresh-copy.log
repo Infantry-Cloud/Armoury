@@ -1,0 +1,76 @@
+# VAL-1 (partial) 2026-11-19T23:41:34Z; fresh copy of the tracked files: /tmp/armoury-val1.w72RnQ
+# No mise.local.toml exists (no Okteto context on this workstation), so only check:fast can run.
+## mise install
+mise lock                                rust@1.100.0 windows-x64
+mise lock                                npm:renovate@44.236.3 macos-arm64
+mise lock                              ✓ 84 targets checked
+exit=0
+## KUBECONFIG=/nonexistent mise run check:fast
+==> check:pins
+pins: every reference is pinned exactly
+==> check:rust
+==> check:test-rust
+        PASS [   0.013s] (1/4) agent-proto::val_2_roundtrip val_2_generated_message_roundtrip
+        PASS [   0.018s] (2/4) armoury::bin/armoury httpapi::tests::unknown_api_routes_are_not_found
+        PASS [   0.018s] (3/4) armoury::bin/armoury httpapi::tests::healthz_reports_ok
+        PASS [   0.018s] (4/4) armoury::bin/armoury httpapi::tests::client_routes_fall_back_to_the_web_app
+     Summary [   0.019s] 4 tests run: 4 passed, 0 skipped
+==> check:web
+svelte-check found 0 errors and 0 warnings
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+==> check:chart
+==> Linting charts/armoury
+1 chart(s) linted, 0 chart(s) failed
+==> check:test-tasks
+✔ VAL-5 pins check rejects floating references (1442.308959ms)
+✔ VAL-16 mise run ci runs the CI tiers in order and stops at the first failure (467.220125ms)
+✔ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (4681.4345ms)
+check:fast: all fast-tier steps passed
+exit=0
+## mise run check (cluster tier stops at the first cluster step without an Okteto context)
+==> check:pins
+==> check:rust
+==> check:test-rust
+==> check:web
+==> check:chart
+==> Linting charts/armoury
+==> check:test-tasks
+check:fast: all fast-tier steps passed
+==> check:api
+/private/tmp/armoury-val1.w72RnQ/mise-tasks/check/api: line 4: ARMOURY_OKTETO_CONTEXT: is not set; copy mise.local.toml.example to mise.local.toml
+check: FAILED at step 'api' (rerun it with: mise run check:api)
+exit=1
+## cargo metadata (resolver, edition, binaries)
+armoury-agent edition 2024 bins armoury-agent
+agent-proto edition 2024 bins -
+armoury edition 2024 bins armoury
+armoury-httpapi edition 2024 bins -
+2:resolver = "3"
+## web/package.json and web/components.json
+tailwindcss 4.3.5
+@xyflow/svelte 1.6.6
+@sveltejs/adapter-static 3.0.11
+@sveltejs/kit 2.70.4
+svelte 5.58.0
+/tmp/armoury-val1.w72RnQ/web/components.json
+## helm show chart charts/armoury; ls charts/armoury/charts
+apiVersion: v2
+appVersion: 0.1.0
+dependencies:
+- condition: control-plane.enabled
+  name: control-plane
+  repository: ""
+  version: 0.1.0
+- condition: agent.enabled
+  name: agent
+  repository: ""
+  version: 0.1.0
+description: Armoury control plane and cluster agent (umbrella chart).
+name: armoury
+type: application
+version: 0.1.0
+
+agent
+control-plane
+/tmp/armoury-val1.w72RnQ/api/openapi.yaml

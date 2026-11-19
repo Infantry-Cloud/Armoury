@@ -1,0 +1,27 @@
+# Weekly (and on demand) Renovate run that opens pull requests keeping every pin exact.
+# The token is a GitHub App or fine-grained token secret: pull requests opened with GITHUB_TOKEN start no CI.
+name: renovate
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  renovate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: 2026.11.8
+          install_args: node npm:renovate
+      - run: mise run renovate
+        env:
+          RENOVATE_DRY_RUN: "false"
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}

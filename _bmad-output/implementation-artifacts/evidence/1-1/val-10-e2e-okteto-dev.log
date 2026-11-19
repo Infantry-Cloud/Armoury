@@ -1,0 +1,8 @@
+[e2e] $ ~/projects/home/armoury/mise-tasks/e2e
+e2e: testing http://localhost:8080
+
+Running 1 test using 1 worker
+
+  ✓  1 e2e/smoke.spec.ts:12:1 › loads the web app @VAL-10 (1.2s)
+
+  1 passed (2.2s)

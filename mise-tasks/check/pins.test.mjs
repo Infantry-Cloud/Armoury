@@ -92,7 +92,7 @@ function escapeRegExp(text) {
 	return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-test.skip('VAL-5 pins check rejects floating references', (t) => {
+test('VAL-5 pins check rejects floating references', (t) => {
 	const roots = [];
 	t.after(() => roots.forEach((root) => rmSync(root, { recursive: true, force: true })));
 

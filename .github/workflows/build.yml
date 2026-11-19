@@ -1,0 +1,46 @@
+# Builds both images with okteto build on every push; only main publishes them to GHCR by digest.
+# Each job installs mise and runs one task (D14). Chart publication is Epic 10.
+name: build
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # ARC scale set label, declared in .github/actionlint.yaml.
+    runs-on: armoury-arc
+    outputs:
+      control_plane_image: ${{ steps.build.outputs.control_plane_image }}
+      agent_image: ${{ steps.build.outputs.agent_image }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: 2026.11.8
+      - id: build
+        run: mise run ci:build
+
+  publish:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: armoury-arc
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: 2026.11.8
+      - run: mise run ci:publish
+        env:
+          ARMOURY_CONTROL_PLANE_IMAGE: ${{ needs.build.outputs.control_plane_image }}
+          ARMOURY_AGENT_IMAGE: ${{ needs.build.outputs.agent_image }}
+          GITHUB_TOKEN: ${{ github.token }}

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: control-plane
+description: Armoury control plane (web app and REST API on one origin).
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

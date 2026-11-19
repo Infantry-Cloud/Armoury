@@ -1,0 +1,17 @@
+## RED: ci/_default mutated to continue after a failing tier
+✖ VAL-16 mise run ci runs the CI tiers in order and stops at the first failure (992.725916ms)
+ℹ fail 1
+✖ failing tests:
+✖ VAL-16 mise run ci runs the CI tiers in order and stops at the first failure (992.725916ms)
+        calls: [
+  +     exitedZero: true,
+  -     exitedZero: false,
+        calls: [
+  +     exitedZero: true,
+  -     exitedZero: false,
+        calls: [
+  +     exitedZero: true,
+## GREEN: restored
+✔ VAL-16 mise run ci runs the CI tiers in order and stops at the first failure (350.817625ms)
+ℹ pass 1
+ℹ fail 0

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: armoury
+description: Armoury control plane and cluster agent (umbrella chart).
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: control-plane
+    version: 0.1.0
+    condition: control-plane.enabled
+  - name: agent
+    version: 0.1.0
+    condition: agent.enabled

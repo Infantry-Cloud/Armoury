@@ -1,0 +1,9 @@
+// Agent to control-plane protocol (FR3/FR4). The gRPC service arrives in Epic 3.
+syntax = "proto3";
+
+package armoury.agent.v1;
+
+// A liveness report from one cluster agent.
+message Heartbeat {
+  string agent_id = 1;
+}

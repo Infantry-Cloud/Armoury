@@ -1,0 +1,27 @@
+# VAL-17 (partial: check:codeql, not the whole gate) 2026-11-19T23:22:58Z; copy: /tmp/armoury-val17.fSweUB
+## run 1: eval(location.hash) injected into web/src/routes/+layout.ts
+Initializing databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.mpTXxr/db.
+codeql: analysing the actions database
+CodeQL scanned 4 out of 4 GitHub Actions files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the javascript database
+CodeQL scanned 4 out of 4 GitHub Actions files and 16 out of 18 JavaScript/TypeScript files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the rust database
+CodeQL scanned 14 out of 14 Rust files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: web/src/routes/+layout.ts:3 js/code-injection: This code execution depends on a [user-provided value](1).
+codeql: 1 result(s); fix them or dismiss with a reasoned query-filters entry in .github/codeql/codeql-config.yml
+exit=1
+## run 2: reasoned query-filters exclusion added
+query-filters:
+  # Reason: VAL-17 probe only; the injected eval is a deliberate test finding.
+  - exclude:
+      id: js/code-injection
+codeql: analysing the actions database
+CodeQL scanned 4 out of 4 GitHub Actions files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the javascript database
+CodeQL scanned 4 out of 4 GitHub Actions files and 16 out of 18 JavaScript/TypeScript files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the rust database
+CodeQL scanned 14 out of 14 Rust files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: no results
+exit=0
+## databases or SARIF left inside the copy (expected none):
+       0
