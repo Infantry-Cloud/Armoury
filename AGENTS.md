@@ -71,5 +71,6 @@ If the loop is unhealthy, fix it before writing code.
 
 ## Version control
 
-Use jj, never git. Agents run only `jj new` and `jj describe`; the user pushes. There is no
-`CLAUDE.md`; this file is the agent context.
+Use jj, never git. Agents run `jj new` and `jj describe`, and may set and push any bookmark except
+`main` (forward moves only, no force or deletes; see `_bmad/custom/jj-vcs.md`). Only the user moves or
+pushes `main`. There is no `CLAUDE.md`; this file is the agent context.

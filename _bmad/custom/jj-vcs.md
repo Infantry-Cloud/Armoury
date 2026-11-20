@@ -11,9 +11,15 @@ A colocated Git backend is supported, but the agent-facing interface remains jj.
 
 - Never run `git` commands, including read-only status, diff or log commands. Translate
   upstream Git/HEAD/index/branch instructions using the table below.
-- The only mutating jj commands an agent may run are `jj new` and `jj describe`.
-  Bookmarks, pushes, fetches, history edits, squash, split, rebase, abandon, restore,
-  edit, undo, operation restore and repository setup stay with the user. Never hide
+- The only mutating jj commands an agent may run are `jj new`, `jj describe`, and
+  for any bookmark except `main`: `jj bookmark create`, `jj bookmark set` and
+  `jj git push --bookmark <name>` (add `--allow-new` only for a new remote bookmark).
+  Move a bookmark forward only: its current target must be an ancestor of the new
+  target, and `conflicts() & ::<target>` must be empty. Never pass `--allow-backwards`,
+  never delete, rename, forget or force-push a bookmark, and never push `--all`.
+- `main` stays with the user: never create, set, move or push it.
+- Fetches, history edits, squash, split, rebase, abandon, restore, edit, undo,
+  operation restore and repository setup stay with the user. Never hide
   prohibited operations inside a script, alias or wrapper.
 - `jj describe` only ever targets `@`. Never `jj describe -r` another revision: that
   rewrites history, including sealed contract approval changes.
@@ -164,8 +170,10 @@ fixes too. Later edits invalidate affected evidence; do not close from stale res
 
 ## Closing a story and recommending a bookmark
 
-ATDD, Build and Build Auto never recommend a bookmark. Only Code Review may do so,
-after all of these are freshly true:
+When the user asks, any agent may set and push a non-`main` bookmark under the hard
+rules above; that push shares work and is never delivery or closure. ATDD, Build and
+Build Auto never recommend a closure bookmark. Only Code Review may do so, after all
+of these are freshly true:
 
 1. Review covers the full verified story range, including acceptance tests and review fixes.
 2. Required findings are resolved; deferrals/waivers have explicit authority and do not
@@ -189,10 +197,11 @@ Only after all checks pass, confirm the project's bookmark naming convention and
 resolve the actual top reviewed story change. Do not assume Seeker's `feature/epic-*`
 convention. Inspect the existing bookmark and its ancestry. Never recommend a move
 backwards/sideways, an ambiguous target or an unreviewed tip. If the name/convention
-is unknown, ask rather than inventing it. Show the appropriate create/set command
-in a fish code block for the user to run manually, preceded by the story closure
-summary. Never execute it, and do not suggest a push. Keep existing contract and
-Linear reports; the bookmark recommendation does not replace them.
+is unknown, ask rather than inventing it. Precede the bookmark step with the story
+closure summary. For a bookmark other than `main`, set it and push it yourself under
+the hard rules. For `main`, show the create/set command in a fish code block for the
+user to run manually, and never execute it or push it. Keep existing contract and
+Linear reports; the bookmark step does not replace them.
 
 ## Checks and provenance
 

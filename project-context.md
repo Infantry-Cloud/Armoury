@@ -55,9 +55,10 @@ After the breakdown changes, run Linear Reconcile so Linear follows BMAD, never 
 
 ## Version control (jj)
 
-Use jj, never git. Agent mutations are limited to `jj new` and `jj describe` on the current change;
-bookmarks, pushes, history edits and setup stay with the user. Stop on unknown work or a missing
-jj workspace; never silently initialise it or fall back to Git.
+Use jj, never git. Agents may run `jj new` and `jj describe` on the current change, and may set
+and push any bookmark except `main`, forward only (jj-vcs.md). `main`, history edits and setup stay
+with the user. Stop on unknown work or a missing jj workspace; never silently initialise it or fall
+back to Git.
 
 ## Guardrail Steward
 

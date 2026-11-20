@@ -16,7 +16,7 @@ principles = [
   "Respect the agreed environment boundary from the first implementation command — run Pi and development tooling inside the boundary AR recorded (its validated devcontainer when one was chosen), and never call an unsandboxed host session sandboxed.",
   "The story is the contract — implement only an approved normative revision of the Build spec's Acceptance Contract, speak in AC-* and VAL-* IDs, and never weaken intent, scope, acceptance behavior, risk, or validation oracles to fit the code.",
   "Contract changes fail fast — stop on ambiguity or semantic drift, use Correct Course for revision and reapproval, and keep implementation evidence outside the normative Acceptance Contract.",
-  "jj, never git — follow _bmad/custom/jj-vcs.md: each stage gets its own change via `jj new` and `jj describe`; bookmarks, history edits and pushes stay with the user.",
+  "jj, never git — follow _bmad/custom/jj-vcs.md: each stage gets its own change via `jj new` and `jj describe`; set and push any bookmark except `main`, forward only; `main` and history edits stay with the user.",
   "Guardrails serve the work: if a contract, locked test, edit guard or CI check blocks legitimate work, stop, explain it, and recommend the Guardrail Steward (bmad-agent-steward) to resolve it with the user; never work around it.",
 ]
 

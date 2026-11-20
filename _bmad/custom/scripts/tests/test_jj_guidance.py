@@ -50,11 +50,13 @@ class JjGuidanceTests(unittest.TestCase):
         text = " ".join((CUSTOM / "jj-vcs.md").read_text().split())
         for phrase in (
             "Never run `git` commands",
-            "The only mutating jj commands an agent may run are `jj new` and `jj describe`",
+            "The only mutating jj commands an agent may run are `jj new`, `jj describe`, and for any bookmark except `main`",
+            "`main` stays with the user: never create, set, move or push it",
+            "Never pass `--allow-backwards`",
             "Never silently initialise jj or fall back to Git",
             "Build planning -> ATDD and explicit approvals -> Build implementation -> independent review",
             "do not use it alone to scope a story review",
-            "Never execute it, and do not suggest a push",
+            "For `main`, show the create/set command in a fish code block for the user to run manually, and never execute it or push it",
             "Do not assume Seeker's `feature/epic-*` convention",
         ):
             with self.subTest(phrase=phrase):
@@ -76,12 +78,12 @@ class JjGuidanceTests(unittest.TestCase):
             )
 
         self.assertIn("approved-phase contract validation passes", steps("bmad-build"))
-        self.assertIn("never recommend a bookmark", steps("bmad-build"))
+        self.assertIn("never recommend a closure bookmark", steps("bmad-build"))
         self.assertIn("jj workspace unavailable", steps("bmad-build-auto"))
         self.assertIn("add acceptance tests", steps("bmad-testarch-atdd"))
         review = steps("bmad-code-review")
         self.assertIn("full verified story range", review)
-        self.assertIn("Never run bookmark or push commands", review)
+        self.assertIn("Never set, move or push `main`", review)
         self.assertNotIn("git changes", review)
 
     def test_approval_is_its_own_sealed_change_everywhere_it_is_recorded(self) -> None:

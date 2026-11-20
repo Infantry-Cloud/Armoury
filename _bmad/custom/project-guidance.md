@@ -31,11 +31,12 @@ mark Build output delivered, or import tracker edits as changes to a frozen cont
 ## Version control (jj)
 
 Projects using these customisations use Jujutsu (jj), never git, for agent version-control work.
-Follow `_bmad/custom/jj-vcs.md`: agents may run only `jj new` and `jj describe` to give each stage
-(planning, ATDD, implementation, review) its own described change; bookmarks, pushes and history
-edits stay with the user. If the workspace is not a jj workspace, stop and ask rather than falling
-back to git or initialising jj. A story contract's approval is its own sealed jj change, and the
-validator checks the contract against that recorded version (story-contract.md, "Approval change (jj)").
+Follow `_bmad/custom/jj-vcs.md`: agents run `jj new` and `jj describe` to give each stage
+(planning, ATDD, implementation, review) its own described change, and may set and push any
+bookmark except `main`, forward only; `main` and history edits stay with the user. If the
+workspace is not a jj workspace, stop and ask rather than falling back to git or initialising jj.
+A story contract's approval is its own sealed jj change, and the validator checks the contract
+against that recorded version (story-contract.md, "Approval change (jj)").
 
 ## Guardrail Steward
 

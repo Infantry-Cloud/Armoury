@@ -150,19 +150,36 @@ REVIEW_STEP = (
     "Delivery Evidence or status write, prepare the review/closure stage change. Rerun checks after the last patch "
     "and review any review-time fixes."
 )
-DEV_PRINCIPLE = (
+DEV_PRINCIPLE_V1 = (
     "jj, never git — follow _bmad/custom/jj-vcs.md: each stage gets its own change via `jj new` and "
     "`jj describe`; bookmarks, history edits and pushes stay with the user."
+)
+DEV_PRINCIPLE = (
+    "jj, never git — follow _bmad/custom/jj-vcs.md: each stage gets its own change via `jj new` and "
+    "`jj describe`; set and push any bookmark except `main`, forward only; `main` and history edits "
+    "stay with the user."
 )
 BUILD_COMPLETE = (
     " Finally, if this run wrote files, finalise the current stage's jj description with the full Conventional "
     "Commits message as one `-m` argument; do not end with a fenced commit message, run no other mutating VCS "
+    "command unless the user asks for a non-main bookmark push, and never recommend a closure bookmark (only "
+    "bmad-code-review may, after closure)."
+)
+BUILD_COMPLETE_V1 = (
+    " Finally, if this run wrote files, finalise the current stage's jj description with the full Conventional "
+    "Commits message as one `-m` argument; do not end with a fenced commit message, run no other mutating VCS "
     "command, and never recommend a bookmark (only bmad-code-review may, after closure)."
 )
-REVIEW_COMPLETE = (
+REVIEW_COMPLETE_V1 = (
     " If, and only if, every jj-vcs.md closure item passes after delivered-phase validation, finalise the review "
     "change description and show the bookmark recommendation exactly as jj-vcs.md describes, for the user to run "
     "manually; otherwise state that the story is not closed and recommend no bookmark. Never run bookmark or push commands."
+)
+REVIEW_COMPLETE = (
+    " If, and only if, every jj-vcs.md closure item passes after delivered-phase validation, finalise the review "
+    "change description and do the bookmark step exactly as jj-vcs.md describes: set and push a non-main bookmark "
+    "yourself, and show a `main` command for the user to run manually; otherwise state that the story is not "
+    "closed and recommend no bookmark. Never set, move or push `main`."
 )
 CONTEXT_SECTION_V1 = """## Version control (jj)
 
@@ -173,7 +190,7 @@ edits stay with the user. If the workspace is not a jj workspace, stop and ask r
 back to git or initialising jj.
 
 """
-CONTEXT_SECTION = """## Version control (jj)
+CONTEXT_SECTION_V2 = """## Version control (jj)
 
 Projects using these customisations use Jujutsu (jj), never git, for agent version-control work.
 Follow `_bmad/custom/jj-vcs.md`: agents may run only `jj new` and `jj describe` to give each stage
@@ -181,6 +198,17 @@ Follow `_bmad/custom/jj-vcs.md`: agents may run only `jj new` and `jj describe` 
 edits stay with the user. If the workspace is not a jj workspace, stop and ask rather than falling
 back to git or initialising jj. A story contract's approval is its own sealed jj change, and the
 validator checks the contract against that recorded version (story-contract.md, "Approval change (jj)").
+
+"""
+CONTEXT_SECTION = """## Version control (jj)
+
+Projects using these customisations use Jujutsu (jj), never git, for agent version-control work.
+Follow `_bmad/custom/jj-vcs.md`: agents run `jj new` and `jj describe` to give each stage
+(planning, ATDD, implementation, review) its own described change, and may set and push any
+bookmark except `main`, forward only; `main` and history edits stay with the user. If the
+workspace is not a jj workspace, stop and ask rather than falling back to git or initialising jj.
+A story contract's approval is its own sealed jj change, and the validator checks the contract
+against that recorded version (story-contract.md, "Approval change (jj)").
 
 """
 WALKTHROUGH = (
@@ -259,6 +287,7 @@ def wire(custom: Path, context: Path | None) -> list[Path]:
         add_fact,
         lambda t: append_step(t, "activation_steps_append", BUILD_STEP),
         lambda t: append_step(t, "activation_steps_append", BUILD_APPROVAL_STEP),
+        upgrade(BUILD_COMPLETE_V1.replace('"', '\\"'), BUILD_COMPLETE.replace('"', '\\"')),
         lambda t: append_on_complete(t, BUILD_COMPLETE),
     )
     edit(
@@ -266,6 +295,7 @@ def wire(custom: Path, context: Path | None) -> list[Path]:
         add_fact,
         lambda t: append_step(t, "activation_steps_append", BUILD_AUTO_STEP),
         lambda t: append_step(t, "activation_steps_append", BUILD_AUTO_APPROVAL_STEP),
+        upgrade(BUILD_COMPLETE_V1.replace('"', '\\"'), BUILD_COMPLETE.replace('"', '\\"')),
         lambda t: append_on_complete(t, BUILD_COMPLETE),
     )
     edit(
@@ -284,6 +314,7 @@ def wire(custom: Path, context: Path | None) -> list[Path]:
         ),
         lambda t: append_step(t, "activation_steps_append", REVIEW_STEP),
         lambda t: append_step(t, "activation_steps_append", REVIEW_APPROVAL_STEP),
+        upgrade(REVIEW_COMPLETE_V1.replace('"', '\\"'), REVIEW_COMPLETE.replace('"', '\\"')),
         lambda t: append_on_complete(t, REVIEW_COMPLETE),
     )
     edit(
@@ -299,6 +330,7 @@ def wire(custom: Path, context: Path | None) -> list[Path]:
     edit(
         "bmad-agent-dev.toml",
         add_fact,
+        upgrade(_quote(DEV_PRINCIPLE_V1), _quote(DEV_PRINCIPLE)),
         lambda t: append_step(t, "principles", DEV_PRINCIPLE),
     )
 
@@ -319,6 +351,7 @@ def wire(custom: Path, context: Path | None) -> list[Path]:
 
     if context is not None and context.is_file():
         text = upgrade(CONTEXT_SECTION_V1, CONTEXT_SECTION)(context.read_text())
+        text = upgrade(CONTEXT_SECTION_V2, CONTEXT_SECTION)(text)
         edits[context] = text
         if "## Version control (jj)" not in text:
             anchor = "## Methodology & structure"
