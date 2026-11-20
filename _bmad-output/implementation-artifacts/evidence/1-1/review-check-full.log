@@ -1,0 +1,1097 @@
+[check] $ ~/projects/home/armoury/mise-tasks/check/_default
+==> check:pins
+pins: every reference is pinned exactly
+==> check:rust
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.71s
+==> check:test-rust
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+────────────
+ Nextest run ID 8c89c5c1-5956-4caa-b18c-b5d37f4bc81e with nextest profile: ci
+    Starting 4 tests across 5 binaries (1 binary skipped via profile.ci.default-filter)
+        PASS [   0.019s] (1/4) agent-proto::val_2_roundtrip val_2_generated_message_roundtrip
+        PASS [   0.021s] (2/4) armoury::bin/armoury httpapi::tests::healthz_reports_ok
+        PASS [   0.021s] (3/4) armoury::bin/armoury httpapi::tests::client_routes_fall_back_to_the_web_app
+        PASS [   0.022s] (4/4) armoury::bin/armoury httpapi::tests::unknown_api_routes_are_not_found
+────────────
+     Summary [   0.023s] 4 tests run: 4 passed, 0 skipped
+==> check:web
+
+> armoury-web@0.1.0 prepare
+> svelte-kit sync || echo ''
+
+
+added 265 packages in 10s
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+
+> armoury-web@0.1.0 lint
+> prettier --check . && eslint .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> armoury-web@0.1.0 check
+> svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings
+
+Loading svelte-check in workspace: /Users/danielbooth/projects/home/armoury/web
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings
+
+> armoury-web@0.1.0 build
+> vite build
+
+vite v8.3.8 building ssr environment for production...
+transforming...
+✓ 148 modules transformed.
+rendering chunks...
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 159 modules transformed.
+rendering chunks...
+computing gzip size...
+.svelte-kit/output/client/_app/version.json                                                     0.02 kB │ gzip:  0.04 kB
+.svelte-kit/output/client/.vite/manifest.json                                                   4.72 kB │ gzip:  0.75 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-vietnamese-wght-normal.CBcvBZtf.woff2    10.25 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-greek-ext-wght-normal.DlzME5K_.woff2     11.23 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-cyrillic-wght-normal.DqGufNeO.woff2      18.74 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-greek-wght-normal.CkhJZR-_.woff2         18.99 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-cyrillic-ext-wght-normal.BOeWTOD4.woff2  25.96 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-latin-wght-normal.Dx4kXJAl.woff2         48.25 kB
+.svelte-kit/output/client/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2     85.06 kB
+.svelte-kit/output/client/_app/immutable/assets/0.qY-IjVYE.css                                 11.43 kB │ gzip:  3.10 kB
+.svelte-kit/output/client/_app/immutable/entry/start.1dwxBe4v.js                                0.06 kB │ gzip:  0.07 kB
+.svelte-kit/output/client/_app/immutable/chunks/xihTtKlq.js                                     0.06 kB │ gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/nodes/2.lN6-Cmfq.js                                    0.19 kB │ gzip:  0.17 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.Z6nwVDiK.js                                    0.22 kB │ gzip:  0.18 kB
+.svelte-kit/output/client/_app/immutable/nodes/1.CMilNJrn.js                                    0.57 kB │ gzip:  0.32 kB
+.svelte-kit/output/client/_app/immutable/chunks/Bjy-W4x2.js                                     1.36 kB │ gzip:  0.65 kB
+.svelte-kit/output/client/_app/immutable/entry/app.Dv4mQa2e.js                                  4.39 kB │ gzip:  2.00 kB
+.svelte-kit/output/client/_app/immutable/chunks/DQptZaAR.js                                    26.63 kB │ gzip: 10.30 kB
+.svelte-kit/output/client/_app/immutable/chunks/Cx_IsHmo.js                                    36.70 kB │ gzip: 14.06 kB
+
+✓ built in 112ms
+computing gzip size...
+.svelte-kit/output/server/.vite/manifest.json                                                    5.40 kB │ gzip:  0.81 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-vietnamese-wght-normal.CBcvBZtf.woff2     10.25 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-greek-ext-wght-normal.DlzME5K_.woff2      11.23 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-cyrillic-wght-normal.DqGufNeO.woff2       18.74 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-greek-wght-normal.CkhJZR-_.woff2          18.99 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-cyrillic-ext-wght-normal.BOeWTOD4.woff2   25.96 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-latin-wght-normal.Dx4kXJAl.woff2          48.25 kB
+.svelte-kit/output/server/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2      85.06 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.b8z0_F5p.css                            11.36 kB │ gzip:  3.10 kB
+.svelte-kit/output/server/entries/pages/_layout.ts.js                                            0.05 kB │ gzip:  0.07 kB
+.svelte-kit/output/server/env.js                                                                 0.13 kB │ gzip:  0.12 kB
+.svelte-kit/output/server/entries/pages/_page.svelte.js                                          0.19 kB │ gzip:  0.17 kB
+.svelte-kit/output/server/entries/pages/_layout.svelte.js                                        0.21 kB │ gzip:  0.17 kB
+.svelte-kit/output/server/chunks/env.js                                                          0.26 kB │ gzip:  0.16 kB
+.svelte-kit/output/server/chunks/rolldown-runtime.js                                             0.34 kB │ gzip:  0.24 kB
+.svelte-kit/output/server/internal.js                                                            0.40 kB │ gzip:  0.19 kB
+.svelte-kit/output/server/chunks/internal.js                                                     0.72 kB │ gzip:  0.33 kB
+.svelte-kit/output/server/entries/fallbacks/error.svelte.js                                      4.08 kB │ gzip:  1.65 kB
+.svelte-kit/output/server/chunks/shared.js                                                      10.49 kB │ gzip:  3.37 kB
+.svelte-kit/output/server/chunks/exports.js                                                     11.15 kB │ gzip:  3.61 kB
+.svelte-kit/output/server/chunks/utils.js                                                       31.66 kB │ gzip:  9.33 kB
+.svelte-kit/output/server/chunks/internal2.js                                                   39.77 kB │ gzip: 11.44 kB
+.svelte-kit/output/server/remote-entry.js                                                       54.37 kB │ gzip: 12.02 kB
+.svelte-kit/output/server/chunks/server.js                                                     115.92 kB │ gzip: 30.55 kB
+.svelte-kit/output/server/index.js                                                             125.70 kB │ gzip: 31.94 kB
+
+✓ built in 1.37s
+
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-static
+  Wrote site to "build"
+  ✔ done
+
+ RUN  v4.1.12 /Users/danielbooth/projects/home/armoury/web
+
+ ✓ src/routes/val-4.test.ts (1 test) 13ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  13:55:08
+   Duration  192ms (transform 24ms, setup 0ms, import 25ms, tests 13ms, environment 0ms)
+
+JUNIT report written to /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-check/web-unit.xml
+==> check:chart
+==> Linting charts/armoury
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+==> check:test-tasks
+✔ AC-3 check runs every step in tier order and stops at the first failure (3569.804334ms)
+✔ VAL-5 pins check rejects floating references (1518.577708ms)
+✔ AC-11 ci:build builds both images in the explicit context and outputs their digests (903.971791ms)
+✔ VAL-16 mise run ci runs the CI tiers in order and stops at the first failure (414.212708ms)
+✔ AC-10 ci-gate passes only when every needed job succeeded (404.206416ms)
+✔ VAL-15 cluster tasks require and pass an explicit Okteto and kube context (3529.392667ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3665.820459
+check:fast: all fast-tier steps passed
+==> check:api
+ i  Using danielboothcloud @ dashboard.okteto.lab.danielbooth.cloud as context
+ i  Executing test container 'generate'
+ i  Running 'rm -rf out'
+ ✓  Command 'rm -rf out' successfully executed
+ i  Running 'java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate --input-spec api/openapi.yaml --generator-name rust-axum --output out/rust --additional-properties=packageName=armoury-httpapi,hideGenerationTimestamp=true'
+[main] INFO  o.o.codegen.DefaultGenerator - Generating with dryRun=false
+[main] INFO  o.o.c.ignore.CodegenIgnoreProcessor - Output directory (/okteto/src/out/rust) does not exist, or is inaccessible. No file (.openapi-generator-ignore) will be evaluated.
+[main] INFO  o.o.codegen.DefaultGenerator - OpenAPI Generator: rust-axum (server)
+[main] INFO  o.o.codegen.DefaultGenerator - Generator 'rust-axum' is considered beta.
+[main] INFO  o.o.c.l.RustAxumServerCodegen - Environment variable RUST_POST_PROCESS_FILE not defined. rustfmt will be used by default. To choose a different tool, try 'export RUST_POST_PROCESS_FILE="/usr/local/bin/rustfmt"' (Linux/Mac)
+[main] INFO  o.o.c.l.RustAxumServerCodegen - NOTE: To enable file post-processing, 'enablePostProcessFile' must be set to `true`  (--enable-post-process-file for CLI).
+[main] WARN  o.o.c.l.RustAxumServerCodegen - generateAliasAsModel is set to false, which means array/map will be generated as model instead and the resulting code may have issues. Please enable `generateAliasAsModel` to address the issue.
+[main] INFO  o.o.codegen.utils.URLPathUtils - 'host' (OAS 2.0) or 'servers' (OAS 3.0) not defined in the spec. Default to [http://localhost] for server URL [http://localhost/]
+[main] WARN  o.o.c.languages.AbstractRustCodegen - ApplicationJson cannot be used as a model name. Renamed to ApplicationSlashJson
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/apis/health.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/Cargo.toml
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.gitignore
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/types.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/header.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/models.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/apis/mod.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/server/mod.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/src/lib.rs
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/README.md
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator-ignore
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator/VERSION
+[main] INFO  o.o.codegen.TemplateManager - writing file /okteto/src/out/rust/.openapi-generator/FILES
+############################################################################################
+# Thanks for using OpenAPI Generator.                                                      #
+# We appreciate your support! Please consider donating to help us maintain this project.   #
+# https://opencollective.com/openapi_generator/donate                                      #
+############################################################################################
+ ✓  Command 'java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate --input-spec api/openapi.yaml --generator-name rust-axum --output out/rust --additional-properties=packageName=armoury-httpapi,hideGenerationTimestamp=true' successfully executed
+ ✓  Test container 'generate' passed
+✨ openapi-typescript 7.13.0
+🚀 /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.DbPCIZ5Lil/api/openapi.yaml → /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.UMm0dcWIen/web/src/lib/api/schema.d.ts [17.8ms]
+gen:api: wrote control-plane/src/httpapi/server/generated and web/src/lib/api/schema.d.ts under /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/tmp.UMm0dcWIen
+api: generated code matches api/openapi.yaml
+==> check:test-db
+test-db: starting Pod armoury-test-db-20261126135555-64074-6648 in namespace danielboothcloud
+pod/armoury-test-db-20261126135555-64074-6648 created
+pod/armoury-test-db-20261126135555-64074-6648 condition met
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.85s
+────────────
+ Nextest run ID 0a35605a-1bd9-4f75-a178-ed0389e933cd with nextest profile: ci-db
+    Starting 1 test across 1 binary (5 binaries skipped via profile.ci-db.default-filter)
+        PASS [   3.623s] (1/1) armoury::val_3_age val_3_age_extension_is_available
+────────────
+     Summary [   3.626s] 1 test run: 1 passed, 0 skipped
+/Users/danielbooth/projects/home/armoury/mise-tasks/check/test-db: line 16: 64790 Terminated: 15          kubectl port-forward "pod/$pod" "${kube[@]}" --address 127.0.0.1 :5432 > "$work/forward.log" 2>&1
+==> check:test-tasks-cluster
+✔ VAL-7 gen:api is repeatable and the api step names an edited generated file (150512.680042ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150610.824167
+==> check:codeql
+Package specifications to check for download: codeql/rust-queries@0.1.46, codeql/javascript-queries@2.5.0, codeql/actions-queries@0.6.39
+Did not need to download any packs.
+Package install location: /Users/danielbooth/.codeql/packages
+Already installed codeql/rust-queries@0.1.46
+Already installed codeql/javascript-queries@2.5.0
+Already installed codeql/actions-queries@0.6.39
+Initializing databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db.
+Package install location: /Users/danielbooth/.codeql/packages
+Already installed codeql/rust-queries@0.1.46
+Already installed codeql/javascript-queries@2.5.0
+Already installed codeql/actions-queries@0.6.39
+Running build command: []
+Running 3 commands for 3 databases:
+- /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/actions
+- /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/javascript
+- /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust
+Running command in /Users/danielbooth/projects/home/armoury: [/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/actions/tools/autobuild.sh]
+[2026-11-26 13:59:17] [build-stdout] LGTM_INDEX_FILTERS set. Using the default filters together with the user-provided filters, and passing through to the JavaScript extractor.
+[2026-11-26 13:59:17] [build-stdout] Found JavaScript extractor at '/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript'.
+[2026-11-26 13:59:17] [build-stdout] Running JavaScript autobuilder at '/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/autobuild.sh'.
+[2026-11-26 13:59:18] [build-stderr] Skipping path /Users/danielbooth/projects/home/armoury/web/test-results, which does not exist.
+[2026-11-26 13:59:18] [build-stdout] Single-threaded extraction.
+[2026-11-26 13:59:21] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/build.yml
+[2026-11-26 13:59:21] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/build.yml (83 ms)
+[2026-11-26 13:59:21] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/ci.yml
+[2026-11-26 13:59:21] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/ci.yml (8 ms)
+[2026-11-26 13:59:21] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/preview-cleanup.yml
+[2026-11-26 13:59:21] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/preview-cleanup.yml (3 ms)
+[2026-11-26 13:59:21] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/renovate.yml
+[2026-11-26 13:59:21] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/renovate.yml (3 ms)
+Running command in /Users/danielbooth/projects/home/armoury: [/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/autobuild.sh]
+[2026-11-26 13:59:22] [build-stderr] Skipping path /Users/danielbooth/projects/home/armoury/web/test-results, which does not exist.
+[2026-11-26 13:59:22] [build-stdout] Single-threaded extraction.
+[2026-11-26 13:59:23] [build-stdout] web/package.json: Main file not found
+[2026-11-26 13:59:23] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/app.html
+[2026-11-26 13:59:23] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/app.html (44 ms)
+[2026-11-26 13:59:23] [build-stdout] Found Node.js at: node
+[2026-11-26 13:59:23] [build-stdout] Found Node.js version: v26.13.1
+[2026-11-26 13:59:23] [build-stdout] Memory for TypeScript process: 2000 MB, and 400 MB reserve
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/lib/components/ui/cn.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/lib/components/ui/cn.ts (61 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/lib/api/schema.d.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/lib/api/schema.d.ts (18 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/routes/+layout.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/routes/+layout.ts (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/routes/val-4.test.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/routes/val-4.test.ts (9 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/e2e/smoke.spec.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/e2e/smoke.spec.ts (12 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/src/app.d.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/src/app.d.ts (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/playwright.config.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/playwright.config.ts (5 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/vite.config.ts
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/vite.config.ts (3 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/templates/deployment.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/templates/deployment.yaml (14 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/templates/serviceaccount.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/templates/serviceaccount.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/deployment.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/deployment.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/service.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/service.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/serviceaccount.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/templates/serviceaccount.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/Chart.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/Chart.yaml (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/values.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/agent/values.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/Chart.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/Chart.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/values.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/charts/control-plane/values.yaml (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/codeql/codeql-config.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/codeql/codeql-config.yml (4 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/build.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/build.yml (5 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/ci.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/ci.yml (5 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/preview-cleanup.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/preview-cleanup.yml (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/workflows/renovate.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/workflows/renovate.yml (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/Chart.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/Chart.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/charts/armoury/values.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/charts/armoury/values.yaml (1 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/check.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/check.test.mjs (29 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/pins
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/pins (79 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/pins.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/pins.test.mjs (49 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/test-db.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/check/test-db.yaml (5 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/build.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/build.test.mjs (26 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/ci.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/ci.test.mjs (32 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/gate
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/gate (13 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/gate.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/ci/gate.test.mjs (19 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/gen/api.cluster.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/gen/api.cluster.test.mjs (53 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/gen/okteto.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/gen/okteto.yml (3 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.github/actionlint.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.github/actionlint.yaml (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/api/openapi.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/api/openapi.yaml (3 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/mise-tasks/cluster-context.test.mjs
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/mise-tasks/cluster-context.test.mjs (147 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/eslint.config.js
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/eslint.config.js (9 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/package.json
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/package.json (4 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/prettier.config.js
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/prettier.config.js (3 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/svelte.config.js
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/svelte.config.js (3 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/web/tsconfig.json
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/web/tsconfig.json (2 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/.agent-profile.yml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/.agent-profile.yml (14 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/projects/home/armoury/okteto.yaml
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/projects/home/armoury/okteto.yaml (4 ms)
+[2026-11-26 13:59:24] [build-stderr] No externs trap cache found
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/constants.js
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/constants.js (102 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/net.js
+[2026-11-26 13:59:24] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/net.js (30 ms)
+[2026-11-26 13:59:24] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/globals.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/globals.js (106 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/events.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/events.js (9 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/repl.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/repl.js (8 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/util.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/util.js (16 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/dgram.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/dgram.js (12 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/vm.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/vm.js (11 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/stream.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/stream.js (46 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/child_process.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/child_process.js (43 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/assert.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/assert.js (9 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/os.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/os.js (14 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/console.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/console.js (2 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/readline.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/readline.js (12 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/punycode.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/punycode.js (5 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/https.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/https.js (11 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/domain.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/domain.js (5 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/dns.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/dns.js (14 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/assert_legacy.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/assert_legacy.js (2 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/tty.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/tty.js (6 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/timers.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/timers.js (9 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/querystring.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/querystring.js (6 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/module.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/module.js (5 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/sys.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/sys.js (2 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/path.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/path.js (17 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/string_decoder.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/string_decoder.js (5 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/cluster.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/cluster.js (54 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/v8.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/v8.js (5 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/crypto.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/crypto.js (61 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/zlib.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/zlib.js (47 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/url.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/url.js (9 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/tls.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/tls.js (32 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/process.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/process.js (2 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/http.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/http.js (35 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/buffer.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/buffer.js (10 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/fs.js
+[2026-11-26 13:59:25] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/nodejs/fs.js (143 ms)
+[2026-11-26 13:59:25] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_dom.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_dom.js (412 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/mediasource.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/mediasource.js (31 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/html5.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/html5.js (409 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_anim_timing.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_anim_timing.js (8 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom3.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom3.js (69 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/fetchapi.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/fetchapi.js (38 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/streamsapi.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/streamsapi.js (35 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/fileapi.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/fileapi.js (64 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_navigation_timing.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_navigation_timing.js (19 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_range.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_range.js (14 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_indexeddb.js
+[2026-11-26 13:59:26] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_indexeddb.js (46 ms)
+[2026-11-26 13:59:26] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom2.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom2.js (217 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_elementtraversal.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_elementtraversal.js (6 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_webcrypto.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_webcrypto.js (22 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_vml.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_vml.js (5 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/intl.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/intl.js (12 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_rtc.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_rtc.js (99 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_requestidlecallback.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_requestidlecallback.js (3 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_geolocation.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_geolocation.js (5 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webstorage.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webstorage.js (6 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_usercontent.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_usercontent.js (2 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/window.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/window.js (5 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/page_visibility.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/page_visibility.js (1 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webgl.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webgl.js (135 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_touch_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_touch_event.js (10 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_event.js (22 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/whatwg_encoding.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/whatwg_encoding.js (3 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_event3.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_event3.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_xml.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_xml.js (2 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_event.js (11 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_css.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_css.js (77 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_css.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/ie_css.js (10 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_css.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_css.js (48 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_xml.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_xml.js (15 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_css.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_css.js (11 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/iphone.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/iphone.js (6 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_selectors.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_selectors.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/chrome.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/chrome.js (22 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_batterystatus.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_batterystatus.js (3 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_notifications.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_notifications.js (10 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_screen_orientation.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_screen_orientation.js (2 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_midi.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_midi.js (9 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_serviceworker.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_serviceworker.js (23 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_device_sensor_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_device_sensor_event.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_event.js (1 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_permissions.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_permissions.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_gamepad.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_gamepad.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom1.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom1.js (36 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/url.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/url.js (6 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_event.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_event.js (5 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_encoding.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_encoding.js (3 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/flash.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/flash.js (9 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_pointer_events.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_pointer_events.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_ext.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_ext.js (1 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_dom.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/gecko_dom.js (30 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_dom.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/webkit_dom.js (16 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_css3d.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_css3d.js (7 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom4.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/web/w3c_dom4.js (2 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/rhino.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/rhino.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/v8.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/v8.js (4 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/spidermonkey.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/spidermonkey.js (1 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/jsshell.js
+[2026-11-26 13:59:27] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/vm/jsshell.js (25 ms)
+[2026-11-26 13:59:27] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/jquery-3.2.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/jquery-3.2.js (103 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/bdd.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/bdd.js (4 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/should.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/should.js (11 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/vows.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/lib/vows.js (14 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/proxy.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/proxy.js (2 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es5.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es5.js (15 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/intl.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/intl.js (9 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es6_collections.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es6_collections.js (8 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es6.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es6.js (59 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es2017.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es2017.js (3 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es3.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es3.js (91 ms)
+[2026-11-26 13:59:28] [build-stdout] Extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es2016.js
+[2026-11-26 13:59:28] [build-stdout] Done extracting /Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/javascript/tools/data/externs/es/es2016.js (2 ms)
+Running command in /Users/danielbooth/projects/home/armoury: [/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/rust/tools/autobuild.sh]
+[2026-11-26 13:59:29] [build-stderr] Scanning for files in /Users/danielbooth/projects/home/armoury...
+[2026-11-26 13:59:29] [build-stderr] /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust: Indexing files in in /Users/danielbooth/projects/home/armoury...
+[2026-11-26 13:59:29] [build-stderr] Running command in /Users/danielbooth/projects/home/armoury: [/Users/danielbooth/.local/share/mise/installs/codeql/2.27.4/codeql/rust/tools/index-files.sh, /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust/working/files-to-index7730381449669266728.list]
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout] [32m INFO[0m configuration: {
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     scratch_dir: "/var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust/working",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     trap_dir: "/var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust/trap/rust",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     source_archive_dir: "/var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust/src",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     diagnostic_dir: "/var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust/diagnostic/extractors/rust",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_target_dir: Some(
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]         "/Users/danielbooth/.cache/armoury/codeql-cargo-target",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     ),
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_target: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_features: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_cfg_overrides: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_extra_env: {},
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_extra_args: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     cargo_all_targets: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     logging_flamegraph: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     logging_verbosity: Some(
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]         "progress",
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     ),
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     trap_compression: Zstd,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     number of inputs: 14,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     qltest: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     qltest_cargo_check: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     qltest_dependencies: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     qltest_use_nightly: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     qltest_edition: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     sysroot: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     sysroot_src: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     rustc_src: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     build_script_command: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     extra_includes: [],
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     proc_macro_server: None,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     extract_dependencies_as_source: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]     force_library_mode: false,
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout] }
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout] [32m INFO[0m found manifests:
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]   /Users/danielbooth/projects/home/armoury/control-plane/src/httpapi/server/Cargo.toml
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout]   /Users/danielbooth/projects/home/armoury/Cargo.toml
+[2026-11-26 13:59:30] [build-stdout] [2026-11-26 13:59:30] [build-stdout] [32m INFO[0m project Rust toolchain: 1.100.0-aarch64-apple-darwin (overridden by environment variable RUSTUP_TOOLCHAIN)
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (ExtractLibrary): 35.910s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (Extract): 1.001s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (CrateGraph): 0.269s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (FindManifests): 0.002s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (LoadManifest): 8.437s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (ParseLibrary): 8.418s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (Parse): 0.000s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration (LoadSource): 18.895s
+[2026-11-26 14:01:09] [build-stdout] [2026-11-26 14:01:09] [build-stdout] [32m INFO[0m total duration: 1min39.258s
+Finalizing databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db.
+Running TRAP import for CodeQL database at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/actions...
+Importing TRAP files
+Merging relations
+Finished writing database (relations: 5.62 KiB; string pool: 2.05 MiB).
+TRAP import complete (462ms).
+Finished zipping source archive (3.13 KiB).
+Running TRAP import for CodeQL database at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/javascript...
+Importing TRAP files
+Merging relations
+Finished writing database (relations: 3.35 MiB; string pool: 4.78 MiB).
+TRAP import complete (2.8s).
+Finished zipping source archive (296.71 KiB).
+Running TRAP import for CodeQL database at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db/rust...
+Importing TRAP files
+Merging relations
+Finished writing database (relations: 132.55 MiB; string pool: 22.03 MiB).
+TRAP import complete (55.1s).
+Finished zipping source archive (39.20 MiB).
+Successfully created databases at /var/folders/p4/769jnb153l7dvdjxm2pvny1r0000gn/T/armoury-codeql.e417BG/db.
+codeql: analysing the actions database
+Running queries.
+Resolving data extensions.
+Finished resolving data extensions.
+Merging data extensions.
+Finished merging data extensions.
+WARNING: Not caching stages during query-loading, since max heap size is only 1816 MB.
+[1/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-1395/UseOfKnownVulnerableAction.qlx.
+[2/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-312/UnmaskedSecretExposure.qlx.
+[3/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-312/ExcessiveSecretsExposure.qlx.
+[4/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-312/SecretsInArtifacts.qlx.
+[5/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-275/MissingActionsPermissions.qlx.
+[6/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-367/UntrustedCheckoutTOCTOUHigh.qlx.
+[7/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-285/ImproperAccessControl.qlx.
+[8/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-094/CodeInjectionCritical.qlx.
+[9/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-367/UntrustedCheckoutTOCTOUCritical.qlx.
+[10/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-349/CachePoisoningViaCodeInjection.qlx.
+[11/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Diagnostics/SuccessfullyExtractedFiles.qlx.
+[12/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-349/CachePoisoningViaDirectCache.qlx.
+[13/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-349/CachePoisoningViaPoisonableStep.qlx.
+[14/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-829/UntrustedCheckoutCritical.qlx.
+[15/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-829/ArtifactPoisoningCritical.qlx.
+[16/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-829/UntrustedCheckoutHigh.qlx.
+[17/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-077/EnvVarInjectionCritical.qlx.
+[18/18] Loaded /Users/danielbooth/.codeql/packages/codeql/actions-queries/0.6.39/Security/CWE-077/EnvPathInjectionCritical.qlx.
+Starting evaluation of codeql/actions-queries/Security/CWE-077/EnvPathInjectionCritical.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-077/EnvVarInjectionCritical.ql.
+Starting evaluation of codeql/actions-queries/Diagnostics/SuccessfullyExtractedFiles.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-094/CodeInjectionCritical.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-1395/UseOfKnownVulnerableAction.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-285/ImproperAccessControl.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-275/MissingActionsPermissions.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-312/ExcessiveSecretsExposure.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-312/SecretsInArtifacts.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-349/CachePoisoningViaCodeInjection.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-349/CachePoisoningViaPoisonableStep.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-367/UntrustedCheckoutTOCTOUCritical.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-312/UnmaskedSecretExposure.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-349/CachePoisoningViaDirectCache.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-367/UntrustedCheckoutTOCTOUHigh.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-829/ArtifactPoisoningCritical.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-829/UntrustedCheckoutCritical.ql.
+Starting evaluation of codeql/actions-queries/Security/CWE-829/UntrustedCheckoutHigh.ql.
+[1/18 eval 204ms] Evaluation done; writing results to codeql/actions-queries/Diagnostics/SuccessfullyExtractedFiles.bqrs.
+[2/18 eval 859ms] Evaluation done; writing results to codeql/actions-queries/Security/CWE-1395/UseOfKnownVulnerableAction.bqrs.
+[3/18 eval 866ms] Evaluation done; writing results to codeql/actions-queries/Security/CWE-312/UnmaskedSecretExposure.bqrs.
+[4/18 eval 878ms] Evaluation done; writing results to codeql/actions-queries/Security/CWE-312/ExcessiveSecretsExposure.bqrs.
+[5/18 eval 1.4s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-312/SecretsInArtifacts.bqrs.
+[6/18 eval 1.4s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-275/MissingActionsPermissions.bqrs.
+[7/18 eval 1.5s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-349/CachePoisoningViaDirectCache.bqrs.
+[8/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-285/ImproperAccessControl.bqrs.
+[9/18 eval 1.4s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-829/UntrustedCheckoutHigh.bqrs.
+[10/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-367/UntrustedCheckoutTOCTOUCritical.bqrs.
+[11/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-367/UntrustedCheckoutTOCTOUHigh.bqrs.
+[12/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-349/CachePoisoningViaPoisonableStep.bqrs.
+[13/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-077/EnvPathInjectionCritical.bqrs.
+[14/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-829/UntrustedCheckoutCritical.bqrs.
+[15/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-094/CodeInjectionCritical.bqrs.
+[16/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-349/CachePoisoningViaCodeInjection.bqrs.
+[17/18 eval 1.6s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-077/EnvVarInjectionCritical.bqrs.
+[18/18 eval 1.7s] Evaluation done; writing results to codeql/actions-queries/Security/CWE-829/ArtifactPoisoningCritical.bqrs.
+Shutting down query evaluator.
+Interpreting results.
+CodeQL scanned 4 out of 4 GitHub Actions files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the javascript database
+Running queries.
+Resolving data extensions.
+Finished resolving data extensions.
+Merging data extensions.
+Finished merging data extensions.
+WARNING: Not caching stages during query-loading, since max heap size is only 1800 MB.
+[1/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/AngularJS/DoubleCompilation.qlx.
+[2/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/RegExp/IdentityReplacement.qlx.
+[3/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/AngularJS/InsecureUrlWhitelist.qlx.
+[4/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/AngularJS/DisablingSce.qlx.
+[5/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-830/FunctionalityFromUntrustedDomain.qlx.
+[6/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-830/FunctionalityFromUntrustedSource.qlx.
+[7/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-200/PrivateFileExposure.qlx.
+[8/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-094/CodeInjection.qlx.
+[9/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-201/PostMessageStar.qlx.
+[10/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-326/InsufficientKeySize.qlx.
+[11/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-094/ImproperCodeSanitization.qlx.
+[12/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-209/StackTraceExposure.qlx.
+[13/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-094/UnsafeDynamicMethodAccess.qlx.
+[14/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-601/ClientSideUrlRedirect.qlx.
+[15/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-327/BadRandomness.qlx.
+[16/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-601/ServerSideUrlRedirect.qlx.
+[17/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-178/CaseSensitiveMiddlewarePath.qlx.
+[18/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-327/BrokenCryptoAlgorithm.qlx.
+[19/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-916/InsufficientPasswordHash.qlx.
+[20/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-614/ClearTextCookie.qlx.
+[21/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-598/SensitiveGetQuery.qlx.
+[22/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-942/CorsPermissiveConfiguration.qlx.
+[23/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/IncompleteUrlSchemeCheck.qlx.
+[24/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-918/RequestForgery.qlx.
+[25/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/IncorrectSuffixCheck.qlx.
+[26/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/IncompleteHostnameRegExp.qlx.
+[27/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/UselessRegExpCharacterEscape.qlx.
+[28/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/IncompleteUrlSubstringSanitization.qlx.
+[29/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-073/TemplateObjectInjection.qlx.
+[30/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-089/SqlInjection.qlx.
+[31/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-020/OverlyLargeRange.qlx.
+[32/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-693/InsecureHelmet.qlx.
+[33/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-347/MissingJWTKeyVerification.qlx.
+[34/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-295/DisablingCertificateValidation.qlx.
+[35/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-640/HostHeaderPoisoningInEmailGeneration.qlx.
+[36/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-770/MissingRateLimiting.qlx.
+[37/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/IncompleteSanitization.qlx.
+[38/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-400/DeepObjectResourceExhaustion.qlx.
+[39/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-834/LoopBoundInjection.qlx.
+[40/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-1427/SystemPromptInjection.qlx.
+[41/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/UnsafeHtmlExpansion.qlx.
+[42/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-770/ResourceExhaustion.qlx.
+[43/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/BadTagFilter.qlx.
+[44/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/DoubleEscaping.qlx.
+[45/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-346/CorsMisconfigurationForCredentials.qlx.
+[46/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/IncompleteMultiCharacterSanitization.qlx.
+[47/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-915/PrototypePollutingFunction.qlx.
+[48/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-116/IncompleteHtmlAttributeSanitization.qlx.
+[49/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-915/PrototypePollutingAssignment.qlx.
+[50/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-915/PrototypePollutingMergeCall.qlx.
+[51/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-312/CleartextStorage.qlx.
+[52/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-300/InsecureDependencyResolution.qlx.
+[53/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-776/XmlBomb.qlx.
+[54/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-754/UnvalidatedDynamicMethodCall.qlx.
+[55/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-312/CleartextLogging.qlx.
+[56/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-352/MissingCsrfMiddleware.qlx.
+[57/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-312/BuildArtifactLeak.qlx.
+[58/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-134/TaintedFormatString.qlx.
+[59/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-730/ServerCrash.qlx.
+[60/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-1004/ClientExposedCookie.qlx.
+[61/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-338/InsecureRandomness.qlx.
+[62/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-078/UselessUseOfCat.qlx.
+[63/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-502/UnsafeDeserialization.qlx.
+[64/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-730/RegExpInjection.qlx.
+[65/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-022/ZipSlip.qlx.
+[66/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-843/TypeConfusionThroughParameterTampering.qlx.
+[67/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-022/TaintedPath.qlx.
+[68/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-611/Xxe.qlx.
+[69/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-078/SecondOrderCommandInjection.qlx.
+[70/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-078/UnsafeShellCommandConstruction.qlx.
+[71/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-078/ShellCommandInjectionFromEnvironment.qlx.
+[72/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-078/CommandInjection.qlx.
+[73/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-643/XpathInjection.qlx.
+[74/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-829/InsecureDownload.qlx.
+[75/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/ReflectedXss.qlx.
+[76/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Performance/ReDoS.qlx.
+[77/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/XssThroughDom.qlx.
+[78/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/UnsafeJQueryPlugin.qlx.
+[79/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Diagnostics/ExtractionErrors.qlx.
+[80/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Diagnostics/ExtractedFiles.qlx.
+[81/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Summary/LinesOfCode.qlx.
+[82/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/UnsafeHtmlConstruction.qlx.
+[83/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/Xss.qlx.
+[84/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Electron/AllowRunningInsecureContent.qlx.
+[85/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Electron/DisablingWebSecurity.qlx.
+[86/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/ExceptionXss.qlx.
+[87/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Security/CWE-079/StoredXss.qlx.
+[88/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Summary/LinesOfUserCode.qlx.
+[89/89] Loaded /Users/danielbooth/.codeql/packages/codeql/javascript-queries/2.5.0/Performance/PolynomialReDoS.qlx.
+Starting evaluation of codeql/javascript-queries/AngularJS/DisablingSce.ql.
+Starting evaluation of codeql/javascript-queries/AngularJS/DoubleCompilation.ql.
+Starting evaluation of codeql/javascript-queries/AngularJS/InsecureUrlWhitelist.ql.
+Starting evaluation of codeql/javascript-queries/Diagnostics/ExtractedFiles.ql.
+Starting evaluation of codeql/javascript-queries/Diagnostics/ExtractionErrors.ql.
+Starting evaluation of codeql/javascript-queries/Electron/AllowRunningInsecureContent.ql.
+Starting evaluation of codeql/javascript-queries/Electron/DisablingWebSecurity.ql.
+Starting evaluation of codeql/javascript-queries/Performance/PolynomialReDoS.ql.
+Starting evaluation of codeql/javascript-queries/Performance/ReDoS.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/IncorrectSuffixCheck.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/IncompleteUrlSchemeCheck.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/IncompleteHostnameRegExp.ql.
+Starting evaluation of codeql/javascript-queries/RegExp/IdentityReplacement.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/OverlyLargeRange.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-020/UselessRegExpCharacterEscape.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-022/TaintedPath.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-022/ZipSlip.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-073/TemplateObjectInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-078/CommandInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-078/SecondOrderCommandInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-078/ShellCommandInjectionFromEnvironment.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-078/UnsafeShellCommandConstruction.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-078/UselessUseOfCat.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/ExceptionXss.ql.
+[1/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Diagnostics/ExtractedFiles.bqrs.
+[2/89 eval 1.9s] Evaluation done; writing results to codeql/javascript-queries/Diagnostics/ExtractionErrors.bqrs.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/ReflectedXss.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/StoredXss.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/UnsafeHtmlConstruction.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/UnsafeJQueryPlugin.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/Xss.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-079/XssThroughDom.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-089/SqlInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-094/CodeInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-094/ImproperCodeSanitization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-094/UnsafeDynamicMethodAccess.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-1004/ClientExposedCookie.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/BadTagFilter.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/DoubleEscaping.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/IncompleteMultiCharacterSanitization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/IncompleteHtmlAttributeSanitization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/UnsafeHtmlExpansion.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-116/IncompleteSanitization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-134/TaintedFormatString.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-1427/SystemPromptInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-178/CaseSensitiveMiddlewarePath.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-200/PrivateFileExposure.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-201/PostMessageStar.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-209/StackTraceExposure.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-295/DisablingCertificateValidation.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-300/InsecureDependencyResolution.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-312/BuildArtifactLeak.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-312/CleartextLogging.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-312/CleartextStorage.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-326/InsufficientKeySize.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-327/BadRandomness.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-327/BrokenCryptoAlgorithm.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-338/InsecureRandomness.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-346/CorsMisconfigurationForCredentials.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-347/MissingJWTKeyVerification.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-352/MissingCsrfMiddleware.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-400/DeepObjectResourceExhaustion.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-502/UnsafeDeserialization.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-598/SensitiveGetQuery.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-601/ClientSideUrlRedirect.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-601/ServerSideUrlRedirect.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-611/Xxe.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-614/ClearTextCookie.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-640/HostHeaderPoisoningInEmailGeneration.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-643/XpathInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-693/InsecureHelmet.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-730/RegExpInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-730/ServerCrash.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-754/UnvalidatedDynamicMethodCall.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-770/MissingRateLimiting.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-770/ResourceExhaustion.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-776/XmlBomb.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-829/InsecureDownload.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-830/FunctionalityFromUntrustedDomain.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-830/FunctionalityFromUntrustedSource.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-834/LoopBoundInjection.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-843/TypeConfusionThroughParameterTampering.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-915/PrototypePollutingAssignment.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-915/PrototypePollutingFunction.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-915/PrototypePollutingMergeCall.ql.
+[3/89 eval 679ms] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-300/InsecureDependencyResolution.bqrs.
+[4/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/AngularJS/DisablingSce.bqrs.
+[5/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/AngularJS/DoubleCompilation.bqrs.
+[6/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/AngularJS/InsecureUrlWhitelist.bqrs.
+[7/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/Electron/AllowRunningInsecureContent.bqrs.
+[8/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/Electron/DisablingWebSecurity.bqrs.
+[9/89 eval 6.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.bqrs.
+[10/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Performance/PolynomialReDoS.bqrs.
+[11/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/RegExp/IdentityReplacement.bqrs.
+[12/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/IncompleteUrlSchemeCheck.bqrs.
+[13/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/IncorrectSuffixCheck.bqrs.
+[14/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/UselessRegExpCharacterEscape.bqrs.
+[15/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/OverlyLargeRange.bqrs.
+[16/89 eval 3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/UnsafeHtmlConstruction.bqrs.
+[17/89 eval 2.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-094/CodeInjection.bqrs.
+[18/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-073/TemplateObjectInjection.bqrs.
+[19/89 eval 6.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-078/UnsafeShellCommandConstruction.bqrs.
+[20/89 eval 3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/UnsafeJQueryPlugin.bqrs.
+[21/89 eval 2.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-094/ImproperCodeSanitization.bqrs.
+[22/89 eval 1.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/DoubleEscaping.bqrs.
+[23/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/IncompleteHtmlAttributeSanitization.bqrs.
+[24/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/UnsafeHtmlExpansion.bqrs.
+[25/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/IncompleteSanitization.bqrs.
+[26/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/IncompleteMultiCharacterSanitization.bqrs.
+[27/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-134/TaintedFormatString.bqrs.
+[28/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-201/PostMessageStar.bqrs.
+[29/89 eval 1.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-178/CaseSensitiveMiddlewarePath.bqrs.
+[30/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-200/PrivateFileExposure.bqrs.
+[31/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-312/BuildArtifactLeak.bqrs.
+[32/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-209/StackTraceExposure.bqrs.
+[33/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-295/DisablingCertificateValidation.bqrs.
+[34/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-327/BadRandomness.bqrs.
+[35/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-326/InsufficientKeySize.bqrs.
+[36/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-347/MissingJWTKeyVerification.bqrs.
+[37/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-352/MissingCsrfMiddleware.bqrs.
+[38/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-730/ServerCrash.bqrs.
+[39/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-598/SensitiveGetQuery.bqrs.
+[40/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-834/LoopBoundInjection.bqrs.
+[41/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-843/TypeConfusionThroughParameterTampering.bqrs.
+[42/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-640/HostHeaderPoisoningInEmailGeneration.bqrs.
+[43/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-400/DeepObjectResourceExhaustion.bqrs.
+[44/89 eval 2.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-1004/ClientExposedCookie.bqrs.
+[45/89 eval 1.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-614/ClearTextCookie.bqrs.
+[46/89 eval 1.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-502/UnsafeDeserialization.bqrs.
+[47/89 eval 3.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/StoredXss.bqrs.
+[48/89 eval 1.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-312/CleartextStorage.bqrs.
+[49/89 eval 2.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/XssThroughDom.bqrs.
+[50/89 eval 1.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-1427/SystemPromptInjection.bqrs.
+[51/89 eval 3.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/ReflectedXss.bqrs.
+[52/89 eval 3.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/Xss.bqrs.
+[53/89 eval 1.9s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-346/CorsMisconfigurationForCredentials.bqrs.
+[54/89 eval 7.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-078/ShellCommandInjectionFromEnvironment.bqrs.
+[55/89 eval 7.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-079/ExceptionXss.bqrs.
+[56/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-022/TaintedPath.bqrs.
+[57/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-020/IncompleteHostnameRegExp.bqrs.
+[58/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-078/SecondOrderCommandInjection.bqrs.
+[59/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-022/ZipSlip.bqrs.
+[60/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-078/CommandInjection.bqrs.
+[61/89 eval 7.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-078/UselessUseOfCat.bqrs.
+[62/89 eval 2.1s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-338/InsecureRandomness.bqrs.
+[63/89 eval 2.1s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+[64/89 eval 2.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-601/ClientSideUrlRedirect.bqrs.
+[65/89 eval 2.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-601/ServerSideUrlRedirect.bqrs.
+[66/89 eval 3.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-089/SqlInjection.bqrs.
+[67/89 eval 7.6s] Evaluation done; writing results to codeql/javascript-queries/Performance/ReDoS.bqrs.
+[68/89 eval 2.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-611/Xxe.bqrs.
+[69/89 eval 3.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-094/UnsafeDynamicMethodAccess.bqrs.
+[70/89 eval 2.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-643/XpathInjection.bqrs.
+[71/89 eval 2.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-770/MissingRateLimiting.bqrs.
+[72/89 eval 2.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-693/InsecureHelmet.bqrs.
+[73/89 eval 2.3s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-776/XmlBomb.bqrs.
+[74/89 eval 3.2s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-116/BadTagFilter.bqrs.
+[75/89 eval 2.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-770/ResourceExhaustion.bqrs.
+[76/89 eval 2.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-830/FunctionalityFromUntrustedSource.bqrs.
+[77/89 eval 2.4s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-830/FunctionalityFromUntrustedDomain.bqrs.
+[78/89 eval 2.5s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-730/RegExpInjection.bqrs.
+[79/89 eval 2.5s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-829/InsecureDownload.bqrs.
+Starting evaluation of codeql/javascript-queries/Security/CWE-916/InsufficientPasswordHash.ql.
+[80/89 eval 2.5s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-754/UnvalidatedDynamicMethodCall.bqrs.
+[81/89 eval 2.6s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-915/PrototypePollutingFunction.bqrs.
+[82/89 eval 2.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-312/CleartextLogging.bqrs.
+[83/89 eval 205ms] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-916/InsufficientPasswordHash.bqrs.
+Starting evaluation of codeql/javascript-queries/Security/CWE-918/RequestForgery.ql.
+Starting evaluation of codeql/javascript-queries/Security/CWE-942/CorsPermissiveConfiguration.ql.
+Starting evaluation of codeql/javascript-queries/Summary/LinesOfCode.ql.
+Starting evaluation of codeql/javascript-queries/Summary/LinesOfUserCode.ql.
+[84/89 eval 2.7s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-915/PrototypePollutingAssignment.bqrs.
+[85/89 eval 2ms] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-942/CorsPermissiveConfiguration.bqrs.
+[86/89 eval 2.8s] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-915/PrototypePollutingMergeCall.bqrs.
+[87/89 eval 14ms] Evaluation done; writing results to codeql/javascript-queries/Summary/LinesOfCode.bqrs.
+[88/89 eval 127ms] Evaluation done; writing results to codeql/javascript-queries/Security/CWE-918/RequestForgery.bqrs.
+[89/89 eval 1.2s] Evaluation done; writing results to codeql/javascript-queries/Summary/LinesOfUserCode.bqrs.
+Shutting down query evaluator.
+Interpreting results.
+CodeQL scanned 4 out of 4 GitHub Actions files and 21 out of 21 JavaScript/TypeScript files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+codeql: analysing the rust database
+Running queries.
+Resolving data extensions.
+Finished resolving data extensions.
+Merging data extensions.
+Finished merging data extensions.
+WARNING: Not caching stages during query-loading, since max heap size is only 1800 MB.
+[1/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-089/SqlInjection.qlx.
+[2/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-825/AccessInvalidPointer.qlx.
+[3/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-327/BrokenCryptoAlgorithm.qlx.
+[4/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-319/UseOfHttp.qlx.
+[5/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-311/CleartextTransmission.qlx.
+[6/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-614/InsecureCookie.qlx.
+[7/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-327/WeakSensitiveDataHashing.qlx.
+[8/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-918/RequestForgery.qlx.
+[9/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-312/CleartextLogging.qlx.
+[10/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-770/UncontrolledAllocationSize.qlx.
+[11/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-020/RegexInjection.qlx.
+[12/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/ExtractionErrors.qlx.
+[13/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-295/DisabledCertificateCheck.qlx.
+[14/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-798/HardcodedCryptographicValue.qlx.
+[15/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-312/CleartextStorageDatabase.qlx.
+[16/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-022/TaintedPath.qlx.
+[17/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/UnextractedElements.qlx.
+[18/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-078/CommandInjection.qlx.
+[19/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/ExtractedFiles.qlx.
+[20/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/CfgConsistencyCounts.qlx.
+[21/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/UnresolvedMacroCalls.qlx.
+[22/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/ExtractionWarnings.qlx.
+[23/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/AstConsistencyCounts.qlx.
+[24/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/NumberOfFilesExtractedWithErrors.qlx.
+[25/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/LinesOfCode.qlx.
+[26/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/TypeInferenceConsistencyCounts.qlx.
+[27/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/NumberOfSuccessfullyExtractedFiles.qlx.
+[28/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/SsaConsistencyCounts.qlx.
+[29/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/telemetry/DatabaseQualityDiagnostics.qlx.
+[30/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/security/CWE-079/XSS.qlx.
+[31/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/telemetry/ExtractorInformation.qlx.
+[32/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/diagnostics/DataFlowConsistencyCounts.qlx.
+[33/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/LinesOfUserCode.qlx.
+[34/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/NodesWithTypeAtLengthLimit.qlx.
+[35/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/SummaryStats.qlx.
+[36/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/QuerySinkCounts.qlx.
+[37/37] Loaded /Users/danielbooth/.codeql/packages/codeql/rust-queries/0.1.46/queries/summary/SummaryStatsReduced.qlx.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/CfgConsistencyCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/AstConsistencyCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/ExtractedFiles.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/ExtractionErrors.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/DataFlowConsistencyCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/SsaConsistencyCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/ExtractionWarnings.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/TypeInferenceConsistencyCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/UnextractedElements.ql.
+Starting evaluation of codeql/rust-queries/queries/diagnostics/UnresolvedMacroCalls.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-022/TaintedPath.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-079/XSS.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-089/SqlInjection.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-020/RegexInjection.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-078/CommandInjection.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-295/DisabledCertificateCheck.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-311/CleartextTransmission.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-312/CleartextLogging.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-312/CleartextStorageDatabase.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-319/UseOfHttp.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-327/BrokenCryptoAlgorithm.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-327/WeakSensitiveDataHashing.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-614/InsecureCookie.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-770/UncontrolledAllocationSize.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-798/HardcodedCryptographicValue.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-825/AccessInvalidPointer.ql.
+Starting evaluation of codeql/rust-queries/queries/security/CWE-918/RequestForgery.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/LinesOfUserCode.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/LinesOfCode.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/NodesWithTypeAtLengthLimit.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/NumberOfFilesExtractedWithErrors.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/NumberOfSuccessfullyExtractedFiles.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/QuerySinkCounts.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/SummaryStats.ql.
+Starting evaluation of codeql/rust-queries/queries/summary/SummaryStatsReduced.ql.
+Starting evaluation of codeql/rust-queries/queries/telemetry/DatabaseQualityDiagnostics.ql.
+Starting evaluation of codeql/rust-queries/queries/telemetry/ExtractorInformation.ql.
+[1/37 eval 57.4s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/ExtractedFiles.bqrs.
+[2/37 eval 57.5s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/ExtractionErrors.bqrs.
+[3/37 eval 57.5s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/UnextractedElements.bqrs.
+[4/37 eval 57.5s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/UnresolvedMacroCalls.bqrs.
+[5/37 eval 57.5s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/ExtractionWarnings.bqrs.
+[6/37 eval 51s] Evaluation done; writing results to codeql/rust-queries/queries/summary/NumberOfSuccessfullyExtractedFiles.bqrs.
+[7/37 eval 51s] Evaluation done; writing results to codeql/rust-queries/queries/summary/NumberOfFilesExtractedWithErrors.bqrs.
+[8/37 eval 1m6s] Evaluation done; writing results to codeql/rust-queries/queries/summary/LinesOfCode.bqrs.
+[9/37 eval 1m6s] Evaluation done; writing results to codeql/rust-queries/queries/summary/LinesOfUserCode.bqrs.
+[10/37 eval 2m13s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/AstConsistencyCounts.bqrs.
+[11/37 eval 2m46s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/CfgConsistencyCounts.bqrs.
+[12/37 eval 2m46s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/SsaConsistencyCounts.bqrs.
+[13/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/TypeInferenceConsistencyCounts.bqrs.
+[14/37 eval 3m7s] Evaluation done; writing results to codeql/rust-queries/queries/summary/NodesWithTypeAtLengthLimit.bqrs.
+[15/37 eval 3m7s] Evaluation done; writing results to codeql/rust-queries/queries/telemetry/ExtractorInformation.bqrs.
+[16/37 eval 3m15s] Evaluation done; writing results to codeql/rust-queries/queries/diagnostics/DataFlowConsistencyCounts.bqrs.
+[17/37 eval 3m15s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-311/CleartextTransmission.bqrs.
+[18/37 eval 3m15s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-312/CleartextLogging.bqrs.
+[19/37 eval 3m15s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-312/CleartextStorageDatabase.bqrs.
+[20/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+[21/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-614/InsecureCookie.bqrs.
+[22/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-079/XSS.bqrs.
+[23/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-078/CommandInjection.bqrs.
+[24/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-319/UseOfHttp.bqrs.
+[25/37 eval 3m16s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-020/RegexInjection.bqrs.
+[26/37 eval 3m17s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-295/DisabledCertificateCheck.bqrs.
+[27/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/summary/SummaryStatsReduced.bqrs.
+[28/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/telemetry/DatabaseQualityDiagnostics.bqrs.
+[29/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-825/AccessInvalidPointer.bqrs.
+[30/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-918/RequestForgery.bqrs.
+[31/37 eval 3m18s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-089/SqlInjection.bqrs.
+[32/37 eval 3m18s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-022/TaintedPath.bqrs.
+[33/37 eval 3m11s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-770/UncontrolledAllocationSize.bqrs.
+[34/37 eval 3m12s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-798/HardcodedCryptographicValue.bqrs.
+[35/37 eval 3m13s] Evaluation done; writing results to codeql/rust-queries/queries/summary/QuerySinkCounts.bqrs.
+[36/37 eval 3m19s] Evaluation done; writing results to codeql/rust-queries/queries/security/CWE-327/WeakSensitiveDataHashing.bqrs.
+[37/37 eval 3m13s] Evaluation done; writing results to codeql/rust-queries/queries/summary/SummaryStats.bqrs.
+Shutting down query evaluator.
+Interpreting results.
+CodeQL scanned 14 out of 14 Rust files in this invocation. Typically CodeQL is configured to analyze a single CodeQL language per invocation, so check other invocations to determine overall coverage information.
+Analysis produced the following metric data:
+
+|                            Metric                            | Value |
++--------------------------------------------------------------+-------+
+| Total number of Rust files that were extracted with errors   |     0 |
+| Total number of Rust files that were extracted without error |    14 |
+
+codeql: no results
+check: all steps passed
+
+real	11m40.648s
+user	14m4.408s
+sys	1m46.121s

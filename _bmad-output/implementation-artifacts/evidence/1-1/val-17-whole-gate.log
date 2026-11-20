@@ -1,0 +1,18 @@
+# VAL-17 through mise run check, 2026-11-26T14:07:03Z; copy /tmp/armoury-val17.H995aF of 'jj file list' (change volrxxvv)
+## run 1: injected eval(location.hash)
+exit=1
+codeql: analysing the actions database
+codeql: analysing the javascript database
+codeql: analysing the rust database
+codeql: web/src/routes/+layout.ts:4 js/code-injection: This code execution depends on a [user-provided value](1).
+codeql: 1 result(s); fix them or dismiss with a reasoned query-filters entry in .github/codeql/codeql-config.yml
+check: FAILED at step 'codeql' (rerun it with: mise run check:codeql)
+## run 2: reasoned query-filters exclusion
+exit=0
+codeql: analysing the actions database
+codeql: analysing the javascript database
+codeql: analysing the rust database
+codeql: no results
+check: all steps passed
+## leftovers in the copy
+(none listed above means none)

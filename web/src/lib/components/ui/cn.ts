@@ -1,3 +1,4 @@
+// Class-name merging and prop helper types that shadcn-svelte components import.
 export { cn } from 'cn';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

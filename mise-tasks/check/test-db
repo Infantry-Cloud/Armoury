@@ -30,9 +30,10 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 echo "test-db: starting Pod $pod in namespace $ARMOURY_NAMESPACE"
+# Set first: an interrupt during the create must still delete the Pod.
+created=1
 sed "s/^  name: armoury-test-db\$/  name: $pod/" "$root/mise-tasks/check/test-db.yaml" |
   kubectl create "${kube[@]}" -f -
-created=1
 kubectl wait "pod/$pod" "${kube[@]}" --for=condition=Ready --timeout=300s
 
 kubectl port-forward "pod/$pod" "${kube[@]}" --address 127.0.0.1 :5432 >"$work/forward.log" 2>&1 &

@@ -47,6 +47,8 @@ GitHub Actions only installs mise and runs one task per job (`.github/workflows/
 - `ci.yml`: `fast` (`ci:fast`, hosted, every event); `cluster` (`ci:cluster`) and `e2e`
   (`ci:e2e`; for a pull request, the Okteto preview `pr-<n>`) on ARC runners for pushes and
   same-repository pull requests only; `ci-gate` always runs and fails unless every job succeeded.
+  A fork pull request therefore never passes `ci-gate`: a maintainer pushes its commits to a
+  branch of this repository to run the cluster tiers.
 - `build.yml`: `ci:build` on every push (images with `okteto build`, chart with `helm package`);
   `ci:publish` on `main` copies both images by digest to `ghcr.io/<owner>/armoury-control-plane`
   and `ghcr.io/<owner>/armoury-agent`.

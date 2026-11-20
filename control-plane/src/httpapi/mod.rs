@@ -42,6 +42,9 @@ impl Health for Api {
 pub fn router(web_root: &Path) -> Router {
     let web_app = ServeDir::new(web_root).fallback(ServeFile::new(web_root.join("index.html")));
     armoury_httpapi::server::new(Arc::new(Api))
+        // `{*rest}` needs a non-empty segment, so `/api` and `/api/` get their own 404 routes.
+        .route("/api", any(|| async { StatusCode::NOT_FOUND }))
+        .route("/api/", any(|| async { StatusCode::NOT_FOUND }))
         .route("/api/{*rest}", any(|| async { StatusCode::NOT_FOUND }))
         .fallback_service(web_app)
 }
@@ -92,7 +95,13 @@ mod tests {
 
     #[tokio::test]
     async fn unknown_api_routes_are_not_found() {
-        let (status, _) = get("unknown-api", "/api/v1/nothing-here").await;
-        assert_eq!(status, StatusCode::NOT_FOUND);
+        for (test, uri) in [
+            ("unknown-api", "/api/v1/nothing-here"),
+            ("api-root", "/api"),
+            ("api-slash", "/api/"),
+        ] {
+            let (status, _) = get(test, uri).await;
+            assert_eq!(status, StatusCode::NOT_FOUND, "{uri}");
+        }
     }
 }

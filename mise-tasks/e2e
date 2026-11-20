@@ -5,6 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../web"
 export ARMOURY_E2E_BASE_URL="${ARMOURY_E2E_BASE_URL:-http://localhost:8080}"
 
 echo "e2e: testing $ARMOURY_E2E_BASE_URL"
+[ -d node_modules ] || npm ci --no-audit --no-fund
 # The browser build is pinned by the @playwright/test version in package-lock.json.
 npx --no -- playwright install chromium
 npx --no -- playwright test

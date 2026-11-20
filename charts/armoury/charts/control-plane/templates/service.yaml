@@ -1,3 +1,4 @@
+{{- /* The control-plane Service that the UI, API and e2e tests reach. */ -}}
 apiVersion: v1
 kind: Service
 metadata:

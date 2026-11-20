@@ -937,7 +937,7 @@
         "planning:sprint"
       ],
       "done_when": "Approved contract delivered; accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -964,6 +964,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "b180c2ec-6e23-4752-859f-fb91e8428425"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.1:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "9307cde6-9614-4ee5-a9ee-579f7ea9492c"
         }
       ],
       "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
@@ -4734,7 +4740,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-2 evidence for VAL-5 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "a681983d-26c9-428c-829a-48ba38899dce",
@@ -4743,7 +4749,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t1:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "270284f2-f075-4be4-8010-c4d16ebd66ec"
+        }
+      ],
       "synced": {
         "title": "Task T1: Pin the toolchain and ignore build output",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4764,7 +4777,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-5 evidence for VAL-1, VAL-2 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "0ac2180a-b554-48c4-9c57-d9757fee316f",
@@ -4773,7 +4786,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t2:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "2e583792-8ab0-4b1d-a4c4-0badbea7d6e3"
+        }
+      ],
       "synced": {
         "title": "Task T2: Cargo workspace and agent-proto codegen",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4794,7 +4814,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-3 evidence for VAL-1, VAL-3 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "22d3a082-a47c-48c5-a26b-82d8aa412937",
@@ -4803,7 +4823,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t3:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "aef1688e-325e-41c1-a06b-fa883838e666"
+        }
+      ],
       "synced": {
         "title": "Task T3: Minimal control-plane and agent binaries with the AGE sqlx test",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4824,7 +4851,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-6 evidence for VAL-7 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "78a63977-a5b0-48f3-b330-1bd5af67c936",
@@ -4833,7 +4860,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t4:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "aaeed88c-759e-4b9a-a90c-b81dae7d41bc"
+        }
+      ],
       "synced": {
         "title": "Task T4: OpenAPI generation and drift check",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4854,7 +4888,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-1, AC-5 evidence for VAL-4 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "0adaf6b4-9631-479e-aaec-f56bc8563db6",
@@ -4863,7 +4897,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t5:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "5ba83244-7f06-4917-a5a7-f38a77936b3a"
+        }
+      ],
       "synced": {
         "title": "Task T5: SvelteKit web app with lint, svelte-check and Vitest",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4884,7 +4925,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-3, AC-5 evidence for VAL-1 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "ee3a1123-ea97-42a0-bc99-8de4cf997787",
@@ -4893,7 +4934,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t6:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "4d68fcb1-2590-42eb-8ec3-c6d6c42673c8"
+        }
+      ],
       "synced": {
         "title": "Task T6: Umbrella Helm chart with subcharts",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4914,7 +4962,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-2, AC-3, AC-4 evidence for VAL-1, VAL-5, VAL-6 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "b1b2afb1-5628-49e6-8abf-0e484f5874b0",
@@ -4923,7 +4971,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t7:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "3db1df11-0c46-48ea-837d-fb9f7f54e342"
+        }
+      ],
       "synced": {
         "title": "Task T7: Aggregate check task, pin check and defect demonstration",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4944,7 +4999,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-7 evidence for VAL-8 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "0c447401-bb7a-431f-a0cb-d100c75ecc74",
@@ -4953,7 +5008,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t8:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "7027a43e-a0c2-45e5-ae29-909418d7e2c3"
+        }
+      ],
       "synced": {
         "title": "Task T8: Digest-pinned multi-stage Dockerfiles",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -4974,7 +5036,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-8, AC-9, AC-13 evidence for VAL-9, VAL-10, VAL-14 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "20720ec5-587f-4106-b731-c071d2f10d98",
@@ -4983,7 +5045,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t9:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "e540694c-877e-45e3-ad2c-37fec734db0a"
+        }
+      ],
       "synced": {
         "title": "Task T9: Skaffold kind dev loop and Playwright smoke test",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -5004,7 +5073,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-10, AC-11, AC-13, AC-15 evidence for VAL-11, VAL-12, VAL-16 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "ccd648d1-66bc-4a42-ac3c-1e8125b60ccf",
@@ -5013,7 +5082,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t10:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "1830216a-cd51-4b1a-a2d4-83e21db63bf8"
+        }
+      ],
       "synced": {
         "title": "Task T10: CI and image build workflows",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -5034,7 +5110,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-12 evidence for VAL-13 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "cd4e716f-d797-4294-85a4-8b873d740afb",
@@ -5043,7 +5119,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": [],
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t11:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "6fca3cd0-be10-4225-ab89-178ffa212f68"
+        }
+      ],
       "synced": {
         "title": "Task T11: AGENTS.md and README.md",
         "parent_id": "3a2f765f-517a-4be6-b589-812ddd9acbd4",
@@ -5064,7 +5147,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-14 evidence for VAL-15 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "464c2647-3dad-4f22-87d6-9ca9a6502d1a",
@@ -5073,7 +5156,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t12:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b6aa8e94-3e0d-4b41-baa1-09163bb2c6ce"
+        }
+      ]
     },
     {
       "key": "story:4:4.9",
@@ -5167,7 +5257,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-3, AC-16 evidence for VAL-1, VAL-17 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "86ba235c-1258-4107-958e-83a12693a9aa",
@@ -5176,7 +5266,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t13:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "53e29a8d-a755-4048-80f5-cc022eb0cefc"
+        }
+      ]
     },
     {
       "key": "task:story:1:1.1:t14",
@@ -5190,7 +5287,7 @@
       "parent_key": "story:1:1.1",
       "after": [],
       "done_when": "AC-17 evidence for VAL-18 accepted by independent Code Review",
-      "local_status": "in-progress",
+      "local_status": "in-review",
       "publication": "published",
       "remote": {
         "id": "76dfed5a-ef2f-4c98-9b0c-4fa32cfa9dc7",
@@ -5199,7 +5296,14 @@
       },
       "evidence": null,
       "milestone_key": "epic:1",
-      "notes": []
+      "notes": [
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:task:story:1:1.1:t14:in-review:r1",
+          "kind": "comment",
+          "publication": "published",
+          "id": "7bd28c4d-6b84-45a1-853f-52669e4395fd"
+        }
+      ]
     }
   ],
   "workspace": {

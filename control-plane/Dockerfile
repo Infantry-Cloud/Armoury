@@ -8,14 +8,22 @@ RUN cargo install cargo-chef --version 0.1.78 --locked
 WORKDIR /src
 
 FROM chef AS planner
-COPY . .
+COPY Cargo.toml Cargo.lock ./
+COPY proto proto
+COPY agent-proto agent-proto
+COPY agent agent
+COPY control-plane control-plane
 RUN cargo chef prepare --recipe-path recipe.json
 
 FROM chef AS rust-build
 ARG CARGO_PROFILE=release
 COPY --from=planner /src/recipe.json recipe.json
 RUN cargo chef cook --profile "$CARGO_PROFILE" --locked --package armoury --recipe-path recipe.json
-COPY . .
+COPY Cargo.toml Cargo.lock ./
+COPY proto proto
+COPY agent-proto agent-proto
+COPY agent agent
+COPY control-plane control-plane
 RUN cargo build --profile "$CARGO_PROFILE" --locked --package armoury \
   && cp "target/$([ "$CARGO_PROFILE" = dev ] && echo debug || echo "$CARGO_PROFILE")/armoury" /armoury
 

@@ -2,6 +2,6 @@ Armoury {{ .Chart.AppVersion }} is installed in namespace {{ .Release.Namespace 
 {{- if index .Values "control-plane" "enabled" }}
 
 Open the web app:
-  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ .Release.Name }}-control-plane 8080:8080
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ printf "%s-control-plane" .Release.Name | trunc 63 | trimSuffix "-" }} 8080:{{ index .Values "control-plane" "service" "port" | default 8080 }}
   then browse to http://localhost:8080
 {{- end }}

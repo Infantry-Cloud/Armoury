@@ -1,7 +1,11 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"description": "Keep every pin exact: mise tools, =x.y.z Cargo requirements, exact npm versions, image digests and action SHAs.",
-	"extends": ["config:recommended", "docker:pinDigests", "helpers:pinGitHubActionDigests"],
+	"extends": [
+		"config:recommended",
+		"docker:pinDigests",
+		"helpers:pinGitHubActionDigests"
+	],
 	"rangeStrategy": "pin",
 	"ignorePaths": [
 		"**/node_modules/**",
@@ -24,6 +28,26 @@
 				"image:\\s*(?<depName>[^\\s:@]+(?::\\d+)?/[^\\s:@]+):(?<currentValue>[^\\s@]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
 			],
 			"datasourceTemplate": "docker"
+		},
+		{
+			"description": "Crates installed with `cargo install <name> --version <x.y.z>` in Dockerfiles",
+			"customType": "regex",
+			"managerFilePatterns": ["/(^|/)Dockerfile$/"],
+			"matchStrings": [
+				"cargo install (?<depName>[a-z0-9_-]+) --version (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+			],
+			"datasourceTemplate": "crate"
+		},
+		{
+			"description": "The mise version that jdx/mise-action installs in workflows",
+			"customType": "regex",
+			"managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+			"matchStrings": [
+				"jdx/mise-action@[0-9a-f]{40}[^\\n]*\\n\\s+with:\\n\\s+version: (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+			],
+			"depNameTemplate": "jdx/mise",
+			"datasourceTemplate": "github-releases",
+			"extractVersionTemplate": "^v(?<version>.+)$"
 		}
 	],
 	"packageRules": [
@@ -36,6 +60,16 @@
 			"description": "The generator image must stay in step with the committed generated code; bump with mise run gen:api",
 			"matchDepNames": ["docker.io/openapitools/openapi-generator-cli"],
 			"groupName": "openapi-generator"
+		},
+		{
+			"description": "SvelteKit 3 rejects the svelte.config.js that locked VAL-4 imports; moving needs Correct Course",
+			"matchPackageNames": ["@sveltejs/kit"],
+			"allowedVersions": "<3.0.0"
+		},
+		{
+			"description": "openapi-typescript 7 peers on TypeScript 5",
+			"matchPackageNames": ["typescript"],
+			"allowedVersions": "<6.0.0"
 		}
 	]
 }

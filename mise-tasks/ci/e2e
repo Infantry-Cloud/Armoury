@@ -36,8 +36,9 @@ if [ "${GITHUB_EVENT_NAME:-}" = pull_request ]; then
 else
   namespace="armoury-ci-$(date +%Y%m%d%H%M%S)-$$-$RANDOM"
   echo "ci:e2e: creating namespace $namespace"
-  OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto namespace create "$namespace" --use=false
+  # Set first: an interrupt during the create must still delete the namespace.
   created=1
+  OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto namespace create "$namespace" --use=false
   okteto deploy "${okteto_flags[@]}" --namespace "$namespace" --wait --timeout 20m
 fi
 

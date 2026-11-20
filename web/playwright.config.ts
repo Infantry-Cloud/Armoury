@@ -1,7 +1,7 @@
+// Playwright smoke tests against a running Okteto deployment, never a local web server.
 import { defineConfig } from '@playwright/test';
 
-// Runs against an Okteto deployment: `mise run dev` (localhost:8080) or the in-cluster URL in
-// `ci:e2e`. There is no webServer, so the run fails when no deployment is reachable.
+// The base URL is `mise run dev` (localhost:8080) or the in-cluster URL in `ci:e2e`.
 const junitOutput = process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE;
 
 export default defineConfig({

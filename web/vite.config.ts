@@ -1,3 +1,4 @@
+// Vite build for the SPA (Tailwind, SvelteKit) and the Vitest unit-test settings.
 import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';

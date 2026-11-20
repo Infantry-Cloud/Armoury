@@ -19,7 +19,7 @@ mkdir -p "$work/api"
 cp "$root/api/openapi.yaml" "$work/api/openapi.yaml"
 cp "$repo/mise-tasks/gen/okteto.yml" "$work/okteto.yml"
 (cd "$work" && okteto test generate --context "$ARMOURY_OKTETO_CONTEXT" --namespace "$ARMOURY_NAMESPACE" \
-  --file okteto.yml --name armoury-gen-api --timeout 5m)
+  --file okteto.yml --name "armoury-gen-api-$$-$RANDOM" --timeout 5m)
 
 if [ ! -f "$work/out/rust/src/lib.rs" ]; then
   echo "gen:api: okteto test returned no Rust output in out/rust" >&2
@@ -27,8 +27,11 @@ if [ ! -f "$work/out/rust/src/lib.rs" ]; then
 fi
 rm -rf "${root:?}/$rust_out"
 mkdir -p "$(dirname "$root/$rust_out")"
+# The generator's own manifest floats its versions; server/Cargo.toml is the one that builds.
+rm -f "$work/out/rust/Cargo.toml"
 cp -R "$work/out/rust" "$root/$rust_out"
 
 mkdir -p "$(dirname "$root/$ts_out")"
+[ -d "$repo/web/node_modules" ] || (cd "$repo/web" && npm ci --no-audit --no-fund)
 (cd "$repo/web" && npx --no -- openapi-typescript "$work/api/openapi.yaml" --output "$root/$ts_out")
 echo "gen:api: wrote $rust_out and $ts_out under $root"

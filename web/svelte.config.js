@@ -1,6 +1,6 @@
+// SvelteKit configuration: the static adapter with an SPA fallback page.
 import adapter from '@sveltejs/adapter-static';
 
-/** The web app is a static SPA that the control plane serves; index.html is the fallback route. */
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	compilerOptions: {

@@ -2,7 +2,7 @@
 title: 'Story 1.1: Monorepo scaffold with an aggregate local gate and CI'
 type: 'chore'
 created: '2026-11-06'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 baseline_commit: '52e5b8e6a2e7f62197df63c653fb5756f0dcf637'
 review_loop_iteration: 0
@@ -227,14 +227,14 @@ Nothing exists yet except the files marked EXISTING.
 
 - Implementation session: a2f4088c-aed1-43be-bfff-1af12c5f041b
 - Implementation stage: change `ttwsqvwx`, baseline `52e5b8e6a2e7f62197df63c653fb5756f0dcf637` (`mztrkprp`, approval change r1).
-- Environment (2026-11-19): macOS arm64, no Okteto context (`okteto context list`: "Your context is not set"; no `~/.okteto/context`), no `mise.local.toml`. The assumption "Before T3, T4 and T9: a working Okteto context" is unmet, so no cluster-tier check (`api`, `test-db`, `test-tasks-cluster`, `ci:e2e`, `dev`, image builds) has run. T3, T4, T7, T9 and T13 stay unticked until their checks run.
+- Historical (superseded by the 2026-11-20 notes below): Environment (2026-11-19): macOS arm64, no Okteto context (`okteto context list`: "Your context is not set"; no `~/.okteto/context`), no `mise.local.toml`. The assumption "Before T3, T4 and T9: a working Okteto context" is unmet, so no cluster-tier check (`api`, `test-db`, `test-tasks-cluster`, `ci:e2e`, `dev`, image builds) has run. T3, T4, T7, T9 and T13 stay unticked until their checks run.
 - Evidence files: `_bmad-output/implementation-artifacts/evidence/1-1/`. Locked tests: only skip markers removed; `validate_story_contract.py lock` reproduces all eight lock digests; `validate --phase approved` VALID.
 - Build verification (2026-11-19, after fixing a corrupted comment in `mise-tasks/check/test-db.yaml`): approved-phase validation VALID; `mise run check:fast` exit 0 in 31 s (`check-fast-build-verify.log`); `mise run check` exit 1 at `api` (`ARMOURY_OKTETO_CONTEXT` not set). Blocked on the unmet Okteto-context assumption.
-- Aggregate gate: `mise run check:fast` exits 0 (`check-fast-final.log`). `mise run check` stops at `api` because `ARMOURY_OKTETO_CONTEXT` is not set (`val-1-fresh-copy.log`). The handoff gate has therefore not passed.
+- Historical: Aggregate gate: `mise run check:fast` exits 0 (`check-fast-final.log`). `mise run check` stops at `api` because `ARMOURY_OKTETO_CONTEXT` is not set (`val-1-fresh-copy.log`). The handoff gate has therefore not passed.
 - Okteto context (2026-11-20): Daniel logged in to `https://dashboard.okteto.lab.danielbooth.cloud` (namespace `danielboothcloud`, kube context `dashboard_okteto_lab_danielbooth_cloud`, Kubernetes v1.36.6, so `k8s-openapi` `v1_33` holds); untracked `mise.local.toml` written. `okteto context show --output json` has the `registry` field that `ci:build` reads.
 - First `check:api` failed naming `apis/health.rs` and `server/mod.rs` (blank-line differences from the online generator; `val-7-api-drift-online-generator.log`), as Decision 3 anticipated. Resolved by `mise run gen:api` (pinned image via `okteto test`); `check:api` then passes.
 - Handoff gate: `mise run check` exit 0 in 9 m 35 s, every step in tier order (`check-full-okteto.log`).
-- BLOCKER for T9 (VAL-9, VAL-10 in Okteto, VAL-14) and the image builds (VAL-8, VAL-12): `ci:e2e` run 1 failed in `okteto build` at `cargo install cargo-chef` (`index.crates.io` transferred 0 bytes; `val-14-run1-buildkit-mtu-failure.log`) and still deleted its `armoury-ci-` namespace. Cause, outside this repository: the Okteto BuildKit Pod's `eth0` MTU is 1300 but its CNI bridge `buildkit0` (`/etc/buildkit/cni.json`, no `mtu`) is 1500, so large packets from `RUN` steps are dropped. A probe Pod in `danielboothcloud` reaches crates.io, npm and GitHub over IPv4 in about 0.1 s. Fix belongs to Daniel's Okteto install (for example Helm value `buildkit.network.mode: host`, or `"mtu": 1300` in the BuildKit CNI config).
+- Historical, resolved (see next note): BLOCKER for T9 (VAL-9, VAL-10 in Okteto, VAL-14) and the image builds (VAL-8, VAL-12): `ci:e2e` run 1 failed in `okteto build` at `cargo install cargo-chef` (`index.crates.io` transferred 0 bytes; `val-14-run1-buildkit-mtu-failure.log`) and still deleted its `armoury-ci-` namespace. Cause, outside this repository: the Okteto BuildKit Pod's `eth0` MTU is 1300 but its CNI bridge `buildkit0` (`/etc/buildkit/cni.json`, no `mtu`) is 1500, so large packets from `RUN` steps are dropped. A probe Pod in `danielboothcloud` reaches crates.io, npm and GitHub over IPv4 in about 0.1 s. Fix belongs to Daniel's Okteto install (for example Helm value `buildkit.network.mode: host`, or `"mtu": 1300` in the BuildKit CNI config).
 - Blockers resolved outside this repository (2026-11-20): GitOps `b851fbd` set BuildKit `network.mode: host`; nodes then failed `x509` pulling from the Okteto Registry through Okteto's self-signed internal ingress. `sveltos-bootstrap` 0.1.43/0.1.44 now copies each mirrored GatewayRoute's ZeroSSL Secret back into its vCluster (`okteto/okteto-tls`) and GitOps `63f2d8d` points Okteto's ingress at it; the internal ingress (10.106.125.129) now serves the ZeroSSL certificate.
 
 ### Evidence candidates (Dev-owned VAL-*), jj change `ttwsqvwx` (working copy, not pushed)
@@ -254,8 +254,10 @@ Nothing exists yet except the files marked EXISTING.
 | VAL-14 (earlier) | BLOCKED | Run 2 (`val-14-run2.log`, after GitOps set BuildKit `network.mode: host`): all three images built and pushed (MTU fault fixed), chart installed, then `okteto deploy` timed out after 20 m and the namespace was deleted. Cause (outside this repository): the Okteto daemon's `updateHosts` task points nodes' `registry.okteto.lab.danielbooth.cloud` at the internal ingress-nginx (10.106.125.129), which serves `default-ssl-certificate-selfsigned` (issuer `okteto-wildcard-ca`); `privateCA` injection is disabled on Talos, so containerd fails `x509: certificate signed by unknown authority` and both Pods stay `ImagePullBackOff`. Pods see the valid ZeroSSL cert via the Tailscale gateway. Run 1 (`val-14-run1-buildkit-mtu-failure.log`): namespace `armoury-ci-20261120075950-72844-26648` created with `--use=false`, `okteto build` failed on the BuildKit MTU fault, namespace deleted on failure, exit 1. Two passing runs and the interrupt run wait for the BuildKit fix. |
 | VAL-15 | PASS | `val-15-red-green.log` (RED: `--use=false` dropped; a real port-forward race found and fixed in `check/test-db`). |
 | VAL-16 | PASS | `val-16-red-green.log` (RED: runner continues after a failing tier). |
-| VAL-17 | PASS (candidate) | Whole-gate run: `check-full-okteto.log` shows databases for `actions`, `javascript` and `rust`, `codeql: no results`. |
+| VAL-17 | PASS | `val-17-whole-gate.log` (2026-11-26, review change `rmrwxunv`): in a copy, an injected `eval(window.location.hash...)` made `mise run check` exit 1 at `codeql` naming `web/src/routes/+layout.ts:4 js/code-injection`; a `query-filters` exclusion with a `# Reason:` comment made it exit 0; databases for `actions`, `javascript` and `rust`; no SARIF or database left in the copy. |
 | VAL-17 (earlier) | PARTIAL | `codeql-clean-run.log`: `check:codeql` on the working tree, no results, about 17 min cold. `val-17-codeql-injection.log`: in a copy, `eval(window.location.hash...)` in `web/src/routes/+layout.ts` fails with `web/src/routes/+layout.ts:3 js/code-injection` (exit 1); a reasoned `query-filters` exclusion then passes (exit 0); no database or SARIF left in the copy. Run as `check:codeql`, because the whole gate stops at `api` without Okteto. |
+
+Build review patches (2026-11-26, change `rmrwxunv`): `review-check-fast.log` (`check:fast` exit 0, 6 task tests incl. new `ci/gate.test.mjs`, `ci/build.test.mjs`, `check/check.test.mjs`); `review-check-full.log` (`mise run check` exit 0 in 11 m 41 s; CodeQL Rust: 0 files extracted with errors, 14 without, after `gen:api` stopped writing the generator's `Cargo.toml`); `review-ci-e2e.log` (`ci:e2e` exit 0 with the narrowed Dockerfile `COPY`). The host descheduler evicted `dev-vcluster-k8s` Pods every 2 minutes; IaC now labels that host namespace `bootstrap.projectsveltos.io/descheduler=false` (outside this repository).
 
 Test Architect inputs for VAL-9 (2026-11-20): `val-9-dev.log` (`mise run dev`: `okteto up` built and deployed, forward 8080, `cargo watch` running; a temporary string edit in `control-plane/src/main.rs`, reverted afterwards, recompiled only `armoury v0.1.0` in 2.04 s); `val-9-pod-images.log` (both Pods run `registry.okteto.lab.danielbooth.cloud/...@sha256:` images, the control plane as `armoury-control-plane-dev`); `val-9-pgrep.log` (none of the eight processes running); `localhost:8080` served the SPA and `/api/v1/healthz` `{"status":"ok"}`. The restart-and-edit-again step is not recorded. Also `val-18-renovate-dry-run.log` (local platform, `--dry-run=lookup`, no token: 16 package files, 133 dependencies across cargo, dockerfile, github-actions, helmv3, kubernetes, mise, npm and the Okteto regex manager).
 
@@ -290,6 +292,43 @@ Test Architect inputs for VAL-9 (2026-11-20): `val-9-dev.log` (`mise run dev`: `
 - 2026-11-13 — TEA ATDD Edit (change `rppznkzx`), frozen-block edit approved by Daniel in session: SD-6 (Vera, B6) adds JUnit report uploads and a hosted `contracts` job that AR phase 3 builds. Boundaries, AC-10 and VAL-11 now allow SHA-pinned report upload/download steps, and `ci-gate` fails unless every other job in `ci.yml` succeeded, so the AC holds before and after phase 3. CI naming check passes. Still Revision 1 (never approved).
 
 ## Review Triage Log
+
+Build review iteration 0, 2026-11-20, review change `rmrwxunv`, diff `52e5b8e6..@`. Layers: Blind Hunter (BH), Edge Case Hunter (EC), Verification Gap (VG), Acceptance Auditor (AA).
+
+| ID | Finding | Verdict | Evidence | Route |
+| --- | --- | --- | --- | --- |
+| BH1+AA2 | Generator's floating `generated/Cargo.toml` is committed; pins skips `.openapi-generator` folders; CodeQL fails to load it | medium | `check-full-okteto.log:519` "failed to load workspace", 7 Rust files extracted with errors; `pins:24` skip hides `serde = "1"` etc. | patch: `gen:api` drops the file, pins skip removed |
+| BH2 | `.svelte` components not scanned by CodeQL, untracked | medium | Decision 12 injection gave no result; CodeQL extractor limit, not caused by this story | defer |
+| BH3+VG1 | `ci:gate` has no test | medium | `rg ci/gate` matches only the task; flipping line 15 keeps `check:test-tasks` green | patch: `ci/gate.test.mjs` |
+| BH4+EC11 | Fork PRs never get a green `ci-gate` | low | Real, but AC-10 mandates "skipped counts as failure"; changing it edits the contract | patch: README states the fork path; contract question raised to Daniel |
+| BH5a | `gen:api` fixed `--name armoury-gen-api` collides for concurrent runs in one namespace | medium | Push and same-repo PR runs both run `check:api` in the runner's `ARMOURY_NAMESPACE` | patch: run-unique name |
+| BH5b+EC9+EC12 | No workflow `concurrency`; PR preview deploys and cleanup can race | medium | Real, but Boundaries allow only job `if:` logic in YAML; fix edits the contract | reject (spec edit); raised to Daniel |
+| BH6+EC8 | PR e2e deploys branch tip, not `GITHUB_SHA` | medium | Race exists; AC-13 specifies "from the pull-request branch" | defer |
+| BH7 | No evidence rows for VAL-8/11/12/13 while T8/T10/T11 ticked | low | They are Test Architect checks; fix is a spec edit | reject (spec edit) |
+| BH8+AA7 | Superseded Implementation Notes contradict later notes; status files disagree | low | Lines 230/233/237 stale; sprint/Linear sync happens in step 5 | reject (spec edit); notes marked historical as record keeping |
+| BH9 | Renovate will propose SvelteKit 3 / TypeScript 6+, misses `cargo install --version` pins | low | Decision 1 rules them out; dry-run log lists those branches | patch: `allowedVersions` + regex manager |
+| BH10 | `armoury-httpapi` pins `tokio`/`tracing` outside the workspace | low | `server/Cargo.toml:34-35` duplicates root pins | patch: `workspace = true` |
+| BH11 | Fast tier never builds the SPA | medium | `check/web` has no `npm run build`; build errors appear only in image builds | patch |
+| BH12 | Missing `/_app/*` assets return `index.html` 200 | low | Real; fix adds routing branches, rare outside stale tabs | reject (low, adds complexity) |
+| BH13 | `COPY . .` makes web edits rebuild Rust crates in both images | low | `rust-build` stage copies the whole context | patch: copy Rust sources only |
+| BH14 | `ci:build` packages the chart and discards it | false | AC-11 and VAL-12 require `helm package` in `ci:build`; publication is Epic 10 | reject |
+| BH15 | `robots.txt` allows crawling; favicon is the Svelte logo | low | Template leftovers in `web/static`, `web/src/lib/assets` | patch |
+| EC1 | `/api` and `/api/` return the SPA with 200 | low | `{*rest}` needs a non-empty segment | patch: two 404 routes + test |
+| EC2 | Missing web root still starts the server | low | Images always ship the web root; fix adds a guard | reject (low, adds complexity) |
+| EC3 | CodeQL skips a language database without `codeql-database.yml` | maybe-false | Would need a failed extraction that still finalises the cluster; medium if true | defer (unverified) |
+| EC4 | Dotted-key Cargo deps (`serde.version = "1"`) pass pins | medium | Reproduced by reviewer, exit 0 | patch |
+| EC5 | `[dependencies.foo]` with `git` and no `rev` passes pins | low | Table form only checks `version` | patch |
+| EC6 | `=1` / `=1.0` accepted as exact | medium | Only the `=` prefix is checked | patch: full `=x.y.z` regex |
+| EC7+AA5 | Interrupt during create leaks the namespace or Pod | low | `created=1` is set after the create call | patch: set before the call |
+| EC10 | NOTES.txt port-forward ignores `service.port` | low | Hard-coded `8080:8080` | patch |
+| EC13 | `e2e`, `gen:api` and `check:api` fail on a fresh clone | medium | `npx --no` without `web/node_modules`; VAL-13 needs README commands to work | patch: `npm ci` when missing |
+| VG2 | VAL-15 never reaches `okteto build` or `GITHUB_OUTPUT` in `ci:build` | medium | Empty shim output stops `ci/build:15`; locked test unchanged | patch: new `ci/build.test.mjs` |
+| VG3 | Gate step lists and stop-on-failure untested | medium | Only `ci/_default` has a test | patch: `check/check.test.mjs` |
+| AA1 | `actions/checkout` steps are outside AC-10's literal step list | low | Checkout is required to run repo tasks; literal VAL-11 inspection would fail | reject (spec edit); raised to Daniel |
+| AA3 | Generated server crate has no workspace lints and `.unwrap()`s on the request path | medium | `generated/src/server/mod.rs:71,98,108`; exemption needs AGENTS.md | defer |
+| AA4 | VAL-17 injection ran as `check:codeql`, not `mise run check` | low | `val-17-codeql-injection.log` header | patch: rerun through the whole gate (done, `val-17-whole-gate.log`) |
+| AA6 | `OKTETO_BUILD_*_IMAGE` accepted in any YAML | low | `pins:100` | patch: Okteto manifests only (multi-line `latest` feature rejected: adds parser state) |
+| AA8 | Files without a one-line purpose comment | low | `vite.config.ts`, `cn.ts`, `playwright.config.ts`, `svelte.config.js`, chart templates | patch |
 
 ## Verification
 
