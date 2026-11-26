@@ -22,8 +22,10 @@ codeql pack download "${packs[@]}"
 
 # The Rust extractor runs cargo; a persistent target dir outside the workspace makes reruns faster.
 cargo_cache="${XDG_CACHE_HOME:-$HOME/.cache}/armoury/codeql-cargo-target"
+# In a container CodeQL sizes its heap from the node, not the Pod limit (619 MiB on ARC, out of memory).
+ram="--ram=${ARMOURY_CODEQL_RAM_MB:-4096}"
 mkdir -p "$cargo_cache"
-codeql database create "$work/db" --db-cluster --overwrite --build-mode=none \
+codeql database create "$work/db" "$ram" --db-cluster --overwrite --build-mode=none \
   --language="$(IFS=,; echo "${languages[*]}")" --source-root="$root" --codescanning-config="$config" \
   --extractor-option="rust.cargo_target_dir=$cargo_cache"
 
@@ -33,7 +35,7 @@ for database in "$work"/db/*/; do
   language="$(basename "$database")"
   echo "codeql: analysing the $language database"
   # No queries given: the packs, suites and query-filters come from the configuration.
-  codeql database analyze "$database" --format=sarif-latest --output="$work/$language.sarif" --threads=0
+  codeql database analyze "$database" "$ram" --format=sarif-latest --output="$work/$language.sarif" --threads=0
 done
 
 node - "$work"/*.sarif <<'EOF'
