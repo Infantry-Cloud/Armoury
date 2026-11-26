@@ -18,7 +18,8 @@ registry="$(OKTETO_CONTEXT="$ARMOURY_OKTETO_CONTEXT" okteto context show --outpu
 }
 tag="ci-${GITHUB_RUN_ID:-local}-$(date +%Y%m%d%H%M%S)"
 for image in control-plane agent; do
-  okteto build "$image" --context "$ARMOURY_OKTETO_CONTEXT" --namespace "$ARMOURY_NAMESPACE" --file okteto.yaml \
+  # Smart Builds skip a cached image and never push --tag; the BuildKit layer cache still applies.
+  OKTETO_SMART_BUILDS_ENABLED=false okteto build "$image" --context "$ARMOURY_OKTETO_CONTEXT" --namespace "$ARMOURY_NAMESPACE" --file okteto.yaml \
     --tag "$registry/$ARMOURY_NAMESPACE/armoury-$image:$tag" --progress plain
 done
 
