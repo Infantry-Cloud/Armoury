@@ -1,0 +1,13 @@
+[check:test-db] $ ~/projects/home/armoury/mise-tasks/check/test-db
+test-db: starting Pod armoury-test-db-20261126145917-99067-18663 in namespace danielboothcloud
+pod/armoury-test-db-20261126145917-99067-18663 created
+pod/armoury-test-db-20261126145917-99067-18663 condition met
+   Compiling agent-proto v0.1.0 (/Users/danielbooth/projects/home/armoury/agent-proto)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.63s
+────────────
+ Nextest run ID ae5248b0-39d5-46c9-a396-50113ed8b19a with nextest profile: ci-db
+    Starting 1 test across 1 binary (5 binaries skipped via profile.ci-db.default-filter)
+        PASS [   3.040s] (1/1) armoury::val_3_age val_3_age_extension_is_available
+────────────
+     Summary [   3.043s] 1 test run: 1 passed, 0 skipped
+/Users/danielbooth/projects/home/armoury/mise-tasks/check/test-db: line 16: 99522 Terminated: 15          kubectl port-forward "pod/$pod" "${kube[@]}" --address 127.0.0.1 :5432 > "$work/forward.log" 2>&1
