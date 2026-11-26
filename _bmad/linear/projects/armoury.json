@@ -970,6 +970,12 @@
           "kind": "comment",
           "publication": "published",
           "id": "9307cde6-9614-4ee5-a9ee-579f7ea9492c"
+        },
+        {
+          "marker": "BMAD-NOTE: 6c72558f-a015-481f-9427-04b4a978be1e:story:1:1.1:changed:ci-2026-11-26",
+          "kind": "comment",
+          "publication": "published",
+          "id": "b342fa8c-e65c-4854-8740-c21bafa47c3e"
         }
       ],
       "description_synced": "2026-11-06 (sprint-change-proposal-2026-11-06.md)"
