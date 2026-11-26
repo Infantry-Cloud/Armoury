@@ -1,4 +1,4 @@
-# The ARC scale set for this repository (runs-on label); Daniel operates it outside the repository.
+# The Infantry-Cloud ARC scale set (runs-on label); Daniel operates it outside the repository.
 self-hosted-runner:
   labels:
     - armoury-arc

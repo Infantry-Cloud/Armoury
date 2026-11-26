@@ -23,7 +23,7 @@ jobs:
 
   cluster:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-    # ARC scale set for this repository; the runner provides the ARMOURY_* site values (README).
+    # Infantry-Cloud ARC scale set; the runner provides the ARMOURY_* site values (README).
     runs-on: armoury-arc
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -55,10 +55,11 @@ GitHub Actions only installs mise and runs one task per job (`.github/workflows/
 - `preview-cleanup.yml`: destroys the preview of a closed same-repository pull request.
 - `renovate.yml`: weekly and on demand, Renovate opens pull requests that keep every pin exact.
 
-Repository setup (outside this repository): an ARC scale set named `armoury-arc` for this
-repository whose runners provide `ARMOURY_OKTETO_CONTEXT`, `ARMOURY_KUBE_CONTEXT`,
-`ARMOURY_NAMESPACE` and an Okteto identity; Okteto access to the repository for previews; the
-`RENOVATE_TOKEN` secret; workflow approval required for all external contributors.
+Repository setup (outside this repository): an ARC scale set named `armoury-arc` for the
+Infantry-Cloud organisation (GitOps `devops/arc`) whose runners provide `ARMOURY_OKTETO_CONTEXT`,
+`ARMOURY_KUBE_CONTEXT`, `ARMOURY_NAMESPACE` and an Okteto identity; Okteto access to the repository
+for previews; the `RENOVATE_TOKEN` secret; workflow approval required for all external
+contributors on every public Infantry-Cloud repository, because any of them can use these runners.
 
 ## Licence
 
