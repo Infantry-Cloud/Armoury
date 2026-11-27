@@ -1,0 +1,20 @@
+# mise run ci with the VAL-11 defect (agent/src/main.rs: Ok(  ())), 2026-11-27T04:21:13Z
+[ci] $ ~/projects/home/armoury/mise-tasks/ci/_default
+==> ci:fast
+[ci:fast] $ ~/projects/home/armoury/mise-tasks/ci/fast
+==> check:pins
+pins: every reference is pinned exactly
+==> check:rust
+Diff in /Users/danielbooth/projects/home/armoury/agent/src/main.rs:27:
+         result = tokio::signal::ctrl_c() => result?,
+         _ = terminate.recv() => {}
+     }
+[31m-    Ok(  ())
+(B[m[32m+    Ok(())
+(B[m }
+ 
+check: FAILED at step 'rust' (rerun it with: mise run check:rust)
+[ci:fast] ERROR task failed
+ci: FAILED at tier ci:fast (rerun it with: mise run ci:fast)
+[ci] ERROR task failed
+exit=1

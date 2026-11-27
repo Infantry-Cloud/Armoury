@@ -13,7 +13,7 @@ A colocated Git backend is supported, but the agent-facing interface remains jj.
   upstream Git/HEAD/index/branch instructions using the table below.
 - The only mutating jj commands an agent may run are `jj new`, `jj describe`, and
   for any bookmark except `main`: `jj bookmark create`, `jj bookmark set` and
-  `jj git push --bookmark <name>` (add `--allow-new` only for a new remote bookmark).
+  `jj git push --bookmark <name>` (it also creates and tracks a new remote bookmark).
   Move a bookmark forward only: its current target must be an ancestor of the new
   target, and `conflicts() & ::<target>` must be empty. Never pass `--allow-backwards`,
   never delete, rename, forget or force-push a bookmark, and never push `--all`.
