@@ -27,5 +27,5 @@ async fn main() -> anyhow::Result<()> {
         result = tokio::signal::ctrl_c() => result?,
         _ = terminate.recv() => {}
     }
-    Ok(())
+    Ok(  ())
 }
